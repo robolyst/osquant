@@ -1,0 +1,14 @@
+baseURL = "/"
+languageCode = "en-us"
+title = "OS Quant"
+theme = "osquant"
+
+FootnoteReturnLinkContents = "↑"
+
+
+[markup]
+  [markup.highlight]
+    style = "monokailight"
+
+[markup.goldmark.renderer]
+unsafe= true

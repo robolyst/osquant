@@ -1,0 +1,21 @@
+{{ define "main" }}
+
+    <div id="single">
+
+        <div id="page_header">
+            <div class='container'>
+                <span class='title'>{{ .Title }}</span>
+                <p class="blurb">{{ .Params.blurb }}</p>
+                {{ partial "article_meta.html" . }}
+            </div>
+        </div>
+
+        <div id="page_content">
+            {{ .Content }}
+
+            {{ partial "adrian.html" . }}
+        </div>
+
+    </div>
+
+{{ end }}

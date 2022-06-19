@@ -1,0 +1,434 @@
+/* ----------------------------------------------------------------------------
+Global styles
+---------------------------------------------------------------------------- */
+html {
+    height: 100%;
+    font-size: 16px; /* rem units are based on this */
+}
+
+body {
+    background-color: #FDFDFD;
+    font-family: -apple-system, Helvetica, arial, sans-serif;
+    height: 100%;
+}
+
+@media (max-width:750px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media (max-width:600px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+a {
+    color: #374D9E;
+}
+
+a:hover {
+    color: #EB5757;
+    text-decoration: none;
+}
+
+#content img {
+    width: 100%;
+    display: block;
+}
+
+#content {
+    min-height: 100%;
+    /* padding-bottom: 8rem; */
+}
+
+h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-top: 40pt;
+    margin-bottom: 10pt;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 20pt;
+    margin-bottom: 10pt;
+}
+
+callout {
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: block;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    width: 50%;
+    padding: 0.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+blockquote {
+    border-left: 3px solid #D2D2D2;
+    padding-left: 1.5rem;
+}
+
+div.highlight pre {
+    border: 1px solid #dfdfdf;
+    padding: 0.75rem;
+}
+
+/* -------------------
+Define the page size
+------------------- */
+
+.container, #page_content > * {
+    max-width: 700px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width:1000px) {
+    .container, #page_content > *  {
+        max-width: 600px;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+Nav bar
+---------------------------------------------------------------------------- */
+
+.nav-container {
+    margin-top: 0px;
+    padding: 10px 0px 10px 0px;
+    background-color: white;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+nav a {
+    color: black;
+}
+
+
+/* ----------------------------------------------------------------------------
+Splash
+---------------------------------------------------------------------------- */
+
+#splash {
+    /* background-color: #FBECB7; */
+    overflow: hidden;
+    padding: 5rem;
+    height: 70vh;
+}
+#splash .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+
+#splash .title {
+    font-size: 3em;
+    line-height: 1.25em;
+    font-weight: 600;
+    margin-bottom: 3.5rem;
+    text-align: center;
+}
+
+/* ----------------------------------------------------------------------------
+Section
+---------------------------------------------------------------------------- */
+#section .post {
+    margin-top: 4rem;
+}
+
+#section .post .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: black;
+}
+
+#section .post .title:hover {
+    color:#747474;
+    text-decoration:underline;
+}
+
+#section .post .meta {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#section .post .date {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #747474;
+    text-transform: uppercase;
+}
+
+#section .post .tag {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #747474;
+    text-transform: lowercase;
+    background-color: #ececec;
+    display: inline-block;
+    border-radius: 5px;
+    margin-left: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+
+}
+
+/* ----------------------------------------------------------------------------
+Page (Single)
+---------------------------------------------------------------------------- */
+
+#single p {
+    text-align: justify;
+}
+
+#page_header {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+
+#page_header .title {
+    font-size: 2.5em;
+    font-weight:700;
+    display: block;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+#page_header .blurb {
+    display: block;
+    width: 80%;
+    max-width: 480px;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#page_header .article-meta {
+    display: block;
+    text-align: center;
+    color: #747474;
+    font-size: 0.9rem;
+    margin-top:2rem;
+}
+
+#page_content {
+    margin-bottom: 5rem;
+    line-height: 1.5em;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+#page_content .plot {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+#page_content .plot.wide {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#page_content a {
+    /* color: #374D9E; */
+    color: inherit;
+    border-bottom: 2px solid #dfdfdf;
+}
+
+#page_content a:hover {
+    background-color: #fff9e3;
+    border-bottom: 2px solid #ffedae;
+}
+
+@media (max-width:450px) {
+    #page_header {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+        margin-bottom: 5rem;
+    }
+    #page_header img {
+        max-width: 300px;
+        max-height: 300px;
+    }
+    #page_header span.subtitle {
+        font-size: 1.5rem;
+    }
+    .article-meta {
+        font-size: 1rem;
+    }
+    #page_content {
+        font-size: 1.2rem;
+        line-height: 1.5em;
+    }
+}
+
+/* ------- Footnotes ------- */
+
+#page_content .footnotes {
+    margin-top: 5rem;
+    font-size: 0.9rem;
+    color: #747474;
+    border-top: 1px solid #EAEAEA;
+    padding-top: 2rem;
+}
+
+#page_content .footnotes hr {
+    visibility: hidden;
+}
+
+#page_content .footnotes li {
+    margin-bottom: 1rem;
+}
+
+
+a[href^="#fn:"]:before{ content: '[' }
+a[href^="#fn:"]:after{ content: ']' }
+
+/* ------- Author ------- */
+
+#author {
+    border-top: 1px solid #EAEAEA;
+    display: flex;
+    flex-direction: row;
+    font-size: 1rem;
+    color: #747474;
+    margin-top: 5rem;
+    padding: 2rem;
+}
+
+#author img.photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    margin: 0;
+    margin-right: 2rem;
+}
+
+#author .title {
+    text-transform: uppercase;
+    color: #AEAEAE;
+}
+
+#author .name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: black;
+}
+
+
+#author .socials {
+    margin-top: 15px;
+}
+
+#author .socials .social {
+    margin-right: 15px;
+    display: inline;
+    border: none;
+}
+#author .socials .social:hover {
+    background-color: transparent;
+}
+
+#author .socials .social img {
+    width: 1.5rem;
+    display: inline;
+}
+
+/* ----------------------------------------------------------------------------
+Footer
+---------------------------------------------------------------------------- */
+
+footer {
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-weight: 300;
+    font-size: 0.8rem;
+    /* background-color: white; */
+    /* border-top: 1px solid #EAEAEA; */
+}
+
+
+/* ----------------------------------------------------------------------------
+Other
+---------------------------------------------------------------------------- */
+
+.math {
+    font-size: 0.8em;
+}
+
+#content table {
+    margin-left: auto; 
+    margin-right: auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+#content table th {
+    background-color: #f3f3f3;
+    padding: 4pt 20pt;
+}
+
+#content table td {
+    padding: 4pt 20pt;
+}
+
+#content figure {
+    margin-bottom: 2rem;
+}
+
+#content .katex { /* Inline math */
+    font-size: 1.2em;
+}
+
+#content .katex-display { /* Block math */
+    margin-top: 20pt;
+    margin-bottom: 20pt;
+    margin: 4rem 0;
+    display: block;
+}
+
+#content .katex-display .katex { /* Block math */
+    font-size: 1.2em;
+}
+
+@media (max-width:450px) {
+    #content table th {
+        padding: 4pt 4pt;
+    }
+    
+    #content table td {
+        padding: 4pt 4pt;
+    }
+}

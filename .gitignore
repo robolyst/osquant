@@ -1,0 +1,5 @@
+.now
+/public
+/resources
+.vercel
+*.lock
