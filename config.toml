@@ -1,6 +1,6 @@
 baseURL = "/"
 languageCode = "en-us"
-title = "OS Quant"
+title = "Open Source Quant"
 theme = "osquant"
 
 FootnoteReturnLinkContents = "↑"
