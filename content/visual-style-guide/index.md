@@ -1,7 +1,12 @@
 ---
 chapter: 1
 title: "Visual style guide"
-blurb: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc ut."
+blurb: "
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
+    ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
+    a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
+    pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+"
 
 date: "1900-01-01"
 type: article
