@@ -3,7 +3,7 @@ Global styles
 ---------------------------------------------------------------------------- */
 html {
     height: 100%;
-    font-size: 16px; /* rem units are based on this */
+    font-size: 18px; /* rem units are based on this */
 }
 
 body {
@@ -96,7 +96,7 @@ Define the page size
 ------------------- */
 
 .container, #page_content > * {
-    max-width: 700px;
+    max-width: 750px;
     padding-right: 15px;
     padding-left: 15px;
     margin-left: auto;
@@ -113,13 +113,6 @@ Define the page size
 Nav bar
 ---------------------------------------------------------------------------- */
 
-.nav-container {
-    margin-top: 0px;
-    padding: 10px 0px 10px 0px;
-    background-color: white;
-    border-bottom: 1px solid #f1f1f1;
-}
-
 .navbar-brand {
     font-weight: 700;
     font-size: 1.2rem;
@@ -129,32 +122,11 @@ nav a {
     color: black;
 }
 
-
-/* ----------------------------------------------------------------------------
-Splash
----------------------------------------------------------------------------- */
-
-#splash {
-    /* background-color: #FBECB7; */
-    overflow: hidden;
-    padding: 5rem;
-    height: 70vh;
-}
-#splash .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+.navbar {
+    padding: 20px 0px 5px 0px;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.5);
 }
 
-
-#splash .title {
-    font-size: 3em;
-    line-height: 1.25em;
-    font-weight: 600;
-    margin-bottom: 3.5rem;
-    text-align: center;
-}
 
 /* ----------------------------------------------------------------------------
 Section
@@ -205,7 +177,7 @@ Page (Single)
 ---------------------------------------------------------------------------- */
 
 #single p {
-    text-align: justify;
+    /* text-align: justify; */
 }
 
 #page_header {
@@ -215,27 +187,21 @@ Page (Single)
 
 
 #page_header .title {
-    font-size: 2.5em;
+    font-size: 2.75em;
     font-weight:700;
     display: block;
-    text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 #page_header .blurb {
+    font-size: 1.6em;
     display: block;
-    width: 80%;
-    max-width: 480px;
     padding: 0;
     margin: 0;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 #page_header .article-meta {
     display: block;
-    text-align: center;
-    color: #747474;
     font-size: 0.9rem;
     margin-top:2rem;
 }

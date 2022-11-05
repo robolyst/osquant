@@ -1,5 +1,4 @@
 ---
-chapter: 1
 title: "Visual style guide"
 blurb: "
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
@@ -11,7 +10,6 @@ blurb: "
 date: "1900-01-01"
 type: article
 katex: true
-bokeh: true
 draft: true
 markup: "mmark"
 ---
@@ -49,10 +47,20 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
 
 # Maths
 
+## Inline maths
+
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum \\(a = \sum x^2\\) nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. This is a financial number $100 ok adn this is another $100. Curabitur pulvinar magna sit amet mattis semper.
+
+
+## Math blocks
+
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
+
 $$
 \left( \frac{C}{p_{\text{now}}} +m \sum_{y=\text{now}}^{\text{now}+T} \frac{(1 + \phi)^y}{p_y} \right) p_{\text{now} + T} = A
 $$
 
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
 
 # Code
 
