@@ -1,7 +1,7 @@
 ---
 title: "Measuring performance"
 blurb: "
-How can you measure performance when investing? You might think you can simply measure how much money you make. However, that is a slippery slope which can lead to losing a large portion of your capital. I want to show you why that isn’t a good idea and how I measure my own investment performance.
+How can you measure performance when investing? You might think you can simply measure how much money you make. However, this can lead to losing a large portion of your capital. I want to show you why that can happen and how I measure my own investment performance.
 "
 
 date: "2020-06-12"
