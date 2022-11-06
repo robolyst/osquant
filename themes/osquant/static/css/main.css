@@ -217,9 +217,17 @@ Page (Single)
 }
 
 #page_header .article-meta {
-    display: block;
-    font-size: 0.9rem;
+    display: flex;
+    font-size: 1.1rem;
     margin-top:2rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#page_header .article-meta .label {
+    text-transform: uppercase;
+    opacity: 0.75;
+    font-size: 0.8rem;
 }
 
 #page_content {

@@ -1,12 +1,24 @@
 {{ if eq .Type "article" }} 
     {{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
 
-    {{ $minutes := math.Floor (div $readTime 60) }}
-    {{ $seconds := mod $readTime 60 }}
+    {{ $minutes := math.Round (div $readTime 60) }}
 
     <div class="article-meta">
-        {{ .Date.Format "2 January 2006" }} <br />
-        Read in {{ $minutes }} {{ cond (eq $minutes 1) "minute" "minutes" }} and
-        {{ $seconds }} {{ cond (eq $seconds 1) "second" "seconds" }}
+
+        <div>
+            <div class="label">Author</div>
+            <div>{{ .Params.author }}</div>
+        </div>
+        <div>
+            <div class="label">Published</div>
+            <div>{{ .Date.Format "2 January 2006" }}</div>
+        </div>
+        <div>
+            <div class="label">Length</div>
+            <div>
+                {{ $minutes }} {{ cond (eq $minutes 1) "minute" "minutes" }}
+            </div>
+        </div>
+
     </div>
 {{ end }}
