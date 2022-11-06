@@ -18,7 +18,7 @@ A quick way of quantifying an investment's performance is to measure how much mo
 When assessing two different investments, we can compare their returns. We could say the investment with the best return was the better investment over that time period. Let's have a look at an example.
 
 
-![Example image](measuring_performance/example_investments.svg)
+![Example image](images/example_investments.svg)
 
 In the figure above we can see the value of two different investments over 3 years. Investment A returned about 18.3% while investment B returned 22.7%. Should we conclude investment B was better because it made 22.7% vs 18.3%? The answer is no!
 
@@ -26,8 +26,8 @@ Have another look at the returns from both investments. Investment B seems to wi
 
 | Investment   | Worst day return  |
 |--------------|-------------------|
-| Investment A | -0.6% |
-| Investment B | -0.9% |
+| Investment A | -0.6%             |
+| Investment B | -0.9%             |
 
 
 Investment B's worst day lost 50% more than investment A's worst day! Investment B is riskier than investment A. Ah ha! We have found another dimension to performance: risk.
@@ -36,13 +36,13 @@ We will loosely define **risk** as the amount of money you could lose over the s
 
 Look at the example below. There are two investments with the same return but one fluctuates more than the other. If you invested in Crazy Corp, you would have experienced wild swings in value only to land at the same return as Calm Corp.
 
-![](measuring_performance/risky_investment.svg)
+![](images/risky_investment.svg)
 
 As investors, we must prefer the safer investment. Both of these investments finished with a 10% return by the end of 2012. What if you withdrew your money at the start of 2012? Crazy Corp. would have lost you 2% while Calm Corp would have gained you about 8%. Very different results, and the only difference is the magnitude of fluctuations in the price of the investments.
 
 Let's change Calm Corp to have a slightly lower return, 7.4%:
 
-![](measuring_performance/risky_investments_2.svg)
+![](images/risky_investments_2.svg)
 
 Now, which investment would you prefer? I hope you still said Calm Corp. While the return is almost 3% lower, the risk in that investment is still considerably lower. We would not experience wild swings in value if we were to invest in Calm Corp.
 
@@ -68,7 +68,7 @@ The average return measures the return of the investment, and the standard devia
 
 Let's go back to Investment A and Investment B. We know Investment B is riskier. So, we should expect that its returns vary more than Investment A's returns. Look at the chart below. 
 
-![](measuring_performance/standard_deviation.svg)
+![](images/standard_deviation.svg)
 
 It shows the daily returns for each investment. The standard deviation is shown in red. The average returns are similar, but the returns vary more in Investment B:
 
@@ -112,7 +112,7 @@ So at Robolyst, we do not use the arithmetic average of returns. We use the geom
 
 The second problem with the Sharpe ratio is it doesn't take into account the order of returns. At first this feels a bit abstract. Let's go straight to a chart to see what I mean.
 
-![](measuring_performance/reordered_returns.svg)
+![](images/reordered_returns.svg)
 
 Have a close look at the two investments in the chart above. Which one do you prefer? Hopefully, you said you prefer Fountain LLC. That decline in Extreme LLC is about a 7% loss of capital. But there is something surprising here. Both investments have the same return: 10% and both have the same Sharpe ratio 0.13! In fact, Extreme LLC is exactly the same as Fountain LLC, I just reordered the returns! I moved some of the positive returns to the start of the period and some of the negative returns to the end of the period.
 
@@ -122,13 +122,13 @@ At Robolyst, we do not use the standard deviation of returns as our measure of r
 
 To understand drawdown, let's go back to our example of Investments A & B at the start of this article. Have a closer look at what happened in Investment B in the first half of 2011:
 
-![](measuring_performance/example_investments_decline.svg)
+![](images/example_investments_decline.svg)
 
 There was a huge decline in value. Shortly after the start of 2011, the investment peaked at 18.2% then fell to a return of 10.8%. Let's go back to our example of investing $100. At the peak, that $100 would be worth $118.2 and at the bottom of the decline, it would be worth $110.8. That's a decline in value of 6.3%. We call this drawdown.
 
 **Drawdown** is the amount the investment has lost since its last high. We can actually chart the drawdown day by day for both of the investments.
 
-![](measuring_performance/example_investments_drawdowns.svg)
+![](images/example_investments_drawdowns.svg)
 
 We can see Investment A doesn't drawdown more than 3% and Investment B can drawdown as much as 6%.
 
@@ -142,7 +142,7 @@ $$
 
 Using the unit returns as our performance metric allows us to capture more of an investment's behaviour than the Sharpe ratio. Have a look at the example below.
 
-![](measuring_performance/last_example.svg)
+![](images/last_example.svg)
 
 Which investment do you think is better? By now, you'll probably instantly say it's the calmer looking investment, Imaginary Corp. We've measured the Sharpe ratio and unit returns in the table:
 

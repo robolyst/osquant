@@ -89,7 +89,7 @@ for i in range(10):
 
 # Images
 
-![Example image](visual-style-guide/example_investments.svg)
+![Example image](example_investments.svg)
 
 
 # Footnotes & references
