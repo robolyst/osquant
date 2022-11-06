@@ -61,7 +61,7 @@ This is an excellent way to think about investment performance. It means if an i
 
 # The Sharpe ratio
 
-The Sharpe ratio is a common metric for measuring returns relative to risk. It was developed by William F. Sharpe in 1966 who was awarded the Nobel Memorial Prize in Economic Sciences in 1990. The Sharpe ratio is defined as the average return divided by the standard deviation of returns:
+The Sharpe ratio is a common metric for measuring returns relative to risk. It was developed by William F. Sharpe in 1966 [^1][^2] who was awarded the Nobel Memorial Prize in Economic Sciences in 1990. The Sharpe ratio is defined as the average return divided by the standard deviation of returns:
 
 $$\frac{\text{avg return}}{\text{std deviation}} = \frac{\bar{r}}{\sigma}$$
 
@@ -83,7 +83,7 @@ As expected, the Sharpe ratio for Investment A is greater than Investment B. So,
 
 # Unit returns
 
-We do not use the Sharpe ratio at Robolyst. We've already established that measuring returns relative to risk is a great idea. We simply do not like how the Sharpe ratio calculates the return and the risk. There are two problems with the Sharpe ratio that make us uncomfortable.
+I do not use the Sharpe ratio. We've already established that measuring returns relative to risk is a great idea. However, I do not like how the Sharpe ratio calculates return and risk. There are two problems with the Sharpe ratio that should make us uncomfortable.
 
 ## Problem of arithmetic average
 
@@ -101,13 +101,13 @@ $$
 50\\% + - 45\\% = 2 \times x
 $$
 
-But we know returns don't add, they multiply. We instead should use the **geometric average**. The geometric average assumes the returns are multiplied together. It tries to find one number which, when multiplied together 2 times, is the same as the multiple of the two returns. The geometric average tries to find the $$x$$ in:
+But we know returns don't add, they multiply. We instead should use the **geometric average**. The geometric average assumes the returns are multiplied together. It tries to find one number which, when multiplied together 2 times, is the same as the multiple of the two returns. The geometric average tries to find the \\(x\\) in:
 
-$$(1 + 50\%) \times (1 - 45\%) = (1 + x)^2 $$
+$$(1 + 50\\%) \times (1 - 45\\%) = (1 + x)^2 $$
 
-We have to add the ones because a 50% return on $1,000 doesn't leave us with $500, it leaves us with $1,500. That is $$\$1,000 \times (1 + 50\%) = \$1,500$$.
+We have to add the ones because a 50% return on $1,000 doesn't leave us with $500, it leaves us with $1,500. That is \\(\\$1,000 \times (1 + 50\\%) = \\$1,500\\).
 
-So at Robolyst, we do not use the arithmetic average of returns. We use the geometric average of returns.
+So, we should not use the arithmetic average of returns. we should use the geometric average of returns.
 
 ## Problem of order of returns
 
@@ -119,7 +119,7 @@ Have a close look at the two investments in the chart above. Which one do you pr
 
 Remember, the Sharpe ratio is the average return divided by the standard deviation of returns. Neither of those metrics take into account the order of the returns. Because of this, the Sharpe ratio isn't able to capture the huge risk revealed in Extreme LLC.
 
-At Robolyst, we do not use the standard deviation of returns as our measure of risk. Instead we calculate the average drawdown.
+We should not use the standard deviation of returns as our measure of risk. Instead, we calculate the average drawdown.
 
 To understand drawdown, let's go back to our example of Investments A & B at the start of this article. Have a closer look at what happened in Investment B in the first half of 2011:
 
@@ -156,6 +156,11 @@ The unit returns correctly identifies the risk in Diamond Bread LLC and consider
 
 # Summary
 
-Measuring an investment's performance with only returns leaves you open to taking on huge risks and losing money. A better way to think about performance is how much return you are getting relative to risk. We calculate this as return divided by risk. The classic method of measuring this is the Sharpe ratio, however there are a couple of problems that still put us at risk. Robolyst uses a measure that we call the unit return. This metric captures more of the risk revealed in an investment's return stream.
+Measuring an investment's performance with only returns leaves you open to taking on huge risks and losing money. A better way to think about performance is how much return you are getting relative to risk. We calculate this as return divided by risk. The classic method of measuring this is the Sharpe ratio, however there are a couple of problems that still put us at risk. I use a measure that I call the unit return. This metric captures more of the risk revealed in an investment's return stream.
 
 You can use this metric yourself to compare different investments and make better decisions.
+
+
+
+[^1]: Sharpe, William F. "Mutual Fund Performance." Journal of Business, January 1966, pp. 119-138.
+[^2]: Sharpe, William F. ["The Sharpe Ratio"](http://web.stanford.edu/~wfsharpe/art/sr/sr.htm) The Journal of Portfolio Management, 1994.
