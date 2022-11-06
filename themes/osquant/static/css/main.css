@@ -302,6 +302,10 @@ Page (Single)
 a[href^="#fn:"]:before{ content: '[' }
 a[href^="#fn:"]:after{ content: ']' }
 
+ol {
+    padding-inline-start: 20px;
+}
+
 
 /* ----------------------------------------------------------------------------
 Footer
