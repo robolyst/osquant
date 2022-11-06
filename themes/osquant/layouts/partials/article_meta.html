@@ -5,15 +5,15 @@
 
     <div class="article-meta">
 
-        <div>
+        <div class="item">
             <div class="label">Author</div>
             <div>{{ .Params.author }}</div>
         </div>
-        <div>
+        <div class="item">
             <div class="label">Published</div>
             <div>{{ .Date.Format "2 January 2006" }}</div>
         </div>
-        <div>
+        <div class="item">
             <div class="label">Length</div>
             <div>
                 {{ $minutes }} {{ cond (eq $minutes 1) "minute" "minutes" }}

@@ -219,9 +219,14 @@ Page (Single)
 #page_header .article-meta {
     display: flex;
     font-size: 1.1rem;
-    margin-top:2rem;
+    margin-top: 2rem;
     flex-wrap: wrap;
-    justify-content: space-between;
+    row-gap: 20px;
+}
+
+#page_header .article-meta .item {
+    flex-grow: 1;
+    min-width: 130px;
 }
 
 #page_header .article-meta .label {
