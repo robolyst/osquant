@@ -9,7 +9,6 @@ type: article
 author: Adrian Letchford
 katex: true
 markup: "mmark"
-draft: true
 ---
 
 # How to think about performance
