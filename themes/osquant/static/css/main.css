@@ -44,14 +44,14 @@ a:hover {
 }
 
 h1 {
-    font-size: 2.25rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    margin-top: 5rem;
-    margin-bottom: 2rem;
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
 }
 
 h2 {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
     font-weight: 600;
     margin-top: 40pt;
     margin-bottom: 10pt;
@@ -242,10 +242,11 @@ Page (Single)
     margin-bottom: 2em;
 }
 
-#page_content .plot.wide {
+#page_content img.wide {
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 1rem;
 }
 
 #page_content a {
@@ -285,7 +286,7 @@ Page (Single)
 
 #page_content .footnotes {
     margin-top: 5rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #747474;
     border-top: 1px solid #EAEAEA;
     padding-top: 2rem;
