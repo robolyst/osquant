@@ -20,7 +20,7 @@ body {
 
 @media (max-width:600px) {
     html {
-        font-size: 12px;
+        font-size: 14px;
     }
 }
 
@@ -233,8 +233,6 @@ Page (Single)
 #page_content {
     margin-bottom: 5rem;
     line-height: 1.5em;
-    margin-left: 25px;
-    margin-right: 25px;
 }
 
 #page_content .plot {
