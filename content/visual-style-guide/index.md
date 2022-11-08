@@ -49,7 +49,7 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
 
 ## Inline maths
 
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum \\(a = \sum x^2\\) nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. This is a financial number $100 ok adn this is another $100. Curabitur pulvinar magna sit amet mattis semper.
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum \\(a = \sum x^2\\) nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. This is a financial number $100 ok and this is another $100. Curabitur pulvinar magna sit amet mattis semper.
 
 
 ## Math blocks
@@ -94,12 +94,14 @@ for i in range(10):
 
 # Footnotes & references
 
-Donec auctor lacus est, sit amet dapibus erat porta ac. Proin facilisis, dui quis lacinia convallis, eros nunc rhoncus orci, at tempor enim magna nec enim. Nulla facilisi [^1]. Etiam ut ex dignissim, porttitor augue ac, congue ex. Ut sit amet tellus gravida, venenatis nisl et, luctus eros. Nam massa lacus, ornare ac pulvinar eget, consequat vitae nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit [^2]. Integer ut ornare tellus.
+Donec auctor lacus est, sit amet dapibus erat porta ac. Proin facilisis, dui quis lacinia convallis, eros nunc rhoncus orci, at tempor enim magna nec enim. Nulla facilisi [^Cavallo2012]. Etiam ut ex dignissim, porttitor augue ac, congue ex. Ut sit amet tellus gravida, venenatis nisl et, luctus eros. Nam massa lacus, ornare ac pulvinar eget, consequat vitae nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit [^2]. Integer ut ornare tellus.
 
-Quisque dictum, odio a tristique pretium, velit sem egestas quam, eu ultrices [^3] enim risus at leo. Nulla tortor ante, commodo et euismod consectetur, dictum ullamcorper nisi.
+Quisque dictum, odio a tristique pretium, velit sem egestas quam, eu ultrices [^Shiller2000] enim risus at leo. Nulla tortor ante, commodo et euismod consectetur, dictum ullamcorper nisi [^Adrian2020].
 
-[^1]: Cavallo, J. V., & Fitzsimons, G. M. (2012). [Goal competition, conflict, coordination, and completion: How intergoal dynamics affect self-regulation.](https://psycnet.apa.org/record/2011-26825-009) In H. Aarts & A. J. Elliot (Eds.), Frontiers of social psychology. Goal-directed behavior (p. 267–299). Psychology Press.
+[^Cavallo2012]: Cavallo, J. V., & Fitzsimons, G. M. (2012). [Goal competition, conflict, coordination, and completion: How intergoal dynamics affect self-regulation.](https://psycnet.apa.org/record/2011-26825-009) In H. Aarts & A. J. Elliot (Eds.), Frontiers of social psychology. Goal-directed behavior (p. 267–299). Psychology Press.
 
 [^2]: If you type this phrase into Google you will get many hits. I do not know who said it first. There are many people using it without reference. I think I might have first read it in a <a href="https://www.forbes.com/sites/moneywisewomen/2012/10/26/you-can-have-anything-you-want/?sh=78b73db1d8e4" target="_blank">Forbes article</a>.
 
-[^3]: Economist Robert J. Shiller wrote a book called *Irrational Exuberance* published in 2000 showing hundreds of years worth of data. He demonstrates that housing prices do not always go up.
+[^Shiller2000]: Economist Robert J. Shiller wrote a book called *Irrational Exuberance* published in 2000 showing hundreds of years worth of data. He demonstrates that housing prices do not always go up.
+
+{{% refbook id="Adrian2020" author="Letchford, A." title="A book about nothing" year="2020" publisher="Wagga Wagga Press" address="NSW" %}}

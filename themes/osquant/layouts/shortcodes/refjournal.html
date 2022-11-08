@@ -1,0 +1,4 @@
+[^{{ .Get "id" }}]: {{ .Get "author" }}: "{{ .Get "title" }}"
+{{ .Get "journal" }}
+{{ if .Get "volume" }} **{{ .Get "volume" }}**({{ .Get "number" }}) {{ end }} {{ .Get "pages" }}
+{{ .Get "publisher" }} ({{ .Get "year" }})

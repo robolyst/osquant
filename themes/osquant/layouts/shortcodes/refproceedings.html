@@ -1,0 +1,7 @@
+[^{{ .Get "id" }}]: {{ .Get "author" }}:
+"{{ .Get "title" }}"
+In: {{ .Get "booktitle" }}
+{{ if .Get "volume" }} vol. {{ .Get "volume" }} {{ end }} pp. {{ .Get "pages" }}
+{{ .Get "publisher" }}
+{{ .Get "address" }}
+({{ .Get "year" }})
