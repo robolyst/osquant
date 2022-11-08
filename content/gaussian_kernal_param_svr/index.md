@@ -83,42 +83,48 @@ K = \left[\begin{matrix}
 \end{aligned}
 $$
 
-For simplicity's sake, we'll denote each cell with a single index instead of two, and refer to them with $p$:
-\begin{align}
+For simplicity's sake, we'll denote each cell with a single index instead of two, and refer to them with \\(p\\):
+$$
+\begin{aligned}
 K &= \left[\begin{matrix}
-  1 \\
-  p_0 & 1 \\
-   p_1 & p_{n-1} & 1 \\
-   p_2 & p_{n} & \ddots & 1 \\
-   \vdots & \vdots & \vdots & \ddots & \ddots \\
-   p_{n-2} & \dots  & \dots  & \dots & p_{n(n-1)/2} & 1
- \end{matrix}\right] \\ 
-p_i &= \kappa(\textbf{x}_{\text{row}(i)}, \textbf{x}_{\text{col}(i)}) \\
-\text{row}(i) &= \text{col}(i) + \text{diag}(i) + 1 \\
-\text{col}(i) &= \floor[\Bigg]{\frac{(2n - 1) - \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2}} \\
+    1 \\\
+    p_0 & 1 \\\
+    p_1 & p_{n-1} & 1 \\\
+    p_2 & p_{n} & \ddots & 1 \\\
+    \vdots & \vdots & \vdots & \ddots & \ddots \\\
+    p\_{n-2} & \dots  & \dots  & \dots & p\_{n(n-1)/2} & 1
+\end{matrix}\right] \\\
+p_i &= \kappa(\textbf{x}\_{\text{row}(i)}, \textbf{x}_{\text{col}(i)}) \\\
+\text{row}(i) &= \text{col}(i) + \text{diag}(i) + 1 \\\
+\text{col}(i) &= \Bigg\lfloor{\frac{(2n - 1) - \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2}}\Bigg\rfloor \\\
 \text{diag}(i) &= i - - \frac{- (2n-1)\text{col}(i) + \text{col}(i)^2}{2}
-\end{align}
-The functions $\text{col}(i)$, $\text{row}(i)$, $\text{diag}(i)$ give the column, row, and diagonal index of a cell $i$ respectively. The functions are derived in the appendix.
+\end{aligned}
+$$
+The functions \\(\text{col}(i)\\), \\(\text{row}(i)\\), \\(\text{diag}(i)\\) give the column, row, and diagonal index of a cell \\(i\\) respectively. The functions are derived in the appendix.
 
-Ignoring the main diagonal of 1s, there are $n-2$ diagonals which we denote with $d$. The zeroth mean diagonal is:
-\begin{align}
+Ignoring the main diagonal of 1s, there are \\(n-2\\) diagonals which we denote with \\(d\\). The zeroth mean diagonal is:
+$$
 d_0 = \frac{p_0 + p_{n-1} + \dots + p_{n(n-1)/2}}{n-1}
-\end{align}
-and the $j^{\text{th}}$ diagonal is:
-\begin{align}
-d_j &= \frac{1}{n-2-j+1} \sum_{i=0}^{n-2-j} p_{in-i(i+1)/2+j}
-\end{align}
+$$
+
+and the \\(j^{\text{th}}\\) diagonal is:
+$$
+d_j = \frac{1}{n-2-j+1} \sum_{i=0}^{n-2-j} p_{in-i(i+1)/2+j}
+$$
+
 We calculate the slope by taking the weighted average of the differenced mean diagonal line:
-\begin{align}
+
+$$
+\begin{aligned}
 S &= \frac{
-		\frac{d_1 -d_0}{l_1+l_0} + 
-		\frac{d_2 -d_1}{l_2+l_1} +  
-		\dots
-	}{
-		(l_1 + l_0) + 
-		(l_2 + l_1) + 
-		\dots
-	}\\
+    \frac{d\_1 -d\_0}{l\_1+l\_0} +
+    \frac{d\_2 -d\_1}{l\_2+l\_1} + 
+    \dots
+}{
+    (l\_1 + l\_0) + 
+    (l\_2 + l\_1) + 
+    \dots
+} \\\
 &= \frac{
 		-d_0(l_0 + l_1) +
 		\sum_{i=1}^{n-3} d_i(l_{i-1} - l_{i+1}) +
@@ -126,11 +132,15 @@ S &= \frac{
 	}{
 		l_0+2\sum_{i=1}^{n-3}l_i + l_{n-2}
 	}
-\end{align}
-This is a linear combination of $p$s and we can write it as such:
+\end{aligned}
+$$
+
+This is a linear combination of \\(p\\)s and we can write it as such:
+$$
 \begin{align}
 S = \sum_{i=0}^{n(n-1)/2} w_i p_i \label{eq:objfunc}
 \end{align}
+$$
 
 
 Each weight is calculated as:
