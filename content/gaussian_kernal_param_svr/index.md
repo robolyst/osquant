@@ -164,7 +164,7 @@ The objective function \eqref{eq:objfunc} is shown in Figure \ref{fig:objfunc}A 
 
 All weights in the objective function \eqref{eq:objfunc} are positive except for when $\text{diag}(i)= 0$ \eqref{eq:weight_conditional}. As a result, there is no guarantee that the objective function \eqref{eq:objfunc} has a single minima. Figure \ref{fig:objfunc}B shows an example of the objective function when the time series values are drawn from a Gaussian distribution. Because the objective function is not guaranteed to have a single minima, we use an exhaustive search to find the global minima in this paper.
 
-\section*{Results}
+# Results
 
 We use a dataset called the \textit{Mashable News Popularity} dataset\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Online+News+Popularity}} to evaluate the \textit{diagonal slope algorithm} described in the previous section. This dataset is a collection of features on 2,000 articles from the online news site \textit{Mashable}. The task is to predict the number of times each article is shared. We provide a full description of this dataset in Appendix 2.
 
@@ -196,16 +196,19 @@ To check whether or not our algorithm is more or less robust than the grid searc
 \label{fig:robust}
 \end{figure}
 
-We show the variance of the $\beta$s in Figure \ref{fig:robust}. On three data sets, the \textit{diagonal slope algorithm} has a greater variance than the grid search. We conclude that the \textit{diagonal slope algorithm} is not always as robust as a grid search.
+We show the variance of the $\beta$s in Figure \ref{fig:robust}. On three data sets, the *diagonal slope algorithm* has a greater variance than the grid search. We conclude that the *diagonal slope algorithm* is not always as robust as a grid search.
 
-\section*{Summary}
-In this paper, we propose an algorithm for choosing kernel parameters in regression tasks which we call the \textit{diagonal slope algorithm}. 
+# Summary
+
+In this paper, we propose an algorithm for choosing kernel parameters in regression tasks which we call the *diagonal slope algorithm*. 
 
 We test this algorithm on a variety of datasets using the Gaussian kernel and support vector regression. We find that the algorithm's accuracy is comparable to a grid search which represents the best possible result. However, we find that the algorithm's choice of the Gaussian kernel's bandwidth parameter is sometimes sensitive to changes in the training data.
 
-Our results suggest that the speed gained from using the \textit{diagonal slope algorithm} does not reduce performance, but it does sometimes reduce robustness. This algorithm can potentially be applied to kernels other than the Gaussian kernel and to kernels with more than one parameter. Such kernels will need to be a measure of similarity or be normalised. A normalised kernel represents the correlation of two points in feature space.
+Our results suggest that the speed gained from using the *diagonal slope algorithm* does not reduce performance, but it does sometimes reduce robustness. This algorithm can potentially be applied to kernels other than the Gaussian kernel and to kernels with more than one parameter. Such kernels will need to be a measure of similarity or be normalised. A normalised kernel represents the correlation of two points in feature space.
 
-\section*{Appendix 1 - Calculating the row, column and diagonal indices of a Gramian matrix cell} \label{apdx:indices}
+# Appendices 
+## Appendix 1 - Calculating the row, column and diagonal indices of a Gramian matrix cell
+\label{apdx:indices}
 
 A Gramian matrix is a matrix of the dot products between a set of vectors. The matrix is symmetric and the values along the main diagonal are identical because they correspond to the dot product between two identical points. The only unique values in a Gramian matrix are in the upper or lower triangle. Here, we will use the lower triangle.
 
@@ -254,38 +257,41 @@ The row is the column plus the diagonal:
 \text{row}(i) &= \text{col}(i) + \text{diag}(i) + 1
 \end{align}
 
-\section*{Appendix 2 - Datasets} \label{apdx:data}
+## Appendix 2 - Datasets
+\label{apdx:data}
 
 We use a variety of real-world datasets that cover a wide range of topics such as micro-blogging and education. 
 
-\paragraph{Mashable News Popularity dataset}
+**Mashable News Popularity dataset**
+
 \textit{Mashable} is an online news site where readers can share news articles. In one study, researchers collected almost 40,000 articles from \textit{Mashable} and extracted a set of features from each one including number of positive words, LDA topic distribution and publication time \cite{Fernandes2015}. The task is to predict the number of times each article was shared.
 
 The Mashable News Popularity dataset contains 39,797 news articles. In this study we use a random sample of 2,000 articles.
 
-\paragraph{Portuguese Students, mathematics class dataset}
+**Portuguese Students, mathematics class dataset**
 
 To improve understanding of why Portugal’s student failure rate is high, one study collected data from two Portuguese schools \cite{Cortez2008}. The researchers collected data on each student by conducting a survey which asked questions ranging from their romantic relationship to their parent's alcohol consumption. They also collected the students final grades. 
 
 This dataset contains data on 395 students in both schools and their final mathematics grade. The task is to correctly predict their final grade.
 
-\paragraph{Portuguese Students, Portuguese class dataset}
+**Portuguese Students, Portuguese class dataset**
 
 As well as the students' mathematics grades, the study also reports their Portuguese grades. This dataset contains data on 649 students and their Portuguese grades. Again, the task is to correctly predict their final grade.
 
-\paragraph{Million Song}
+**Million Song**
+
 This dataset is a collection of 515,245 songs selected from the Million Song Dataset \cite{Bertin-Mahieux2011}. It contains 90 attributes for each song which are the means and covariances of the timbre across segments within a song. The task is to predict the year each song was produced. In this study we use a random sample of 2,000 songs.
 
-\paragraph{Housing}
+**Housing**
+
 This is a dataset of 506 houses in Boston and their prices as used by \cite{Quinlan1993}. The task is to predict the median housing price from a set of features which includes crime rate, average number of rooms, tax rates and socio-economic states.
 
+**Blog Feedback**
 
-
-
-\paragraph{Blog Feedback}
 This is a dataset of 60,000 blog posts from around 1,200 Hungarian blogs. There are 280 recorded features for each post including number of links, number of comments received thus far and the most discriminative features from a bag of words analysis. The goal is to predict the number of comments each post will recieve in the next 24 hours. This dataset was used by \cite{Buza2014}. We use a random subset of 2,000 blog posts.
 
-\paragraph{Bike Sharing}
+**Bike Sharing**
+
 Bike sharing systems completely automate the rental and return process of renting bikes. Users are able to rent a bike from one location, and return the bike to another. This dataset contains daily records of a bike-sharing system called Captial Bike Sharing in Washington, D.C., USA. There are two years of records from the 1$^\text{st}$ of January 2011 to the 31$^\text{st}$ of December 2012 for a total of 731 days. This dataset was used by \cite{Fanaee-T2014} to test an event detection algorithm. In this paper, the task is to predict the number of rented bikes from the day's weather records.
 
 
