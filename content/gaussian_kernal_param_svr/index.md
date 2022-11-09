@@ -1,7 +1,7 @@
 ---
-title: "Choosing the Gaussian Kernel's Parameter for Support Vector Regression"
+title: "Faster Gaussian Kernel fit for Support Vector Regression"
 blurb: "
-Support vector regression models transform input vectors into a very high number of dimensions where the regression problem becomes linear. This new space is defined by a kernel function which has it's own parameters. A major drawback of these models is that they are slow to fit the kernel parameters. Here, we focus on quickly choosing the Gaussian kernel's bandwidth parameter. We develop an algorithm which attempts to match the distance between the input vectors to the distance between the output vectors using a linear combination of the kernel functions. We find that this algorithm is fast, robust on some datasets, and has a similar error to slower and more exhaustive methods.
+Support vector regression models transform input vectors into a very high number of dimensions where the regression problem becomes linear. This new space is defined by a kernel function. A major drawback of these models is that they are slow to fit the kernel parameters. Here I develop an algorithm to quickly fit the Gaussian kernel's bandwidth parameter. This algorithm is fast, robust on some datasets, and has a similar fit to slower and more exhaustive methods.
 "
 
 date: "2016-01-07"
@@ -9,7 +9,6 @@ type: article
 author: Adrian Letchford
 katex: true
 markup: "mmark"
-draft: true
 ---
 
 # Introduction
@@ -28,17 +27,17 @@ $$
 
 A necessary task when fitting a support vector regression (SVR) model is tuning the kernel parameters. The most common method of selecting \\(\beta\\) in \\(\eqref{1}\\) and the parameters to a SVR is by a grid search with cross-validation [^Hong2015] [^Tang2009]. In a grid search, the parameter space is divided into a grid of points where each one is tested using cross-validation. Given a vast number of grid points, this is the most accurate method. Evaluating a SVR model's prediction error has a complexity on the order of \\(O(n^3)\\) where \\(n\\) is the number of data points. This cubic complexity makes the grid search the slowest method. Various alternatives do not necessarily work around the evaluation complexity. For example, one alternative is to test random points rather than use a grid [^Bergstra2012].
 
-In this paper, we develop an algorithm to find a value for \\(\beta\\) from a set of training points. Our algorithm does not calculate the model's prediction error and runs in \\(O(n^2)\\) time. The resulting error is just as good as an exhaustive grid search. We show that, on some datasets, the selected value for \\(\beta\\) varies considerably between small subsets of data; which means that this algorithm can sometimes trade robustness for the improvement in speed.
+In this paper, I develop an algorithm to find a value for \\(\beta\\) from a set of training points. This algorithm does not calculate the model's prediction error and runs in \\(O(n^2)\\) time. The resulting error is just as good as an exhaustive grid search. I show that, on some datasets, the selected value for \\(\beta\\) varies considerably between small subsets of data; which means that this algorithm can sometimes trade robustness for the improvement in speed.
 
 # Finding the Gaussian kernel parameter
 
-We present a method that selects a value for the Gaussian kernel's bandwidth by focusing on the distance between the output values \\(y\\). A kernel machine models the target value \\(y\\) as a function of the dot product between the input vectors \\(x\\). The dot product can be thought of as a measure of similarity between two vectors. The algorithm presented here attempts to select values for a kernel's parameters so that two \\(x\\) vectors are more similar if their corresponding \\(y\\) values are also similar.
+This method selects a value for the Gaussian kernel's bandwidth by focusing on the distance between the output values \\(y\\). A kernel machine models the target value \\(y\\) as a function of the dot product between the input vectors \\(x\\). The dot product can be thought of as a measure of similarity between two vectors. The algorithm presented here attempts to select values for a kernel's parameters so that two \\(x\\) vectors are more similar if their corresponding \\(y\\) values are also similar.
 
 {{<figure src="images/time_series_example.svg" title="Figure 1: An example time series." >}}
 In this example, \\(y = \sin(x) + \sin(3x) + \sin(2x + 5)\\).
 {{</figure>}}
 
-Consider the example time series in Figure 1. In this example, we want to predict the next value in this series based on the last 20 values. We'll represent the last 20 values at time \\(t\\) as \\(\textbf{x}_t\\) and the target value as \\(y_t\\). The Gramian matrix, sometimes known as the feature matrix, is a matrix of dot products between each of the \\(\textbf{x}\\) vectors. We write this as \\(\textbf{K}\\):
+Consider the example time series in Figure 1. In this example, we want to predict the next value in this series based on the last 20 values. The last 20 values at time \\(t\\) can be represented as \\(\textbf{x}_t\\) and the target value as \\(y_t\\). The Gramian matrix, sometimes known as the feature matrix, is a matrix of dot products between each of the \\(\textbf{x}\\) vectors. This is written as \\(\textbf{K}\\):
 $$
 \begin{aligned}
 \textbf{K} = \left[\begin{matrix}
@@ -49,10 +48,10 @@ $$
 \end{aligned}
 $$
 
-For our example time series, the Gramian matrix with the Gaussian kernel is shown in Figure 2A. The value for \\(\beta\\) was chosen by hand and is not important in this example. Observe in Figure 2B what happens when we sort the vectors by their \\(y\\) values in an ascending order. Now, adjacent \\(\textbf{x}\\) vectors have a very close value for their corresponding target \\(y\\). Notice that cells close to the main diagonal are red (value close to 1), and the further a cell is from the diagonal the more blue (value close to 0) it is.
+For the example time series, the Gramian matrix with the Gaussian kernel is shown in Figure 2A. The value for \\(\beta\\) was chosen by hand and is not important in this example. Observe in Figure 2B what happens after sorting the vectors by their \\(y\\) values in an ascending order. Now, adjacent \\(\textbf{x}\\) vectors have a very close value for their corresponding target \\(y\\). Notice that cells close to the main diagonal are red (value close to 1), and the further a cell is from the diagonal the more blue (value close to 0) it is.
 
 {{<figure src="images/time_series_gramian.svg" title="Figure 2: The Gramian matrix of the time series in Figure 1." width="medium" >}}
-**(A)** We set the problem of predicting the value of the example series in Figure 1 using the previous 20 values. We represent the value at time \\(t\\) with \\(y_t\\) and the previous 20 with \\(x_t\\). Here we shown the Gramian matrix where each cell is the value of the Gaussian function between two \\(x\\) vectors. We choose the bandwidth parameter to highlight the pattern, it's exactly value is not important. **(B)** If we sort the \\(x\\) vectors by their corresponding target value \\(y\\), the pattern is destroyed, however, a new pattern emerges. Now, values closer to the main diagonal are more red. That is, the kernel function of two \\(x\\) vectors tends to be closer to 1 when their corresponding \\(y\\)s are closer in value.
+**(A)** Consider the problem of predicting the next value of the example series in Figure 1 using the previous 20 values. The value at time \\(t\\) is represented with \\(y_t\\) and the previous 20 with \\(x_t\\). Here you can see the Gramian matrix where each cell is the value of the Gaussian function between two \\(x\\) vectors. The bandwidth parameter was chosen to highlight the pattern, its exact value is not important. **(B)** If the \\(x\\) vectors are sorted by their corresponding target value \\(y\\), the pattern is destroyed, however, a new pattern emerges. Now, values closer to the main diagonal are more red. That is, the kernel function of two \\(x\\) vectors tends to be closer to 1 when their corresponding \\(y\\)s are closer in value.
 {{</figure>}}
 
 Now that the vectors are sorted, the further away a cell is from the main diagonal, the more distant their target values. Ideally, just like in Fig. 2B, we want the \\(\textbf{x}\\) vectors that correspond to the cells to also be less similar. We can visualise this decrease in similarity by taking the mean value of each of the matrix's lower diagonals. We can ignore the upper diagonals because they are exactly the same--a Gramian matrix is symmetric. In Figure 3 we plot the mean of each of the diagonals in Fig. 2B. Again we can see that the kernel function's values are more similar when closer to the main diagonal. In this example, the average value decreases to zero the further from the main diagonal.
@@ -196,11 +195,11 @@ We show the variance of the \\(\beta\\)s in Figure 6. On three data sets, the di
 
 # Summary
 
-In this paper, we propose an algorithm for choosing kernel parameters in regression tasks which we call the *diagonal slope algorithm*. 
+In this paper, I propose an algorithm for choosing kernel parameters in regression tasks termmed the *diagonal slope algorithm*. 
 
-We test this algorithm on a variety of datasets using the Gaussian kernel and support vector regression. We find that the algorithm's accuracy is comparable to a grid search which represents the best possible result. However, we find that the algorithm's choice of the Gaussian kernel's bandwidth parameter is sometimes sensitive to changes in the training data.
+This algorithm was tested on a variety of datasets using the Gaussian kernel and support vector regression. The algorithm's accuracy is comparable to a grid search which represents the best possible result. However, the algorithm's choice of the Gaussian kernel's bandwidth parameter is sometimes sensitive to changes in the training data.
 
-Our results suggest that the speed gained from using the *diagonal slope algorithm* does not reduce performance, but it does sometimes reduce robustness. This algorithm can potentially be applied to kernels other than the Gaussian kernel and to kernels with more than one parameter. Such kernels will need to be a measure of similarity or be normalised. A normalised kernel represents the correlation of two points in feature space.
+These results suggest that the speed gained from using the diagonal slope algorithm does not reduce performance, but it does sometimes reduce robustness. This algorithm can potentially be applied to kernels other than the Gaussian kernel and to kernels with more than one parameter. Such kernels will need to be a measure of similarity or be normalised. A normalised kernel represents the correlation of two points in feature space.
 
 # Appendices 
 ## Appendix 1 - Row and column indices of a matrix cell
@@ -211,7 +210,7 @@ A Gramian matrix is a matrix of the dot products between a set of vectors. The m
 Because a Gramian marix is symmetric and the diagonals are all the same value we only need to index the lower triangle. Here, we depict how each cell is indexed with a top to bottom approach. The indexes for the columns, rows and diagonals are also shown. 
 {{</figure>}}
 
-We can index each cell in the lower triangle of a Gramian matrix as shown in Figure 7 which represents the matrix made by $6$ vectors. In this appendix, we derive the column, row and diagonal index from the cell index.
+We can index each cell in the lower triangle of a Gramian matrix as shown in Figure 7 which represents the matrix made by 6 vectors. In this appendix, we derive the column, row and diagonal index from the cell index.
 
 We represent the cell index with \\(i\\) and the total number of vectors which produce the Gramian matrix with \\(n\\). First we figure out the function \\(\text{col}(i)\\) which calculates the column index. Given a column index \\(c\\), the \\(i\\) that sits at the top of that column is:
 $$
