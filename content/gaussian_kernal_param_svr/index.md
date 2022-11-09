@@ -298,6 +298,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     year="1998"
     publisher="Wiley & Sons"
     address="New York"
+    link="https://www.wiley.com/en-gb/Statistical+Learning+Theory-p-9780471030034"
 %}}
 
 {{% citation 

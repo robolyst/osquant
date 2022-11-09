@@ -6,5 +6,6 @@
 {{ $number := cond (not (.Get "number")) "" (.Get "number" | printf "(%s)") }}
 {{ $pages := cond (not (.Get "pages")) "" (.Get "pages" | printf "pp. %s") }}
 {{ $year := cond (not (.Get "year")) "" (.Get "year" | printf "(%s)") }}
+{{ $link := cond (not (.Get "link")) "" (.Get "link" | printf "[link](%s)") }}
 
-{{ $key }} {{ $author }} "{{ .Get "title" }}" {{ $publication }} {{ $volume }}{{ $number }} {{ $pages }} {{ .Get "publisher" }} {{ .Get "address" }} {{ $year }}
+{{ $key }} {{ $author }} "{{ .Get "title" }}" {{ $publication }} {{ $volume }}{{ $number }} {{ $pages }} {{ .Get "publisher" }} {{ .Get "address" }} {{ $year }} {{ $link }}
