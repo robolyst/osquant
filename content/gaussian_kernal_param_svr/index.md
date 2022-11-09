@@ -138,65 +138,61 @@ $$
 This is a linear combination of \\(p\\)s and we can write it as such:
 $$
 \begin{align}
-S = \sum_{i=0}^{n(n-1)/2} w_i p_i \label{eq:objfunc}
+S = \sum_{i=0}^{n(n-1)/2} w_i p_i \label{2}
 \end{align}
 $$
 
 
 Each weight is calculated as:
+
+$$
+w_i^* = \frac{1}{n-2-\text{diag}(i)+1} \times \frac{1}{l_0+2\sum_{j=1}^{n-3}l_j + l_{n-2}}
+$$
+$$
 \begin{align}
-w_i^* &= \frac{1}{n-2-\text{diag}(i)+1} \times \frac{1}{l_0+2\sum_{j=1}^{n-3}l_j + l_{n-2}} \\
-w_i &= \begin{cases}
-      -w_i^*(l_0 + l_1), & \text{if}\ \text{diag}(i)= 0 \\
-      w_i^*(l_{\text{diag}(i)-1} - l_{\text{diag}(i)+1}), & \text{if}\ 1 \geq \text{diag}(i) \geq n-3 \\
-      w_i^*(l_{n-2} + l_{n-3}), & \text{if}\ \text{diag}(i)= n-2
-    \end{cases} \label{eq:weight_conditional}
+    w_i &= \begin{cases}
+        -w_i^*(l_0 + l_1), & \text{if}\ \text{diag}(i)= 0 \\\
+        -w_i^\*(l_{\text{diag}(i)-1} - l_{\text{diag}(i)+1}), & \text{if}\ 1 \geq \text{diag}(i) \geq n-3 \\\
+        w_i^\*(l_{n-2} + l_{n-3}), & \text{if}\ \text{diag}(i)= n-2
+    \end{cases} \label{3}
 \end{align}
+$$
 
-The objective function \eqref{eq:objfunc} is shown in Figure \ref{fig:objfunc}A using the time series example in Figure 1. 
+The objective function \\(\eqref{2}\\) is shown in Figure 4A using the time series example in Figure 1. 
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\linewidth]{images/objective_function_example}
-\caption{\textbf{Examples of the objective function as $\beta$ changes.} \textbf{(A)} The objective function on the example time series in Figure 1. \textbf{(B)} The objective function on a randomly generated time series shows that there is no guarantee that it will be convex.} 
-\label{fig:objfunc}
-\end{figure}
+{{<figure src="images/objective_function_example.svg" title="Figure 4: Examples of the objective function." >}}
+**(A)** The objective function on the example time series in Figure 1. **(B)** The objective function on a randomly generated time series shows that there is no guarantee that it will be convex.
+{{</figure>}}
 
-All weights in the objective function \eqref{eq:objfunc} are positive except for when $\text{diag}(i)= 0$ \eqref{eq:weight_conditional}. As a result, there is no guarantee that the objective function \eqref{eq:objfunc} has a single minima. Figure \ref{fig:objfunc}B shows an example of the objective function when the time series values are drawn from a Gaussian distribution. Because the objective function is not guaranteed to have a single minima, we use an exhaustive search to find the global minima in this paper.
+All weights in the objective function \\(\eqref{2}\\) are positive except for when \\(\text{diag}(i)= 0\\) \\(\eqref{3}\\). As a result, there is no guarantee that the objective function \\(\eqref{2}\\) has a single minima. Figure 4B shows an example of the objective function when the time series values are drawn from a Gaussian distribution. Because the objective function is not guaranteed to have a single minima, we use an exhaustive search to find the global minima in this paper.
 
 # Results
 
-We use a dataset called the \textit{Mashable News Popularity} dataset\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Online+News+Popularity}} to evaluate the \textit{diagonal slope algorithm} described in the previous section. This dataset is a collection of features on 2,000 articles from the online news site \textit{Mashable}. The task is to predict the number of times each article is shared. We provide a full description of this dataset in Appendix 2.
+We use a dataset called the *Mashable News Popularity* dataset [^Mashable] to evaluate the diagonal slope algorithm described in the previous section. This dataset is a collection of features on 2,000 articles from the online news site [Mashable](https://mashable.com/). The task is to predict the number of times each article is shared. We provide a full description of this dataset in Appendix 2.
 
 We randomly split this dataset into two even subsets, one for training and one for testing. We convert any non-numeric dimensions into an orthogonal representation. We normalise the training dataset by subtracting the mean from each dimension and dividing by their standard deviations. We normalise the testing dataset using the same mean and standard deviation.
 
-We evaluate the \textit{diagonal slope algorithm's} objective function for each $\beta$ from $10^{-3}$ to $10^{3}$ at $80$ logarithmic evenly spaced values. After finding the $\beta$ which minimises the diagonal slope, we use a grid search to fit the $\epsilon$ and $C$ parameters of a support vector regressor. We evaluate $\epsilon$ at 5 logarithmic evenly spaced values from $10^{-3}$ to $10^1$, and $C$ at 7 logarithmic evenly spaced values from $10^{-3}$ to $10^{3}$.
+We evaluate the diagonal slope algorithm's objective function for each \\(\beta\\) from \\(10^{-3}\\) to \\(10^{3}\\) at \\(80\\) logarithmic evenly spaced values. After finding the \\(\beta\\) which minimises the diagonal slope, we use a grid search to fit the \\(\epsilon\\) and \\(C\\) parameters of a support vector regressor. We evaluate \\(\epsilon\\) at 5 logarithmic evenly spaced values from \\(10^{-3}\\) to \\(10^1\\), and \\(C\\) at 7 logarithmic evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\).
 
-We find that the support vector regressor fitted with the  \textit{diagonal slope algorithm} has a mean absolute error (MAE) of 0.30 on the testing data while the plain grid search's MAE is also 0.30. These results show that our algorithm achieves a comparable forecasting error with an exhaustive grid search but at a fraction of the time.
+We find that the support vector regressor fitted with the diagonal slope algorithm has a mean absolute error (MAE) of 0.30 on the testing data while the plain grid search's MAE is also 0.30. These results show that our algorithm achieves a comparable forecasting error with an exhaustive grid search but at a fraction of the time.
 
-We verify this result by performing the same analysis on six other datasets. There is a dataset for predicting Portuguese student's mathematics grades\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Student+Performance}}, predicting Portuguese student's Portuguese grades\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Student+Performance}}, classifying the age of a song\footnote{\url{https://archive.ics.uci.edu/ml/datasets/YearPredictionMSD}}, predicting housing prices in Boston\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Housing}}, predicting the number of comments on blog posts\footnote{\url{https://archive.ics.uci.edu/ml/datasets/BlogFeedback}}, and predicting the number of bicycles rented in a bike-sharing system\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset}}. Again, we provide a full description of each of the datasets in Appendix 2.
+We verify this result by performing the same analysis on six other datasets. There is a dataset for predicting Portuguese student's mathematics grades [^Mathematics], predicting Portuguese student's Portuguese grades [^Portuguese], classifying the age of a song [^Music], predicting housing prices in Boston [^Housing], predicting the number of comments on blog posts [^Blog], and predicting the number of bicycles rented in a bike-sharing system [^Bike]. Again, we provide a full description of each of the datasets in Appendix 2.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.7\linewidth]{images/accuracy}
-\caption{\textbf{The error is just as good as the standard slow and exhaustive method.} The dataset \textit{Mashable News Popularity} is a collection of articles from the news website \textit{Mashable} and the aim is to predict the the number of times each article is shared based on a set of features. We randomly split this dataset evenly into a training and testing set. We train the proposed \textit{diagonal slope} algorithm and a basic grid search on the training sample and evaluate the mean absolute percentage error (MAPE) on the testing set. We repeat this process on the remaining datasets. We find that the error from the \textit{diagonal slope} algorithm is never more than 5\% greater than the grid search. } 
-\label{fig:error}
-\end{figure}
+{{<figure src="images/accuracy.svg" title="Figure 5: The error is just as good as the standard slow and exhaustive method." >}}
+The dataset *Mashable News Popularity* is a collection of articles from the news website [Mashable](https://mashable.com/) and the aim is to predict the the number of times each article is shared based on a set of features. We randomly split this dataset evenly into a training and testing set. We train the proposed diagonal slope algorithm and a basic grid search on the training sample and evaluate the mean absolute percentage error (MAPE) on the testing set. We repeat this process on the remaining datasets. We find that the error from the diagonal slope algorithm is never more than 5\% greater than the grid search.
+{{</figure>}}
 
-The results are shown in Figure \ref{fig:error}. While the \textit{diagonal slope algorithm's} error is slightly higher or lower on some datasets, it is never greater by more than 5\%. These results suggest that our algorithm does not trade accuracy for speed.
+The results are shown in Figure 5. While the diagonal slope algorithm's error is slightly higher or lower on some datasets, it is never greater by more than 5\%. These results suggest that our algorithm does not trade accuracy for speed.
 
 Because kernel algorithms can be very slow when using large datasets, a common practice is to fit a model on a small subset. However, there is a possibility that an algorithm for choosing the kernel parameters is very sensitive to the subset. If the subset changes, the selected parameters might also change quite significantly. An algorithm that is able to choose consistent kernel parameters is called robust.
 
-To check whether or not our algorithm is more or less robust than the grid search, we draw with replacement 30 random subsets of 100 points from each datasets. We use the \textit{diagonal slope algorithm} and grid search to find a suitable value for $\beta$ on each subset. We then compare the variance of the $\beta$s as chosen by the two algorithms.
+To check whether or not our algorithm is more or less robust than the grid search, we draw with replacement 30 random subsets of 100 points from each datasets. We use the diagonal slope algorithm and grid search to find a suitable value for \\(\beta\\) on each subset. We then compare the variance of the \\(\beta\\)s as chosen by the two algorithms.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.7\linewidth]{images/robustness}
-\caption{\textbf{The proposed algorithm is not always robust.} We take 30 random samples of 100 articles from the \textit{Mashable News Popularity} dataset. We fit both the \textit{diagonal slope} algorithm and a basic grid search to each of the samples and record the fitted $\beta$. We then calculate the variance between the selected values. Here we show that the value for $\beta$ selected by the \textit{diagonal slope} algorithm has a greater variance than if selected by the grid search. We repeat this analysis on all the data sets and find that the \textit{diagonal slope} algorithm's variance is greater for three of the datasets. This demonstrates that the proposed algorithm is not always robust.} 
-\label{fig:robust}
-\end{figure}
+{{<figure src="images/robustness.svg" title="Figure 6: The proposed algorithm is not always robust." >}}
+We take 30 random samples of 100 articles from the *Mashable News Popularity* dataset. We fit both the diagonal slope algorithm and a basic grid search to each of the samples and record the fitted \\(\beta\\). We then calculate the variance between the selected values. Here we show that the value for \\(\beta\\) selected by the diagonal slope algorithm has a greater variance than if selected by the grid search. We repeat this analysis on all the data sets and find that the diagonal slope algorithm's variance is greater for three of the datasets. This demonstrates that the proposed algorithm is not always robust.
+{{</figure>}}
 
-We show the variance of the $\beta$s in Figure \ref{fig:robust}. On three data sets, the *diagonal slope algorithm* has a greater variance than the grid search. We conclude that the *diagonal slope algorithm* is not always as robust as a grid search.
+We show the variance of the \\(\beta\\)s in Figure 6. On three data sets, the diagonal slope algorithm has a greater variance than the grid search. We conclude that the diagonal slope algorithm is not always as robust as a grid search.
 
 # Summary
 
@@ -431,6 +427,14 @@ Bike sharing systems completely automate the rental and return process of rentin
     number=""
     pages="281--305"
 %}}
+
+[^Mashable]: [Online news popularity dataset](https://archive.ics.uci.edu/ml/datasets/Online+News+Popularity)
+[^Mathematics]: [Student performance, mathematics dataset](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
+[^Portuguese]: [Student performance, Portuguese dataset](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
+[^Music]: [Age of song dataset](https://archive.ics.uci.edu/ml/datasets/YearPredictionMSD)
+[^Housing]: [House prices dataset](https://archive.ics.uci.edu/ml/datasets/Housing)
+[^Blog]: [Blog feedback dataset](https://archive.ics.uci.edu/ml/datasets/BlogFeedback)
+[^Bike]: [Bike sharing dataset](https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset)
 
 
 
