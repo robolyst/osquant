@@ -1,8 +1,0 @@
-{{ $key := .Get "id" | printf "[^%s]:" }}
-{{ $author := cond (not (.Get "author")) "" (.Get "author" | printf "%s:") }}
-{{ $booktitle := cond (not (.Get "booktitle")) "" (.Get "booktitle" | printf "In: *%s*") }}
-{{ $volume := cond (not (.Get "volume")) "" (.Get "volume" | printf "vol. %s") }}
-{{ $pages := cond (not (.Get "pages")) "" (.Get "pages" | printf "pp. %s") }}
-{{ $year := cond (not (.Get "year")) "" (.Get "year" | printf "(%s)") }}
-
-{{ $key }} {{ $author }} "{{ .Get "title" }}" {{ $booktitle }} {{ $volume }} {{ $pages }} {{ .Get "publisher" }} {{ .Get "address" }} {{ $year }}

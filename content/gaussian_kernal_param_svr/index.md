@@ -324,11 +324,11 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Kluwer Academic Publishers"
 %}}
 
-{{% refproceedings 
+{{% refjournal 
     id="Phillips1998"
     author="Phillips, P Jonathon"
     title="Support Vector Machines Applied to Face Recognition"
-    booktitle="Proceedings of the 1998 Conference on Advances in Neural Information Processing Systems II"
+    publication="Proceedings of the 1998 Conference on Advances in Neural Information Processing Systems II"
     year="1999"
     pages="803--809"
     publisher="MIT Press"
@@ -347,11 +347,11 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Kluwer Academic Publishers"
 %}}
 
-{{% refproceedings 
+{{% refjournal 
     id="Li2001"
     author="Li, S Z and Fu, QingDong and Gu, Lie and Scholkopf, Bernhard and Cheng, Yimin and Zhang, Hongjiag"
     title="Kernel machine based learning for multi-view face detection and pose estimation"
-    booktitle="Computer Vision, 2001. ICCV 2001. Proceedings. Eighth IEEE International Conference on"
+    publication="Computer Vision, 2001. ICCV 2001. Proceedings. Eighth IEEE International Conference on"
     year="2001"
     pages="674--679"
     volume="2"
@@ -393,11 +393,11 @@ Bike sharing systems completely automate the rental and return process of rentin
 %}}
 
 
-{{% refproceedings 
+{{% refjournal 
     id="Vapnik1996"
     author="Vapnik, Vladimir and Golowich, Steven E and Smola, Alex"
     title="Support Vector Method for Function Approximation, Regression Estimation, and Signal Processing"
-    booktitle="Advances in Neural Information Processing Systems"
+    publication="Advances in Neural Information Processing Systems"
     year="1996"
     pages="281--287"
     volume="9"
@@ -433,20 +433,20 @@ Bike sharing systems completely automate the rental and return process of rentin
 [^Blog]: [Blog feedback dataset](https://archive.ics.uci.edu/ml/datasets/BlogFeedback)
 [^Bike]: [Bike sharing dataset](https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset)
 
-{{% refproceedings 
+{{% refjournal 
     id="Fernandes2015"
     author="Fernandes, K. and Vinagre, P. and Cortez, P."
     title="A Proactive Intelligent Decision Support System for Predicting the Popularity of Online News"
-    booktitle="Proceedings of the 17th EPIA 2015 - Portuguese Conference on Artificial Intelligence"
+    publication="Proceedings of the 17th EPIA 2015 - Portuguese Conference on Artificial Intelligence"
     year="2015"
     address="Coimbra, Portugal"
 %}}
 
-{{% refproceedings 
+{{% refjournal 
     id="Cortez2008"
     author="Cortez, Paulo and Silva, Alice"
     title="Using Data Mining To Predict Secondary School Student Performance"
-    booktitle="In the Proceedings of 5th Annual Future Business Technology Conference"
+    publication="In the Proceedings of 5th Annual Future Business Technology Conference"
     year="2008"
     pages="5--12"
     volume="2003"
@@ -455,29 +455,29 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="A. Brito and J. Teixeira"
 %}}
 
-{{% refproceedings 
+{{% refjournal 
     id="Bertin-Mahieux2011"
     author="Bertin-Mahieux, Thierry and Ellis, Daniel P W and Whitman, Brian and Lamere, Paul"
     title="The Million Song Dataset"
-    booktitle="Proceedings of the 12th International Conference on Music Information Retrieval"
+    publication="Proceedings of the 12th International Conference on Music Information Retrieval"
     year="2011"
 %}}
 
-{{% refproceedings 
+{{% refjournal 
     id="Quinlan1993"
     author="Quinlan, J R"
     title="Combining Instance-Based and Model-Based Learning"
-    booktitle="Proceedings of the Tenth International Conference of Machine Learning"
+    publication="Proceedings of the Tenth International Conference of Machine Learning"
     year="1993"
     pages="236--243"
     publisher="Morgan Kaufmann"
 %}}
 
-{{% refproceedings 
+{{% refjournal 
     id="Buza2014"
     author="Buza, Krisztian"
     title="Feedback Prediction for Blogs"
-    booktitle="Data Analysis, Machine Learning and Knowledge Discovery SE - 16"
+    publication="Data Analysis, Machine Learning and Knowledge Discovery SE - 16"
     year="2014"
     pages="145--152"
     publisher="Springer International Publishing"
