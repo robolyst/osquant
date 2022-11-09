@@ -3,3 +3,4 @@
 /resources
 .vercel
 *.lock
+.DS_Store
