@@ -1,4 +1,4 @@
-<figure>
-<img src='{{ .Get "src" | safeURL }}' alt='{{ .Get "title" }}'>
-<figcaption><b>{{ .Get "title" }}</b> {{ .Inner | markdownify }}</figcaption>
+<figure class='{{ .Get "width" }}'>
+    <img src='{{ .Get "src" | safeURL }}' alt='{{ .Get "title" }}'  class='{{ .Get "width" }}'>
+    <figcaption><b>{{ .Get "title" }}</b> {{ .Inner | markdownify }}</figcaption>
 </figure>

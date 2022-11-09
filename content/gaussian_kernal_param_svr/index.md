@@ -51,7 +51,7 @@ $$
 
 For our example time series, the Gramian matrix with the Gaussian kernel is shown in Figure 2A. The value for \\(\beta\\) was chosen by hand and is not important in this example. Observe in Figure 2B what happens when we sort the vectors by their \\(y\\) values in an ascending order. Now, adjacent \\(\textbf{x}\\) vectors have a very close value for their corresponding target \\(y\\). Notice that cells close to the main diagonal are red (value close to 1), and the further a cell is from the diagonal the more blue (value close to 0) it is.
 
-{{<figure src="images/time_series_gramian.svg" title="Figure 2: The Gramian matrix of the time series in Figure 1." >}}
+{{<figure src="images/time_series_gramian.svg" title="Figure 2: The Gramian matrix of the time series in Figure 1." width="medium" >}}
 **(A)** We set the problem of predicting the value of the example series in Figure 1 using the previous 20 values. We represent the value at time \\(t\\) with \\(y_t\\) and the previous 20 with \\(x_t\\). Here we shown the Gramian matrix where each cell is the value of the Gaussian function between two \\(x\\) vectors. We choose the bandwidth parameter to highlight the pattern, it's exactly value is not important. **(B)** If we sort the \\(x\\) vectors by their corresponding target value \\(y\\), the pattern is destroyed, however, a new pattern emerges. Now, values closer to the main diagonal are more red. That is, the kernel function of two \\(x\\) vectors tends to be closer to 1 when their corresponding \\(y\\)s are closer in value.
 {{</figure>}}
 
@@ -178,7 +178,7 @@ We find that the support vector regressor fitted with the diagonal slope algorit
 
 We verify this result by performing the same analysis on six other datasets. There is a dataset for predicting Portuguese student's mathematics grades [^Mathematics], predicting Portuguese student's Portuguese grades [^Portuguese], classifying the age of a song [^Music], predicting housing prices in Boston [^Housing], predicting the number of comments on blog posts [^Blog], and predicting the number of bicycles rented in a bike-sharing system [^Bike]. Again, we provide a full description of each of the datasets in Appendix 2.
 
-{{<figure src="images/accuracy.svg" title="Figure 5: The error is just as good as the standard slow and exhaustive method." >}}
+{{<figure src="images/accuracy.svg" title="Figure 5: The error is just as good as the standard slow and exhaustive method." width="medium" >}}
 The dataset *Mashable News Popularity* is a collection of articles from the news website [Mashable](https://mashable.com/) and the aim is to predict the the number of times each article is shared based on a set of features. We randomly split this dataset evenly into a training and testing set. We train the proposed diagonal slope algorithm and a basic grid search on the training sample and evaluate the mean absolute percentage error (MAPE) on the testing set. We repeat this process on the remaining datasets. We find that the error from the diagonal slope algorithm is never more than 5\% greater than the grid search.
 {{</figure>}}
 
@@ -188,7 +188,7 @@ Because kernel algorithms can be very slow when using large datasets, a common p
 
 To check whether or not our algorithm is more or less robust than the grid search, we draw with replacement 30 random subsets of 100 points from each datasets. We use the diagonal slope algorithm and grid search to find a suitable value for \\(\beta\\) on each subset. We then compare the variance of the \\(\beta\\)s as chosen by the two algorithms.
 
-{{<figure src="images/robustness.svg" title="Figure 6: The proposed algorithm is not always robust." >}}
+{{<figure src="images/robustness.svg" title="Figure 6: The proposed algorithm is not always robust." width="medium" >}}
 We take 30 random samples of 100 articles from the *Mashable News Popularity* dataset. We fit both the diagonal slope algorithm and a basic grid search to each of the samples and record the fitted \\(\beta\\). We then calculate the variance between the selected values. Here we show that the value for \\(\beta\\) selected by the diagonal slope algorithm has a greater variance than if selected by the grid search. We repeat this analysis on all the data sets and find that the diagonal slope algorithm's variance is greater for three of the datasets. This demonstrates that the proposed algorithm is not always robust.
 {{</figure>}}
 
@@ -207,7 +207,7 @@ Our results suggest that the speed gained from using the *diagonal slope algorit
 
 A Gramian matrix is a matrix of the dot products between a set of vectors. The matrix is symmetric and the values along the main diagonal are identical because they correspond to the dot product between two identical points. The only unique values in a Gramian matrix are in the upper or lower triangle. Here, we will use the lower triangle.
 
-{{<figure src="images/grid.svg" title="Figure 7: Matrix indexing." >}}
+{{<figure src="images/grid.svg" title="Figure 7: Matrix indexing." width="small" >}}
 Because a Gramian marix is symmetric and the diagonals are all the same value we only need to index the lower triangle. Here, we depict how each cell is indexed with a top to bottom approach. The indexes for the columns, rows and diagonals are also shown. 
 {{</figure>}}
 
@@ -311,6 +311,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     number="2"
     pages="121--167"
     publisher="Springer"
+    link="https://link.springer.com/article/10.1023/A:1009715923555"
 %}}
 
 {{% citation 

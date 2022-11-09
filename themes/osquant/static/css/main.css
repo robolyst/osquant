@@ -349,8 +349,28 @@ Other
 }
 
 #content figure {
+    display: block;
     margin-bottom: 2rem;
 }
+
+#content figure img.medium {
+    width: 75%;
+    margin: 0 auto;
+}
+
+#content figure img.small {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#content figure figcaption {
+    padding-top: 10px;
+    font-size: 0.85rem;
+    line-height: 1.25rem;
+    width: 90%;
+    margin: 0 auto;
+}
+
 
 #content .katex { /* Inline math */
     font-size: 1.2em;
