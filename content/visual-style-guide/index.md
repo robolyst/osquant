@@ -96,7 +96,7 @@ for i in range(10):
 
 Donec auctor lacus est, sit amet dapibus erat porta ac. Proin facilisis, dui quis lacinia convallis, eros nunc rhoncus orci, at tempor enim magna nec enim. Nulla facilisi [^Cavallo2012]. Etiam ut ex dignissim, porttitor augue ac, congue ex. Ut sit amet tellus gravida, venenatis nisl et, luctus eros. Nam massa lacus, ornare ac pulvinar eget, consequat vitae nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit [^2]. Integer ut ornare tellus.
 
-Quisque dictum, odio a tristique pretium, velit sem egestas quam, eu ultrices [^Shiller2000] enim risus at leo. Nulla tortor ante, commodo et euismod consectetur, dictum ullamcorper nisi [^Adrian2020].
+Quisque dictum, odio a tristique pretium, velit sem egestas quam, eu ultrices [^Shiller2000] enim risus at leo. Nulla tortor ante, commodo et euismod consectetur, dictum ullamcorper nisi [^Vapnik1998].
 
 [^Cavallo2012]: Cavallo, J. V., & Fitzsimons, G. M. (2012). [Goal competition, conflict, coordination, and completion: How intergoal dynamics affect self-regulation.](https://psycnet.apa.org/record/2011-26825-009) In H. Aarts & A. J. Elliot (Eds.), Frontiers of social psychology. Goal-directed behavior (p. 267–299). Psychology Press.
 
@@ -104,4 +104,12 @@ Quisque dictum, odio a tristique pretium, velit sem egestas quam, eu ultrices [^
 
 [^Shiller2000]: Economist Robert J. Shiller wrote a book called *Irrational Exuberance* published in 2000 showing hundreds of years worth of data. He demonstrates that housing prices do not always go up.
 
-{{% citation id="Adrian2020" author="Letchford, A." title="A book about nothing" year="2020" publisher="Wagga Wagga Press" address="NSW" %}}
+{{% citation
+    id="Vapnik1998"
+    author="Vapnik, Vladimir"
+    title="Statistical learn theory"
+    year="1998"
+    publisher="Wiley & Sons"
+    address="New York"
+    link="https://www.wiley.com/en-gb/Statistical+Learning+Theory-p-9780471030034"
+%}}
