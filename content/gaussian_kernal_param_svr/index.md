@@ -203,7 +203,7 @@ We test this algorithm on a variety of datasets using the Gaussian kernel and su
 Our results suggest that the speed gained from using the *diagonal slope algorithm* does not reduce performance, but it does sometimes reduce robustness. This algorithm can potentially be applied to kernels other than the Gaussian kernel and to kernels with more than one parameter. Such kernels will need to be a measure of similarity or be normalised. A normalised kernel represents the correlation of two points in feature space.
 
 # Appendices 
-## Appendix 1 - Calculating the row, column and diagonal indices of a Gramian matrix cell
+## Appendix 1 - Row and column indices of a matrix cell
 
 A Gramian matrix is a matrix of the dot products between a set of vectors. The matrix is symmetric and the values along the main diagonal are identical because they correspond to the dot product between two identical points. The only unique values in a Gramian matrix are in the upper or lower triangle. Here, we will use the lower triangle.
 
