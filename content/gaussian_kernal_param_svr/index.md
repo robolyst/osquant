@@ -291,7 +291,7 @@ Bike sharing systems completely automate the rental and return process of rentin
 
 
 
-{{% refbook
+{{% citation
     id="Vapnik1998"
     author="Vapnik, Vladimir"
     title="Statistical learn theory"
@@ -300,7 +300,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="New York"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Burges1998"
     author="Burges, Christopher J C"
     title="A tutorial on support vector machines for pattern recognition"
@@ -312,7 +312,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Springer"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Smola2004"
     author="Smola, AlexJ. and Schölkopf, Bernhard"
     title="A tutorial on support vector regression"
@@ -324,7 +324,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Kluwer Academic Publishers"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Phillips1998"
     author="Phillips, P Jonathon"
     title="Support Vector Machines Applied to Face Recognition"
@@ -335,7 +335,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Cambridge, MA, USA"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Wang2007"
     author="Wang, Tai-Yue and Chiang, Huei-Min"
     title="Fuzzy support vector machine for multi-class text categorization"
@@ -347,7 +347,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Kluwer Academic Publishers"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Li2001"
     author="Li, S Z and Fu, QingDong and Gu, Lie and Scholkopf, Bernhard and Cheng, Yimin and Zhang, Hongjiag"
     title="Kernel machine based learning for multi-view face detection and pose estimation"
@@ -359,7 +359,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Cambridge, MA, USA"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Kim2003"
     author="Kim, Kyoung-jae"
     title="Financial time series forecasting using support vector machines"
@@ -370,7 +370,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="307--319"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Chapelle1999a"
     author="Chapelle, O and Haffner, P and Vapnik, V N"
     title="Support vector machines for histogram-based image classification"
@@ -381,7 +381,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="1055--1064"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Hong2015"
     author="Hong, X and Chen, S and Gao, J and Harris, C J"
     title="Nonlinear Identification Using Orthogonal Forward Regression With Nested Optimal Regularizationn"
@@ -393,7 +393,7 @@ Bike sharing systems completely automate the rental and return process of rentin
 %}}
 
 
-{{% refjournal 
+{{% citation 
     id="Vapnik1996"
     author="Vapnik, Vladimir and Golowich, Steven E and Smola, Alex"
     title="Support Vector Method for Function Approximation, Regression Estimation, and Signal Processing"
@@ -405,7 +405,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Cambridge, MA, USA"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Tang2009"
     author="Tang, Yaohua Tang Yaohua and Guo, Weimin Guo Weimin and Gao, Jinghuai Gao Jinghuai"
     title="Efficient model selection for Support Vector Machine with Gaussian kernel function"
@@ -414,7 +414,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="40-45"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Bergstra2012"
     author="Bergstra, James and Bengio, Yoshua"
     title="Random Search for Hyper-Parameter Optimization"
@@ -433,7 +433,7 @@ Bike sharing systems completely automate the rental and return process of rentin
 [^Blog]: [Blog feedback dataset](https://archive.ics.uci.edu/ml/datasets/BlogFeedback)
 [^Bike]: [Bike sharing dataset](https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset)
 
-{{% refjournal 
+{{% citation 
     id="Fernandes2015"
     author="Fernandes, K. and Vinagre, P. and Cortez, P."
     title="A Proactive Intelligent Decision Support System for Predicting the Popularity of Online News"
@@ -442,7 +442,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Coimbra, Portugal"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Cortez2008"
     author="Cortez, Paulo and Silva, Alice"
     title="Using Data Mining To Predict Secondary School Student Performance"
@@ -455,7 +455,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="A. Brito and J. Teixeira"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Bertin-Mahieux2011"
     author="Bertin-Mahieux, Thierry and Ellis, Daniel P W and Whitman, Brian and Lamere, Paul"
     title="The Million Song Dataset"
@@ -463,7 +463,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     year="2011"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Quinlan1993"
     author="Quinlan, J R"
     title="Combining Instance-Based and Model-Based Learning"
@@ -473,7 +473,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Morgan Kaufmann"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Buza2014"
     author="Buza, Krisztian"
     title="Feedback Prediction for Blogs"
@@ -485,7 +485,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     series="Studies in Classification, Data Analysis, and Knowledge Organization"
 %}}
 
-{{% refjournal 
+{{% citation 
     id="Fanaee-T2014"
     author="Fanaee-T, Hadi and Gama, Joao"
     title="Event labeling combining ensemble detectors and background knowledge"

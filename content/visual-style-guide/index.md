@@ -104,4 +104,4 @@ Quisque dictum, odio a tristique pretium, velit sem egestas quam, eu ultrices [^
 
 [^Shiller2000]: Economist Robert J. Shiller wrote a book called *Irrational Exuberance* published in 2000 showing hundreds of years worth of data. He demonstrates that housing prices do not always go up.
 
-{{% refbook id="Adrian2020" author="Letchford, A." title="A book about nothing" year="2020" publisher="Wagga Wagga Press" address="NSW" %}}
+{{% citation id="Adrian2020" author="Letchford, A." title="A book about nothing" year="2020" publisher="Wagga Wagga Press" address="NSW" %}}
