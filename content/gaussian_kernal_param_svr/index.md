@@ -204,57 +204,57 @@ Our results suggest that the speed gained from using the *diagonal slope algorit
 
 # Appendices 
 ## Appendix 1 - Calculating the row, column and diagonal indices of a Gramian matrix cell
-\label{apdx:indices}
 
 A Gramian matrix is a matrix of the dot products between a set of vectors. The matrix is symmetric and the values along the main diagonal are identical because they correspond to the dot product between two identical points. The only unique values in a Gramian matrix are in the upper or lower triangle. Here, we will use the lower triangle.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.4\linewidth]{images/grid}
-\caption{\textbf{Matrix indexing.} Because a Gramian marix is symmetric and the diagonals are all the same value we only need to index the lower triangle. Here, we depict how each cell is indexed with a top to bottom approach. The indexes for the columns, rows and diagonals are also shown. } 
-\label{fig:grammianindex}
-\end{figure}
+{{<figure src="images/grid.svg" title="Figure 7: Matrix indexing." >}}
+Because a Gramian marix is symmetric and the diagonals are all the same value we only need to index the lower triangle. Here, we depict how each cell is indexed with a top to bottom approach. The indexes for the columns, rows and diagonals are also shown. 
+{{</figure>}}
 
-We can index each cell in the lower triangle of a Gramian matrix as shown in Figure \ref{fig:grammianindex} which represents the matrix made by $6$ vectors. In this appendix, we derive the column, row and diagonal index from the cell index.
+We can index each cell in the lower triangle of a Gramian matrix as shown in Figure 7 which represents the matrix made by $6$ vectors. In this appendix, we derive the column, row and diagonal index from the cell index.
 
 
-We represent the cell index with $i$ and the total number of vectors which produce the Gramian matrix with $n$. First we figure out the function $\text{col}(i)$ which calculates the column index. Given a column index $c$, the $i$ that sits at the top of that column is
-\begin{align}
-i = \frac{n(n-1)}{2} - \frac{(n - c)(n - c-1)}{2}.
-\end{align}
-We can factor this down to
-\begin{align}
+We represent the cell index with \\(i\\) and the total number of vectors which produce the Gramian matrix with \\(n\\). First we figure out the function \\(\text{col}(i)\\) which calculates the column index. Given a column index \\(c\\), the \\(i\\) that sits at the top of that column is:
+$$
+i = \frac{n(n-1)}{2} - \frac{(n - c)(n - c-1)}{2}
+$$
+
+We can factor this down to:
+$$
 %i &= n^{(T)} - (n - c)^{(T)} \\
 %i &= n^{(T)} - \frac{(n-c)(n-c-1)}{2} \\
 %i &= n^{(T)} - \frac{n^2 - n - (2n-1)c + c^2}{2} \\
 %i - n^{(T)} &= - \frac{n^2 - n - (2n-1)c + c^2}{2} \\
 %i - n^{(T)} + n^{(T)} &=  -\frac{- (2n-1)c + c^2}{2} \\
-i &=  -\frac{- (2n-1)c + c^2}{2},
-\end{align}
-and solve for $c$
-\begin{align}
+i =  -\frac{- (2n-1)c + c^2}{2}
+$$
+
+and solve for \\(c\\):
+$$
+\begin{aligned}
 %2i &=  - (2n-1)c + c^2 \\
 %0 &=  - (2n-1)c + c^2 - 2i \\
-c &= \frac{(2n - 1) \pm \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2} \\
-c &= \frac{(2n - 1) - \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2}.
-\end{align}
-For any $i$ that does not sit at the top of a column, $c$ will be between the column index and the next column's index. We have to floor this value to get the column index of $i$:
-\begin{align}
-\text{col}(i) &= \floor[\Bigg]{\frac{(2n - 1) - \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2}}
-\end{align}
+c &= \frac{(2n - 1) \pm \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2} \\\
+c &= \frac{(2n - 1) - \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2}
+\end{aligned}
+$$
 
-The diagonal is the number of spaces the $i$ sits from the top of it's column:
-\begin{align}
-\text{diag}(i) &= i - - \frac{- (2n-1)\text{col}(i) + \text{col}(i)^2}{2}
-\end{align}
+For any \\(i\\) that does not sit at the top of a column, \\(c\\) will be between the column index and the next column's index. We have to floor this value to get the column index of \\(i\\):
+$$
+\text{col}(i) = \Bigg\lfloor\frac{(2n - 1) - \sqrt{(2n - 1)^2 - 4 \cdot 2i}}{2}\Bigg\rfloor
+$$
+
+The diagonal is the number of spaces the \\(i\\) sits from the top of it's column:
+$$
+\text{diag}(i) = i - - \frac{- (2n-1)\text{col}(i) + \text{col}(i)^2}{2}
+$$
 
 The row is the column plus the diagonal:
-\begin{align}
-\text{row}(i) &= \text{col}(i) + \text{diag}(i) + 1
-\end{align}
+$$
+\text{row}(i) = \text{col}(i) + \text{diag}(i) + 1
+$$
 
 ## Appendix 2 - Datasets
-\label{apdx:data}
 
 We use a variety of real-world datasets that cover a wide range of topics such as micro-blogging and education. 
 
