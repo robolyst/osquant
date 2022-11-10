@@ -19,14 +19,14 @@ Consider a series of values \\(y_i\\) that need to be modelled based on some cor
 Each input vector may be transformed to hundreds of thousands or even an infinite number of dimensions. Mapping each point into this new space is not practical, especially when the embedding space has an infinite number of dimensions. A clever trick is to rearrange the equation for the linear part of the kernel machine so that each input vector is paired with another in a dot product, like so: \\(\varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)\\). This dot product is usually defined with a very simple kernel function. The most common one is the Gaussian kernel which represents the dot product between two points that have been mapped into a space of an infinite number of dimensions: 
 $$
 \begin{align}
-\kappa(\mathbf{x}_i, \mathbf{x}_j) = \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j) =  e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2} \label{eq:gkernel}
+\kappa(\mathbf{x}_i, \mathbf{x}_j) = \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j) =  e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2} \label{1}
 \end{align}
 $$
 A kernel machine is now a linear model of \\(\kappa(\mathbf{x}_i, \mathbf{x}_j)\\) instead of \\(\mathbf{x}_i\\). The book \cite{Liu2010a} discusses different kernel regression models (kernel machine version of linear regression) and provides an easy and detailed mathematical description of how kernel machines work. 
 
 The most common kernel machine is the support vector machine (SVM) which has two varieties for modelling classification and regression tasks \cite{Vapnik1998, Burges1998, Smola2004}. SVMs have been used for a wide variety of problems such as pattern recognition \cite{Wang2007}, face recognition \cite{Phillips1998, Li2001}, time series prediction \cite{Kim2003}, image classification \cite{Chapelle1999a}, system control \cite{Hong2015}, and function approximation \cite{Vapnik1996}.
 
-A common task with SVMs, and kernel machine modeling in general, is tuning the kernel parameters. The most widely used strategy is to conduct cross validation with a separate set of data, which is very time comsuming. The question we address in this paper is: how to quickly identify an appropriate Gaussian bandwidth parameter \\(\beta\\) in the Gasssian kernel defined in \\(\eqref{eq:gkernel}\\)? This parameter is important because it directly affects the geometry of the embedding space. The distance between any two points in this higher dimensional space is:
+A common task with SVMs, and kernel machine modeling in general, is tuning the kernel parameters. The most widely used strategy is to conduct cross validation with a separate set of data, which is very time comsuming. The question we address in this paper is: how to quickly identify an appropriate Gaussian bandwidth parameter \\(\beta\\) in the Gasssian kernel defined in \\(\eqref{1}\\)? This parameter is important because it directly affects the geometry of the embedding space. The distance between any two points in this higher dimensional space is:
 $$
 ||\varphi(\mathbf{x}_i) - \varphi(\mathbf{x}_j)||^2 = 2(1 - \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)) = 2(1 - e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2})
 $$
