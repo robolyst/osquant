@@ -22,9 +22,9 @@ $$
 \kappa(\mathbf{x}_i, \mathbf{x}_j) = \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j) =  e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2} \label{1}
 \end{align}
 $$
-A kernel machine is now a linear model of \\(\kappa(\mathbf{x}_i, \mathbf{x}_j)\\) instead of \\(\mathbf{x}_i\\). The book \cite{Liu2010a} discusses different kernel regression models (kernel machine version of linear regression) and provides an easy and detailed mathematical description of how kernel machines work. 
+A kernel machine is now a linear model of \\(\kappa(\mathbf{x}_i, \mathbf{x}_j)\\) instead of \\(\mathbf{x}_i\\). The book *Kernel Adaptive Filtering* [^Liu2010a] discusses different kernel regression models (kernel machine version of linear regression) and provides an easy and detailed mathematical description of how kernel machines work. 
 
-The most common kernel machine is the support vector machine (SVM) which has two varieties for modelling classification and regression tasks \cite{Vapnik1998, Burges1998, Smola2004}. SVMs have been used for a wide variety of problems such as pattern recognition \cite{Wang2007}, face recognition \cite{Phillips1998, Li2001}, time series prediction \cite{Kim2003}, image classification \cite{Chapelle1999a}, system control \cite{Hong2015}, and function approximation \cite{Vapnik1996}.
+The most common kernel machine is the support vector machine (SVM) which has two varieties for modelling classification and regression tasks [^Vapnik1998] [^Burges1998] [^Smola2004]. SVMs have been used for a wide variety of problems such as pattern recognition [^Wang2007], face recognition [^Phillips1998] [^Li2001], time series prediction [^Kim2003], image classification [^Chapelle1999a], system control [^Hong2015], and function approximation [^Vapnik1996].
 
 A common task with SVMs, and kernel machine modeling in general, is tuning the kernel parameters. The most widely used strategy is to conduct cross validation with a separate set of data, which is very time comsuming. The question we address in this paper is: how to quickly identify an appropriate Gaussian bandwidth parameter \\(\beta\\) in the Gasssian kernel defined in \\(\eqref{1}\\)? This parameter is important because it directly affects the geometry of the embedding space. The distance between any two points in this higher dimensional space is:
 $$
@@ -33,13 +33,13 @@ $$
 
 If \\(\beta\\) is 0, then each point has zero distance to each other point. If \\(\beta \rightarrow \infty\\), then each point has exactly a distance of 2 from each other point.
 
-The most common method of selecting \\(\beta\\) and the parameters to a support vector machine is by a grid search with cross-validation \cite{Hong2015, Tang2009}. Here, every point in a grid of points across the parameter space is tested using cross-validation. This is the most accurate method and the slowest. Typically, evaluating a kernel machine's prediction error has a complexity on the order of \\(O(n^3)\\) where \\(n\\) is the number of data points. A grid search must test a vast number of different parameter values to ensure a high degree of accuracy. One alternative to a grid search is to repeatedly try random points \cite{Bergstra2012}. However, this does not necessarily reduce the computational burden.
+The most common method of selecting \\(\beta\\) and the parameters to a support vector machine is by a grid search with cross-validation [^Hong2015] [^Tang2009]. Here, every point in a grid of points across the parameter space is tested using cross-validation. This is the most accurate method and the slowest. Typically, evaluating a kernel machine's prediction error has a complexity on the order of \\(O(n^3)\\) where \\(n\\) is the number of data points. A grid search must test a vast number of different parameter values to ensure a high degree of accuracy. One alternative to a grid search is to repeatedly try random points [^Bergstra2012]. However, this does not necessarily reduce the computational burden.
 
-One way to reduce the computational cost is by estimating the error. There is a large body of literature focused on estimating an upper bound for the leave-one-out error. Vapnik derives a bound from the number of support vectors \cite{Vapnik1995} and another bound from the radius of a ball containing all embedded points \cite{Vapnik1998}; Jaakkola and Haussler generalises this to kernel machines other than support vector machines \cite{Jaakkola1999}; and Opper and Winther applies this bound to SVMs without a threshold \cite{Opper2000}. A bounds estimate can be used with a gradient descent algorithm to reduce the number of trials before selecting a set of parameters \cite{Chapelle2002}.
+One way to reduce the computational cost is by estimating the error. There is a large body of literature focused on estimating an upper bound for the leave-one-out error. Vapnik derives a bound from the number of support vectors [^Vapnik1995] and another bound from the radius of a ball containing all embedded points [^Vapnik1998]; Jaakkola and Haussler generalises this to kernel machines other than support vector machines [^Jaakkola1999]; and Opper and Winther applies this bound to SVMs without a threshold [^Opper2000]. A bounds estimate can be used with a gradient descent algorithm to reduce the number of trials before selecting a set of parameters [^Chapelle2002].
 
-Because the Gaussian kernel's bandwidth \\(\beta\\) has a significant effect on the geometry of the embedding space, some algorithms select a value without calculating the prediction error. One study focused on classification tasks and selected the \\(\beta\\) which maximised the distance between the classes and minimised the distance between points of the same class \cite{Ahn2010}. This algorithm is many times faster than calculating or estimating the model's error. However, the fitness function is not guaranteed to be convex and thus requires a grid search or a complex search algorithm. 
+Because the Gaussian kernel's bandwidth \\(\beta\\) has a significant effect on the geometry of the embedding space, some algorithms select a value without calculating the prediction error. One study focused on classification tasks and selected the \\(\beta\\) which maximised the distance between the classes and minimised the distance between points of the same class[^Ahn2010]. This algorithm is many times faster than calculating or estimating the model's error. However, the fitness function is not guaranteed to be convex and thus requires a grid search or a complex search algorithm. 
 
-Another study maximised the variance of the distances between data points and found that this idea was fast and comparably accurate \cite{Tang2009}. In this paper, we build on this algorithm giving it a significant increase in speed. We show that the selected value for \\(\beta\\) varies very little between small subsets of data. This allows us to confidently use only a small amount of data to find the value for \\(\beta\\) for a much larger sample set. We also show that these algorithms can be used for both classification and regression tasks.
+Another study maximised the variance of the distances between data points and found that this idea was fast and comparably accurate [^Tang2009]. In this paper, we build on this algorithm giving it a significant increase in speed. We show that the selected value for \\(\beta\\) varies very little between small subsets of data. This allows us to confidently use only a small amount of data to find the value for \\(\beta\\) for a much larger sample set. We also show that these algorithms can be used for both classification and regression tasks.
 
 # Solution
 
@@ -59,7 +59,7 @@ We explore two algorithms in this paper for choosing \\(\beta\\), the first maxi
 
 ## Maximum variance
 
-The algorithm proposed by \cite{Tang2009} maximises the Gaussian kernel variance calculated over a training set. The idea is that if this variance is maximised, then the data points will have a wide range of similarities which may help a predictive model identify patterns.
+The algorithm propose[^cite{Tang2009] maximises the Gaussian kernel variance calculated over a training set. The idea is that if this variance is maximised, then the data points will have a wide range of similarities which may help a predictive model identify patterns.
 
 The variance is calculated as:
 $$
@@ -120,7 +120,7 @@ We test the mean-to-half and maximum variance algorithms on a dataset called SUS
 
 We randomly select 5,000 points from the dataset and evenly split them into a training and test set. We run the mean-to-half algorithm on the training set to find the value for \\(\beta\\). We then use a grid search with 5-fold cross validation to select the support vector classifier's regularisation parameter, \\(C\\). We test \\(C\\) at 7 evenly spaced values across the range \\(10^{-3}\\) to \\(10^{3}\\). We carry out the same analysis with the maximum variance algorithm.
 
-We compare the accuracy of the mean-to-half and maximum variance algorithms against a grid search which represents the best performance and Ahn's algorithm \cite{Ahn2010}. The grid search evaluates \\(\beta\\) at 80 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\) and the regularising parameter \\(C\\) at 7 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\). Ahn's method checks each value for \\(\beta\\) in the same set of evenly spaced values and selects the one that maximises the separation between the data classes. We choose \\(C\\) by performing a grid search at 7 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\).
+We compare the accuracy of the mean-to-half and maximum variance algorithms against a grid search which represents the best performance and Ahn's algorithm [^Ahn2010]. The grid search evaluates \\(\beta\\) at 80 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\) and the regularising parameter \\(C\\) at 7 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\). Ahn's method checks each value for \\(\beta\\) in the same set of evenly spaced values and selects the one that maximises the separation between the data classes. We choose \\(C\\) by performing a grid search at 7 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\).
 
 We repeat this analysis on four more datasets, HIGGS [^HIGGS] which classes particle simulations as whether or not they produce a Higgs boson; 746 and Impens [^HIV] which both classes polyproteins as whether or not they can be split by the HIV-1 protease; and Dress Recommendation [^Dress] which classes dresses in an online shop as whether or not customers recommend them to friends. These datasets are discussed in more detail in the [Methods](#methods) section.
 
@@ -154,7 +154,7 @@ We repeat this experiment measuring the variance of \\(\beta\\) as selected by t
 
 # Conclusion
 
-In this paper, we propose an algorithm for choosing the Gaussian kernel's bandwidth parameter which we call mean-to-half. Our work is built on a method proposed by \cite{Tang2009} which we call maximise variance. These two algorithms choose the bandwidth that best highlights clusters of points.
+In this paper, we propose an algorithm for choosing the Gaussian kernel's bandwidth parameter which we call mean-to-half. Our work is built on a method propose[^cite{Tang2009] which we call maximise variance. These two algorithms choose the bandwidth that best highlights clusters of points.
 
 We test these two algorithms on a variety of datasets using support vector machines, both for classification and regression. We find that the algorithms accuracy is comparable to a grid search which represents the best possible result. We also find that the value for \\(\beta\\) that these two algorithms select is more robust to changes in the dataset than other algorithms. This means that we can find appropriate parameters for very large datasets by only examining small subsets.
 
@@ -172,13 +172,13 @@ We use a variety of real-world datasets that cover a wide range of topics such a
 
 **SUSY dataset**
 
-Physicists at the Large Hadron Collider smash together exotic particles in the hope of detecting supersymmetric (SUSY) particles. These supersymmetric particles are invisible to their detectors and must be inferred from the particles produced by a collision. There are two possible collision; the one we're interested in called the signal, and a similar collision that does not produce supersymmetric particles called the background noise. The SUSY dataset contains simulations of signal and background collisions. The task is to accurately classify whether each collision produces supersymmetric particles or not. This datasets was used in a study asking whether or not deep learning improves classification \cite{Baldi2014}.
+Physicists at the Large Hadron Collider smash together exotic particles in the hope of detecting supersymmetric (SUSY) particles. These supersymmetric particles are invisible to their detectors and must be inferred from the particles produced by a collision. There are two possible collision; the one we're interested in called the signal, and a similar collision that does not produce supersymmetric particles called the background noise. The SUSY dataset contains simulations of signal and background collisions. The task is to accurately classify whether each collision produces supersymmetric particles or not. This datasets was used in a study asking whether or not deep learning improves classification [^Baldi2014].
 
 The SUSY dataset contains 5,000,000 simulations. In this study we use a random sample of 5,000 simulations evenly split between the signal and noise records.
 
 **HIGGS dataset**
 
-The Standard Model of particle physics includes a field which gives matter its mass; this is known as the Higgs field. The only means of confirming the existence of the Higgs field is to detect its associated particle, the Higgs boson. Similar to detecting supersymmetric particles, the Large Hadron Collider smashes together particles in the hopes of detecting some Higgs bosons. Just like the SUSY dataset, this dataset lists simulations of collisions and whether or not it produces Higgs bosons. This dataset was used alongside the SUSY dataset in a study asking whether or not deep learning improves detecting Higgs bosons \cite{Baldi2014}.
+The Standard Model of particle physics includes a field which gives matter its mass; this is known as the Higgs field. The only means of confirming the existence of the Higgs field is to detect its associated particle, the Higgs boson. Similar to detecting supersymmetric particles, the Large Hadron Collider smashes together particles in the hopes of detecting some Higgs bosons. Just like the SUSY dataset, this dataset lists simulations of collisions and whether or not it produces Higgs bosons. This dataset was used alongside the SUSY dataset in a study asking whether or not deep learning improves detecting Higgs bosons [^Baldi2014].
 
 The HIGGS dataset contains 11,000,000 simulations. In this study we use a random sample of 5,000 simulations evenly split between the signal and noise records.
 
@@ -186,15 +186,15 @@ The HIGGS dataset contains 11,000,000 simulations. In this study we use a random
 
 The HIV-1 protease is an enzyme responsible for breaking down certain polyproteins into components of virions that spread HIV. Without this enzyme, the HIV virions are not infectious. Being able to predict which polyproteins the HIV-1 protease breaks down helps scientists test hypotheses of how this enzyme affects the human body. The 746 dataset is a list of polyproteins called octamers which are composed of eight amino acids. The task is to classify whether or not the HIV-1 protease will split an octamer between the fourth and fifth amino acid.
 
-These octamers were collected from various sources in the literature by \cite{You2005}. They were used by \cite{Rognvaldsson2014} to compare the performance of support vector machines with different kernels.
+These octamers were collected from various sources in the literature by [^You2005]. They were used by [^Rognvaldsson2014] to compare the performance of support vector machines with different kernels.
 
 **Impens dataset**
 
-This dataset is also a list of octamers labelled as split or unsplit by the HIV-1 protease. These octamers were collected by \cite{Rognvaldsson2014}.
+This dataset is also a list of octamers labelled as split or unsplit by the HIV-1 protease. These octamers were collected by [^Rognvaldsson2014].
 
 **Portuguese Students, mathematics class dataset**
 
-To improve understanding of why Portugal’s student failure rate is high, one study collected data from two Portuguese schools \cite{Cortez2008}. The researchers collected data on each student by conducting a survey which asked questions ranging from their romantic relationship to their parent's alcohol consumption. They also collected the students final grades. 
+To improve understanding of why Portugal’s student failure rate is high, one study collected data from two Portuguese schools [^Cortez2008]. The researchers collected data on each student by conducting a survey which asked questions ranging from their romantic relationship to their parent's alcohol consumption. They also collected the students final grades. 
 
 This dataset contains data on students in both schools and their final mathematics grade. The task is to correctly predict their final grade.
 
@@ -204,7 +204,7 @@ As well as the students' mathematics grades, the study also reports their Portug
 
 **Mashable News Popularity dataset**
 
-[Mashable](https://mashable.com/) is an online news site where readers can share news articles. In one study, researchers collected almost 40,000 articles from [Mashable](https://mashable.com/) and extracted a set of features from each one including number of positive words, LDA topic distribution and publication time \cite{Fernandes2015}. The task is to predict the number of times each article was shared.
+[Mashable](https://mashable.com/) is an online news site where readers can share news articles. In one study, researchers collected almost 40,000 articles from [Mashable](https://mashable.com/) and extracted a set of features from each one including number of positive words, LDA topic distribution and publication time [^Fernandes2015]. The task is to predict the number of times each article was shared.
 
 The Mashable News Popularity dataset contains 39,797 news articles. In this study we use a random sample of 2,000 simulations evenly split between the signal and noise records.
 
@@ -232,7 +232,7 @@ $$
 \end{aligned}
 $$
 
-The constant \\(C\\) controls the level of over fitting; a large \\(C\\) leads to an over-fitted model. If the Gaussian function is used as the kernel, then the only parameters are the Gaussian bandwidth \\(\beta\\) and \\(C\\). For a deeper explanation of support vector classification see \cite{Burges1998} or \cite{Vapnik1998}.
+The constant \\(C\\) controls the level of over fitting; a large \\(C\\) leads to an over-fitted model. If the Gaussian function is used as the kernel, then the only parameters are the Gaussian bandwidth \\(\beta\\) and \\(C\\). For a deeper explanation of support vector classification see [^Burges1998] or [^Vapnik1998].
 
 ### Support vector regression
 
@@ -254,7 +254,7 @@ $$
 \end{aligned}
 $$
 
-Similarly to SVCs, the \\(C\\) term controls the amount of over fitting; a large \\(C\\) leads to an over-fitted model. If the Gaussian kernel function is used, then there are only three parameters, the Gaussian bandwidth \\(\beta\\), \\(\epsilon\\), and \\(C\\). For a deeper explanation of support vector regression see \cite{Smola2004} or \cite{Vapnik1998}.
+Similarly to SVCs, the \\(C\\) term controls the amount of over fitting; a large \\(C\\) leads to an over-fitted model. If the Gaussian kernel function is used, then there are only three parameters, the Gaussian bandwidth \\(\beta\\), \\(\epsilon\\), and \\(C\\). For a deeper explanation of support vector regression see [^Smola2004] or [^Vapnik1998].
 
 
 ## Finding the bandwidth
@@ -267,9 +267,10 @@ To find a suitable value for the Gaussian bandwidth, we must perform a grid sear
 
 ### Ahn's method
 
-A study conducted by Ahn looks at classification problems and choose a kernel's parameters by minimising the average distance between points of the same class and maximising the average distance between points of different classes \cite{Ahn2010}. 
+A study conducted by Ahn looks at classification problems and choose a kernel's parameters by minimising the average distance between points of the same class and maximising the average distance between points of different classes [^Ahn2010]. 
 
-If we represent \\(\textbf{x}_i\\) and \\(\textbf{y}_j\\) to be vectors of two different classes, we can write the mean distance between vectors of the same class as: 
+If we represent \\(\textbf{x}_i\\) and \\(\textbf{y}_j\\) to be vectors of two difference classes, we can write the mean distance between vectors of the same class as:
+
 $$
 \begin{aligned}
 & \frac{1}{2} \left(
@@ -341,3 +342,262 @@ $$
 [^Dress]: [Dress recommendations dataset](https://archive.ics.uci.edu/ml/datasets/Dresses_Attribute_Sales)
 [^Mashable]: [Mashable dataset](https://archive.ics.uci.edu/ml/datasets/Online+News+Popularity)
 [^Student]: [Portuguese student performance dataset](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
+
+{{% citation
+    id="Liu2010a"
+    author="Liu, Weifeng and Principe, José C and Haykin, Simon"
+    title="Kernel Adaptive Filtering: A Comprehensive Introduction"
+    year="2010"
+    publisher="Wiley & Sons Inc."
+    address="Hoboken, New Jersey"
+    link="https://www.wiley.com/en-gb/Kernel+Adaptive+Filtering:+A+Comprehensive+Introduction-p-9780470447536"
+%}}
+
+{{% citation
+    id="Vapnik1998"
+    author="Vapnik, Vladimir"
+    title="Statistical learn theory"
+    year="1998"
+    publisher="Wiley & Sons"
+    address="New York"
+    link="https://www.wiley.com/en-gb/Statistical+Learning+Theory-p-9780471030034"
+%}}
+
+{{% citation 
+    id="Burges1998"
+    author="Burges, Christopher J C"
+    title="A tutorial on support vector machines for pattern recognition"
+    publication="Data Mining and Knowledge Discovery"
+    year="1998"
+    volume="2"
+    number="2"
+    pages="121--167"
+    publisher="Springer"
+    link="https://link.springer.com/article/10.1023/A:1009715923555"
+%}}
+
+{{% citation 
+    id="Smola2004"
+    author="Smola, AlexJ. and Schölkopf, Bernhard"
+    title="A tutorial on support vector regression"
+    publication="Statistics and Computing"
+    year="2004"
+    volume="14"
+    number="3"
+    pages="199--222"
+    publisher="Kluwer Academic Publishers"
+%}}
+
+{{% citation 
+    id="Wang2007"
+    author="Wang, Tai-Yue and Chiang, Huei-Min"
+    title="Fuzzy support vector machine for multi-class text categorization"
+    publication="Information Processing & Management"
+    year="2007"
+    volume="43"
+    number="4"
+    pages="914--929"
+    publisher="Kluwer Academic Publishers"
+%}}
+
+{{% citation 
+    id="Phillips1998"
+    author="Phillips, P Jonathon"
+    title="Support Vector Machines Applied to Face Recognition"
+    publication="Proceedings of the 1998 Conference on Advances in Neural Information Processing Systems II"
+    year="1999"
+    pages="803--809"
+    publisher="MIT Press"
+    address="Cambridge, MA, USA"
+%}}
+
+{{% citation 
+    id="Li2001"
+    author="Li, S Z and Fu, QingDong and Gu, Lie and Scholkopf, Bernhard and Cheng, Yimin and Zhang, Hongjiag"
+    title="Kernel machine based learning for multi-view face detection and pose estimation"
+    publication="Computer Vision, 2001. ICCV 2001. Proceedings. Eighth IEEE International Conference on"
+    year="2001"
+    pages="674--679"
+    volume="2"
+    publisher="MIT Press"
+    address="Cambridge, MA, USA"
+%}}
+
+{{% citation 
+    id="Kim2003"
+    author="Kim, Kyoung-jae"
+    title="Financial time series forecasting using support vector machines"
+    publication="Neurocomputing"
+    year="2003"
+    volume="55"
+    number="1-2"
+    pages="307--319"
+%}}
+
+{{% citation 
+    id="Chapelle1999a"
+    author="Chapelle, O and Haffner, P and Vapnik, V N"
+    title="Support vector machines for histogram-based image classification"
+    publication="Neural Networks, IEEE Transactions on"
+    year="1999"
+    volume="10"
+    number="5"
+    pages="1055--1064"
+%}}
+
+{{% citation 
+    id="Hong2015"
+    author="Hong, X and Chen, S and Gao, J and Harris, C J"
+    title="Nonlinear Identification Using Orthogonal Forward Regression With Nested Optimal Regularizationn"
+    publication="Neural Networks, IEEE Transactions on"
+    year="2015"
+    volume="PP"
+    number="99"
+    pages="1"
+%}}
+
+{{% citation 
+    id="Vapnik1996"
+    author="Vapnik, Vladimir and Golowich, Steven E and Smola, Alex"
+    title="Support Vector Method for Function Approximation, Regression Estimation, and Signal Processing"
+    publication="Advances in Neural Information Processing Systems"
+    year="1996"
+    pages="281--287"
+    volume="9"
+    publisher="MIT Press"
+    address="Cambridge, MA, USA"
+%}}
+
+{{% citation 
+    id="Tang2009"
+    author="Tang, Yaohua Tang Yaohua and Guo, Weimin Guo Weimin and Gao, Jinghuai Gao Jinghuai"
+    title="Efficient model selection for Support Vector Machine with Gaussian kernel function"
+    publication="IEEE Symposium on Computational Intelligence and Data Mining"
+    year="2009"
+    pages="40-45"
+%}}
+
+{{% citation 
+    id="Bergstra2012"
+    author="Bergstra, James and Bengio, Yoshua"
+    title="Random Search for Hyper-Parameter Optimization"
+    publication="Journal of Machine Learning Research"
+    year="2012"
+    volume="13"
+    number=""
+    pages="281--305"
+%}}
+
+{{% citation
+    id="Vapnik1995"
+    author="Vapnik, Vladimir"
+    title="The nature of statistical learning theory"
+    year="1995"
+    publisher="Springer"
+    address="Berlin"
+%}}
+
+{{% citation
+    id="Jaakkola1999"
+    author="Jaakkola, Tommi S and Haussler, David"
+    title="Probabilistic Kernel Regression Models"
+    year="1999"
+    publication="Proceedings of the 1999 Conference on AI and Statistics"
+%}}
+
+{{% citation 
+    id="Opper2000"
+    author="Opper, M. and Winther, O."
+    title="Gaussian processes and svm: Mean field and leave-one-out"
+    publication="Advances in large margin classifiers"
+    year="2000"
+    pages="311--326"
+    address="Cambridge, MA"
+    publisher="MIT Press"
+%}}
+
+{{% citation 
+    id="Chapelle2002"
+    author="Chapelle, Olivier and Vapnik, Vladimir and Bousquet, Olivier and Mukherjee, Sayan"
+    title="Choosing multiple parameters for support vector machines"
+    publication="Machine Learning"
+    year="2002"
+    pages="131--159"
+    number="1-3"
+    volume="46"
+%}}
+
+
+{{% citation 
+    id="Ahn2010"
+    author="Ahn, Jeongyoun"
+    title="A stable hyperparameter selection for the Gaussian RBF kernel for discrimination"
+    year="2010"
+    pages="142--148"
+    number="3"
+    volume="3"
+%}}
+
+{{% citation 
+    id="Tang2009"
+    author="Tang, Yaohua Tang Yaohua and Guo, Weimin Guo Weimin and Gao, Jinghuai Gao Jinghuai"
+    title="Efficient model selection for Support Vector Machine with Gaussian kernel function"
+    publication="IEEE Symposium on Computational Intelligence and Data Mining"
+    year="2009"
+    pages="40-45"
+%}}
+
+{{% citation 
+    id="Baldi2014"
+    author="Baldi, P and Sadowski, P and Whiteson, D"
+    title="Searching for exotic particles in high-energy physics with deep learning"
+    publication="Nat Commun"
+    year="2014"
+    number="4308"
+    volume="5"
+    publisher="Nature Publishing Group"
+%}}
+
+{{% citation 
+    id="You2005"
+    author="You, Liwen and Garwicz, Daniel and Rögnvaldson, Thorsteinn"
+    title="Comprehensive Bioinformatic Analysis of the Specificity of Human Immunodeficiency Virus Type 1 Protease"
+    publication="Journal of Virology"
+    year="2005"
+    number="19"
+    volume="79"
+    pages="12477--12486"
+%}}
+
+{{% citation 
+    id="Rognvaldsson2014"
+    author="Rögnvaldsson, T. and You, L. and Garwicz, D."
+    title="State of the art prediction of HIV-1 protease cleavage sites"
+    publication="Bioinformatics"
+    year="2014"
+    number="8"
+    volume="31"
+    pages="1204--1210"
+%}}
+
+{{% citation 
+    id="Cortez2008"
+    author="Cortez, Paulo and Silva, Alice"
+    title="Using Data Mining To Predict Secondary School Student Performance"
+    publication="In the Proceedings of 5th Annual Future Business Technology Conference"
+    year="2008"
+    pages="5--12"
+    volume="2003"
+    number="2000"
+    publisher="MIT Press"
+    address="A. Brito and J. Teixeira"
+%}}
+
+{{% citation 
+    id="Fernandes2015"
+    author="Fernandes, K. and Vinagre, P. and Cortez, P."
+    title="A Proactive Intelligent Decision Support System for Predicting the Popularity of Online News"
+    publication="Proceedings of the 17th EPIA 2015 - Portuguese Conference on Artificial Intelligence"
+    year="2015"
+    address="Coimbra, Portugal"
+%}}
