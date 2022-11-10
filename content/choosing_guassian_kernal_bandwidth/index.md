@@ -49,29 +49,19 @@ We present two methods that select a value for the Gaussian kernel's bandwidth b
 
 Consider that if two points are very close together, then the value of the Gaussian kernel between these two points will be close to 1. If they are identical, the value will be exactly 1. If, however, the two points are far apart, the value of the Gaussian function approaches 0. We could interpret a value of 1 as meaning the two points are 100\% similar, and a value of 0 as meaning they are 0\% similar. The Gaussian kernel is then a measure of similarity between two points.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.97\linewidth]{images/different_beta_example2.pdf}
-\caption{\textbf{Distribution of the similarity between points in the Mashable News Popularity dataset.} We explore how the distribution of the similarity between data points change as the bandwidth parameter \\(\beta\\) moves between $0$ and \\(\infty\\). In this example, we use the Mashable news popularity dataset. \textbf{(A)} As the Gaussian bandwidth \\(\beta\\) approaches zero, the similarity between each point approaches 1 where each point looks identical to every other point. \textbf{(B)} As \\(\beta\\) gets larger, the points spread out. Some are close together with a similarity close to 1 while others are far apart with a similarity of 0. \textbf{(C)} As \\(\beta\\) approaches \\(\infty\\), the similarity between each point approaches zero.} 
-\label{fig:m2hexplain}
-\end{figure}
+By calculating the similarity between every point in a dataset we get a distribution of similarities. Consider for the moment how this distribution changes as the \\(\beta\\) parameter of the Gaussian kernel changes. If \\(\beta = 0\\), then all similarities are equal to one (Figure 1A); all the points are 100\% similar.  In this situation, a model cannot tell the difference between any points. If \\(\beta\\) were to grow to \\(\infty\\), then all similarities are equal to 0 (Figure 1C); all the points are all completely different sharing nothing in common. Now, a model can tell the difference between each point. However, it will not be able to tell which points have something in common. This is where a Gaussian kernel machine should get its power from; the ability to identify how similar a new data point is to previously seen examples. Ideally, then, \\(\beta\\) ought to be somewhere in-between \\(0\\) and \\(\infty\\) (Figure 1B).
 
-By calculating the similarity between every point in a dataset we get a distribution of similarities. Consider for the moment how this distribution changes as the \\(\beta\\) parameter of the Gaussian kernel changes. If \\(\beta = 0\\), then all similarities are equal to one (Figure \ref{fig:m2hexplain}A); all the points are 100\% similar.  In this situation, a model cannot tell the difference between any points. If \\(\beta\\) were to grow to \\(\infty\\), then all similarities are equal to 0 (Figure \ref{fig:m2hexplain}C); all the points are all completely different sharing nothing in common. Now, a model can tell the difference between each point. However, it will not be able to tell which points have something in common. This is where a Gaussian kernel machine should get its power from; the ability to identify how similar a new data point is to previously seen examples. Ideally, then, \\(\beta\\) ought to be somewhere in-between $0$ and \\(\infty\\) (Figure \ref{fig:m2hexplain}B).
+{{<figure src="images/different_beta_example2.svg" title="Figure 1: Distribution of the similarity between points in the Mashable News Popularity dataset." >}}
+We explore how the distribution of the similarity between data points change as the bandwidth parameter \\(\beta\\) moves between \\(0\\) and \\(\infty\\). In this example, we use the Mashable news popularity dataset. **(A)** As the Gaussian bandwidth \\(\beta\\) approaches zero, the similarity between each point approaches 1 where each point looks identical to every other point. **(B)** As \\(\beta\\) gets larger, the points spread out. Some are close together with a similarity close to 1 while others are far apart with a similarity of 0. **(C)** As \\(\beta\\) approaches \\(\infty\\), the similarity between each point approaches zero.
+{{</figure>}}
 
-Notice in Figure \ref{fig:m2hexplain}B how the similarities are distributed across the entire space from 0 to 1. There are very clearly points that appear to be very similar with a value near 1. There are also points that very clearly have nothing in common with a value near 0. These could be clusters of points that may have predictive power for a target variable. The defining feature here is that the distribution is spread out; relative to other values of \\(\beta\\), its variance is big. We propose to find a value for \\(\beta\\) which produces a distribution that is spread out between the two extremes, 0 and 1.
+Notice in Figure 1B how the similarities are distributed across the entire space from 0 to 1. There are very clearly points that appear to be very similar with a value near 1. There are also points that very clearly have nothing in common with a value near 0. These could be clusters of points that may have predictive power for a target variable. The defining feature here is that the distribution is spread out; relative to other values of \\(\beta\\), its variance is big. We propose to find a value for \\(\beta\\) which produces a distribution that is spread out between the two extremes, 0 and 1.
 
 We explore two algorithms in this paper for choosing \\(\beta\\), the first maximises the similarity distribution's variance and is called *maximum variance*, the other optimises the similarity distribution mean called *mean-to-half*.
 
 ## Maximum variance
 
 The algorithm proposed by \cite{Tang2009} maximises the Gaussian kernel variance calculated over a training set. The idea is that if this variance is maximised, then the data points will have a wide range of similarities which may help a predictive model identify patterns.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.6\linewidth]{images/max-var-demo.pdf}
-\caption{\textbf{Variance of a similarity distribution as a function of \\(\beta\\).} \textbf{(A)} Here we calculate the variance of similarity between each point in the \textit{Mashable news popularity} dataset as we vary the Gaussian kernel parameter \\(\beta\\). \textbf{(B)} The derivative to the left of the global maximum is above 0 and to the right it is below 0. This allows us to use a binary search to find the value for \\(\beta\\) that maximises the variance.} 
-\label{fig:maxvar}
-\end{figure}
 
 The variance is calculated as:
 $$
@@ -87,7 +77,11 @@ N &= \frac{n(n-1)}{2}
 \end{aligned}
 $$
 
-As \\(\beta\\) increases from $0$ to \\(\infty\\) the variance first increases from $0$ then decreases back to 0 (Figure \ref{fig:maxvar}A). The derivative is zero where \\(\beta\\) maximises the variance (Figure \ref{fig:maxvar}B). To the left of the peak, the derivative is above 0, and to the right the derivative is below 0. This allows us to find the value of \\(\beta\\) that maximises the variance using a binary search. The derivative is:
+{{<figure src="images/max-var-demo.svg" title="Figure 2: Variance of a similarity distribution as a function of the bandwidth parameter." width="medium" >}}
+**(A)** Here we calculate the variance of similarity between each point in the Mashable news popularity dataset as we vary the Gaussian kernel parameter \\(\beta\\). **(B)** The derivative to the left of the global maximum is above 0 and to the right it is below 0. This allows us to use a binary search to find the value for \\(\beta\\) that maximises the variance.
+{{</figure>}}
+
+As \\(\beta\\) increases from \\(0\\) to \\(\infty\\) the variance first increases from \\(0\\) then decreases back to 0 (Figure 2A). The derivative is zero where \\(\beta\\) maximises the variance (Figure 2B). To the left of the peak, the derivative is above 0, and to the right the derivative is below 0. This allows us to find the value of \\(\beta\\) that maximises the variance using a binary search. The derivative is:
 $$
 \frac{d}{d\beta}\left[\frac{1}{N}\sum_{\forall p} \left( e ^{ - \beta p} - \mu \right)^2 \right] = -\frac{2}{N}\sum_{\forall p} pe^{-2\beta p}
 +\frac{2}{N^2}\sum_{\forall p}e ^{ - \beta p}\sum_{\forall p}pe ^{ - \beta p}
@@ -102,7 +96,7 @@ The time complexity of calculating the derivative is \\(O(n^2m)\\).
 
 ## Mean-to-half
 
-The previous algorithm directly maximises the similarity variance, however, an indirect method may be faster. We note that the distribution in Figure \ref{fig:m2hexplain}B lies between 0 and 1 with 0.5 as the mid point. If the mean is 0.5 then the variance might be close to its maximum. In this algorithm, we select the value for \\(\beta\\) where the distribution mean is 0.5.
+The previous algorithm directly maximises the similarity variance, however, an indirect method may be faster. We note that the distribution in Figure 1B lies between 0 and 1 with 0.5 as the mid point. If the mean is 0.5 then the variance might be close to its maximum. In this algorithm, we select the value for \\(\beta\\) where the distribution mean is 0.5.
 
 We calculate the mean similarity as:
 $$
@@ -111,14 +105,11 @@ $$
 \end{align}
 $$
 
-As \\(\beta\\) increases from $0$ to \\(\infty\\), the mean decreases because it is a sum of \\(e\\)s to the power of a negative number (Figure \ref{fig:mean_vs_beta}). We can find the value for \\(\beta\\) where the distribution mean is 0.5 using a binary search.
+As \\(\beta\\) increases from \\(0\\) to \\(\infty\\), the mean decreases because it is a sum of \\(e\\)s to the power of a negative number (Figure 3). We can find the value for \\(\beta\\) where the distribution mean is 0.5 using a binary search.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\linewidth]{images/mean-to-half-demo.pdf}
-\caption{\textbf{Mean of a similarity distribution as a function of \\(\beta\\).} Here we calculate the similarity mean between each point in the \textit{Mashable news popularity} dataset as we vary the Gaussian kernel parameter \\(\beta\\). The aim is to find the value of \\(\beta\\) where the mean is equal to 0.5. Because the function is monotonic, we use a fast binary search algorithm.} 
-\label{fig:mean_vs_beta}
-\end{figure}
+{{<figure src="images/mean-to-half-demo.svg" title="Figure 3: Mean of a similarity distribution as a function of the badwidth parameter." width="small" >}}
+Here we calculate the similarity mean between each point in the Mashable news popularity dataset as we vary the Gaussian kernel parameter \\(\beta\\). The aim is to find the value of \\(\beta\\) where the mean is equal to 0.5. Because the function is monotonic, we use a fast binary search algorithm.
+{{</figure>}}
 
 This algorithm runs faster than maximum-variance as it is merely a sum of exponential functions. We calculate the complexity by counting additions, subtractions, multiplications, divisions and powers. If the input vectors have \\(m\\) dimensions then each similarity is composed of:
 $$
@@ -137,42 +128,33 @@ We compare the accuracy of the mean-to-half and maximum variance algorithms agai
 
 We repeat this analysis on four more datasets, HIGGS [^HIGGS] which classes particle simulations as whether or not they produce a Higgs boson; 746 and Impens [^HIV] which both classes polyproteins as whether or not they can be split by the HIV-1 protease; and Dress Recommendation [^Dress] which classes dresses in an online shop as whether or not customers recommend them to friends. These datasets are discussed in more detail in the [Methods](#methods) section.
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=\linewidth]{images/error.pdf}
-\caption{\textbf{Performance of different algorithms for choosing \\(\beta\\) on various real-world tasks.} \textbf{(A)} We randomly divide the \textit{SUSY} dataset into a training and test set. We run the mean-to-half algorithm on the training set to find a value for the Gaussian kernel's bandwidth parameter \\(\beta\\). We then use a grid search with 5 fold cross-validation to find the regularisation parameter \\(C\\) for the support vector classifier model.  We carry out the same analysis with the maximise variance method and record the percentage of correctly predicted cases on the test set. We repeat this analysis with a similar algorithm, Ahn's method, and a grid search on the other datasets. We find that the mean-to-half and maximum variance algorithms perform comparably to the grid search which represents the best case. \textbf{(B)} We repeat the same analysis in (A) on real-world regression tasks. We measure the performance of each method by calculating the mean absolute error and dividing by the value for the grid search. Again, we find that the mean-to-half and maximum variance algorithms perform comparably to the grid search.} 
-\label{fig:classification_error}
-\end{figure}
+We measure the performance by each method on each dataset by calculating the percentage of correctly predicted outcomes, shown in Figure 4A. We find that both the mean-to-half and maximum variance algorithm perform comparably to the grid search.
 
-We measure the performance by each method on each dataset by calculating the percentage of correctly predicted outcomes, shown in Figure \ref{fig:classification_error}A. We find that both the mean-to-half and maximum variance algorithm perform comparably to the grid search.
+{{<figure src="images/error.svg" title="Figure 4: Performance of different algorithms on various real-world tasks." >}}
+**(A)** We randomly divide the SUSY dataset into a training and test set. We run the mean-to-half algorithm on the training set to find a value for the Gaussian kernel's bandwidth parameter \\(\beta\\). We then use a grid search with 5 fold cross-validation to find the regularisation parameter \\(C\\) for the support vector classifier model.  We carry out the same analysis with the maximise variance method and record the percentage of correctly predicted cases on the test set. We repeat this analysis with a similar algorithm, Ahn's method, and a grid search on the other datasets. We find that the mean-to-half and maximum variance algorithms perform comparably to the grid search which represents the best case. **(B)** We repeat the same analysis in (A) on real-world regression tasks. We measure the performance of each method by calculating the mean absolute error and dividing by the value for the grid search. Again, we find that the mean-to-half and maximum variance algorithms perform comparably to the grid search.
+{{</figure>}}
 
 The Mashable News Popularity dataset [^Mashable] describes articles published by [Mashable](https://mashable.com/) including linguistic and topical features. Each article is shared by readers with some being shared more than others. This dataset includes the number of times each article was shared. The task is to estimate how many times an article will be shared before it is published. This is known as a regression task.
 
-In a similar fashion to the previous classification tasks, we randomly select 5,000 points from the completely dataset and split this evenly into a training and test set. We run the mean-to-half algorithm on the training set to find a value for \\(\beta\\). We then use a grid search with 5-fold cross validation to select the regularisation parameter \\(C\\) from the same set as we used before and threshold value \\(\epsilon\\) of a support vector regressor model from a set of 7 evenly spaced between \\(10^{-3}\\) and \\(10^{3}\\). We measure the prediction error on the test set by calculating the mean absolute error. We repeat this process using the maximise variance and the grid search algorithms to find the values for \\(\beta\\) and estimate prediction error. We divide each method's MAE by the grid search's MAE to give us the mean absolute percentage error (MAPE) (Figure \ref{fig:classification_error}B). We conduct a parallel analysis on two more datasets, *Portuguese Students, mathematics class* [^Student] which describes Portuguese students with the aim of predicting their mathematics grades and *Portuguese Students, Portuguese class* [^Student] with the aim of predicting their Portuguese grades.
+In a similar fashion to the previous classification tasks, we randomly select 5,000 points from the completely dataset and split this evenly into a training and test set. We run the mean-to-half algorithm on the training set to find a value for \\(\beta\\). We then use a grid search with 5-fold cross validation to select the regularisation parameter \\(C\\) from the same set as we used before and threshold value \\(\epsilon\\) of a support vector regressor model from a set of 7 evenly spaced between \\(10^{-3}\\) and \\(10^{3}\\). We measure the prediction error on the test set by calculating the mean absolute error. We repeat this process using the maximise variance and the grid search algorithms to find the values for \\(\beta\\) and estimate prediction error. We divide each method's MAE by the grid search's MAE to give us the mean absolute percentage error (MAPE) (Figure 4B). We conduct a parallel analysis on two more datasets, *Portuguese Students, mathematics class* [^Student] which describes Portuguese students with the aim of predicting their mathematics grades and *Portuguese Students, Portuguese class* [^Student] with the aim of predicting their Portuguese grades.
 
-We find that the mean-to-half and maximise variance algorithms perform better than the grid search in all except one example. The maximise variance algorithm performs less than 4\% worse than the grid search on the Portuguese mathematics class dataset. We also note from the performance statistics in Figure \ref{fig:classification_error} that these two algorithms are suitable for both classification and regression tasks. \newline
+We find that the mean-to-half and maximise variance algorithms perform better than the grid search in all except one example. The maximise variance algorithm performs less than 4\% worse than the grid search on the Portuguese mathematics class dataset. We also note from the performance statistics in Figure 4 that these two algorithms are suitable for both classification and regression tasks. \newline
 
 Even though the two algorithms presented here find \\(\beta\\) faster than others, on large datasets they will still be very time consuming. One potential way of dealing with this is to use a small subset of data to find \\(\beta\\). The problem here is that different subsets may result in a different value for \\(\beta\\). This approach may only be feasible if \\(\beta\\) varies very little between different subsets.
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=1\linewidth]{images/classification_robust_general.pdf}
-\caption{\textbf{Robustness of \\(\beta\\) between measuring the prediction error or a feature of the similarity distribution.} \textbf{(A)} We repeatedly draw random samples points from the SUSY dataset. For each sample, we calculate the similarity mean for a range of values for \\(\beta\\). Here, we draw each random sample as a line illustrating how the mean differs from 0.5 as \\(\beta\\) varies. \textbf{(B)} Using the same random samples, we calculate the prediction error as \\(\beta\\) varies. We note that the value for \\(\beta\\) where the similarity mean is 0.5 has significantly little variance in comparison to where the prediction error is at its peak.} 
-\label{fig:generalrobust}
-\end{figure}
+As a general example, we take 100 random samples of 500 points from the SUSY dataset. For each random sample, we evaluate the mean of the similarity distribution for values of \\(\beta\\) between \\(10^{-2}\\) and \\(10^{2}\\) and depict the squared error from 0.5 in Figure 5A. This is the error function that the mean-to-half algorithm minimises. Each subset is drawn as a grey line with one subset highlighted in blue. For the same random subsets across the same values for \\(\beta\\) we evaluate the prediction error of a support vector classifier (with \\(C = 1/2\\)) and show the results in Figure 5B. The best \\(\beta\\) according to the mean-to-half algorithm appears to vary significantly less than trying to optimise the error.
 
-As a general example, we take 100 random samples of 500 points from the SUSY dataset. For each random sample, we evaluate the mean of the similarity distribution for values of \\(\beta\\) between \\(10^{-2}\\) and \\(10^{2}\\) and depict the squared error from 0.5 in Figure \ref{fig:generalrobust}A. This is the error function that the mean-to-half algorithm minimises. Each subset is drawn as a grey line with one subset highlighted in blue. For the same random subsets across the same values for \\(\beta\\) we evaluate the prediction error of a support vector classifier (with \\(C = 1/2\\)) and show the results in Figure \ref{fig:generalrobust}B. The best \\(\beta\\) according to the mean-to-half algorithm appears to vary significantly less than trying to optimise the error.
+{{<figure src="images/classification_robust_general.svg" title="Figure 5: Robustness of \\(\beta\\) between measuring the prediction error or a feature of the similarity distribution." >}}
+**(A)** We repeatedly draw random samples points from the SUSY dataset. For each sample, we calculate the similarity mean for a range of values for \\(\beta\\). Here, we draw each random sample as a line illustrating how the mean differs from 0.5 as \\(\beta\\) varies. **(B)** Using the same random samples, we calculate the prediction error as \\(\beta\\) varies. We note that the value for \\(\beta\\) where the similarity mean is 0.5 has significantly little variance in comparison to where the prediction error is at its peak.
+{{</figure>}}
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=\linewidth]{images/robust.pdf}
-\caption{\textbf{Variance of \\(\beta\\) between random subsets of each dataset.} \textbf{(A)} We draw 30 random samples of 100 points from the SUSY dataset. For each sample, we use the mean-to-half algorithm to find a value for \\(\beta\\) and compute the variance of \\(\beta\\). We also calculate the variance of \\(\beta\\) selected by the maximise variance and grid search algorithms. We repeat this analysis across all our datasets. We find that the mean-to-half algorithm has the least variance for each dataset and the grid search has the most amount of variance. \textbf{(B)} We repeat this experiment on the regression datasets and find that the mean-to-half algorithm consistently has the least amount of variance.} 
-\label{fig:classification_robust}
-\end{figure}
+We quantify this variance by taking 30 random samples of 100 points from the SUSY dataset, finding \\(\beta\\) with the mean-to-half algorithm on each sample and calculating the variance of \\(\beta\\)s. We carry out the same analysis with the maximise variance algorithm, Ahn's algorithm, and a grid search with 5-fold cross validation minimising the prediction error. We repeat this analysis across all the classification datasets. We find that \\(\beta\\) consistently varies least when using the mean-to-half algorithm and most when using the grid search (Figure 6A). Ahn's method is not consistent between datasets where it selects the smallest possible \\(\beta\\) on the Impens dataset and fluctuates between high and low values for \\(\beta\\) on the remaining dataset.
 
-We quantify this variance by taking 30 random samples of 100 points from the SUSY dataset, finding \\(\beta\\) with the mean-to-half algorithm on each sample and calculating the variance of \\(\beta\\)s. We carry out the same analysis with the maximise variance algorithm, Ahn's algorithm, and a grid search with 5-fold cross validation minimising the prediction error. We repeat this analysis across all the classification datasets. We find that \\(\beta\\) consistently varies least when using the mean-to-half algorithm and most when using the grid search (Figure \ref{fig:classification_robust}A). Ahn's method is not consistent between datasets where it selects the smallest possible \\(\beta\\) on the Impens dataset and fluctuates between high and low values for \\(\beta\\) on the remaining dataset.
+{{<figure src="images/robust.svg" title="Figure 6: Variance of \\(\beta\\) between random subsets of each dataset." >}}
+**(A)** We draw 30 random samples of 100 points from the SUSY dataset. For each sample, we use the mean-to-half algorithm to find a value for \\(\beta\\) and compute the variance of \\(\beta\\). We also calculate the variance of \\(\beta\\) selected by the maximise variance and grid search algorithms. We repeat this analysis across all our datasets. We find that the mean-to-half algorithm has the least variance for each dataset and the grid search has the most amount of variance. **(B)** We repeat this experiment on the regression datasets and find that the mean-to-half algorithm consistently has the least amount of variance.
+{{</figure>}}
 
-We repeat this experiment measuring the variance of \\(\beta\\) as selected by the grid search, maximise variance and mean-to-half algorithms on the regression datasets. Again, we find that the mean-to-half algorithm has the least amount of variance while the grid search has the most (Figure \ref{fig:classification_robust}B).
+We repeat this experiment measuring the variance of \\(\beta\\) as selected by the grid search, maximise variance and mean-to-half algorithms on the regression datasets. Again, we find that the mean-to-half algorithm has the least amount of variance while the grid search has the most (Figure 6B).
 
 # Conclusion
 
@@ -292,7 +274,6 @@ To find a suitable value for the Gaussian bandwidth, we must perform a grid sear
 A study conducted by Ahn looks at classification problems and choose a kernel's parameters by minimising the average distance between points of the same class and maximising the average distance between points of different classes \cite{Ahn2010}. 
 
 If we represent \\(\textbf{x}_i\\) and \\(\textbf{y}_j\\) to be vectors of two different classes, we can write the mean distance between vectors of the same class as: 
-
 $$
 \begin{aligned}
 & \frac{1}{2} \left(
@@ -317,6 +298,45 @@ $$
 
 
 Similar to the two methods proposed in this paper (*maximum variance* and *mean-to-half*) this method is a linear combination of the Gaussian similarity between each point. Ahn demonstrated that the global maximum is robust to changes in the data. However, this function also has local maxima which prevents a fast search algorithm.
+
+# Appendix
+
+## Complexity of maximum variance
+
+Each similarity is composed of:
+* \\(m\\) subtractions, \\(m\\) powers and \\(m-1\\) additions: \\(p = ||\textbf{x}_i - \textbf{x}_j||^2\\)
+* 2 multiplications: \\(-2 \beta p\\), \\(\beta p\\)
+* 2 powers: \\(e^{-2 \beta p}\\), \\(e^{\beta p}\\)
+* 2 multiplications: \\(p e^{-2 \beta p}\\), \\(e^{\beta p}\\), \\(p e^{\beta p}\\)
+
+In total, each similarity costs \\(3m + 5\\) operations, and there are \\(n(n-1)/2\\) similarities resulting in \\(3m + 5)n(n-1)/2\\) operations. Then, these similarities are summed together and combined to form the derivative:
+* \\((\frac{n(n-1)}{2} -1) \times 3\\) additions: \\(\sum_{\forall p}p e^{-2 \beta p}\\), \\(\sum_{\forall p}e^{\beta p}\\), \\(\sum_{\forall p}p e^{\beta p}\\)
+* 3 multiplications: \\(-\frac{2}{N}\sum_{\forall p}p e^{-2 \beta p}\\), \\(\frac{2}{N^2}\sum_{\forall p}e^{\beta p} \sum_{\forall p}p e^{\beta p}\\)
+* 1 addition: \\(-\frac{2}{N}\sum_{\forall p}p e^{-2 \beta p} + \frac{2}{N^2}\sum_{\forall p}e^{\beta p} \sum_{\forall p}p e^{\beta p}\\)
+
+
+This step has a total cost of \\(\frac{n(n-1)}{2}3 + 1\\) operations. The full cost of calculating the derivative at each step is:
+$$
+\begin{aligned}
+(3m + 5)\frac{n(n-1)}{2} + \frac{n(n-1)}{2}3 + 1 &= \frac{n(n-1)}{2} (3m + 8) + 1 \\\
+&= O(n^2m)
+\end{aligned}
+$$
+
+## Complexity of mean to half
+
+We expect that this algorithm ought to run faster than maximum-variance as this is merely a sum of exponential functions. We calculate the complexity by counting additions, subtractions, multiplications, divisions and powers. If the input vectors have \\(m\\) dimensions then each similarity is composed of:
+* \\(m\\) subtractions, \\(m\\) powers and \\(m-1\\) additions: \\(p = ||\textbf{x}_i - \textbf{x}_j||^2\\)
+* 1 multiplication: \\(-\beta p\\)
+* 1 exponential: \\(e^{\beta p}\\)
+
+Thus a single Gaussian kernel functions takes \\(3m + 1\\) operations to calculate. If there are $n$ data points then there are \\(\frac{n(n-1)}{2}\\) distances. We need to calculate each distance, add them together and divide by the number of distances:
+$$
+\begin{aligned}
+\frac{n(n-1)}{2} (3m + 1) + \frac{n(n-1)}{2} - 1 + 1 &=\frac{n(n-1)}{2}[3m + 2] \\\
+& = O(n^2m)
+\end{aligned}
+$$
 
 
 [^SUSY]: [SUSY dataset](https://archive.ics.uci.edu/ml/datasets/SUSY)
