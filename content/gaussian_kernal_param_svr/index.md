@@ -1,5 +1,5 @@
 ---
-title: "Faster Gaussian Kernel fit for Support Vector Regression"
+title: "Fast Gaussian Kernel fit for Support Vector Regression"
 blurb: "
 Support vector regression models transform input vectors into a very high number of dimensions where the regression problem becomes linear. This new space is defined by a kernel function. A major drawback of these models is that they are slow to fit the kernel parameters. Here I develop an algorithm to quickly fit the Gaussian kernel's bandwidth parameter. This algorithm is fast, robust on some datasets, and has a similar fit to slower and more exhaustive methods.
 "
@@ -10,6 +10,8 @@ author: Adrian Letchford
 katex: true
 markup: "mmark"
 ---
+
+*This was a paper I wrote with the intention of publication. I quit academia during the publication process for greener pastures. I've published it here myself to save me $2,000 in publisher fees and you in subscription fees.*
 
 # Introduction
 

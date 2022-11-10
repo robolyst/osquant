@@ -1,7 +1,7 @@
 ---
 title: "Choosing the Gaussian Kernel's Bandwidth"
 blurb: "
-Kernel machines are powerful non-linear models that transform input vectors into a very high number of dimensions where the problem becomes linear. These models' biggest drawback is that choosing appropriate kernel parameters tends to be a slow process. Here, we focus on quickly choosing the Gaussian kernel's bandwidth parameter. We develop two algorithms which optimise the distribution of the Gaussian kernel evaluated over a training dataset. We find that these two algorithms are fast, robust and have a similar error to slower and more exhaustive methods. As these methods optimise the kernel distribution, they can be used regardless of any particular kernel machine and modelling task.
+I created two algorithms that quickly optimise the bandwidth parameter for a Gaussian kernel. These algorithms only operate on the independent variables of a modelling task. This means they can be used regardless of the chosen kernel machine model and modelling task.
 "
 
 date: "2015-08-06"
@@ -9,8 +9,9 @@ type: article
 author: Adrian Letchford
 katex: true
 markup: "mmark"
-draft: true
 ---
+
+*This was a paper I wrote with the intention of publication. I quit academia during the publication process for greener pastures. I've published it here myself to save me $2,000 in publisher fees and you in subscription fees.*
 
 # Introduction
 
@@ -59,7 +60,7 @@ We explore two algorithms in this paper for choosing \\(\beta\\), the first maxi
 
 ## Maximum variance
 
-The algorithm propose[^cite{Tang2009] maximises the Gaussian kernel variance calculated over a training set. The idea is that if this variance is maximised, then the data points will have a wide range of similarities which may help a predictive model identify patterns.
+The algorithm propose[^Tang2009] maximises the Gaussian kernel variance calculated over a training set. The idea is that if this variance is maximised, then the data points will have a wide range of similarities which may help a predictive model identify patterns.
 
 The variance is calculated as:
 $$
