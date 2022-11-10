@@ -155,7 +155,7 @@ We repeat this experiment measuring the variance of \\(\beta\\) as selected by t
 
 # Conclusion
 
-In this paper, we propose an algorithm for choosing the Gaussian kernel's bandwidth parameter which we call mean-to-half. Our work is built on a method propose[^cite{Tang2009] which we call maximise variance. These two algorithms choose the bandwidth that best highlights clusters of points.
+In this paper, we propose an algorithm for choosing the Gaussian kernel's bandwidth parameter which we call mean-to-half. Our work is built on a method propose[^Tang2009] which we call maximise variance. These two algorithms choose the bandwidth that best highlights clusters of points.
 
 We test these two algorithms on a variety of datasets using support vector machines, both for classification and regression. We find that the algorithms accuracy is comparable to a grid search which represents the best possible result. We also find that the value for \\(\beta\\) that these two algorithms select is more robust to changes in the dataset than other algorithms. This means that we can find appropriate parameters for very large datasets by only examining small subsets.
 
