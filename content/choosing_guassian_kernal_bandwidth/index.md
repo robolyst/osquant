@@ -28,9 +28,7 @@ The most common kernel machine is the support vector machine (SVM) which has two
 
 A common task with SVMs, and kernel machine modeling in general, is tuning the kernel parameters. The most widely used strategy is to conduct cross validation with a separate set of data, which is very time comsuming. The question we address in this paper is: how to quickly identify an appropriate Gaussian bandwidth parameter \\(\beta\\) in the Gasssian kernel defined in \\(\eqref{eq:gkernel}\\)? This parameter is important because it directly affects the geometry of the embedding space. The distance between any two points in this higher dimensional space is:
 $$
-\begin{align}
 ||\varphi(\mathbf{x}_i) - \varphi(\mathbf{x}_j)||^2 = 2(1 - \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)) = 2(1 - e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2})
-\end{align}
 $$
 
 If \\(\beta\\) is 0, then each point has zero distance to each other point. If \\(\beta \rightarrow \infty\\), then each point has exactly a distance of 2 from each other point.
@@ -100,9 +98,7 @@ The previous algorithm directly maximises the similarity variance, however, an i
 
 We calculate the mean similarity as:
 $$
-\begin{align}
-\mu = \frac{1}{N}\sum_{\forall p} e ^{ - \beta p} \label{eq:mean}
-\end{align}
+\mu = \frac{1}{N}\sum_{\forall p} e ^{ - \beta p}
 $$
 
 As \\(\beta\\) increases from \\(0\\) to \\(\infty\\), the mean decreases because it is a sum of \\(e\\)s to the power of a negative number (Figure 3). We can find the value for \\(\beta\\) where the distribution mean is 0.5 using a binary search.
