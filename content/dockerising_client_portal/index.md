@@ -44,7 +44,7 @@ I have made a Docker container for the Client Portal API. The container makes ru
 
 The container is increadibly light weight. As of this writing, the image is less than 70MBs!
 
-Creating the image is a matter of downloading the portal, unzipping and running:
+Creating the image is a matter of downloading the portal, unzipping and running. The `Dockerfile` for this is:
 
 ```Dockerfile
 FROM openjdk:8u212-jre-alpine3.9
