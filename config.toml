@@ -8,7 +8,7 @@ FootnoteReturnLinkContents = "↑"
 
 [markup]
   [markup.highlight]
-    style = "monokailight"
+    style = "monokailight" # dracula
 
 [markup.goldmark.renderer]
 unsafe= true
