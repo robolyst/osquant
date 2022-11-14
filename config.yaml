@@ -1,0 +1,12 @@
+baseURL: "/"
+languageCode: "en-us"
+title: "Open Source Quant"
+theme: "osquant"
+FootnoteReturnLinkContents: "↑"
+
+markup:
+  highlight:
+    style: "monokailight" # dracula
+  goldmark:
+    renderer:
+      unsafe: true
