@@ -2,7 +2,8 @@
 {{ $minutes := math.Round (div $readTime 60) }}
 
 
-<div class="post">
+<div class="mini">
+    <div class="author">{{ .Params.author }}</div>
     <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
     <div class="blurb">{{ .Params.blurb }}</div>
     <div class="meta">
