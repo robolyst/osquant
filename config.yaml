@@ -10,3 +10,9 @@ markup:
   goldmark:
     renderer:
       unsafe: true
+
+menu:
+  author_guide:
+  - identifier: visual
+    name: Visual Style Guide
+    url: /visual-style-guide/

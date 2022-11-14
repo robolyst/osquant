@@ -10,8 +10,8 @@ blurb: "
 date: "1900-01-01"
 type: article
 katex: true
-draft: true
 markup: "mmark"
+author: Adrian Letchford
 ---
 
 # Text styles

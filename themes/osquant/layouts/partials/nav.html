@@ -1,5 +1,12 @@
 <div class='container'>
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="/">{{ .Site.Title }}</a>
+
+        {{ if in (printf "%#v" $.Site.BaseURL) "//localhost" }}
+            {{ range .Site.Menus.author_guide }}
+                <a href="{{ .URL }}">{{ .Name }}</a>
+            {{ end }}
+        {{ end }}
+
     </nav>
 </div>
