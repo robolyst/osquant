@@ -1,6 +1,5 @@
 {{ if eq .Type "article" }} 
     {{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
-
     {{ $minutes := math.Round (div $readTime 60) }}
 
     <div class="article-meta">

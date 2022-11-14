@@ -1,0 +1,14 @@
+{{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
+{{ $minutes := math.Round (div $readTime 60) }}
+
+
+<div class="post">
+    <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
+    <div class="blurb">{{ .Params.blurb }}</div>
+    <div class="meta">
+        <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+        <span class="space">·</span>
+        <span>{{ $minutes }} min read</span>
+        {{if .Params.draft }}<span class="tag">Draft</span>{{ end }}
+    </div>
+</div>
