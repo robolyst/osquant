@@ -6,7 +6,8 @@ Support vector regression models transform input vectors into a very high number
 
 date: "2016-01-07"
 type: paper
-author: Adrian Letchford
+authors:
+    - Adrian Letchford
 katex: true
 markup: "mmark"
 tags:

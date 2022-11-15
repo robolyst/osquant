@@ -6,7 +6,8 @@ How can you measure performance when investing? You might think you can simply m
 
 date: "2020-06-12"
 type: paper
-author: Adrian Letchford
+authors:
+    - Adrian Letchford
 katex: true
 markup: "mmark"
 tags:

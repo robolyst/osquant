@@ -153,6 +153,14 @@ Section
     font-size: 0.8rem;
 }
 
+#section .mini .author a {
+    color: #212529;
+}
+
+#section .mini .author a:hover {
+    color:#747474;
+}
+
 #section .mini .title {
     font-size: 1.5rem;
     font-weight: 700;

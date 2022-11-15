@@ -4,7 +4,8 @@ title: "Invest regularly"
 blurb: "Successful investors combine lots of simple things, each one providing a small improvement. One of these simple things is investing regularly."
 
 date: "2020-12-22"
-author: Adrian Letchford
+authors:
+    - Adrian Letchford
 type: paper
 katex: true
 markup: "mmark"

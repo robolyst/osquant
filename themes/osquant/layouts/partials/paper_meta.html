@@ -6,7 +6,11 @@
 
         <div class="item">
             <div class="label">Author</div>
-            <div>{{ .Params.author }}</div>
+            {{ range .Params.authors }}
+                {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+                    <div><a href="{{ .Permalink }}">{{ .Name }}</a></div>
+                {{ end }}
+            {{ end }}
         </div>
         <div class="item">
             <div class="label">Published</div>
@@ -32,5 +36,6 @@
                 <a class="tag" href="https://github.com/robolyst/osquant/tree/main/content/{{ .File.Dir }}">Github</a>
             </div>
         </div>
+
     </div>
 {{ end }}

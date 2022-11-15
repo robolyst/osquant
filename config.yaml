@@ -11,6 +11,10 @@ markup:
     renderer:
       unsafe: true
 
+taxonomies:
+  tag: tags
+  author: authors
+
 menu:
   author_guide:
   - identifier: visual

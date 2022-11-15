@@ -6,7 +6,8 @@ I created two algorithms that quickly optimise the bandwidth parameter for a Gau
 
 date: "2015-08-06"
 type: paper
-author: Adrian Letchford
+authors:
+    - Adrian Letchford
 katex: true
 markup: "mmark"
 tags:

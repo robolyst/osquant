@@ -3,7 +3,15 @@
 
 
 <div class="mini">
-    <div class="author">{{ .Params.author }}</div>
+    {{ if .Params.authors }}
+        <div class="author">
+            {{ range .Params.authors }}
+                {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+                    <a href="{{ .Permalink }}">{{ .Name }}</a>
+                {{ end }}
+            {{ end }}
+        </div>
+    {{ end }}
     <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
     <div class="blurb">{{ .Params.blurb }}</div>
     <div class="meta">
