@@ -9,6 +9,8 @@ type: paper
 author: Adrian Letchford
 katex: true
 markup: "mmark"
+tags:
+    - mathematics
 ---
 
 *This was a paper I wrote with the intention of publication. I quit academia during the publication process for greener pastures. I've published it here myself to save me $2,000 in publisher fees and you in subscription fees.*

@@ -165,7 +165,7 @@ Section
 }
 
 #section .mini .blurb {
-    opacity: 0.7;
+    color:#747474;
 }
 
 #section .mini .meta {
@@ -173,7 +173,7 @@ Section
     margin-bottom: 0.5rem;
     font-weight: 400;
     font-size: 0.8rem;
-    opacity: 0.7;
+    color:#747474;
 }
 
 #section .mini .meta .space {
@@ -182,16 +182,25 @@ Section
 }
 
 #section .mini .tag {
-    color: #747474;
     text-transform: lowercase;
     background-color: #ececec;
     display: inline-block;
     border-radius: 5px;
-    margin-left: 1rem;
+    margin-right: 1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-
 }
+
+#section .mini a.tag {
+    color:#747474;
+}
+
+#section .mini a.tag:hover {
+    color:#ececec;
+    background-color: #747474;
+}
+
+
 
 /* ----------------------------------------------------------------------------
 Page (Single)

@@ -13,6 +13,10 @@ katex: true
 markup: "mmark"
 author: Adrian Letchford
 draft: true
+tags:
+    - mathematics
+    - engineering
+    - finance
 ---
 
 # My new paper

@@ -9,6 +9,8 @@ type: paper
 author: Adrian Letchford
 katex: true
 markup: "mmark"
+tags:
+    - finance
 ---
 
 # How to think about performance
