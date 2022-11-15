@@ -22,10 +22,15 @@
             <div class="label">Tags</div>
             <div>
                 {{ range (.GetTerms "tags") }}
-                <a class="tag" href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+                <a href="{{ .Permalink }}">{{ .LinkTitle }}</a>
             {{ end }}
             </div>
         </div>
-
+        <div class="item">
+            <div class="label">Paper Source</div>
+            <div>
+                <a class="tag" href="https://github.com/robolyst/osquant/tree/main/content/{{ .File.Dir }}">Github</a>
+            </div>
+        </div>
     </div>
 {{ end }}
