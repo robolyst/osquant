@@ -5,7 +5,7 @@ I created two algorithms that quickly optimise the bandwidth parameter for a Gau
 "
 
 date: "2015-08-06"
-type: article
+type: paper
 author: Adrian Letchford
 katex: true
 markup: "mmark"

@@ -5,7 +5,7 @@ blurb: "Successful investors combine lots of simple things, each one providing a
 
 date: "2020-12-22"
 author: Adrian Letchford
-type: article
+type: paper
 katex: true
 markup: "mmark"
 ---

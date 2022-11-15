@@ -1,8 +1,8 @@
-{{ if eq .Type "article" }} 
+{{ if eq .Type "paper" }} 
     {{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
     {{ $minutes := math.Round (div $readTime 60) }}
 
-    <div class="article-meta">
+    <div class="paper-meta">
 
         <div class="item">
             <div class="label">Author</div>

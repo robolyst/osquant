@@ -8,7 +8,7 @@ blurb: "
 "
 
 date: "1900-01-01"
-type: article
+type: paper
 katex: true
 markup: "mmark"
 author: Adrian Letchford

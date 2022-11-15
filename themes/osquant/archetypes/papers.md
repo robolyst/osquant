@@ -8,7 +8,7 @@ blurb: "
 "
 
 date: {{ .Date }}
-type: article
+type: paper
 katex: true
 markup: "mmark"
 author: Adrian Letchford

@@ -221,7 +221,7 @@ Page (Single)
     margin: 0;
 }
 
-#page_header .article-meta {
+#page_header .paper-meta {
     display: flex;
     font-size: 1.1rem;
     margin-top: 2rem;
@@ -229,12 +229,12 @@ Page (Single)
     row-gap: 20px;
 }
 
-#page_header .article-meta .item {
+#page_header .paper-meta .item {
     flex-grow: 1;
     min-width: 130px;
 }
 
-#page_header .article-meta .label {
+#page_header .paper-meta .label {
     text-transform: uppercase;
     opacity: 0.75;
     font-size: 0.8rem;
@@ -276,7 +276,7 @@ Page (Single)
     #page_header span.subtitle {
         font-size: 1.5rem;
     }
-    .article-meta {
+    .paper-meta {
         font-size: 1rem;
     }
     #page_content {
