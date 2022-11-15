@@ -9,7 +9,7 @@ blurb: "
 
 date: {{ .Date }}
 type: paper
-katex: true
+katex: false # Enable mathematics on the page
 markup: "mmark"
 author: Adrian Letchford
 draft: true
