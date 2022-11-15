@@ -240,6 +240,7 @@ Page (Single)
 
 #page_header .paper-meta .item {
     flex-grow: 1;
+    flex-basis: 33%;
     min-width: 130px;
 }
 

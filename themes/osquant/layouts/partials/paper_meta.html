@@ -18,6 +18,14 @@
                 {{ $minutes }} {{ cond (eq $minutes 1) "minute" "minutes" }}
             </div>
         </div>
+        <div class="item">
+            <div class="label">Tags</div>
+            <div>
+                {{ range (.GetTerms "tags") }}
+                <a class="tag" href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+            {{ end }}
+            </div>
+        </div>
 
     </div>
 {{ end }}
