@@ -1,24 +1,28 @@
 {{ define "main" }}
 
-    <div id="splash">
-        {{- partial "nav.html" . -}}
-        <div class="container">
-            <div class="content">
-                <div>{{ .Title | title }}</div>
-            </div>
-        </div>
-    </div>
-    
+    {{- partial "nav.html" . -}}
 
     <div id="content">
-        <div id="section" class="container">
-            {{ .Content }}
+        <div id="single">
 
+            <div id="page_header">
+                <div class='container'>
+                    <span class='title'>{{ .Title | title }}</span>
+                    <p class="blurb">{{ .Params.blurb }}</p>
+                </div>
+            </div>
+
+            <div id="page_content">
+                {{ .Content }}
+            </div>
+
+        </div>
+
+        <div id="section" class="container">
             {{ range .Pages.ByDate.Reverse }}
                 {{- partial "mini.html" . -}}
             {{ end }}
         </div>
     </div>
-
 
 {{ end }}
