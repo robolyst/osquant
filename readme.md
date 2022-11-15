@@ -7,5 +7,5 @@ brew install hugo
 ```
 Run the deveopment site
 ```bash
-hugo server --buildDrafts
+hugo server --buildDrafts -F
 ```

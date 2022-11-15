@@ -11,7 +11,10 @@ date: "1900-01-01"
 type: paper
 katex: true
 markup: "mmark"
-author: Adrian Letchford
+authors:
+    - Adrian Letchford
+tags:
+    - Guide
 ---
 
 # Text styles
