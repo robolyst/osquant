@@ -1,7 +1,19 @@
 {{ define "main" }}
 
-    <p class="pitch">
-        404
-    </p>
+    {{- partial "nav.html" . -}}
+
+    <div id="content">
+        <div id="single">
+
+            <div id="page_header">
+                <div class='container'>
+                    <span class='title'>404</span>
+                    <p class="blurb">Couldn't find what you're looking for :(</p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 {{ end }}
