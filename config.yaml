@@ -4,6 +4,9 @@ title: "Open Source Quant"
 theme: "osquant"
 FootnoteReturnLinkContents: "↑"
 
+params:
+  gtag: G-SSDJH3F7EZ
+
 sitemap:
   changefreq: weekly
   filename: sitemap.xml
