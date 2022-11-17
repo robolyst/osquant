@@ -4,6 +4,10 @@ title: "Open Source Quant"
 theme: "osquant"
 FootnoteReturnLinkContents: "↑"
 
+sitemap:
+  changefreq: weekly
+  filename: sitemap.xml
+
 markup:
   highlight:
     style: "monokailight" # dracula
