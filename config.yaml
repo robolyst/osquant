@@ -6,6 +6,7 @@ FootnoteReturnLinkContents: "↑"
 
 params:
   gtag: G-SSDJH3F7EZ
+  github_content: https://github.com/robolyst/osquant/tree/main/content/
 
 sitemap:
   changefreq: weekly
