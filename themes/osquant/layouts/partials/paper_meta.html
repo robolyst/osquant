@@ -24,11 +24,11 @@
         </div>
         <div class="item">
             <div class="label">Tags</div>
-            <div>
-                {{ range (.GetTerms "tags") }}
-                <a href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+            {{ range (.GetTerms "tags") }}
+                <div>
+                    <a href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+                </div>
             {{ end }}
-            </div>
         </div>
         <div class="item">
             <div class="label">Paper Source</div>
