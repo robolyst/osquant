@@ -1,7 +1,7 @@
 ---
 title: "Understanding bond ETF returns"
 blurb: "
-The return of a bond ETF can be calculated from bond yields. The distribution of a bond ETF's returns turns out to be a function of the current level of interest rates, the expected change and variance of the interest rates.
+The return of a bond ETF can be estimated from bond yields. The distribution of a bond ETF's returns turns out to be a function of the current level of interest rates, the expected change and variance of the interest rates.
 "
 
 date: "2022-11-21"
@@ -10,7 +10,7 @@ katex: true
 markup: "mmark"
 authors:
     - Adrian Letchford
-draft: true
+draft: false
 tags:
     - mathematics
     - finance
