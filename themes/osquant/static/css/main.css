@@ -402,12 +402,12 @@ Other
 #content .katex-display { /* Block math */
     margin-top: 20pt;
     margin-bottom: 20pt;
-    margin: 4rem 0;
+    margin: 3rem 0;
     display: block;
 }
 
 #content .katex-display .katex { /* Block math */
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 @media (max-width:450px) {
