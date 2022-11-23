@@ -69,4 +69,24 @@ Even though [LTGOVTBD](https://fred.stlouisfed.org/series/LTGOVTBD) is not a per
 
 # Putting it all together
 
+To join these three return streams together, we need to convert them to cumulative returns and then line up the days that overlap.
+
+Converting to cumulative returns is easy. In Python we can just go:
+```python
+np.cumprod(1 + returns)
+```
+
+Getting the first date of a price series to line up with the corresponding date in a cumulative return series requires a quick calculation. Let's say that \\(p_t\\) is the price of TLT at time \\(t\\) and \\(c_t\\) is the cumulative return of an estimated return stream. We can make the estimated price line up with TLT's price at time \\(i\\) with:
+$$
+c_t \times e^{\log(p_i) - \log(c_i)}
+$$
+
+????
+
+$$
+c_t \times \frac{p_i}{c_i}
+$$
+
+Transforming the daily yield estimates onto the start of TLT and then transforming the monthly bond yields onto the start of that gives us 100 years of estimated TLT prices:
+
 ![](images/complete_index.svg)
