@@ -4,7 +4,7 @@ blurb: "
     The price of a bond ETF can be estimated from bond yields. You can use this technique to create a long term performance history of an ETF.
 "
 
-date: "2022-11-22"
+date: "2022-11-24"
 type: paper
 katex: true  # Enable mathematics on the page
 markup: "mmark"
