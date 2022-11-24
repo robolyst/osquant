@@ -15,6 +15,7 @@ authors:
     - Adrian Letchford
 tags:
     - Guide
+draft: true
 ---
 
 # Text styles
@@ -92,7 +93,21 @@ for i in range(10):
 
 # Images
 
+You can create an image with standard mardown:
 ![Example image](example_investments.svg)
+
+You can use a Hugo shortcode to create a figure with a caption:
+{{<figure src="example_investments.svg" title="Example figure." >}}
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
+{{</figure>}}
+
+## Pro tips
+
+When creating charts use SVGs. These will render as crisp as possible on all devices. And, as OSQuant evolves, our style may change. SVGs are editable while other formats are not.
+
+In python you can use [matplotlib](https://matplotlib.org/) to create charts. If you want to enhance them after you've generated the SVGs, [Figma](https://www.figma.com/) is a great and free tool.
+
+If you want to go for that handwritten notebook style, we use [Excalidraw](https://excalidraw.com/) to create these with a consistent style.
 
 
 # Footnotes & references
