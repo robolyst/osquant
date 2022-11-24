@@ -10,14 +10,18 @@ katex: true  # Enable mathematics on the page
 markup: "mmark"
 authors:
     - Adrian Letchford
-draft: true
 tags:
     - finance
 ---
 
-Managing a macro portfolio of ETFs can be tricky because there isn't much price history. Without enough history, asking questions like "What happens when interest rates hit zero?" become hard to answer. Bond ETFs in particular are tricky as many of them are still relatively new. Take TLT as an example, it only started operating in the early 2000s.
+Backtesting a macro portfolio of ETFs can be tricky because there often isn't much price history. Without enough history, you're unable to verify that your strategy would have made good decisions during tumultuous markets. Bond ETFs in particular are tricky as many of them are still relatively new.
 
-These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their fair price by summing together the value of the bonds they hold. Some bond ETFs continuously hold one type of bond. For example, [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT) holds US Treasury bonds with maturities greater than 20 years. We can use this information to model TLT's price as a function of bond yields without know exactly what TLT holds.
+These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their fair price by summing together the value of the bonds they hold. Some bond ETFs continuously hold one type of bond. For example, [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT) holds U.S. Treasury bonds with maturities greater than 20 years. We can use this information to model TLT's price as a function of bond yields without knowing exactly what TLT holds.
+
+Because there is a long history of yield data, it is possible to create a long term history for TLT's performance. We're going to do this with three periods of time:
+* 2002 to the present will be TLT's prices
+* 1962 to 2002 will be estimated using daily yield quotes
+* 1925 to 1962 will be estimated using monthly yield quotes
 
 # Modelling bond ETF returns with yields
 
@@ -31,9 +35,11 @@ where:
 * \\(T\\) is the number of years until maturity.
 * \\(f\\) is the observation frequency. For example, \\(f = 260\\) for daily and \\(f = 12\\) for monthly.
 
+We can plug in daily or monthly yields to get an estimated return for investing in bonds.
+
 # 2002 to present
 
-The most recent history of TLT can be downloaded from Yahoo Finance ([here](https://uk.finance.yahoo.com/quote/TLT/history?p=TLT)). As TLT pays the bond coupons as dividends, we are using the dividend adjusted price.
+The most recent history of TLT can be downloaded from Yahoo Finance ([here](https://uk.finance.yahoo.com/quote/TLT/history?p=TLT)). As TLT pays the bond coupons as dividends, we are using the dividend adjusted price:
 
 ![](images/tlt.svg)
 
@@ -43,11 +49,11 @@ To extend TLT's price beyond 2002, we need to employ the return model from above
 
 ![](images/daily_interest_rates.svg)
 
-The 20 year bond yields has a longer history than the 30 year. It goes back to 1962. However, the 20 year bonds were discontinued by the U.S. government for some time over the 1980s and 1990s. To keep things simple, we're going to use the 20 year yields from 1962 to the start of the 30 year yields and from then on use the 30 year yields.
+The 20 year bond yields have a longer history than the 30 year yields. It goes back to 1962. However, the 20 year bonds were discontinued by the U.S. government for some time over the 1980s and 1990s. To keep things simple, we're going to use the 20 year yields from 1962 to the start of the 30 year yields and from then on use the 30 year yields.
 
-TLT doesn't try to hold bonds maturing at 30 years, so we will estimate a maturity of 25 years (\\(T = 25\\)). The U.S. treasuries pay a coupon twice a year (\\(p = 2\\)). The frequency of this data is daily \\(f = 260\\).
+TLT doesn't try to hold bonds maturing at 30 years, so we will estimate a maturity of 25 years (\\(T = 25\\)). The U.S. treasuries pay a coupon twice a year (\\(p = 2\\)) and the frequency of this data is daily \\(f = 260\\).
 
-Overlaying TLT's price ontop of our estimated valuation looks like:
+Using these parameters and plugging the daily yields into the return caclulation above we get an estimated return series. Converting this to a cumulative return series and overlaying TLT's price ontop looks like:
 
 
 
@@ -69,7 +75,7 @@ Even though [LTGOVTBD](https://fred.stlouisfed.org/series/LTGOVTBD) is not a per
 
 # Putting it all together
 
-To join these three return streams together, we need to convert them to cumulative returns and then line up the days that overlap.
+To join these two estimated return streams onto TLT's price series, we need to convert them to cumulative returns and then line up the days that overlap.
 
 Converting to cumulative returns is easy. In Python we can just go:
 ```python
@@ -77,11 +83,6 @@ np.cumprod(1 + returns)
 ```
 
 Getting the first date of a price series to line up with the corresponding date in a cumulative return series requires a quick calculation. Let's say that \\(p_t\\) is the price of TLT at time \\(t\\) and \\(c_t\\) is the cumulative return of an estimated return stream. We can make the estimated price line up with TLT's price at time \\(i\\) with:
-$$
-c_t \times e^{\log(p_i) - \log(c_i)}
-$$
-
-????
 
 $$
 c_t \times \frac{p_i}{c_i}
