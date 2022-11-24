@@ -11,7 +11,8 @@ date: {{ .Date }}
 type: paper
 katex: false # Enable mathematics on the page
 markup: "mmark"
-author: Adrian Letchford
+authors:
+    - Adrian Letchford
 draft: true
 tags:
     - mathematics
