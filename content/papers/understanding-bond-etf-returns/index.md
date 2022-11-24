@@ -16,8 +16,6 @@ tags:
     - finance
 ---
 
-# Modelling bond ETF returns with yields
-
 A simple model of a bond ETF is that every day, the fund buys a bond on the open market, holds it for a day collecting interest and then sells the bond at the end of the day. The fund's return for the day is the interest earned and any capital made or lost on the price of the bond.
 
 $$
@@ -26,7 +24,7 @@ $$
 
 The bond's yield tells us the interest that we earn. To calculate the capital gains, we need to know how to calculate a bond's price. The capital gain is then the return on the price of the bond.
 
-## Bond price
+# Bond price
 
 A bond is a cashflow producing instrument. Throughout the holding period, the buyer receives periodic **coupons** and at the end of the bond the buyer receives the **notional** amount. The cashflow looks like this:
 
@@ -57,9 +55,7 @@ $$
 
 A key thing to note is that if the coupon equals the rate (\\(C = r\\)) then the price of the bond is equal to the notional \\(P = N\\). This is exactly what happens when a new bond is issued. The price of the bond that the buyer pays is the notional amount and the coupons that they'll receive match the rate at the time of issue.
 
-
-
-## ETF Returns
+# ETF Returns
 
 Earlier we stated that a bond ETFs return is the sum of the interest earned plus the return made on the value of the bonds (captial):
 $$
@@ -94,7 +90,7 @@ If we plot the estimated returns against changes in yield, we find two interesti
 For smaller yields, changes have a larger impact. A change of +0.4% causes the returns from a 1% yield on a 30 year bond to fall further than from 5%.
 {{</figure>}}
 
-## Example
+# Example
 
 We can test out this ETF model on [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT). This is a US based ETF that holds U.S. Treasury bonds that mature in 20+ years.
 
