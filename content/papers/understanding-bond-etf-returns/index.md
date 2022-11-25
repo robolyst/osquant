@@ -164,7 +164,7 @@ def etfret(r1, r, f=260, p=2, T=25):
     return interest + annuity + capital - 1
 ```
 
-We can think of the yield \\(r_t\\) as drawn from a [log normal distribuiton](https://en.wikipedia.org/wiki/Log-normal_distribution). That is, the logged changes in the yield follows a gaussian distribution:
+If we assume that yields cannot go negative, then we can think of the yield \\(r_t\\) as drawn from a [log normal distribuiton](https://en.wikipedia.org/wiki/Log-normal_distribution). That is, the logged changes in the yield follows a gaussian distribution:
 $$
 \begin{aligned}
 \log(r_t) - \log(r_{t-1}) &\sim \mathcal{N}(\mu, \sigma^2) \\\
