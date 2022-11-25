@@ -1,7 +1,7 @@
 ---
 title: "Understanding bond ETF returns"
 blurb: "
-The return of a bond ETF can be estimated from bond yields. The distribution of a bond ETF's returns turns out to be a function of the current level of interest rates, the expected change and variance of the interest rates.
+The return of a bond ETF can be estimated from bond yields. The distribution of a bond ETF's returns turns out to be a function of the interest rate, expected change and variance of the interest rate. Bond returns are skewed depending on the interest rate's level.
 "
 
 date: "2022-11-21"
@@ -57,7 +57,7 @@ A key thing to note is that if the coupon equals the rate (\\(C = r\\)) then the
 
 # ETF Returns
 
-Earlier we stated that a bond ETFs return is the sum of the interest earned plus the return made on the value of the bonds (captial):
+Earlier we stated that a bond ETF's return is the sum of the interest earned plus the return made on the value of the bonds (captial):
 $$
 \text{return}_t = \text{interest}_t + \text{capital}_t
 $$
@@ -84,11 +84,9 @@ $$
 \end{aligned}
 $$
 
-If we plot the estimated returns against changes in yield, we find two interesting relationships. Postive changes in yields creates negative returns and negative changes in yields creates positive returns. And, as yields get smaller, changes have a larger impact on investment returns:
+If we plot the estimated returns against changes in yield, we find a key fact of bond returns. Postive changes in yields creates negative returns and negative changes in yields creates positive returns.
 
-{{<figure src="images/return_curve.svg" title="Impact of interest rate changes" >}}
-For smaller yields, changes have a larger impact. A change of +0.4% causes the returns from a 1% yield on a 30 year bond to fall further than from 5%.
-{{</figure>}}
+![](images/return_curve.svg)
 
 # Example
 
@@ -150,15 +148,21 @@ plt.plot((1 + estimated['returns']).cumprod())
 plt.plot((1 + df['returns']).cumprod())
 ```
 
-<!-- # Distribution of yields and returns
+# Distribution of returns
 
 The previous section found that a fund's return can be estimated with:
 $$
-\text{return}\_t = \frac{r_{t-1}}{260} + \frac{r_{t-1}}{\textcolor{red}{r_t}} \left( 1 - (1 + \frac{\textcolor{red}{r_t}}{p})^{-pT} \right) + (1 + \frac{\textcolor{red}{r_t}}{p})^{-pT} - 1
+\text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{\textcolor{red}{r_t}} \left( 1 - (1 + \frac{\textcolor{red}{r_t}}{p})^{-pT} \right) + (1 + \frac{\textcolor{red}{r_t}}{p})^{-pT} - 1
 $$
-
-We can think of \\(\text{return}\_t\\) as a random variable whose distribution depends on a set of variables \\(r_{t-1}\\), \\(p\\) and \\(T\\) and a random variable \\(r_t\\) for the yield.
-
+In Python this looks like:
+```python
+def etfret(r1, r, f=260, p=2, T=25):
+    """Estimated return for a bond ETF."""
+    interest = r1 / f
+    capital = (1 + r / p)**(-p * T)
+    annuity = r1 / r * (1 - capital)
+    return interest + annuity + capital - 1
+```
 
 We can think of the yield \\(r_t\\) as drawn from a [log normal distribuiton](https://en.wikipedia.org/wiki/Log-normal_distribution). That is, the logged changes in the yield follows a gaussian distribution:
 $$
@@ -169,42 +173,26 @@ r_{t} &\sim \text{Lognormal}(\mu + \log(r_{t-1}), \sigma^2)
 \end{aligned}
 $$
 
-Figuring out the distribution of \\(\text{return}\_t\\) from the log normal distribution of \\(r_t\\) seems a little complicated. However, we can use the [quantile function](https://en.wikipedia.org/wiki/Quantile_function) to help us understand the distribution of \\(\text{return}\_t\\).
+This is similar to the [Black-Karansinski interest rate model](https://en.wikipedia.org/wiki/Black%E2%80%93Karasinski_model) (BK). The BK model assumes that the logged interest rates follow a stochastic mean reversion processed called the [Ornstein-Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). Here we're going to drop the mean reversion assumption and just model the changes as a random process.
 
-For some random variable \\(x\\), the probability that \\(x\\) is equal to or less than some value \\(z\\) is:
-$$
-Pr(x \leq z) = F_{x}(z)
-$$
+Using this lognormal interest rate model, we can simulate a return distribution with:
+```python
+def sim_etfret(rate, mu, std, samples):
+    """Returns an array of simulated bond ETF returns."""
+    sim_rates = np.exp(np.log(rate) + mu + std * np.random.randn(samples))
+    return etfret(r1=rate, r=sim_rates)
+```
 
-This is often called the [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function). It's inverse is the quantile function:
-$$
-F_{x}^{-1}(P(x \leq z)) = z
-$$
-The median of a random variable is the qantile function at 0.5:
-$$
-\text{Median}(x) = F_{x}^{-1}(0.5)
-$$
+By picking an extreme value for the standard deviation (std = 0.3) we can compare a low interest rate environment with a high interest rate environment. When yields are low, bond returns are negatively skewed. When yields are high, they are positively skewed.
 
-The quantile function for the log normal distribution of interest rates is:
-$$
-F_{r_{t}}^{-1}(q) = e^{\mu + \log(r_{t-1}) + \sigma\sqrt{2} \ \text{erf}^{-1}(2q-1)}
-$$
+![](images/return_distribution.svg)
 
-The quantile function for the ETF returns is:
-$$
-F_{\text{returns}\_{t}}^{-1}(q) = \frac{r_{t-1}}{260} + \frac{r_{t-1}}{F_{r_{t}}^{-1}(1 - q)} \left( 1 - (1 + \frac{F_{r_{t}}^{-1}(1 - q)}{p})^{-pT} \right) + (1 + \frac{F_{r_{t}}^{-1}(1 - q)}{p})^{-pT} - 1
-$$
+The negative skew occurs because when bond yields are low a positive change in yield has a larger impact than a negative change in yield. A positive change in yield causes negative returns. When bond yields are high this relationship reverses. Negative changes in yield have a larger impact than positive changes. A negative change in yield causes positive returns.
 
-# Returns are dependent on the level of interest rates
+{{<figure src="images/return_vs_yield.svg" title="Expected skew vs yields." >}}
+As yields decrease, returns skew to the negative. As they increase, returns skew positive.
+{{</figure>}}
 
+We can estimate skew for TLT by using the exponentially weighted moving average and standard deviation of the logged rates for the inputs to `sim_etfret`. I'm using a halflife of 25 days on daily data. Running this simulation for 10 millions samples per day gives us:
 
-The distribution of TLT's returns is then a function of:
-* The current yield: \\(r_{t-1}\\)
-* The expected change in log yield: \\(\mu\\)
-* The expected variance of log yields: \\(\sigma^2\\)
-
-Hypothesis:
-The level of interest rates changes the downside level of risk there in TLT.
-
-
- -->
+![](images/tlt_skew.svg)
