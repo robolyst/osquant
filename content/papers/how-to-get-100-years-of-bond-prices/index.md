@@ -14,11 +14,11 @@ tags:
     - finance
 ---
 
-Backtesting a macro portfolio of ETFs can be tricky because there often isn't much price history. Without enough history, you're unable to verify that your strategy would have made good decisions during tumultuous markets. Bond ETFs in particular are tricky as many of them are still relatively new.
+A tumultuous market can feel like a once in a life time event. However, if you look back far enough in history, you will find many chaotic periods. Backtesting a macro portfolio of ETFs can be tricky because there isn’t much price history. ETF prices provided by your broker will not cover a wide range of market events. So, you do not have a way of testing your strategy on different difficult markets.
 
-These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their fair price by summing together the value of the bonds they hold. Some bond ETFs continuously hold one type of bond. For example, [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT) holds U.S. Treasury bonds with maturities greater than 20 years. We can use this information to model TLT's price as a function of bond yields without knowing exactly what TLT holds.
+Bond ETFs in particular are tricky as many of them are still new. These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their price by summing together the value of the bonds they hold. Some bond ETFs hold one type of bond. For example, iShares 20+ Year Treasury Bond ETF (TLT) holds U.S. Treasury bonds maturing in 20 years or more. We can use this information to model TLT’s price as a function of bond yields. We do not need to know exactly what TLT holds.
 
-Because there is a long history of yield data, it is possible to create a long term history for TLT's performance. We're going to do this with three periods of time:
+Because there is a long history of yield data, it is possible to create a long term history for TLT’s performance. We’re going to do this with three periods of time:
 * 2002 to the present will be TLT's prices
 * 1962 to 2002 will be estimated using daily yield quotes
 * 1925 to 1962 will be estimated using monthly yield quotes
