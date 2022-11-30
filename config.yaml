@@ -4,6 +4,9 @@ title: "Open Source Quant"
 theme: "osquant"
 FootnoteReturnLinkContents: "↑"
 
+disableKinds: ["taxonomy", "section"]
+ignoreErrors: ["error-disable-taxonomy"]
+
 params:
   gtag: G-SSDJH3F7EZ
   github_content: https://github.com/robolyst/osquant/tree/main/content/
