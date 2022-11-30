@@ -18,14 +18,8 @@ Run the rest API with:
 ```bash
 docker run -p 5000:5000 dradrian/ibportal
 ```
-or use docker-compose:
-```yaml
-  ibportal:
-    image: dradrian/ibportal:latest
-    ports:
-      - "5000:5000"
-```
-and navigate to [localhost:5000](http://localhost:5000).
+
+Navigate to [localhost:5000](http://localhost:5000) and login with your live or paper account.
 
 # The Application
 
