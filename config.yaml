@@ -11,6 +11,8 @@ params:
   gtag: G-SSDJH3F7EZ
   github_content: https://github.com/robolyst/osquant/tree/main/content/
   description: A site where quants write about mathematics, engineering and finance.
+  images:
+    - feature.png
 
 sitemap:
   changefreq: weekly
