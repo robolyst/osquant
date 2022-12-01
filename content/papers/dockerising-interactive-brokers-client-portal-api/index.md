@@ -1,6 +1,6 @@
 ---
 title: "Dockerising Interactive Brokers Client Portal API"
-blurb: "
+summary: "
 Interactive Broker's REST API is a webserver that you install and maintain locally in a convoluted fashion. I created a light weight docker image to make things easy.
 "
 

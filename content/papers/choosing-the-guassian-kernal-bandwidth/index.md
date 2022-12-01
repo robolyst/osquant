@@ -1,6 +1,6 @@
 ---
 title: "Choosing the Gaussian Kernel's Bandwidth"
-blurb: "
+summary: "
 I created two algorithms that quickly optimise the bandwidth parameter for a Gaussian kernel. These algorithms only operate on the independent variables of a modelling task. This means they can be used regardless of the chosen kernel machine model and modelling task.
 "
 

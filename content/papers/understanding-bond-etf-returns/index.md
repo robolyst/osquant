@@ -1,6 +1,6 @@
 ---
 title: "Understanding bond ETF returns"
-blurb: "
+summary: "
 The return of a bond ETF can be estimated from bond yields. The distribution of a bond ETF's returns turns out to be a function of the interest rate, expected change and variance of the interest rate. Bond returns are skewed depending on the interest rate's level.
 "
 date: "2022-11-21"

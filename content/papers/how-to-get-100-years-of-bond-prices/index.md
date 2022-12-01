@@ -1,6 +1,6 @@
 ---
 title: "How to get 100 years of bond ETF prices"
-blurb: "
+summary: "
     The price of a bond ETF can be estimated from bond yields. You can use this technique to create a long term performance history of an ETF.
 "
 
