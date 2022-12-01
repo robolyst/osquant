@@ -25,7 +25,7 @@ Navigate to [localhost:5000](http://localhost:5000) and login with your live or 
 
 Interactive Brokers offers an API to interact with their regular trading client. To use it, you need to have the trading client installed and running before you can connect your app and start streaming data. To get around this need for the trading client, Interactive Brokers created a REST API for their trading platform called **Client Portal API**.
 
-This is essentially a webserver that you install on your local system and send REST requests to. You can [download the client from here](https://www.interactivebrokers.com/en/trading/ib-api.php), you can find the <a href="https://interactivebrokers.github.io/cpwebapi/quickstart" ref="nofollow">installation instructions here</a>, and you can find the <a href="https://interactivebrokers.github.io/cpwebapi/endpoints" rel="nofollow">documentation for the endpoints here</a>.
+This is essentially a webserver that you install on your local system and send REST requests to. You can [download the client from here](https://www.interactivebrokers.com/en/trading/ib-api.php), you can find the [Client Portal API documentation here](https://interactivebrokers.github.io/cpwebapi/) which includes a quick start guide with download instructions and documentation for each endpoint.
 
 ![Interactive Brokers API documentation screenshot](images/api.png)
 
