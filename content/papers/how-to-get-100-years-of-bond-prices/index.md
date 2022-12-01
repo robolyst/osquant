@@ -7,7 +7,6 @@ summary: "
 date: "2022-11-24"
 type: paper
 katex: true  # Enable mathematics on the page
-markup: "mmark"
 authors:
     - Adrian Letchford
 tags:

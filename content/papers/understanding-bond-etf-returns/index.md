@@ -6,10 +6,8 @@ The return of a bond ETF can be estimated from bond yields. The distribution of 
 date: "2022-11-21"
 type: paper
 katex: true
-markup: "mmark"
 authors:
     - Adrian Letchford
-draft: false
 tags:
     - mathematics
     - finance

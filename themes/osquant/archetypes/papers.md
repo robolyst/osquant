@@ -10,7 +10,6 @@ summary: "
 date: {{ .Date }}
 type: paper
 katex: false # Enable mathematics on the page
-markup: "mmark"
 authors:
     - Adrian Letchford
 draft: true

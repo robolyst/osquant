@@ -10,7 +10,6 @@ summary: "
 date: "1900-01-01"
 type: paper
 katex: true
-markup: "mmark"
 authors:
     - Adrian Letchford
 tags:
