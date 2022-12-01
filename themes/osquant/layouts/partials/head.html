@@ -5,7 +5,7 @@
     <title> {{.Title}} </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="{{ .Description }}">
+    <meta name="description" content="{{ .Description | default .Page.Params.blurb | default .Site.Params.description }}">
     <link rel="canonical" href="{{ .Permalink }}">
     <link rel="icon" type="image/png" href="/img/favicon.ico">
 
