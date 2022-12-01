@@ -28,7 +28,7 @@ The bond's yield tells us the interest that we earn. To calculate the capital ga
 
 A bond is a cashflow producing instrument. Throughout the holding period, the buyer receives periodic **coupons** and at the end of the bond the buyer receives the **notional** amount. The cashflow looks like this:
 
-![](images/cashflow.svg)
+![Cashflow of a bond](images/cashflow.svg)
 
 The key thing to note with a bond's cashflow is that it is future cashflow. A promise of $100 in 1 years time is not worth $100 today. If the current interest rate is 5%, then you can lend out $95.24 today and receive back $100 in 1 year. You could say that $100 in a years time is worth $95.24 today if the interest rate is 5%.
 
@@ -86,7 +86,7 @@ $$
 
 If we plot the estimated returns against changes in yield, we find a key fact of bond returns. Postive changes in yields creates negative returns and negative changes in yields creates positive returns.
 
-![](images/return_curve.svg)
+![Expected bond return vs yield](images/return_curve.svg)
 
 # Example
 
@@ -94,11 +94,11 @@ We can test out this ETF model on [iShares 20+ Year Treasury Bond ETF](https://w
 
 We will need to use dividend adjusted prices as TLT distributes the coupons via dividends. As the maturity of the bonds held by TLT at any particular time will not exactly equal a fixed maturity, we can use 30 year yields as an estimate and assume the maturity is 25 years. The dividend adjusted prices are fetched from Yahoo ([link](https://uk.finance.yahoo.com/quote/TLT/history?p=TLT)) and 30 year US tresury bond yields from FRED ([link](https://fred.stlouisfed.org/series/DGS30)).
 
-![](images/tlt_data.svg)
+![TLT prices and 30 year yields](images/tlt_data.svg)
 
 The results look like:
 
-![](images/tlt_example.svg)
+![Estimated TLT returns](images/tlt_example.svg)
 
 The code to fetch the data and calculate the returns is:
 
@@ -185,7 +185,7 @@ def sim_etfret(rate, mu, std, samples):
 
 By picking an extreme value for the standard deviation (std = 0.3) we can compare a low interest rate environment with a high interest rate environment. When yields are low, bond returns are negatively skewed. When yields are high, they are positively skewed.
 
-![](images/return_distribution.svg)
+![Distribution of estimated bond returns](images/return_distribution.svg)
 
 The negative skew occurs because when bond yields are low a positive change in yield has a larger impact than a negative change in yield. A positive change in yield causes negative returns. When bond yields are high this relationship reverses. Negative changes in yield have a larger impact than positive changes. A negative change in yield causes positive returns.
 
@@ -195,4 +195,4 @@ As yields decrease, returns skew to the negative. As they increase, returns skew
 
 We can estimate skew for TLT by using the exponentially weighted moving average and standard deviation of the logged rates for the inputs to `sim_etfret`. I'm using a halflife of 25 days on daily data. Running this simulation for 10 millions samples per day gives us:
 
-![](images/tlt_skew.svg)
+![Expected skew over time for TLT](images/tlt_skew.svg)
