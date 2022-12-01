@@ -27,7 +27,7 @@ Interactive Brokers offers an API to interact with their regular trading client.
 
 This is essentially a webserver that you install on your local system and send REST requests to. You can [download the client from here](https://www.interactivebrokers.com/en/trading/ib-api.php), you can find the <a href="https://interactivebrokers.github.io/cpwebapi/quickstart" ref="nofollow">installation instructions here</a>, and you can find the <a href="https://interactivebrokers.github.io/cpwebapi/endpoints" rel="nofollow">documentation for the endpoints here</a>.
 
-![](images/api.png)
+![Interactive Brokers API documentation screenshot](images/api.png)
 
 # The Problem
 
