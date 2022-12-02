@@ -121,11 +121,11 @@ $$
 \begin{aligned}
 S &= \frac{
     \frac{d\_1 -d\_0}{l\_1+l\_0} +
-    \frac{d\_2 -d\_1}{l\_2+l\_1} + 
+    \frac{d\_2 -d\_1}{l\_2+l\_1} +
     \dots
 }{
-    (l\_1 + l\_0) + 
-    (l\_2 + l\_1) + 
+    (l\_1 + l\_0) +
+    (l\_2 + l\_1) +
     \dots
 } \\\
 &= \frac{
@@ -145,11 +145,10 @@ S = \sum_{i=0}^{n(n-1)/2} w_i p_i \label{2}
 \end{align}
 $$
 
-
 Each weight is calculated as:
 
 $$
-w_i^* = \frac{1}{n-2-\text{diag}(i)+1} \times \frac{1}{l_0+2\sum_{j=1}^{n-3}l_j + l_{n-2}}
+w_i^\* = \frac{1}{n-2-\text{diag}(i)+1} \times \frac{1}{l_0+2\sum_{j=1}^{n-3}l_j + l_{n-2}}
 $$
 $$
 \begin{align}
@@ -161,7 +160,7 @@ $$
 \end{align}
 $$
 
-The objective function \\(\eqref{2}\\) is shown in Figure 4A using the time series example in Figure 1. 
+The objective function \\(\eqref{2}\\) is shown in Figure 4A using the time series example in Figure 1.
 
 {{<figure src="images/objective_function_example.svg" title="Figure 4: Examples of the objective function." >}}
 **(A)** The objective function on the example time series in Figure 1. **(B)** The objective function on a randomly generated time series shows that there is no guarantee that it will be convex.
@@ -199,19 +198,20 @@ We show the variance of the \\(\beta\\)s in Figure 6. On three data sets, the di
 
 # Summary
 
-In this paper, I propose an algorithm for choosing kernel parameters in regression tasks termmed the *diagonal slope algorithm*. 
+In this paper, I propose an algorithm for choosing kernel parameters in regression tasks termmed the *diagonal slope algorithm*.
 
 This algorithm was tested on a variety of datasets using the Gaussian kernel and support vector regression. The algorithm's accuracy is comparable to a grid search which represents the best possible result. However, the algorithm's choice of the Gaussian kernel's bandwidth parameter is sometimes sensitive to changes in the training data.
 
 These results suggest that the speed gained from using the diagonal slope algorithm does not reduce performance, but it does sometimes reduce robustness. This algorithm can potentially be applied to kernels other than the Gaussian kernel and to kernels with more than one parameter. Such kernels will need to be a measure of similarity or be normalised. A normalised kernel represents the correlation of two points in feature space.
 
-# Appendices 
+# Appendices
+
 ## Appendix 1 - Row and column indices of a matrix cell
 
 A Gramian matrix is a matrix of the dot products between a set of vectors. The matrix is symmetric and the values along the main diagonal are identical because they correspond to the dot product between two identical points. The only unique values in a Gramian matrix are in the upper or lower triangle. Here, we will use the lower triangle.
 
 {{<figure src="images/grid.svg" title="Figure 7: Matrix indexing." width="small" >}}
-Because a Gramian marix is symmetric and the diagonals are all the same value we only need to index the lower triangle. Here, we depict how each cell is indexed with a top to bottom approach. The indexes for the columns, rows and diagonals are also shown. 
+Because a Gramian marix is symmetric and the diagonals are all the same value we only need to index the lower triangle. Here, we depict how each cell is indexed with a top to bottom approach. The indexes for the columns, rows and diagonals are also shown.
 {{</figure>}}
 
 We can index each cell in the lower triangle of a Gramian matrix as shown in Figure 7 which represents the matrix made by 6 vectors. In this appendix, we derive the column, row and diagonal index from the cell index.
@@ -258,37 +258,37 @@ $$
 
 ## Appendix 2 - Datasets
 
-We use a variety of real-world datasets that cover a wide range of topics such as micro-blogging and education. 
+We use a variety of real-world datasets that cover a wide range of topics such as micro-blogging and education.
 
-#### Mashable News Popularity dataset
+### Mashable News Popularity dataset
 
 [Mashable](https://mashable.com/) is an online news site where readers can share news articles. In one study, researchers collected almost 40,000 articles from Mashable and extracted a set of features from each one including number of positive words, LDA topic distribution and publication time [^Fernandes2015]. The task is to predict the number of times each article was shared.
 
 The Mashable News Popularity dataset [^Mashable] contains 39,797 news articles. In this study we use a random sample of 2,000 articles.
 
-#### Portuguese Students, mathematics class dataset
+### Portuguese Students, mathematics class dataset
 
-To improve understanding of why Portugal’s student failure rate is high, one study collected data from two Portuguese schools [^Cortez2008]. The researchers collected data on each student by conducting a survey which asked questions ranging from their romantic relationship to their parent's alcohol consumption. They also collected the students final grades. 
+To improve understanding of why Portugal’s student failure rate is high, one study collected data from two Portuguese schools [^Cortez2008]. The researchers collected data on each student by conducting a survey which asked questions ranging from their romantic relationship to their parent's alcohol consumption. They also collected the students final grades.
 
 This dataset [^Mathematics] contains data on 395 students in both schools and their final mathematics grade. The task is to correctly predict their final grade.
 
-#### Portuguese Students, Portuguese class dataset
+### Portuguese Students, Portuguese class dataset
 
 As well as the students' mathematics grades, the study also reports their Portuguese grades. This dataset contains data on 649 students and their Portuguese grades. Again, the task is to correctly predict their final grade.
 
-#### Million Song
+### Million Song
 
 This dataset [^Music] is a collection of 515,245 songs selected from the Million Song Dataset [^Bertin-Mahieux2011]. It contains 90 attributes for each song which are the means and covariances of the timbre across segments within a song. The task is to predict the year each song was produced. In this study we use a random sample of 2,000 songs.
 
-#### Housing
+### Housing
 
 This is a dataset of 506 houses in Boston and their prices as used by [^Quinlan1993]. The task is to predict the median housing price from a set of features which includes crime rate, average number of rooms, tax rates and socio-economic states.
 
-#### Blog Feedback
+### Blog Feedback
 
 This is a dataset of 60,000 blog posts from around 1,200 Hungarian blogs. There are 280 recorded features for each post including number of links, number of comments received thus far and the most discriminative features from a bag of words analysis. The goal is to predict the number of comments each post will recieve in the next 24 hours. This dataset was used by [^Buza2014]. We use a random subset of 2,000 blog posts.
 
-#### Bike Sharing
+### Bike Sharing
 
 Bike sharing systems completely automate the rental and return process of renting bikes. Users are able to rent a bike from one location, and return the bike to another. This dataset contains daily records of a bike-sharing system called Captial Bike Sharing in Washington, D.C., USA. There are two years of records from the 1<sup>st</sup> of January 2011 to the 31<sup>st</sup> of December 2012 for a total of 731 days. This dataset was used by [^Fanaee-T2014] to test an event detection algorithm. In this paper, the task is to predict the number of rented bikes from the day's weather records.
 

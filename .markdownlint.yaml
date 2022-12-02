@@ -2,6 +2,9 @@
 default: true
 
 MD025: false # MD025/single-title/single-h1 - Multiple top-level headings in the same document
+MD010: false # MD010/no-hard-tabs - Disabled as it is linting latex blocks
+
+
 
 # MD033/no-inline-html - Inline HTML
 MD033:
