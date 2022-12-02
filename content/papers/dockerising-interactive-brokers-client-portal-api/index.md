@@ -14,7 +14,7 @@ tags:
 
 # TL;DR
 
-Run the rest API with:
+Run the REST API with:
 
 ```bash
 docker run -p 5000:5000 dradrian/ibportal
