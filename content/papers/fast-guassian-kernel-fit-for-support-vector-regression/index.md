@@ -260,39 +260,37 @@ $$
 
 We use a variety of real-world datasets that cover a wide range of topics such as micro-blogging and education. 
 
-**Mashable News Popularity dataset**
+#### Mashable News Popularity dataset
 
 [Mashable](https://mashable.com/) is an online news site where readers can share news articles. In one study, researchers collected almost 40,000 articles from Mashable and extracted a set of features from each one including number of positive words, LDA topic distribution and publication time [^Fernandes2015]. The task is to predict the number of times each article was shared.
 
 The Mashable News Popularity dataset [^Mashable] contains 39,797 news articles. In this study we use a random sample of 2,000 articles.
 
-**Portuguese Students, mathematics class dataset**
+#### Portuguese Students, mathematics class dataset
 
 To improve understanding of why Portugal’s student failure rate is high, one study collected data from two Portuguese schools [^Cortez2008]. The researchers collected data on each student by conducting a survey which asked questions ranging from their romantic relationship to their parent's alcohol consumption. They also collected the students final grades. 
 
 This dataset [^Mathematics] contains data on 395 students in both schools and their final mathematics grade. The task is to correctly predict their final grade.
 
-**Portuguese Students, Portuguese class dataset**
+#### Portuguese Students, Portuguese class dataset
 
 As well as the students' mathematics grades, the study also reports their Portuguese grades. This dataset contains data on 649 students and their Portuguese grades. Again, the task is to correctly predict their final grade.
 
-**Million Song**
+#### Million Song
 
 This dataset [^Music] is a collection of 515,245 songs selected from the Million Song Dataset [^Bertin-Mahieux2011]. It contains 90 attributes for each song which are the means and covariances of the timbre across segments within a song. The task is to predict the year each song was produced. In this study we use a random sample of 2,000 songs.
 
-**Housing**
+#### Housing
 
 This is a dataset of 506 houses in Boston and their prices as used by [^Quinlan1993]. The task is to predict the median housing price from a set of features which includes crime rate, average number of rooms, tax rates and socio-economic states.
 
-**Blog Feedback**
+#### Blog Feedback
 
 This is a dataset of 60,000 blog posts from around 1,200 Hungarian blogs. There are 280 recorded features for each post including number of links, number of comments received thus far and the most discriminative features from a bag of words analysis. The goal is to predict the number of comments each post will recieve in the next 24 hours. This dataset was used by [^Buza2014]. We use a random subset of 2,000 blog posts.
 
-**Bike Sharing**
+#### Bike Sharing
 
 Bike sharing systems completely automate the rental and return process of renting bikes. Users are able to rent a bike from one location, and return the bike to another. This dataset contains daily records of a bike-sharing system called Captial Bike Sharing in Washington, D.C., USA. There are two years of records from the 1<sup>st</sup> of January 2011 to the 31<sup>st</sup> of December 2012 for a total of 731 days. This dataset was used by [^Fanaee-T2014] to test an event detection algorithm. In this paper, the task is to predict the number of rented bikes from the day's weather records.
-
-
 
 {{% citation
     id="Vapnik1998"
@@ -304,7 +302,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     link="https://www.wiley.com/en-gb/Statistical+Learning+Theory-p-9780471030034"
 %}}
 
-{{% citation 
+{{% citation
     id="Burges1998"
     author="Burges, Christopher J C"
     title="A tutorial on support vector machines for pattern recognition"
@@ -317,7 +315,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     link="https://link.springer.com/article/10.1023/A:1009715923555"
 %}}
 
-{{% citation 
+{{% citation
     id="Smola2004"
     author="Smola, AlexJ. and Schölkopf, Bernhard"
     title="A tutorial on support vector regression"
@@ -329,7 +327,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Kluwer Academic Publishers"
 %}}
 
-{{% citation 
+{{% citation
     id="Phillips1998"
     author="Phillips, P Jonathon"
     title="Support Vector Machines Applied to Face Recognition"
@@ -340,7 +338,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Cambridge, MA, USA"
 %}}
 
-{{% citation 
+{{% citation
     id="Wang2007"
     author="Wang, Tai-Yue and Chiang, Huei-Min"
     title="Fuzzy support vector machine for multi-class text categorization"
@@ -352,7 +350,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Kluwer Academic Publishers"
 %}}
 
-{{% citation 
+{{% citation
     id="Li2001"
     author="Li, S Z and Fu, QingDong and Gu, Lie and Scholkopf, Bernhard and Cheng, Yimin and Zhang, Hongjiag"
     title="Kernel machine based learning for multi-view face detection and pose estimation"
@@ -364,7 +362,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Cambridge, MA, USA"
 %}}
 
-{{% citation 
+{{% citation
     id="Kim2003"
     author="Kim, Kyoung-jae"
     title="Financial time series forecasting using support vector machines"
@@ -375,7 +373,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="307--319"
 %}}
 
-{{% citation 
+{{% citation
     id="Chapelle1999a"
     author="Chapelle, O and Haffner, P and Vapnik, V N"
     title="Support vector machines for histogram-based image classification"
@@ -386,7 +384,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="1055--1064"
 %}}
 
-{{% citation 
+{{% citation
     id="Hong2015"
     author="Hong, X and Chen, S and Gao, J and Harris, C J"
     title="Nonlinear Identification Using Orthogonal Forward Regression With Nested Optimal Regularizationn"
@@ -397,8 +395,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="1"
 %}}
 
-
-{{% citation 
+{{% citation
     id="Vapnik1996"
     author="Vapnik, Vladimir and Golowich, Steven E and Smola, Alex"
     title="Support Vector Method for Function Approximation, Regression Estimation, and Signal Processing"
@@ -410,7 +407,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Cambridge, MA, USA"
 %}}
 
-{{% citation 
+{{% citation
     id="Tang2009"
     author="Tang, Yaohua Tang Yaohua and Guo, Weimin Guo Weimin and Gao, Jinghuai Gao Jinghuai"
     title="Efficient model selection for Support Vector Machine with Gaussian kernel function"
@@ -419,7 +416,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     pages="40-45"
 %}}
 
-{{% citation 
+{{% citation
     id="Bergstra2012"
     author="Bergstra, James and Bengio, Yoshua"
     title="Random Search for Hyper-Parameter Optimization"
@@ -438,7 +435,7 @@ Bike sharing systems completely automate the rental and return process of rentin
 [^Blog]: [Blog feedback dataset](https://archive.ics.uci.edu/ml/datasets/BlogFeedback)
 [^Bike]: [Bike sharing dataset](https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset)
 
-{{% citation 
+{{% citation
     id="Fernandes2015"
     author="Fernandes, K. and Vinagre, P. and Cortez, P."
     title="A Proactive Intelligent Decision Support System for Predicting the Popularity of Online News"
@@ -447,7 +444,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="Coimbra, Portugal"
 %}}
 
-{{% citation 
+{{% citation
     id="Cortez2008"
     author="Cortez, Paulo and Silva, Alice"
     title="Using Data Mining To Predict Secondary School Student Performance"
@@ -460,7 +457,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     address="A. Brito and J. Teixeira"
 %}}
 
-{{% citation 
+{{% citation
     id="Bertin-Mahieux2011"
     author="Bertin-Mahieux, Thierry and Ellis, Daniel P W and Whitman, Brian and Lamere, Paul"
     title="The Million Song Dataset"
@@ -468,7 +465,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     year="2011"
 %}}
 
-{{% citation 
+{{% citation
     id="Quinlan1993"
     author="Quinlan, J R"
     title="Combining Instance-Based and Model-Based Learning"
@@ -478,7 +475,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     publisher="Morgan Kaufmann"
 %}}
 
-{{% citation 
+{{% citation
     id="Buza2014"
     author="Buza, Krisztian"
     title="Feedback Prediction for Blogs"
@@ -490,7 +487,7 @@ Bike sharing systems completely automate the rental and return process of rentin
     series="Studies in Classification, Data Analysis, and Knowledge Organization"
 %}}
 
-{{% citation 
+{{% citation
     id="Fanaee-T2014"
     author="Fanaee-T, Hadi and Gama, Joao"
     title="Event labeling combining ensemble detectors and background knowledge"
