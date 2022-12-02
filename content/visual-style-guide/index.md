@@ -23,19 +23,11 @@ Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales
 
 ## Links
 
-Duis maximus massa vitae [libero](#) imperdiet feugiat quis a sapien. Quisque sodales neque dui, a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere.Suspendisse sed [sapien placerat velit](#) pulvinar condimentum. Curabitur lacinia id metus id hendrerit. Curabitur luctus enim id nibh ullamcorper fringilla. Aenean id molestie metus. Donec [vestibulum](#) ipsum arcu, sed commodo lacus lacinia sed. Aenean vestibulum leo non condimentum vulputate.
+Duis maximus massa vitae [libero](/#) imperdiet feugiat quis a sapien. Quisque sodales neque dui, a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere.Suspendisse sed [sapien placerat velit](/#) pulvinar condimentum. Curabitur lacinia id metus id hendrerit. Curabitur luctus enim id nibh ullamcorper fringilla. Aenean id molestie metus. Donec [vestibulum]/#) ipsum arcu, sed commodo lacus lacinia sed. Aenean vestibulum leo non condimentum vulputate.
 
 ## Bold text
 
 Nulla ultrices gravida interdum. Nam nec est quam. In porta mi in mi facilisis, in suscipit nisl dictum. Aenean sapien nibh, **convallis eget faucibus** sit amet, efficitur blandit odio. Vestibulum libero orci, egestas sit amet risus et, luctus tempor diam.
-
-**Aliquam erat volutpat**
-
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
-
-**Aliquam erat volutpat**
-
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
 
 # Callout
 
@@ -45,8 +37,7 @@ Nulla ultrices gravida interdum. Nam nec est quam. In porta mi in mi facilisis, 
 Quisque mi justo, euismod ac leo nec, elementum eleifend purus.
 </callout>
 
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
-
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
 
 # Maths
 
@@ -54,16 +45,15 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
 
 Curabitur pulvinar magna sit amet mattis semper. Nulla interdum \\(a = \sum x^2\\) nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. This is a financial number $100 ok and this is another $100. Curabitur pulvinar magna sit amet mattis semper.
 
-
 ## Math blocks
 
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
 
 $$
 \left( \frac{C}{p_{\text{now}}} +m \sum_{y=\text{now}}^{\text{now}+T} \frac{(1 + \phi)^y}{p_y} \right) p_{\text{now} + T} = A
 $$
 
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
 
 # Code
 
@@ -89,7 +79,6 @@ for i in range(10):
 | Investment A | -0.6%             |
 | Investment B | -0.9%             |
 
-
 # Images
 
 You can create an image with standard mardown:
@@ -97,7 +86,7 @@ You can create an image with standard mardown:
 
 You can use a Hugo shortcode to create a figure with a caption:
 {{<figure src="example_investments.svg" title="Example figure." >}}
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit. 
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
 {{</figure>}}
 
 ## Pro tips
@@ -107,7 +96,6 @@ When creating charts use SVGs. These will render as crisp as possible on all dev
 In python you can use [matplotlib](https://matplotlib.org/) to create charts. If you want to enhance them after you've generated the SVGs, [Figma](https://www.figma.com/) is a great and free tool.
 
 If you want to go for that handwritten notebook style, we use [Excalidraw](https://excalidraw.com/) to create these with a consistent style.
-
 
 # Footnotes & references
 
