@@ -4,3 +4,4 @@
 .vercel
 *.lock
 .DS_Store
+.obsidian
