@@ -15,6 +15,7 @@ tags:
 # TL;DR
 
 Run the rest API with:
+
 ```bash
 docker run -p 5000:5000 dradrian/ibportal
 ```
@@ -66,19 +67,24 @@ The config file `conf.yaml` is very poorly documented and required hacking aroun
 # Usage
 
 Run the rest API with:
+
 ```bash
 docker run -p 5000:5000 dradrian/ibportal
 ```
+
 and navigate to [localhost:5000](http://localhost:5000). You'll get a Interactive Brokers login screen. You can login with both your live and demo account.
 
 I use `docker-compose` to orchestrate my trading apps. I include this in my `docker-compose.yaml`:
+
 ```yaml
   ibportal:
     image: dradrian/ibportal:latest
     ports:
       - "5000:5000"
 ```
+
 and once I have logged in, I can run some Python code like this:
+
 ```python
 import requests
 
@@ -91,7 +97,9 @@ session.verify = False
         
 session.get(url).json()
 ```
+
 and I'll get back a JSON blob containing:
+
 ```JSON
 {
   "symbol": "AAPL",
@@ -103,7 +111,6 @@ and I'll get back a JSON blob containing:
   "company_name": "APPLE INC",
 }
 ```
-
 
 # Show Support
 
