@@ -1,13 +1,11 @@
-# Default state for all rules
-default: true
+# Default settings: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml
 
-MD025: false # MD025/single-title/single-h1 - Multiple top-level headings in the same document
+default: true # Default state for all rules
+
 MD010: false # MD010/no-hard-tabs - Disabled as it is linting latex blocks
+MD025: false # MD025/single-title/single-h1 - Multiple top-level headings in the same document
 
-
-
-# MD033/no-inline-html - Inline HTML
-MD033:
+MD033: # MD033/no-inline-html
   allowed_elements:
     - callout
     - a
@@ -16,8 +14,7 @@ MD033:
     - ref
     - sup
 
-# MD013/line-length - Line length
-MD013:
+MD013: # MD013/line-length
   line_length: 100000000000000
   heading_line_length: 80
   code_block_line_length: 80
