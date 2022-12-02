@@ -18,6 +18,7 @@ A tumultuous market can feel like a once in a life time event. However, if you l
 Bond ETFs in particular are tricky as many of them are still new. These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their price by summing together the value of the bonds they hold. Some bond ETFs hold one type of bond. For example, iShares 20+ Year Treasury Bond ETF (TLT) holds U.S. Treasury bonds maturing in 20 years or more. We can use this information to model TLT’s price as a function of bond yields. We do not need to know exactly what TLT holds.
 
 Because there is a long history of yield data, it is possible to create a long term history for TLT’s performance. We’re going to do this with three periods of time:
+
 * 2002 to the present will be TLT's prices
 * 1962 to 2002 will be estimated using daily yield quotes
 * 1925 to 1962 will be estimated using monthly yield quotes
@@ -29,6 +30,7 @@ $$
 \text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
 $$
 where:
+
 * \\(r_t\\) is the yield at time \\(t\\).
 * \\(p\\) is the number of coupon payments per year.
 * \\(T\\) is the number of years until maturity.
@@ -54,7 +56,6 @@ TLT doesn't try to hold bonds maturing at 30 years, so we will estimate a maturi
 
 Using these parameters and plugging the daily yields into the return caclulation above we get an estimated return series. Converting this to a cumulative return series and overlaying TLT's price ontop looks like:
 
-
 ![Index estimated from daily yields](images/daily_index.svg)
 
 # 1925 to 1962
@@ -76,6 +77,7 @@ Even though [LTGOVTBD](https://fred.stlouisfed.org/series/LTGOVTBD) is not a per
 To join these two estimated return streams onto TLT's price series, we need to convert them to cumulative returns and then line up the days that overlap.
 
 Converting to cumulative returns is easy. In Python we can just go:
+
 ```python
 np.cumprod(1 + returns)
 ```
