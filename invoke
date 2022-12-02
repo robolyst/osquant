@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Run `./invoke build` to build the testing image.
+
+if [ "$@" = "build" ]; then
+    docker build . --tag osquant
+elif [ "$@" = "check" ]; then
+    docker run -it --volume $(pwd):/app \
+    osquant markdownlint content
+elif [ "$@" = "format" ]; then
+    docker run -it --volume $(pwd):/app \
+    osquant markdownlint content --fix
+fi

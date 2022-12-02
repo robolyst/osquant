@@ -1,0 +1,26 @@
+# Default state for all rules
+default: true
+
+MD025: false # MD025/single-title/single-h1 - Multiple top-level headings in the same document
+
+# MD033/no-inline-html - Inline HTML
+MD033:
+  allowed_elements:
+    - callout
+    - a
+    - figure
+    - img
+    - ref
+    - sup
+
+# MD013/line-length - Line length
+MD013:
+  line_length: 100000000000000
+  heading_line_length: 80
+  code_block_line_length: 80
+  code_blocks: true # Include code blocks
+  tables: true # Include tables
+  headings: true # Include headings
+  headers: true # Include headings
+  strict: false # Strict length checking
+  stern: false # Stern length checking
