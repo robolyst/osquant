@@ -60,7 +60,7 @@ This is an excellent way to think about investment performance. It means if an i
 
 # The Sharpe ratio
 
-The Sharpe ratio is a common metric for measuring returns relative to risk. It was developed by William F. Sharpe in 1966 [^1][^2] who was awarded the Nobel Memorial Prize in Economic Sciences in 1990. The Sharpe ratio is defined as the average return divided by the standard deviation of returns:
+The Sharpe ratio is a common metric for measuring returns relative to risk. It was developed by William F. Sharpe in 1966 [^Sharpe1] [^Sharpe2] who was awarded the Nobel Memorial Prize in Economic Sciences in 1990. The Sharpe ratio is defined as the average return divided by the standard deviation of returns:
 
 $$\frac{\text{avg return}}{\text{std deviation}} = \frac{\bar{r}}{\sigma}$$
 
@@ -159,5 +159,5 @@ Measuring an investment's performance with only returns leaves you open to takin
 
 You can use this metric yourself to compare different investments and make better decisions.
 
-[^1]: Sharpe, William F. "Mutual Fund Performance." Journal of Business, January 1966, pp. 119-138.
-[^2]: Sharpe, William F. ["The Sharpe Ratio"](http://web.stanford.edu/~wfsharpe/art/sr/sr.htm) The Journal of Portfolio Management, 1994.
+[^Sharpe1]: Sharpe, William F. "Mutual Fund Performance." Journal of Business, January 1966, pp. 119-138.
+[^Sharpe2]: Sharpe, William F. ["The Sharpe Ratio"](http://web.stanford.edu/~wfsharpe/art/sr/sr.htm) The Journal of Portfolio Management, 1994.
