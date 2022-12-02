@@ -19,7 +19,6 @@ A quick way of quantifying an investment's performance is to measure how much mo
 
 When assessing two different investments, we can compare their returns. We could say the investment with the best return was the better investment over that time period. Let's have a look at an example.
 
-
 ![Example investment performance](images/example_investments.svg)
 
 In the figure above we can see the value of two different investments over 3 years. Investment A returned about 18.3% while investment B returned 22.7%. Should we conclude investment B was better because it made 22.7% vs 18.3%? The answer is no!
@@ -30,7 +29,6 @@ Have another look at the returns from both investments. Investment B seems to wi
 |--------------|-------------------|
 | Investment A | -0.6%             |
 | Investment B | -0.9%             |
-
 
 Investment B's worst day lost 50% more than investment A's worst day! Investment B is riskier than investment A. Ah ha! We have found another dimension to performance: risk.
 
@@ -56,7 +54,7 @@ $$
 \frac{\text{return}}{\text{risk}}
 $$
 
-The higher this ratio for any given investment, the more return it makes for the amount of risk there is. 
+The higher this ratio for any given investment, the more return it makes for the amount of risk there is.
 
 This is an excellent way to think about investment performance. It means if an investment is riskier, that's ok, so long as it has a higher return to match the risk. And if an investment returns very little, that is also ok if the risk is also small enough to match the return. As investors, we are looking for investments that make this ratio as big as possible. We want as much return as we can get for each unit of risk.
 
@@ -68,7 +66,7 @@ $$\frac{\text{avg return}}{\text{std deviation}} = \frac{\bar{r}}{\sigma}$$
 
 The average return measures the return of the investment, and the standard deviation measures the variability of the returns and is a proxy for risk. This is one of the industry-standard methods of measuring the performance of an investment.
 
-Let's go back to Investment A and Investment B. We know Investment B is riskier. So, we should expect that its returns vary more than Investment A's returns. Look at the chart below. 
+Let's go back to Investment A and Investment B. We know Investment B is riskier. So, we should expect that its returns vary more than Investment A's returns. Look at the chart below.
 
 ![Standard deviation of returns](images/standard_deviation.svg)
 
@@ -160,8 +158,6 @@ The unit returns correctly identifies the risk in Diamond Bread LLC and consider
 Measuring an investment's performance with only returns leaves you open to taking on huge risks and losing money. A better way to think about performance is how much return you are getting relative to risk. We calculate this as return divided by risk. The classic method of measuring this is the Sharpe ratio, however there are a couple of problems that still put us at risk. I use a measure that I call the unit return. This metric captures more of the risk revealed in an investment's return stream.
 
 You can use this metric yourself to compare different investments and make better decisions.
-
-
 
 [^1]: Sharpe, William F. "Mutual Fund Performance." Journal of Business, January 1966, pp. 119-138.
 [^2]: Sharpe, William F. ["The Sharpe Ratio"](http://web.stanford.edu/~wfsharpe/art/sr/sr.htm) The Journal of Portfolio Management, 1994.
