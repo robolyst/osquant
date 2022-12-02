@@ -152,6 +152,7 @@ $$
 \text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{\textcolor{red}{r_t}} \left( 1 - (1 + \frac{\textcolor{red}{r_t}}{p})^{-pT} \right) + (1 + \frac{\textcolor{red}{r_t}}{p})^{-pT} - 1
 $$
 In Python this looks like:
+
 ```python
 def etfret(r1, r, f=260, p=2, T=25):
     """Estimated return for a bond ETF."""
@@ -173,6 +174,7 @@ $$
 This is similar to the [Black-Karansinski interest rate model](https://en.wikipedia.org/wiki/Black%E2%80%93Karasinski_model) (BK). The BK model assumes that the logged interest rates follow a stochastic mean reversion processed called the [Ornstein-Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). Here we're going to drop the mean reversion assumption and just model the changes as a random process.
 
 Using this lognormal interest rate model, we can simulate a return distribution with:
+
 ```python
 def sim_etfret(rate, mu, std, samples):
     """Returns an array of simulated bond ETF returns."""
