@@ -4,10 +4,13 @@
 
 if [ "$@" = "build" ]; then
     docker build . --tag osquant
+elif [ "$@" = "shell" ]; then
+    docker run -it --rm --volume $(pwd):/app \
+    osquant sh
 elif [ "$@" = "check" ]; then
-    docker run -it --volume $(pwd):/app \
+    docker run -it --rm --volume $(pwd):/app \
     osquant markdownlint content
 elif [ "$@" = "format" ]; then
-    docker run -it --volume $(pwd):/app \
+    docker run -it --rm --volume $(pwd):/app \
     osquant markdownlint content --fix
 fi
