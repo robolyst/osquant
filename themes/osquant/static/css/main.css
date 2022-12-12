@@ -116,6 +116,12 @@ Define the page size
     }
 }
 
+/* Center latex on the page */
+/* p:has(.katex-display) {
+    max-width: none !important;
+    margin: 0 0 0 0 !important;
+}  */
+
 /* ----------------------------------------------------------------------------
 Nav bar
 ---------------------------------------------------------------------------- */
