@@ -195,3 +195,94 @@ As yields decrease, returns skew to the negative. As they increase, returns skew
 We can estimate skew for TLT by using the exponentially weighted moving average and standard deviation of the logged rates for the inputs to `sim_etfret`. I'm using a halflife of 25 days on daily data. Running this simulation for 10 millions samples per day gives us:
 
 ![Expected skew over time for TLT](images/tlt_skew.svg)
+
+<!-- 
+# Analytical
+
+$$
+\text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
+$$
+
+variable substitution:
+
+$$
+\begin{aligned}
+x &= (1 + \frac{r_t}{p})^{-pT} \\\
+e^{\log(x)\frac{1}{-pT}} &= 1 + \frac{r_t}{p} \\\
+x^{\frac{1}{-pT}} &= 1 + \frac{r_t}{p} \\\
+x^{\frac{1}{-pT}} - 1 &= \frac{r_t}{p} \\\
+x^{\frac{1}{-pT}}p - p &= r_t \\\
+\end{aligned}
+$$
+
+giving:
+
+$$
+\text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{x^{\frac{1}{-pT}}p - p} \left( 1 - x \right) + x - 1
+$$
+
+
+$$
+\begin{aligned}
+y &= \frac{a}{x^bc - c}(1 - x) + x \\\
+y(x^bc - c) &= a(1 - x) + x(x^bc - c) \\\
+x^bcy - cy &= a - xa + x^{b+1}c - xc \\\
+x^bcy - cy &= a + x^{b+1}c - x(a + c) \\\
+-cy -a &= x^{b+1}c - x(a + c) - x^bcy \\\
+cy + a &= x(a + c) + x^bcy  - x^{b+1}c \\\
+\end{aligned}
+$$
+
+# Appendix
+
+## Taylor expansion
+
+### First derivative
+
+$$
+\begin{aligned}
+\text{return}\_t^\prime(r_t) &= \frac{d}{dr_t}\left[\frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right)\right] + \frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} \\\
+&= \frac{d}{dr_t}\left[\frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right)\right] - pT(1 + \frac{r_t}{p})^{-pT-1}\frac{1}{p} \\\
+&= \frac{d}{dr_t}\left[\frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right)\right] - T(1 + \frac{r_t}{p})^{-pT-1} \\\
+&= \frac{d}{dr_t}\left[\frac{r_{t-1}}{r_t}\right] \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + \frac{r_{t-1}}{r_t} \frac{d}{dr_t}\left[ \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) \right] - T(1 + \frac{r_t}{p})^{-pT-1} \\\
+&= -\frac{r_{t-1}}{r_t^2} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + \frac{r_{t-1}}{r_t} \frac{d}{dr_t}\left[ \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) \right] - T(1 + \frac{r_t}{p})^{-pT-1} \\\
+&= -\frac{r_{t-1}}{r_t^2} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) - \frac{r_{t-1}}{r_t} \frac{d}{dr_t} (1 + \frac{r_t}{p})^{-pT} - T(1 + \frac{r_t}{p})^{-pT-1} \\\
+&= -\frac{r_{t-1}}{r_t^2} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + \frac{r_{t-1}}{r_t}  T(1 + \frac{r_t}{p})^{-pT-1} - T(1 + \frac{r_t}{p})^{-pT-1} \\\
+&= -\frac{r_{t-1}}{r_t^2} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (\frac{r_{t-1}}{r_t} - 1)T(1 + \frac{r_t}{p})^{-pT-1} \\\
+\end{aligned}
+$$
+
+### Second derivative
+
+$$
+\begin{aligned}
+\text{return}\_t^{\prime\prime}(r_t) &= -\frac{d}{dr_t}\left[\frac{r_{t-1}}{r_t^2} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right)\right] + \frac{d}{dr_t}\left[(\frac{r_{t-1}}{r_t} - 1)T(1 + \frac{r_t}{p})^{-pT-1}\right] \\\
+&= -\frac{d}{dr_t}\left[\frac{r_{t-1}}{r_t^2} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right)\right] + T\left[\frac{r_{t-1}}{r_t^2}(1 + \frac{r_t}{p})^{-pT-1} + (-pT-1)(\frac{r_{t-1}}{r_t} - 1)(1 + \frac{r_t}{p})^{-pT-2} \right] \\\
+&= -\left[-2\frac{r_{t-1}}{r_t^3} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + T(1 + \frac{r_t}{p})^{-pT - 1} \right] + T\left[\frac{r_{t-1}}{r_t^2}(1 + \frac{r_t}{p})^{-pT-1} + (-pT-1)(\frac{r_{t-1}}{r_t} - 1)(1 + \frac{r_t}{p})^{-pT-2} \right] \\\
+&= 2\frac{r_{t-1}}{r_t^3} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) - T(1 + \frac{r_t}{p})^{-pT - 1} + T\left[\frac{r_{t-1}}{r_t^2}(1 + \frac{r_t}{p})^{-pT-1} + (-pT-1)(\frac{r_{t-1}}{r_t} - 1)(1 + \frac{r_t}{p})^{-pT-2} \right] \\\
+&= 2\frac{r_{t-1}}{r_t^3} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) - T(1 + \frac{r_t}{p})^{-pT - 1} + T\frac{r_{t-1}}{r_t^2}(1 + \frac{r_t}{p})^{-pT-1} + T(-pT-1)(\frac{r_{t-1}}{r_t} - 1)(1 + \frac{r_t}{p})^{-pT-2} \\\
+&= 2\frac{r_{t-1}}{r_t^3} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (\frac{r_{t-1}}{r_t^2} - 1)T(1 + \frac{r_t}{p})^{-pT-1} + T(-pT-1)(\frac{r_{t-1}}{r_t} - 1)(1 + \frac{r_t}{p})^{-pT-2} \\\
+\end{aligned}
+$$
+
+
+### Expansion
+Adding \\(a\\) to allow for adjustments.
+
+$$
+\begin{aligned}
+\text{return}\_t^\*(r_t) = \text{return}\_t(r_{t-1}) + \text{return}\_t^\prime(r_{t-1})(r_t - r_{t-1})  + a\frac{\text{return}\_t^{\prime\prime}(r_{t-1})}{2!}(r_t - r_{t-1})^2
+\end{aligned}
+$$
+
+Because we are expanding around \\(r_{t-1}\\) many of the functions thin down. Filling in we get:
+
+$$
+\begin{aligned}
+\text{return}\_t^\*(r_t) &= \text{return}\_t(r_{t-1}) + \text{return}\_t^\prime(r_{t-1})(r_t - r_{t-1})  + a\frac{\text{return}\_t^{\prime\prime}(r_{t-1})}{2!}(r_t - r_{t-1})^2 \\\
+\text{return}\_t^\*(r_t) &= \frac{r_{t-1}}{f} + \text{return}\_t^\prime(r_{t-1})(r_t - r_{t-1})  + a\frac{\text{return}\_t^{\prime\prime}(r_{t-1})}{2!}(r_t - r_{t-1})^2 \\\
+\text{return}\_t^\*(r_t) &= \frac{r_{t-1}}{f} + \left(-\frac{1}{r_{t-1}} \left( 1 - (1 + \frac{r_{t-1}}{p})^{-pT} \right)\right)(r_t - r_{t-1})  + a\frac{\text{return}\_t^{\prime\prime}(r_{t-1})}{2!}(r_t - r_{t-1})^2 \\\
+\end{aligned}
+$$
+
+ -->
