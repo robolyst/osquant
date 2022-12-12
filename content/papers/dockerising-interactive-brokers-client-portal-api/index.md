@@ -12,7 +12,7 @@ tags:
   - engineering
 ---
 
-# TL;DR
+# Quick Start
 
 Run the REST API with:
 
@@ -40,7 +40,7 @@ If you're anything like me, the idea of installing and running an environment so
 
 I have made a Docker container for the Client Portal API. The container makes running the web server as easy as executing one command. And you can use docker-compose to orchestrate your application and its dependencies.
 
-The container is light weight. As of this writing, the image is less than 70MBs!
+The container is light weight. As of this writing, the image is less than 70 MB.
 
 Creating the image is a matter of downloading the portal, unzipping and running. The `Dockerfile` for this is:
 
@@ -114,4 +114,4 @@ and I'll get back a JSON blob containing:
 
 # Show Support
 
-If you like this, please show your support by staring the Github repository at [https://github.com/robolyst/ibportal](https://github.com/robolyst/ibportal). Thank you! ❤️
+If you like this, please show your support by staring the Github repository at [https://github.com/robolyst/ibportal](https://github.com/robolyst/ibportal). Thank you. ❤️
