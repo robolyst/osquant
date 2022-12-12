@@ -1,7 +1,7 @@
 ---
 title: "Dockerising Interactive Brokers Client Portal API"
 summary: "
-Interactive Broker's REST API is a webserver that you install and maintain locally in a convoluted fashion. I created a light weight docker image to make things easy.
+Interactive Broker's REST API is a web server that you install and maintain locally in a convoluted fashion. I created a light weight docker image to make things easy.
 "
 
 date: "2022-11-13"
@@ -26,7 +26,7 @@ Navigate to [localhost:5000](http://localhost:5000) and login with your live or 
 
 Interactive Brokers offers an API to interact with their regular trading client. To use it, you need to have the trading client installed and running before you can connect your app and start streaming data. To get around this need for the trading client, Interactive Brokers created a REST API for their trading platform called **Client Portal API**.
 
-This is essentially a webserver that you install on your local system and send REST requests to. You can [download the client from here](https://www.interactivebrokers.com/en/trading/ib-api.php), you can find the [Client Portal API documentation here](https://interactivebrokers.github.io/cpwebapi/) which includes a quick start guide with download instructions and documentation for each endpoint.
+This is essentially a web server that you install on your local system and send REST requests to. You can [download the client from here](https://www.interactivebrokers.com/en/trading/ib-api.php), you can find the [Client Portal API documentation here](https://interactivebrokers.github.io/cpwebapi/) which includes a quick start guide with download instructions and documentation for each endpoint.
 
 ![Interactive Brokers API documentation screenshot](images/api.png)
 
@@ -34,13 +34,13 @@ This is essentially a webserver that you install on your local system and send R
 
 The problem is that you need to install and run a Java runtime environment on your local machine.
 
-If you're anything like me, the idea of installing and running an environment so that you can install and run a webserver so that you can make REST requests seems convoluted. It also means there are two new systems to manage, the Java runtime environment and the webserver.
+If you're anything like me, the idea of installing and running an environment so that you can install and run a web server so that you can make REST requests seems convoluted. It also means there are two new systems to manage, the Java runtime environment and the web server.
 
 # The Solution
 
-I have made a Docker container for the Client Portal API. The container makes running the webserver as easy as executing one command. And you can use docker-compose to orchestrate your application and its dependencies.
+I have made a Docker container for the Client Portal API. The container makes running the web server as easy as executing one command. And you can use docker-compose to orchestrate your application and its dependencies.
 
-The container is increadibly light weight. As of this writing, the image is less than 70MBs!
+The container is light weight. As of this writing, the image is less than 70MBs!
 
 Creating the image is a matter of downloading the portal, unzipping and running. The `Dockerfile` for this is:
 
@@ -62,7 +62,7 @@ EXPOSE 5000
 CMD sh bin/run.sh root/conf.yaml
 ```
 
-The config file `conf.yaml` is very poorly documented and required hacking around to get it working. If you're curious as to how the config works, you can checkout the full source over on Github: [https://github.com/robolyst/ibportal](https://github.com/robolyst/ibportal).
+The configuration file `conf.yaml` is poorly documented and required hacking around to get it working. If you're curious as to how configuration works, you can checkout the full source over on Github: [https://github.com/robolyst/ibportal](https://github.com/robolyst/ibportal).
 
 # Usage
 
@@ -114,4 +114,4 @@ and I'll get back a JSON blob containing:
 
 # Show Support
 
-If you like this, please show your support by staring the github repo at [https://github.com/robolyst/ibportal](https://github.com/robolyst/ibportal). Thank you! ❤️
+If you like this, please show your support by staring the Github repository at [https://github.com/robolyst/ibportal](https://github.com/robolyst/ibportal). Thank you! ❤️
