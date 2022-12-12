@@ -13,11 +13,11 @@ tags:
     - finance
 ---
 
-A tumultuous market can feel like a once in a life time event. However, if you look back far enough in history, you will find many chaotic periods. Backtesting a macro portfolio of ETFs can be tricky because there isn’t much price history. ETF prices provided by your broker will not cover a wide range of market events. So, you do not have a way of testing your strategy on different difficult markets.
+Backtesting a macro portfolio of ETFs can seem impossible because there isn’t much price history. You need enough price history to include a large sample of tumultuous markets. ETF prices provided by your broker will not go back far enough to cover a wide range of market events.
 
-Bond ETFs in particular are tricky as many of them are still new. These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their price by summing together the value of the bonds they hold. Some bond ETFs hold one type of bond. For example, iShares 20+ Year Treasury Bond ETF (TLT) holds U.S. Treasury bonds maturing in 20 years or more. We can use this information to model TLT’s price as a function of bond yields. We do not need to know exactly what TLT holds.
+Bond ETFs in particular are tricky as many of them are still new. These bond ETFs buy and hold bonds. If you knew what they held, you could calculate their price by summing together the value of the bonds they hold. Some bond ETFs hold one type of bond. For example, iShares 20+ Year Treasury Bond ETF (TLT) holds U.S. Treasury bonds maturing in 20 years or more. We can use this information to model TLT's price as a function of bond yields. We do not need to know exactly what TLT holds.
 
-Because there is a long history of yield data, it is possible to create a long term history for TLT’s performance. We’re going to do this with three periods of time:
+Because there is a long history of yield data, it is possible to create a long term history for TLT's performance. We’re going to do this with three periods of time:
 
 * 2002 to the present will be TLT's prices
 * 1962 to 2002 will be estimated using daily yield quotes
@@ -25,7 +25,7 @@ Because there is a long history of yield data, it is possible to create a long t
 
 # Modelling bond ETF returns with yields
 
-A previous paper titled [Understanding bond ETF returns]({{<ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
+A previous paper titled [Understanding bond ETF returns]({{< ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
 $$
 \text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
 $$
@@ -54,7 +54,7 @@ The 20 year bond yields have a longer history than the 30 year yields. It goes b
 
 TLT doesn't try to hold bonds maturing at 30 years, so we will estimate a maturity of 25 years (\\(T = 25\\)). The U.S. treasuries pay a coupon twice a year (\\(p = 2\\)) and the frequency of this data is daily \\(f = 260\\).
 
-Using these parameters and plugging the daily yields into the return caclulation above we get an estimated return series. Converting this to a cumulative return series and overlaying TLT's price ontop looks like:
+Using these parameters and plugging the daily yields into the return calculation above we get an estimated return series. Converting this to a cumulative return series and overlaying TLT's price on top looks like:
 
 ![Index estimated from daily yields](images/daily_index.svg)
 
@@ -66,11 +66,11 @@ FRED does not have daily yields going past 1962. However, they do have a handful
 
 As before, we will estimate a maturity of 25 years (\\(T = 25\\)), a coupon frequency of twice a year (\\(p = 2\\)) and the data is monthly \\(f = 12\\).
 
-Overlaying our valulation estimates so far we get:
+Overlaying our valuation estimates so far we get:
 
 ![Index estimated from monthly yields](images/indexes.svg)
 
-Even though [LTGOVTBD](https://fred.stlouisfed.org/series/LTGOVTBD) is not a perfect estimate, it is extremely close!
+Even though [LTGOVTBD](https://fred.stlouisfed.org/series/LTGOVTBD) is not a perfect estimate, it is extremely close.
 
 # Putting it all together
 
