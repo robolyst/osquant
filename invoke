@@ -2,15 +2,19 @@
 
 # Run `./invoke build` to build the testing image.
 
-if [ "$@" = "build" ]; then
+if [ "$1" = "build" ]; then
     docker build . --tag osquant
-elif [ "$@" = "shell" ]; then
+elif [ "$1" = "shell" ]; then
     docker run -it --rm --volume $(pwd):/app \
     osquant sh
-elif [ "$@" = "check" ]; then
+elif [ "$1" = "check" ]; then
     docker run -it --rm --volume $(pwd):/app \
     osquant markdownlint content
-elif [ "$@" = "format" ]; then
+elif [ "$1" = "format" ]; then
     docker run -it --rm --volume $(pwd):/app \
     osquant markdownlint content --fix
+elif [ "$1" = "vale" ]; then
+    docker run -it --rm -v $(pwd):/app \
+    -w /app \
+    jdkato/vale "${@:2}" 
 fi
