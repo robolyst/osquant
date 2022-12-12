@@ -54,7 +54,7 @@ A key thing to note is that if the coupon equals the rate (\\(C = r\\)) then the
 
 # ETF Returns
 
-Earlier we stated that a bond ETF's return is the sum of the interest earned plus the return made on the value of the bonds (captial):
+Earlier we stated that a bond ETF's return is the sum of the interest earned plus the return made on the value of the bonds (capital):
 $$
 \text{return}_t = \text{interest}_t + \text{capital}_t
 $$
@@ -63,7 +63,7 @@ If we imagine the ETF buying a bond, holding for a period of time and then selli
 $$
 \text{interest}\_{t} = \frac{r_{t-1}}{260}
 $$
-Here, we are going to assume that the bond's yield is equal to the market interest rate. So, the bond's yield at the time of purchase (yesterday) is \\(r_{t-1}\\).
+Here, we are going to assume that the bond's yield is equal to the market interest rate. The bond's yield at the time of purchase (yesterday) is \\(r_{t-1}\\).
 
 If we assume that the ETF is always buying bonds at par value (\\(C = r_{t-1}\\)) with a notional of $1 (\\(P_{t-1} = N = 1\\)) then the return on capital is:
 $$
@@ -81,7 +81,7 @@ $$
 \end{aligned}
 $$
 
-If we plot the estimated returns against changes in yield, we find a key fact of bond returns. Postive changes in yields creates negative returns and negative changes in yields creates positive returns.
+If we plot the estimated returns against changes in yield, we find a key fact of bond returns. Positive changes in yields creates negative returns and negative changes in yields creates positive returns.
 
 ![Expected bond return vs yield](images/return_curve.svg)
 
@@ -89,7 +89,7 @@ If we plot the estimated returns against changes in yield, we find a key fact of
 
 We can test out this ETF model on [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT). This is a US based ETF that holds U.S. Treasury bonds that mature in 20+ years.
 
-We will need to use dividend adjusted prices as TLT distributes the coupons via dividends. As the maturity of the bonds held by TLT at any particular time will not exactly equal a fixed maturity, we can use 30 year yields as an estimate and assume the maturity is 25 years. The dividend adjusted prices are fetched from Yahoo ([link](https://uk.finance.yahoo.com/quote/TLT/history?p=TLT)) and 30 year US tresury bond yields from FRED ([link](https://fred.stlouisfed.org/series/DGS30)).
+We will need to use dividend adjusted prices as TLT distributes the coupons via dividends. As the maturity of the bonds held by TLT at any particular time will not exactly equal a fixed maturity, we can use 30 year yields as an estimate and assume the maturity is 25 years. The dividend adjusted prices are fetched from Yahoo ([link](https://uk.finance.yahoo.com/quote/TLT/history?p=TLT)) and 30 year US treasury bond yields from FRED ([link](https://fred.stlouisfed.org/series/DGS30)).
 
 ![TLT prices and 30 year yields](images/tlt_data.svg)
 
@@ -162,7 +162,7 @@ def etfret(r1, r, f=260, p=2, T=25):
     return interest + annuity + capital - 1
 ```
 
-If we assume that yields cannot go negative, then we can think of the yield \\(r_t\\) as drawn from a [log normal distribuiton](https://en.wikipedia.org/wiki/Log-normal_distribution). That is, the logged changes in the yield follows a gaussian distribution:
+If we assume that yields cannot go negative, then we can think of the yield \\(r_t\\) as drawn from a [log-normal distribution](https://en.wikipedia.org/wiki/Log-normal_distribution). That is, the logged changes in the yield follows a Gaussian distribution:
 $$
 \begin{aligned}
 \log(r_t) - \log(r_{t-1}) &\sim \mathcal{N}(\mu, \sigma^2) \\\
@@ -173,7 +173,7 @@ $$
 
 This is similar to the [Black-Karansinski interest rate model](https://en.wikipedia.org/wiki/Black%E2%80%93Karasinski_model) (BK). The BK model assumes that the logged interest rates follow a stochastic mean reversion processed called the [Ornstein-Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). Here we're going to drop the mean reversion assumption and just model the changes as a random process.
 
-Using this lognormal interest rate model, we can simulate a return distribution with:
+Using this log-normal interest rate model, we can simulate a return distribution with:
 
 ```python
 def sim_etfret(rate, mu, std, samples):
@@ -192,7 +192,7 @@ The negative skew occurs because when bond yields are low a positive change in y
 As yields decrease, returns skew to the negative. As they increase, returns skew positive.
 {{</figure>}}
 
-We can estimate skew for TLT by using the exponentially weighted moving average and standard deviation of the logged rates for the inputs to `sim_etfret`. I'm using a halflife of 25 days on daily data. Running this simulation for 10 millions samples per day gives us:
+We can estimate skew for TLT by using the exponentially weighted moving average and standard deviation of the logged rates for the inputs to `sim_etfret`. I'm using a half-life of 25 days on daily data. Running this simulation for 10 millions samples per day gives us:
 
 ![Expected skew over time for TLT](images/tlt_skew.svg)
 
