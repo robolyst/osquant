@@ -221,7 +221,6 @@ $$
 \text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{x^{\frac{1}{-pT}}p - p} \left( 1 - x \right) + x - 1
 $$
 
-
 $$
 \begin{aligned}
 y &= \frac{a}{x^bc - c}(1 - x) + x \\\
@@ -264,7 +263,6 @@ $$
 &= 2\frac{r_{t-1}}{r_t^3} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (\frac{r_{t-1}}{r_t^2} - 1)T(1 + \frac{r_t}{p})^{-pT-1} + T(-pT-1)(\frac{r_{t-1}}{r_t} - 1)(1 + \frac{r_t}{p})^{-pT-2} \\\
 \end{aligned}
 $$
-
 
 ### Expansion
 Adding \\(a\\) to allow for adjustments.

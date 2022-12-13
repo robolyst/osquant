@@ -10,6 +10,9 @@ elif [ "$1" = "shell" ]; then
 elif [ "$1" = "check" ]; then
     docker run -it --rm --volume $(pwd):/app \
     osquant markdownlint content
+    docker run -it --rm -v $(pwd):/app \
+    -w /app \
+    jdkato/vale --minAlertLevel=error content/papers
 elif [ "$1" = "format" ]; then
     docker run -it --rm --volume $(pwd):/app \
     osquant markdownlint content --fix
