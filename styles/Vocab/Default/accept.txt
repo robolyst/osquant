@@ -10,3 +10,17 @@ Mashable
 Gramian
 differenced
 SVMs
+SVCs
+SVRs
+octamer
+polyproteins
+supersymmetric
+
+Vapnik
+Jaakkola
+Haussler
+Opper
+Winther
+Ahn
+Impens
+Higgs

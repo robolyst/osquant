@@ -19,7 +19,7 @@ tags:
 
 Consider a series of values \\(y_i\\) that need to be modelled based on some corresponding vectors \\(\textbf{x}_i\\). One potential family of models for this problem are kernel machines. These are linear models extended into the non-linear world. Generally speaking, a linear model takes a set of points and attempts to find a linear mapping to some specific output. A kernel machine first maps the points into a higher dimension, denoted by \\(\varphi(\mathbf{x}_i)\\), and then applies a linear algorithm.
 
-Each input vector may be transformed to hundreds of thousands or even an infinite number of dimensions. Mapping each point into this new space is not practical, especially when the embedding space has an infinite number of dimensions. A clever trick is to rearrange the equation for the linear part of the kernel machine so that each input vector is paired with another in a dot product, like so: \\(\varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)\\). This dot product is usually defined with a very simple kernel function. The most common one is the Gaussian kernel which represents the dot product between two points that have been mapped into a space of an infinite number of dimensions:
+Each input vector may be transformed to hundreds of thousands or even an infinite number of dimensions. Mapping each point into this new space is not practical, especially when the embedding space has an infinite number of dimensions. A clever trick is to rearrange the equation for the linear part of the kernel machine so that each input vector is paired with another in a dot product, like so: \\(\varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)\\). This dot product is usually defined with a simple kernel function. The most common one is the Gaussian kernel which represents the dot product between two points that have been mapped into a space of an infinite number of dimensions:
 $$
 \begin{align}
 \kappa(\mathbf{x}_i, \mathbf{x}_j) = \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j) =  e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2} \label{1}
@@ -29,7 +29,7 @@ A kernel machine is now a linear model of \\(\kappa(\mathbf{x}_i, \mathbf{x}_j)\
 
 The most common kernel machine is the support vector machine (SVM) which has two varieties for modelling classification and regression tasks [^Vapnik1998] [^Burges1998] [^Smola2004]. SVMs have been used for a wide variety of problems such as pattern recognition [^Wang2007], face recognition [^Phillips1998] [^Li2001], time series prediction [^Kim2003], image classification [^Chapelle1999a], system control [^Hong2015], and function approximation [^Vapnik1996].
 
-A common task with SVMs, and kernel machine modeling in general, is tuning the kernel parameters. The most widely used strategy is to conduct cross validation with a separate set of data, which is very time comsuming. The question we address in this paper is: how to quickly identify an appropriate Gaussian bandwidth parameter \\(\beta\\) in the Gasssian kernel defined in \\(\eqref{1}\\)? This parameter is important because it directly affects the geometry of the embedding space. The distance between any two points in this higher dimensional space is:
+A common task with SVMs, and kernel machine modeling in general, is tuning the kernel parameters. The most widely used strategy is to conduct cross validation with a separate set of data, which is time consuming. The question we address in this paper is: how to quickly identify an appropriate Gaussian bandwidth parameter \\(\beta\\) in the Gaussian kernel defined in \\(\eqref{1}\\)? This parameter is important because it directly affects the geometry of the embedding space. The distance between any two points in this higher dimensional space is:
 $$
 ||\varphi(\mathbf{x}_i) - \varphi(\mathbf{x}_j)||^2 = 2(1 - \varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)) = 2(1 - e ^{ - \beta||\mathbf{x}_i - \mathbf{x}_j||^2})
 $$
@@ -38,25 +38,25 @@ If \\(\beta\\) is 0, then each point has zero distance to each other point. If \
 
 The most common method of selecting \\(\beta\\) and the parameters to a support vector machine is by a grid search with cross-validation [^Hong2015] [^Tang2009]. Here, every point in a grid of points across the parameter space is tested using cross-validation. This is the most accurate method and the slowest. Typically, evaluating a kernel machine's prediction error has a complexity on the order of \\(O(n^3)\\) where \\(n\\) is the number of data points. A grid search must test a vast number of different parameter values to ensure a high degree of accuracy. One alternative to a grid search is to repeatedly try random points [^Bergstra2012]. However, this does not necessarily reduce the computational burden.
 
-One way to reduce the computational cost is by estimating the error. There is a large body of literature focused on estimating an upper bound for the leave-one-out error. Vapnik derives a bound from the number of support vectors [^Vapnik1995] and another bound from the radius of a ball containing all embedded points [^Vapnik1998]; Jaakkola and Haussler generalises this to kernel machines other than support vector machines [^Jaakkola1999]; and Opper and Winther applies this bound to SVMs without a threshold [^Opper2000]. A bounds estimate can be used with a gradient descent algorithm to reduce the number of trials before selecting a set of parameters [^Chapelle2002].
+One way to reduce the computational cost is by estimating the error. A large body of literature exists that focuses on estimating an upper bound for the leave-one-out error. Vapnik derives a bound from the number of support vectors [^Vapnik1995] and another bound from the radius of a ball containing all embedded points [^Vapnik1998]; Jaakkola and Haussler generalises this to kernel machines other than support vector machines [^Jaakkola1999]; and Opper and Winther applies this bound to SVMs without a threshold [^Opper2000]. A bounds estimate can be used with a gradient descent algorithm to reduce the number of trials before selecting a set of parameters [^Chapelle2002].
 
 Because the Gaussian kernel's bandwidth \\(\beta\\) has a significant effect on the geometry of the embedding space, some algorithms select a value without calculating the prediction error. One study focused on classification tasks and selected the \\(\beta\\) which maximised the distance between the classes and minimised the distance between points of the same class[^Ahn2010]. This algorithm is many times faster than calculating or estimating the model's error. However, the fitness function is not guaranteed to be convex and thus requires a grid search or a complex search algorithm.
 
-Another study maximised the variance of the distances between data points and found that this idea was fast and comparably accurate [^Tang2009]. In this paper, we build on this algorithm giving it a significant increase in speed. We show that the selected value for \\(\beta\\) varies very little between small subsets of data. This allows us to confidently use only a small amount of data to find the value for \\(\beta\\) for a much larger sample set. We also show that these algorithms can be used for both classification and regression tasks.
+Another study maximised the variance of the distances between data points and found that this idea was fast and comparably accurate [^Tang2009]. In this paper, we build on this algorithm giving it a significant increase in speed. We show that the selected value for \\(\beta\\) varies little between small subsets of data. This allows us to confidently use only a small amount of data to find the value for \\(\beta\\) for a much larger sample set. We also show that these algorithms can be used for both classification and regression tasks.
 
 # Solution
 
 We present two methods that select a value for the Gaussian kernel's bandwidth by focusing on the distance between points.
 
-Consider that if two points are very close together, then the value of the Gaussian kernel between these two points will be close to 1. If they are identical, the value will be exactly 1. If, however, the two points are far apart, the value of the Gaussian function approaches 0. We could interpret a value of 1 as meaning the two points are 100\% similar, and a value of 0 as meaning they are 0\% similar. The Gaussian kernel is then a measure of similarity between two points.
+Consider that if two points are close together, then the value of the Gaussian kernel between these two points will be close to 1. If they are identical, the value will be exactly 1. If, however, the two points are far apart, the value of the Gaussian function approaches 0. We could interpret a value of 1 as meaning the two points are 100\% similar, and a value of 0 as meaning they are 0\% similar. The Gaussian kernel is then a measure of similarity between two points.
 
-By calculating the similarity between every point in a dataset we get a distribution of similarities. Consider for the moment how this distribution changes as the \\(\beta\\) parameter of the Gaussian kernel changes. If \\(\beta = 0\\), then all similarities are equal to one (Figure 1A); all the points are 100\% similar.  In this situation, a model cannot tell the difference between any points. If \\(\beta\\) were to grow to \\(\infty\\), then all similarities are equal to 0 (Figure 1C); all the points are all completely different sharing nothing in common. Now, a model can tell the difference between each point. However, it will not be able to tell which points have something in common. This is where a Gaussian kernel machine should get its power from; the ability to identify how similar a new data point is to previously seen examples. Ideally, then, \\(\beta\\) ought to be somewhere in-between \\(0\\) and \\(\infty\\) (Figure 1B).
+By calculating the similarity between every point in a dataset we get a distribution of similarities. Consider for the moment how this distribution changes as the \\(\beta\\) parameter of the Gaussian kernel changes. If \\(\beta = 0\\), then all similarities are equal to one (Figure 1A); all the points are 100\% similar. In this situation, a model cannot tell the difference between any points. If \\(\beta\\) were to grow to \\(\infty\\), then all similarities are equal to 0 (Figure 1C); all the points are all completely different sharing nothing in common. Now, a model can tell the difference between each point. However, it will not be able to tell which points have something in common. This is where a Gaussian kernel machine should get its power from; the ability to identify how similar a new data point is to previously seen examples. Ideally, then, \\(\beta\\) ought to be somewhere in-between \\(0\\) and \\(\infty\\) (Figure 1B).
 
 {{<figure src="images/different_beta_example2.svg" title="Figure 1: Distribution of the similarity between points in the Mashable News Popularity dataset." >}}
 We explore how the distribution of the similarity between data points change as the bandwidth parameter \\(\beta\\) moves between \\(0\\) and \\(\infty\\). In this example, we use the Mashable news popularity dataset. **(A)** As the Gaussian bandwidth \\(\beta\\) approaches zero, the similarity between each point approaches 1 where each point looks identical to every other point. **(B)** As \\(\beta\\) gets larger, the points spread out. Some are close together with a similarity close to 1 while others are far apart with a similarity of 0. **(C)** As \\(\beta\\) approaches \\(\infty\\), the similarity between each point approaches zero.
 {{</figure>}}
 
-Notice in Figure 1B how the similarities are distributed across the entire space from 0 to 1. There are very clearly points that appear to be very similar with a value near 1. There are also points that very clearly have nothing in common with a value near 0. These could be clusters of points that may have predictive power for a target variable. The defining feature here is that the distribution is spread out; relative to other values of \\(\beta\\), its variance is big. We propose to find a value for \\(\beta\\) which produces a distribution that is spread out between the two extremes, 0 and 1.
+Notice in Figure 1B how the similarities are distributed across the entire space from 0 to 1. Some points appear to be similar with a value near 1. Other points have nothing in common with a value near 0. These could be clusters of points that may have predictive power for a target variable. The defining feature here is that the distribution is spread out; relative to other values of \\(\beta\\), its variance is big. We propose to find a value for \\(\beta\\) which produces a distribution that is spread out between the two extremes, 0 and 1.
 
 We explore two algorithms in this paper for choosing \\(\beta\\), the first maximises the similarity distribution's variance and is called *maximum variance*, the other optimises the similarity distribution mean called *mean-to-half*.
 
@@ -125,7 +125,7 @@ We randomly select 5,000 points from the dataset and evenly split them into a tr
 
 We compare the accuracy of the mean-to-half and maximum variance algorithms against a grid search which represents the best performance and Ahn's algorithm [^Ahn2010]. The grid search evaluates \\(\beta\\) at 80 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\) and the regularising parameter \\(C\\) at 7 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\). Ahn's method checks each value for \\(\beta\\) in the same set of evenly spaced values and selects the one that maximises the separation between the data classes. We choose \\(C\\) by performing a grid search at 7 evenly spaced values from \\(10^{-3}\\) to \\(10^{3}\\).
 
-We repeat this analysis on four more datasets, HIGGS [^HIGGS] which classes particle simulations as whether or not they produce a Higgs boson; 746 and Impens [^HIV] which both classes polyproteins as whether or not they can be split by the HIV-1 protease; and Dress Recommendation [^Dress] which classes dresses in an online shop as whether or not customers recommend them to friends. These datasets are discussed in more detail in the [Methods](#methods) section.
+We repeat this analysis on four more datasets, Higgs [^HIGGS] which classes particle simulations as whether or not they produce a Higgs boson; 746 and Impens [^HIV] which both classes polyproteins as whether or not they can be split by the HIV-1 protease; and Dress Recommendation [^Dress] which classes dresses in an online shop as whether or not customers recommend them to friends. These datasets are discussed in more detail in the [Methods](#methods) section.
 
 We measure the performance by each method on each dataset by calculating the percentage of correctly predicted outcomes, shown in Figure 4A. We find that both the mean-to-half and maximum variance algorithm perform comparably to the grid search.
 
@@ -139,7 +139,7 @@ In a similar fashion to the previous classification tasks, we randomly select 5,
 
 We find that the mean-to-half and maximise variance algorithms perform better than the grid search in all except one example. The maximise variance algorithm performs less than 4\% worse than the grid search on the Portuguese mathematics class dataset. We also note from the performance statistics in Figure 4 that these two algorithms are suitable for both classification and regression tasks.
 
-Even though the two algorithms presented here find \\(\beta\\) faster than others, on large datasets they will still be very time consuming. One potential way of dealing with this is to use a small subset of data to find \\(\beta\\). The problem here is that different subsets may result in a different value for \\(\beta\\). This approach may only be feasible if \\(\beta\\) varies very little between different subsets.
+Even though the two algorithms presented here find \\(\beta\\) faster than others, on large datasets they will still be time consuming. One potential way of dealing with this is to use a small subset of data to find \\(\beta\\). The problem here is that different subsets may result in a different value for \\(\beta\\). This approach may only be feasible if \\(\beta\\) varies little between different subsets.
 
 As a general example, we take 100 random samples of 500 points from the SUSY dataset. For each random sample, we evaluate the mean of the similarity distribution for values of \\(\beta\\) between \\(10^{-2}\\) and \\(10^{2}\\) and depict the squared error from 0.5 in Figure 5A. This is the error function that the mean-to-half algorithm minimises. Each subset is drawn as a grey line with one subset highlighted in blue. For the same random subsets across the same values for \\(\beta\\) we evaluate the prediction error of a support vector classifier (with \\(C = 1/2\\)) and show the results in Figure 5B. The best \\(\beta\\) according to the mean-to-half algorithm appears to vary significantly less than trying to optimise the error.
 
@@ -159,7 +159,7 @@ We repeat this experiment measuring the variance of \\(\beta\\) as selected by t
 
 In this paper, we propose an algorithm for choosing the Gaussian kernel's bandwidth parameter which we call mean-to-half. Our work is built on a method propose[^Tang2009] which we call maximise variance. These two algorithms choose the bandwidth that best highlights clusters of points.
 
-We test these two algorithms on a variety of datasets using support vector machines, both for classification and regression. We find that the algorithms accuracy is comparable to a grid search which represents the best possible result. We also find that the value for \\(\beta\\) that these two algorithms select is more robust to changes in the dataset than other algorithms. This means that we can find appropriate parameters for very large datasets by only examining small subsets.
+We test these two algorithms on a variety of datasets using support vector machines, both for classification and regression. We find that the algorithms accuracy is comparable to a grid search which represents the best possible result. We also find that the value for \\(\beta\\) that these two algorithms select is more robust to changes in the dataset than other algorithms. This means that we can find appropriate parameters for large datasets by only examining small subsets.
 
 Our results suggest that we can achieve competitive performance at a greater speed using the maximise variance and mean-to-half algorithms. Our experiments on classification and regression tasks also suggest that these algorithms work independently of the problem to be solved.
 
@@ -175,15 +175,15 @@ We use a variety of real-world datasets that cover a wide range of topics such a
 
 ### SUSY dataset
 
-Physicists at the Large Hadron Collider smash together exotic particles in the hope of detecting supersymmetric (SUSY) particles. These supersymmetric particles are invisible to their detectors and must be inferred from the particles produced by a collision. There are two possible collision; the one we're interested in called the signal, and a similar collision that does not produce supersymmetric particles called the background noise. The SUSY dataset contains simulations of signal and background collisions. The task is to accurately classify whether each collision produces supersymmetric particles or not. This datasets was used in a study asking whether or not deep learning improves classification [^Baldi2014].
+Physicists at the Large Hadron Collider smash together exotic particles in the hope of detecting supersymmetric (SUSY) particles. These supersymmetric particles are invisible to their detectors and must be inferred from the particles produced by a collision. Two collision are possible; the one we're interested in called the signal, and a similar collision that does not produce supersymmetric particles called the background noise. The SUSY dataset contains simulations of signal and background collisions. The task is to accurately classify whether each collision produces supersymmetric particles or not. This datasets was used in a study asking whether or not deep learning improves classification [^Baldi2014].
 
 The SUSY dataset contains 5,000,000 simulations. In this study we use a random sample of 5,000 simulations evenly split between the signal and noise records.
 
-### HIGGS dataset
+### Higgs dataset
 
 The Standard Model of particle physics includes a field which gives matter its mass; this is known as the Higgs field. The only means of confirming the existence of the Higgs field is to detect its associated particle, the Higgs boson. Similar to detecting supersymmetric particles, the Large Hadron Collider smashes together particles in the hopes of detecting some Higgs bosons. Just like the SUSY dataset, this dataset lists simulations of collisions and whether or not it produces Higgs bosons. This dataset was used alongside the SUSY dataset in a study asking whether or not deep learning improves detecting Higgs bosons [^Baldi2014].
 
-The HIGGS dataset contains 11,000,000 simulations. In this study we use a random sample of 5,000 simulations evenly split between the signal and noise records.
+The Higgs dataset contains 11,000,000 simulations. In this study we use a random sample of 5,000 simulations evenly split between the signal and noise records.
 
 ### 746 dataset
 
@@ -193,7 +193,7 @@ These octamers were collected from various sources in the literature by [^You200
 
 ### Impens dataset
 
-This dataset is also a list of octamers labelled as split or unsplit by the HIV-1 protease. These octamers were collected by [^Rognvaldsson2014].
+This dataset is also a list of octamers labelled as split or un-split by the HIV-1 protease. These octamers were collected by [^Rognvaldsson2014].
 
 ### Portuguese Students, mathematics class dataset
 
@@ -339,7 +339,7 @@ $$
 $$
 
 [^SUSY]: [SUSY dataset](https://archive.ics.uci.edu/ml/datasets/SUSY)
-[^HIGGS]: [HIGGS dataset](https://archive.ics.uci.edu/ml/datasets/HIGGS)
+[^HIGGS]: [Higgs dataset](https://archive.ics.uci.edu/ml/datasets/HIGGS)
 [^HIV]: [HIV protease dataset](https://archive.ics.uci.edu/ml/datasets/HIV-1+protease+cleavage)
 [^Dress]: [Dress recommendations dataset](https://archive.ics.uci.edu/ml/datasets/Dresses_Attribute_Sales)
 [^Mashable]: [Mashable dataset](https://archive.ics.uci.edu/ml/datasets/Online+News+Popularity)
