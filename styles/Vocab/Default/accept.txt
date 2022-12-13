@@ -6,3 +6,7 @@ iShares
 TLT
 at the end of the day
 [Dd]rawdown
+Mashable
+Gramian
+differenced
+SVMs

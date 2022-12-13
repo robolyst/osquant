@@ -1,7 +1,7 @@
 ---
 title: "Fast Gaussian Kernel fit for Support Vector Regression"
 summary: "
-Support vector regression models transform input vectors into a very high number of dimensions where the regression problem becomes linear. This new space is defined by a kernel function. A major drawback of these models is that they are slow to fit the kernel parameters. Here I develop an algorithm to quickly fit the Gaussian kernel's bandwidth parameter. This algorithm is fast, robust on some datasets, and has a similar fit to slower and more exhaustive methods.
+Support vector regression models transform input vectors into a high number of dimensions where the regression problem becomes linear. This new space is defined by a kernel function. A major drawback of these models is that they are slow to fit the kernel parameters. Here I develop an algorithm to quickly fit the Gaussian kernel's bandwidth parameter. This algorithm is fast, robust on some datasets, and has a similar fit to slower and more exhaustive methods.
 "
 
 date: "2016-01-07"
@@ -21,7 +21,7 @@ Consider a series of continuous values \\(y_i\\) that need to be modelled based 
 
 Support vector regression models are part of a branch of models called support vector machines (SVM) [^Vapnik1998] [^Burges1998] [^Smola2004]. SVMs have been used for a wide variety of problems such as pattern recognition [^Wang2007], face recognition [^Phillips1998] [^Li2001], time series prediction [^Kim2003], image classification [^Chapelle1999a], system control [^Hong2015], and function approximation [^Vapnik1996].
 
-Support vector regression is a powerful model because each input vector may be transformed into an extremely high number of dimensions. This transformation is rarely computationally efficient. However, the model's equations can be rearranged so that each transformed vector is paired with another in a dot product, like so: \\(\varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)\\). This dot product is usually defined with a very simple kernel function. The most common one is the Gaussian kernel:
+Support vector regression is a powerful model because each input vector may be transformed into an extremely high number of dimensions. This transformation is rarely computationally efficient. However, the model's equations can be rearranged so that each transformed vector is paired with another in a dot product, like so: \\(\varphi(\mathbf{x}_i)^T\varphi(\mathbf{x}_j)\\). This dot product is usually defined with a simple kernel function. The most common one is the Gaussian kernel:
 
 $$
 \begin{align}
@@ -52,7 +52,7 @@ $$
 \end{aligned}
 $$
 
-For the example time series, the Gramian matrix with the Gaussian kernel is shown in Figure 2A. The value for \\(\beta\\) was chosen by hand and is not important in this example. Observe in Figure 2B what happens after sorting the vectors by their \\(y\\) values in an ascending order. Now, adjacent \\(\textbf{x}\\) vectors have a very close value for their corresponding target \\(y\\). Notice that cells close to the main diagonal are red (value close to 1), and the further a cell is from the diagonal the more blue (value close to 0) it is.
+For the example time series, the Gramian matrix with the Gaussian kernel is shown in Figure 2A. The value for \\(\beta\\) was chosen by hand and is not important in this example. Observe in Figure 2B what happens after sorting the vectors by their \\(y\\) values in an ascending order. Now, adjacent \\(\textbf{x}\\) vectors have a close value for their corresponding target \\(y\\). Notice that cells close to the main diagonal are red (value close to 1), and the further a cell is from the diagonal the more blue (value close to 0) it is.
 
 {{<figure src="images/time_series_gramian.svg" title="Figure 2: The Gramian matrix of the time series in Figure 1." width="medium" >}}
 **(A)** Consider the problem of predicting the next value of the example series in Figure 1 using the previous 20 values. The value at time \\(t\\) is represented with \\(y_t\\) and the previous 20 with \\(x_t\\). Here you can see the Gramian matrix where each cell is the value of the Gaussian function between two \\(x\\) vectors. The bandwidth parameter was chosen to highlight the pattern, its exact value is not important. **(B)** If the \\(x\\) vectors are sorted by their corresponding target value \\(y\\), the pattern is destroyed, however, a new pattern emerges. Now, values closer to the main diagonal are more red. That is, the kernel function of two \\(x\\) vectors tends to be closer to 1 when their corresponding \\(y\\)s are closer in value.
@@ -72,7 +72,7 @@ The algorithm in this paper chooses \\(\beta\\) such that the slope of this line
 
 We calculate the slope by taking the difference between each successive diagonal mean. These are then combined together in a weighted average to find the average slope. The weights are chosen to be the total number of cells in the corresponding diagonals.
 
-Calculating the mean of each diagonal does not require us to compute the whole Gramian matrix. The main diagonal contains only 1s, and the matrix is symmetric. This means we only need the upper or lower triangle of this matrix. Here, our notation will use the lower triangle:
+Calculating the mean of each diagonal does not require us to compute the whole Gramian matrix. The main diagonal contains only 1, and the matrix is symmetric. This means we only need the upper or lower triangle of this matrix. Here, our notation will use the lower triangle:
 
 $$
 \begin{aligned}
@@ -105,7 +105,7 @@ p_i &= \kappa(\textbf{x}\_{\text{row}(i)}, \textbf{x}_{\text{col}(i)}) \\\
 $$
 The functions \\(\text{col}(i)\\), \\(\text{row}(i)\\), \\(\text{diag}(i)\\) give the column, row, and diagonal index of a cell \\(i\\) respectively. The functions are derived in the appendix.
 
-Ignoring the main diagonal of 1s, there are \\(n-2\\) diagonals which we denote with \\(d\\). The zeroth mean diagonal is:
+Ignoring the main diagonal of ones, there are \\(n-2\\) diagonals which we denote with \\(d\\). The zeroth mean diagonal is:
 $$
 d_0 = \frac{p_0 + p_{n-1} + \dots + p_{n(n-1)/2}}{n-1}
 $$
@@ -178,7 +178,7 @@ We evaluate the diagonal slope algorithm's objective function for each \\(\beta\
 
 We find that the support vector regressor fitted with the diagonal slope algorithm has a mean absolute error (MAE) of 0.30 on the testing data while the plain grid search's MAE is also 0.30. These results show that our algorithm achieves a comparable forecasting error with an exhaustive grid search but at a fraction of the time.
 
-We verify this result by performing the same analysis on six other datasets. There is a dataset for predicting Portuguese student's mathematics grades [^Mathematics], predicting Portuguese student's Portuguese grades [^Portuguese], classifying the age of a song [^Music], predicting housing prices in Boston [^Housing], predicting the number of comments on blog posts [^Blog], and predicting the number of bicycles rented in a bike-sharing system [^Bike]. Again, we provide a full description of each of the datasets in Appendix 2.
+We verify this result by performing the same analysis on six other datasets. We use a dataset for predicting Portuguese student's mathematics grades [^Mathematics], predicting Portuguese student's Portuguese grades [^Portuguese], classifying the age of a song [^Music], predicting housing prices in Boston [^Housing], predicting the number of comments on blog posts [^Blog], and predicting the number of bicycles rented in a bike-sharing system [^Bike]. Again, we provide a full description of each of the datasets in Appendix 2.
 
 {{<figure src="images/accuracy.svg" title="Figure 5: The error is just as good as the standard slow and exhaustive method." width="medium" >}}
 The dataset *Mashable News Popularity* is a collection of articles from the news website [Mashable](https://mashable.com/) and the aim is to predict the the number of times each article is shared based on a set of features. We randomly split this dataset evenly into a training and testing set. We train the proposed diagonal slope algorithm and a basic grid search on the training sample and evaluate the mean absolute percentage error (MAPE) on the testing set. We repeat this process on the remaining datasets. We find that the error from the diagonal slope algorithm is never more than 5\% greater than the grid search.
@@ -186,7 +186,7 @@ The dataset *Mashable News Popularity* is a collection of articles from the news
 
 The results are shown in Figure 5. While the diagonal slope algorithm's error is slightly higher or lower on some datasets, it is never greater by more than 5\%. These results suggest that our algorithm does not trade accuracy for speed.
 
-Because kernel algorithms can be very slow when using large datasets, a common practice is to fit a model on a small subset. However, there is a possibility that an algorithm for choosing the kernel parameters is very sensitive to the subset. If the subset changes, the selected parameters might also change quite significantly. An algorithm that is able to choose consistent kernel parameters is called robust.
+Because kernel algorithms can be slow when using large datasets, a common practice is to fit a model on a small subset. However, there is a possibility that an algorithm for choosing the kernel parameters is sensitive to the subset. If the subset changes, the selected parameters might also change quite significantly. An algorithm that is able to choose consistent kernel parameters is called robust.
 
 To check whether or not our algorithm is more or less robust than the grid search, we draw with replacement 30 random subsets of 100 points from each datasets. We use the diagonal slope algorithm and grid search to find a suitable value for \\(\beta\\) on each subset. We then compare the variance of the \\(\beta\\)s as chosen by the two algorithms.
 
@@ -198,7 +198,7 @@ We show the variance of the \\(\beta\\)s in Figure 6. On three data sets, the di
 
 # Summary
 
-In this paper, I propose an algorithm for choosing kernel parameters in regression tasks termmed the *diagonal slope algorithm*.
+In this paper, I propose an algorithm for choosing kernel parameters in regression tasks termed the *diagonal slope algorithm*.
 
 This algorithm was tested on a variety of datasets using the Gaussian kernel and support vector regression. The algorithm's accuracy is comparable to a grid search which represents the best possible result. However, the algorithm's choice of the Gaussian kernel's bandwidth parameter is sometimes sensitive to changes in the training data.
 
@@ -286,11 +286,11 @@ This is a dataset of 506 houses in Boston and their prices as used by [^Quinlan1
 
 ### Blog Feedback
 
-This is a dataset of 60,000 blog posts from around 1,200 Hungarian blogs. There are 280 recorded features for each post including number of links, number of comments received thus far and the most discriminative features from a bag of words analysis. The goal is to predict the number of comments each post will recieve in the next 24 hours. This dataset was used by [^Buza2014]. We use a random subset of 2,000 blog posts.
+This is a dataset of 60,000 blog posts from around 1,200 Hungarian blogs. It has 280 recorded features for each post including number of links, number of comments received thus far and the most discriminative features from a bag of words analysis. The goal is to predict the number of comments each post will receive in the next 24 hours. This dataset was used by [^Buza2014]. We use a random subset of 2,000 blog posts.
 
 ### Bike Sharing
 
-Bike sharing systems completely automate the rental and return process of renting bikes. Users are able to rent a bike from one location, and return the bike to another. This dataset contains daily records of a bike-sharing system called Captial Bike Sharing in Washington, D.C., USA. There are two years of records from the 1<sup>st</sup> of January 2011 to the 31<sup>st</sup> of December 2012 for a total of 731 days. This dataset was used by [^Fanaee-T2014] to test an event detection algorithm. In this paper, the task is to predict the number of rented bikes from the day's weather records.
+Bike sharing systems completely automate the rental and return process of renting bikes. Users are able to rent a bike from one location, and return the bike to another. This dataset contains daily records of a bike-sharing system called Capital Bike Sharing in Washington, D.C., USA. It has two years of records from the 1<sup>st</sup> of January 2011 to the 31<sup>st</sup> of December 2012 for a total of 731 days. This dataset was used by [^Fanaee-T2014] to test an event detection algorithm. In this paper, the task is to predict the number of rented bikes from the day's weather records.
 
 {{% citation
     id="Vapnik1998"
