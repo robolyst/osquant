@@ -34,15 +34,15 @@ Investment B's worst day lost 50% more than investment A's worst day! Investment
 
 We will loosely define **risk** as the amount of money you could lose over the short term. For any investment we make, we expect to increase our capital over the long term. But, short term fluctuations mean we might see our capital shrink over the short term. That is a risk.
 
-Look at the example below. There are two investments with the same return but one fluctuates more than the other. If you invested in Crazy Corp, you would have experienced wild swings in value only to land at the same return as Calm Corp.
+Look at the example below. It shows two investments with the same return but one fluctuates more than the other. If you invested in Crazy Corp, you would have experienced wild swings in value only to land at the same return as Calm Corp.
 
 ![Risky investment performance](images/risky_investment.svg)
 
-As investors, we must prefer the safer investment. Both of these investments finished with a 10% return by the end of 2012. What if you withdrew your money at the start of 2012? Crazy Corp. would have lost you 2% while Calm Corp would have gained you about 8%. Very different results, and the only difference is the magnitude of fluctuations in the price of the investments.
+As investors, we must prefer the safer investment. Both of these investments finished with a 10% return by the end of 2012. What if you withdrew your money at the start of 2012? Crazy Corp. would have lost you 2% while Calm Corp would have gained you about 8%. That's a huge difference in returns. The only distinction between the two investments is the magnitude of fluctuations in their price.
 
 Let's change Calm Corp to have a slightly lower return, 7.4%:
 
-![Identical performace of more risky asset](images/risky_investments_2.svg)
+![Identical performance of more risky asset](images/risky_investments_2.svg)
 
 Now, which investment would you prefer? I hope you still said Calm Corp. While the return is almost 3% lower, the risk in that investment is still considerably lower. We would not experience wild swings in value if we were to invest in Calm Corp.
 
@@ -56,7 +56,7 @@ $$
 
 The higher this ratio for any given investment, the more return it makes for the amount of risk there is.
 
-This is an excellent way to think about investment performance. It means if an investment is riskier, that's ok, so long as it has a higher return to match the risk. And if an investment returns very little, that is also ok if the risk is also small enough to match the return. As investors, we are looking for investments that make this ratio as big as possible. We want as much return as we can get for each unit of risk.
+This is an excellent way to think about investment performance. It means if an investment is riskier, that's ok, so long as it has a higher return to match the risk. And if an investment returns little, that is also ok if the risk is also small enough to match the return. As investors, we are looking for investments that make this ratio as big as possible. We want as much return as we can get for each unit of risk.
 
 # The Sharpe ratio
 
@@ -66,7 +66,7 @@ $$\frac{\text{avg return}}{\text{std deviation}} = \frac{\bar{r}}{\sigma}$$
 
 The average return measures the return of the investment, and the standard deviation measures the variability of the returns and is a proxy for risk. This is one of the industry-standard methods of measuring the performance of an investment.
 
-Let's go back to Investment A and Investment B. We know Investment B is riskier. So, we should expect that its returns vary more than Investment A's returns. Look at the chart below.
+Let's go back to Investment A and Investment B. We know Investment B is riskier. Therefore, we should expect that its returns vary more than Investment A's returns. Look at the chart below.
 
 ![Standard deviation of returns](images/standard_deviation.svg)
 
@@ -78,11 +78,11 @@ It shows the daily returns for each investment. The standard deviation is shown 
 | Standard Deviation | 0.1979%      | 0.3034%      |
 | Sharpe ratio       | 0.0787       | 0.063        |
 
-As expected, the Sharpe ratio for Investment A is greater than Investment B. So, the Sharpe ratio correctly identifies the better investment.
+As expected, the Sharpe ratio for Investment A is greater than Investment B. The Sharpe ratio correctly identifies the better investment.
 
 # Unit returns
 
-I do not use the Sharpe ratio. We've already established that measuring returns relative to risk is a great idea. However, I do not like how the Sharpe ratio calculates return and risk. There are two problems with the Sharpe ratio that should make us uncomfortable.
+I do not use the Sharpe ratio. We've already established that measuring returns relative to risk is a great idea. However, I do not like how the Sharpe ratio calculates return and risk. The Sharpe ratio has two problems that should make us uncomfortable.
 
 ## Problem of arithmetic average
 
@@ -100,13 +100,13 @@ $$
 50\\% + - 45\\% = 2 \times x
 $$
 
-But we know returns don't add, they multiply. We instead should use the **geometric average**. The geometric average assumes the returns are multiplied together. It tries to find one number which, when multiplied together 2 times, is the same as the multiple of the two returns. The geometric average tries to find the \\(x\\) in:
+Here's the catch. We know returns don't add, they multiply. We instead should use the **geometric average**. The geometric average assumes the returns are multiplied together. It tries to find one number which, when multiplied together 2 times, is the same as the multiple of the two returns. The geometric average tries to find the \\(x\\) in:
 
 $$(1 + 50\\%) \times (1 - 45\\%) = (1 + x)^2 $$
 
 We have to add the ones because a 50% return on $1,000 doesn't leave us with $500, it leaves us with $1,500. That is \\(\\$1,000 \times (1 + 50\\%) = \\$1,500\\).
 
-So, we should not use the arithmetic average of returns. we should use the geometric average of returns.
+We should not use the arithmetic average of returns because returns multiply, they do not add. Instead, we should use the geometric average of returns.
 
 ## Problem of order of returns
 
@@ -114,7 +114,7 @@ The second problem with the Sharpe ratio is it doesn't take into account the ord
 
 ![Reordering returns changes risk](images/reordered_returns.svg)
 
-Have a close look at the two investments in the chart above. Which one do you prefer? Hopefully, you said you prefer Fountain LLC. That decline in Extreme LLC is about a 7% loss of capital. But there is something surprising here. Both investments have the same return: 10% and both have the same Sharpe ratio 0.13! In fact, Extreme LLC is exactly the same as Fountain LLC, I just reordered the returns! I moved some of the positive returns to the start of the period and some of the negative returns to the end of the period.
+Have a close look at the two investments in the chart above. Which one do you prefer? I hope you said Fountain LLC. That decline in Extreme LLC is about a 7% loss of capital. But there is something surprising here. Both investments have the same return: 10% and both have the same Sharpe ratio 0.13! In fact, Extreme LLC is exactly the same as Fountain LLC, I just reordered the returns! I moved some of the positive returns to the start of the period and some of the negative returns to the end of the period.
 
 Remember, the Sharpe ratio is the average return divided by the standard deviation of returns. Neither of those metrics take into account the order of the returns. Because of this, the Sharpe ratio isn't able to capture the huge risk revealed in Extreme LLC.
 
@@ -122,7 +122,7 @@ We should not use the standard deviation of returns as our measure of risk. Inst
 
 To understand drawdown, let's go back to our example of Investments A & B at the start of this article. Have a closer look at what happened in Investment B in the first half of 2011:
 
-![Drawdown is the differecne from the last highest peak price](images/example_investments_decline.svg)
+![Drawdown is the difference from the last highest peak price](images/example_investments_decline.svg)
 
 There was a huge decline in value. Shortly after the start of 2011, the investment peaked at 18.2% then fell to a return of 10.8%. Let's go back to our example of investing $100. At the peak, that $100 would be worth $118.2 and at the bottom of the decline, it would be worth $110.8. That's a decline in value of 6.3%. We call this drawdown.
 
