@@ -241,15 +241,10 @@ A fantastic feature of Grafana is defining all configuration in code. This inclu
 
 # Accompanying Repository
 
-To see this whole monitoring system in action, clone the repository:
+To see this whole monitoring system in action, clone the repository and spin up the stack:
 
 ```bash
 git clone https://github.com/robolyst/trading-monitoring-demo
-```
-
-and spin up the stack:
-
-```bash
 cd trading-monitoring-demo
 docker-compose up
 ```
