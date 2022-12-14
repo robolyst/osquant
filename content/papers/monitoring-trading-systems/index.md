@@ -27,7 +27,9 @@ When coming across systems spewing out gigabytes of logs, I bank a quick win by 
 Here, we're going to create a trading app demo that logs to JSON, ships these logs into an Elastic Search index and visualises them with Grafana.
 
 You can find all the code here in a Github repository [monitoring-trading-systems](https://github.com/robolyst/trading-monitoring-demo).
+
 # Trading app
+
 For our trading app, we'll use a script that logs a random price:
 
 ```python
@@ -61,6 +63,7 @@ price 101.50747597319688
 price 101.45122289615952
 price 102.82811428242694
 ```
+
 # JSON Logs
 
 The Python package [structlog](https://www.structlog.org/en/stable/) creates structured (and often beautiful) logs for you. The package includes a JSON format out of the box which we're going to use.
@@ -89,6 +92,7 @@ logger.info(f"price {price}") -> json_logger.info(event="price", price=price)
 Each log is an event and has an event name. `structlog` has the required argument `event="NAME"`. Best practice is for each of your logs to have their own event name. That way, you can always pick out the exact logs you want down stream.
 
 Now, the trading app's logs look like:
+
 ```json
 {"event": "startup"}
 {"price": 102.17102615753684, "event": "price"}
@@ -125,14 +129,17 @@ Giving us:
  We're going to use Elastic Search as our time series database and Filebeat as a log shipper. Filebeat will listen to changes to the `trader.logs` file and send new lines to Elastic Search.
 
  This is setup by:
- * Dockerising the trading app with `docker-compose`
- * Adding Elastich Search
- * Adding and configuring Filebeat
+
+* Dockerising the trading app with `docker-compose`
+* Adding Elastich Search
+* Adding and configuring Filebeat
 
 ## Dockerising the app
+
 This is a little boring and is nothing more than setting up a Docker file and running the script. If you're curious, you can checkout the `docker-compose.yaml` file [here](https://github.com/robolyst/trading-monitoring-demo/blob/main/docker-compose.yaml). The trader service is called `trader` and should be the first one in the file.
 
 ## Elastic Search
+
 Add a new service to your `docker-compose.yaml` file:
 
 ```yaml
@@ -176,6 +183,7 @@ setup.template.pattern: "trader-*"
 ```
 
 We then create a shared volume in docker for the logs:
+
 ```yaml
 volumes:
   logdata:
