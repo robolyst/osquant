@@ -4,12 +4,11 @@ summary: "
 By switching your logs from human readable to machine reading, you can create a real time monitoring system for your trading apps.
 "
 
-date: "2022-12-04"
+date: "2022-12-14"
 type: paper
 katex: false
 authors:
     - Adrian Letchford
-draft: true
 tags:
     - engineering
 ---
@@ -18,9 +17,9 @@ If you're using logs to monitor your trading system, then this is the article fo
 
 I've come across trading systems that spew out 10s of gigabytes of logs per day. When something goes wrong, some poor intern has to `grep` through these log files for days figuring out why something broke.
 
-The thing is, logs should not be human readable. When you're working with a trading system, you want to have a real time understanding of what your system is doing. You want an imediate diagnosis if something goes wrong. Ideally, logs should be machine readable and visualisable.
+The thing is, logs should not be human readable. When you're working with a trading system, you want to have a real time understanding of what your system is doing. You want an immediate diagnosis if something goes wrong. Ideally, logs should be machine readable and visualised.
 
-When coming across systems spewing out gigabytes of logs, I bank a quick win by converting these logs into JSON. I can then stream these logs into a time series database and visualse them with my favourite dashboard.
+When coming across systems spewing out gigabytes of logs, I bank a quick win by converting these logs into JSON. I can then stream these logs into a time series database and visualise them with my favourite dashboard.
 
 ![system architecture](images/architecture.png)
 
@@ -68,7 +67,7 @@ price 102.82811428242694
 
 The Python package [structlog](https://www.structlog.org/en/stable/) creates structured (and often beautiful) logs for you. The package includes a JSON format out of the box which we're going to use.
 
-Setting up json logs is as easy as wrapping the default logger from our demo trading app above:
+Setting up JSON logs is as easy as wrapping the default logger from our demo trading app above:
 
 ```python
 import structlog
@@ -124,14 +123,14 @@ Giving us:
 {"price": 98.746303446643, "event": "price", "level": "info", "timestamp": "2022-12-14T06:21:07.380507Z"}
 ```
 
-# Timeseries database
+# Time series database
 
  We're going to use Elastic Search as our time series database and Filebeat as a log shipper. Filebeat will listen to changes to the `trader.logs` file and send new lines to Elastic Search.
 
  This is setup by:
 
 * Dockerising the trading app with `docker-compose`
-* Adding Elastich Search
+* Adding Elastic Search
 * Adding and configuring Filebeat
 
 ## Dockerising the app
@@ -158,7 +157,7 @@ Add a new service to your `docker-compose.yaml` file:
       retries: 50
 ```
 
-Take note of the healthcheck. Elastic Search can take a few moments to start up. We'll want Filebeat to wait before it tries to connect. By adding the healthcheck, Docker will know to wait until Elastic Search is ready.
+Take note of the health check. Elastic Search can take a few moments to start up. We'll want Filebeat to wait before it tries to connect. By adding the health check, Docker will know to wait until Elastic Search is ready.
 
 ## Filebeat
 
@@ -238,7 +237,7 @@ Add this to your `docker-compose` file and navigate to `localhost:3000`:
         condition: service_healthy
 ```
 
-A fantastic feature of Grafana is defining all config in code. This includes the database connection and dashboards. That's all a little involved to walk through here. However, the accompanying Github repository is setup with a Grafana service, configured to talk to the Elastic Search database, and has ready built dashboards included for you to explore.
+A fantastic feature of Grafana is defining all configuration in code. This includes the database connection and dashboards. That's all a little involved to walk through here. However, the accompanying Github repository is setup with a Grafana service, configured to talk to the Elastic Search database, and has ready built dashboards included for you to explore.
 
 # Accompanying Repository
 
