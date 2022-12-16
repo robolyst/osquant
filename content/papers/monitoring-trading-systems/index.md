@@ -88,7 +88,7 @@ logger.info("startup") -> json_logger.info(event="startup")
 logger.info(f"price {price}") -> json_logger.info(event="price", price=price)
 ```
 
-Each log is an event and has an event name. `structlog` has the required argument `event="NAME"`. Best practice is for each of your logs to have their own event name. That way, you can always pick out the exact logs you want down stream.
+A log is a statement that something happened. In other words, an event. `structlog` has the required argument `event="NAME"`. Best practice is for each of your logs to have their own event name. That way, you can always pick out the exact logs you want down stream.
 
 Now, the trading app's logs look like:
 
@@ -125,7 +125,7 @@ Giving us:
 
 # Time series database
 
- We're going to use Elastic Search as our time series database and Filebeat as a log shipper. Filebeat will listen to changes to the `trader.logs` file and send new lines to Elastic Search.
+ We're going to use [Elastic Search](https://www.elastic.co/) as our time series database and [Filebeat](https://www.elastic.co/beats/filebeat) as a log shipper. Filebeat will listen to changes to the `trader.logs` file and send new lines to Elastic Search.
 
  This is setup by:
 
@@ -161,7 +161,7 @@ Take note of the health check. Elastic Search can take a few moments to start up
 
 ## Filebeat
 
-Filebeat uses a `yaml` file for configuration. We want to tell Filebeat where the log file lives, where elastic search lives, and what index to put the logs into. We can do this with:
+Filebeat uses a `filebeat.yaml` file for configuration. We want to tell Filebeat where the log file lives, where elastic search lives, and what index to put the logs into. We can do this with:
 
 ```yaml
 filebeat.inputs:
