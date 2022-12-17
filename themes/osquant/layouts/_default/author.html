@@ -1,0 +1,27 @@
+{{ define "main" }}
+
+    <div id="content">
+
+
+        <div id="page_header">
+            <div class='container'>
+                <div id="author_header">
+                    <div>
+                        <h1 class='title'>{{ .Title | title }}</h1>
+                        {{ .Content }}
+                    </div>
+                    <img src="{{ .Permalink }}/picture.png">
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="container">
+            {{ range .Pages.ByDate.Reverse }}
+                {{- partial "mini.html" . -}}
+            {{ end }}
+        </div>
+    </div>
+
+{{ end }}
