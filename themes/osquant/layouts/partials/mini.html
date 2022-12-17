@@ -11,7 +11,7 @@
         {{ end }}
 
         {{ if and .Params.authors (.GetTerms "categories") }}
-        in
+        <sep>in</sep>
         {{ end }}
 
         {{ with (.GetTerms "categories") }}

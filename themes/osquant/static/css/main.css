@@ -167,9 +167,14 @@ Page mini
 
 .mini .author a {
     color: #212529;
+    font-weight: 600;
 }
 
 .mini .author a:hover {
+    color:#747474;
+}
+
+.mini .author sep {
     color:#747474;
 }
 
