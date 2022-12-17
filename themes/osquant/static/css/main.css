@@ -155,40 +155,40 @@ Splash
 
 
 /* ----------------------------------------------------------------------------
-Section
+Page mini
 ---------------------------------------------------------------------------- */
-#section .mini {
+.mini {
     margin-top: 4rem;
 }
 
-#section .mini .author {
+.mini .author {
     font-size: 0.8rem;
 }
 
-#section .mini .author a {
+.mini .author a {
     color: #212529;
 }
 
-#section .mini .author a:hover {
+.mini .author a:hover {
     color:#747474;
 }
 
-#section .mini .title {
+.mini .title {
     font-size: 1.5rem;
     font-weight: 700;
     color: black;
 }
 
-#section .mini .title:hover {
+.mini .title:hover {
     color:#747474;
     text-decoration:underline;
 }
 
-#section .mini .blurb {
+.mini .blurb {
     color:#747474;
 }
 
-#section .mini .meta {
+.mini .meta {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     font-weight: 400;
@@ -196,12 +196,12 @@ Section
     color:#747474;
 }
 
-#section .mini .meta .space {
+.mini .meta .space {
     padding-left: 4px;
     padding-right: 4px;
 }
 
-#section .mini .tag {
+.mini .tag {
     text-transform: lowercase;
     background-color: #ececec;
     display: inline-block;
@@ -211,11 +211,11 @@ Section
     padding-right: 0.5rem;
 }
 
-#section .mini a.tag {
+.mini a.tag {
     color:#747474;
 }
 
-#section .mini a.tag:hover {
+.mini a.tag:hover {
     color:#ececec;
     background-color: #747474;
 }
