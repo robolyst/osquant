@@ -8,7 +8,7 @@ authors:
     - Adrian Letchford
 type: paper
 katex: true
-tags:
+categories:
     - finance
 ---
 

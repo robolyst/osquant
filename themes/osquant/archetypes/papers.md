@@ -13,7 +13,7 @@ katex: false # Enable mathematics on the page
 authors:
     - Adrian Letchford
 draft: true
-tags:
+categories:
     - mathematics
     - engineering
     - finance

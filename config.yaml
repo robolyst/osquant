@@ -28,6 +28,7 @@ markup:
 taxonomies:
   tag: tags
   author: authors
+  category: categories
 
 menu:
   author_guide:

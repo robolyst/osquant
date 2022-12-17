@@ -9,8 +9,13 @@ type: paper
 katex: false
 authors:
     - Adrian Letchford
-tags:
+categories:
     - engineering
+tags:
+  - Python
+  - Grafana
+  - Elastic Search
+  - Visualisation
 ---
 
 If you're using logs to monitor your trading system, then this is the article for you.

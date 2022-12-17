@@ -9,7 +9,7 @@ type: paper
 katex: true  # Enable mathematics on the page
 authors:
     - Adrian Letchford
-tags:
+categories:
     - finance
 ---
 

@@ -23,10 +23,10 @@
             </div>
         </div>
         <div class="item">
-            <div class="label">Tags</div>
-            {{ range (.GetTerms "tags") }}
+            <div class="label">Category</div>
+            {{ range (.GetTerms "categories") }}
                 <div>
-                    <a href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+                    <a href="{{ .Permalink }}">{{ .LinkTitle | title }}</a>
                 </div>
             {{ end }}
         </div>

@@ -9,7 +9,7 @@ type: paper
 authors:
     - Adrian Letchford
 katex: true
-tags:
+categories:
     - mathematics
 ---
 

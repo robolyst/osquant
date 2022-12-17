@@ -12,7 +12,7 @@ type: paper
 katex: true
 authors:
     - Adrian Letchford
-tags:
+categories:
     - Guide
 draft: true
 ---
