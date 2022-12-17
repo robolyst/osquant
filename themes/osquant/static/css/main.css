@@ -132,11 +132,11 @@ Nav bar
     font-size: 1.2rem;
 }
 
-nav a {
+nav a, .navbar-nav-hidden a {
     color: black;
 }
 
-nav a:hover {
+nav a:hover, .navbar-nav-hidden a:hover {
     color: black;
     text-decoration: underline;
 }
@@ -158,6 +158,19 @@ nav a:hover {
     border: none;
 }
 
+.navbar-nav-hidden {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.navbar-nav-hidden ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-top: 10px;
+}
+
+.navbar-nav-hidden ul li:not(:last-child) {
+    margin-bottom: 5px;
+}
 /* ----------------------------------------------------------------------------
 Page mini
 ---------------------------------------------------------------------------- */
