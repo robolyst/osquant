@@ -1,7 +1,7 @@
 ---
 title: "How to monitor a trading system"
 summary: "
-By switching your logs from human readable to machine readable, you can create a real time monitoring system for your trading apps.
+Switch your logs from human readable to machine readable. Then, you can create a real time monitoring system for your trading apps.
 "
 
 date: "2022-12-14"
