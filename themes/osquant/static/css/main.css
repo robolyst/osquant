@@ -136,11 +136,27 @@ nav a {
     color: black;
 }
 
+nav a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
 .navbar {
     padding: 20px 0px 5px 0px;
     border-bottom: 1px solid rgb(0, 0, 0, 0.5);
 }
 
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: flex-end;
+    column-gap: 20px;
+}
+
+.navbar-toggler {
+    border: none;
+}
 
 /* ----------------------------------------------------------------------------
 Splash

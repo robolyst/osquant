@@ -31,7 +31,18 @@ taxonomies:
   category: categories
 
 menu:
+  main:
+    - identifier: mathematics
+      name: Mathematics
+      url: /categories/mathematics
+    - identifier: engineering
+      name: Engineering
+      url: /categories/engineering
+    - identifier: finance
+      name: Finance
+      url: /categories/finance
+
   author_guide:
-  - identifier: visual
-    name: Visual Style Guide
-    url: /visual-style-guide/
+    - identifier: visual
+      name: Visual Style Guide
+      url: /visual-style-guide/
