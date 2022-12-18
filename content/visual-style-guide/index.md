@@ -112,9 +112,11 @@ If you want to go for that handwritten notebook style, we use [Excalidraw](https
 
 # Interactive Plots
 
-There is a shortcode `csvplotly` for creating Plotly.js plots from CSV files. Wherever possible, use this option for showing data. Plotting data with code as part of your papers means we can keep the style OS Quant consistent and up to date.
+There is a shortcode `plotly` for creating Plotly.js plots from CSV files. Wherever possible, use this option for showing data. Plotting data with code as part of your papers means we can keep the style OS Quant consistent and up to date.
 
-{{<csvplotly id="tesla-stock-plot" data="data/TSLA.csv">}}
+You can chart data from a CSV file:
+
+{{<plotly id="tesla-stock-plot" data="data/TSLA.csv">}}
     var traces = [{
         x: unpack(data, 'Date'),
         close: unpack(data, 'Close'),
@@ -141,7 +143,59 @@ There is a shortcode `csvplotly` for creating Plotly.js plots from CSV files. Wh
             },
         }
     };
-{{</csvplotly>}}
+{{</plotly>}}
+
+Or hard code everything:
+{{<plotly id="hard-code-example">}}
+    var trace1 = {
+        x: [1, 2, 3, 4],
+        y: [10, 15, 13, 17],
+        mode: 'markers',
+        name: 'Name of Trace 1',
+        marker: {
+            color: 'rgb(219, 64, 82)',
+            size: 12
+        }
+    };
+
+    var trace2 = {
+        x: [2, 3, 4, 5],
+        y: [16, 5, 11, 9],
+        mode: 'lines',
+        name: 'Name of Trace 2',
+        line: {
+            color: 'rgb(55, 128, 191)',
+            width: 3
+        }
+    };
+
+    var trace3 = {
+        x: [1, 2, 3, 4],
+        y: [12, 9, 15, 12],
+        mode: 'lines+markers',
+        name: 'Name of Trace 3',
+        marker: {
+            color: 'rgb(128, 0, 128)',
+            size: 8
+        },
+        line: {
+            color: 'rgb(128, 0, 128)',
+            width: 1
+        }
+    };
+
+    var traces = [trace1, trace2, trace3];
+
+    var layout = {
+        margin: {
+            l: 50,
+            r: 0,
+            b: 30,
+            t: 35,
+            pad: 10,
+        },
+    };
+{{</plotly>}}
 
 # Footnotes & references
 
