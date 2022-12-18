@@ -10,7 +10,7 @@
         });
     }
 
-    function plot(id, traces, layout) {
+    function plot(id, traces, layout, config) {
         plotdiv = document.getElementById(id);
 
         layout['plot_bgcolor'] = "transparent";
@@ -25,7 +25,11 @@
             size: 16
         };
 
-        Plotly.newPlot(plotdiv, traces, layout, {displaylogo: false, modeBarButtonsToRemove: ['toImage', 'lasso2d', 'select2d']});
+        config['displaylogo'] = false;
+        config['modeBarButtonsToRemove'] = ['toImage', 'lasso2d', 'select2d'];
+        config['responsive'] = true;
+
+        Plotly.newPlot(plotdiv, traces, layout, config);
     }
 
 </script>

@@ -12,7 +12,11 @@
 
             {{ .Inner | safeJS }}
 
-            plot(id, traces, layout);
+            if (typeof config == "undefined") {
+                var config = {};
+            }
+
+            plot(id, traces, layout, config);
         }
 
         load_and_plot();
