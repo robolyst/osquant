@@ -7,7 +7,7 @@ summary: "
     pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
 "
 
-date: {{ .Date }}
+date: "{{ now.Format "2006-01-02" }}"
 type: paper
 katex: false # Enable mathematics on the page
 plotly: false  # Enable plotly on the page
