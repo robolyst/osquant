@@ -79,7 +79,6 @@ callout {
     border-top: 2px solid black;
     border-bottom: 2px solid black;
     width: 50%;
-    padding: 0.5rem;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     font-size: 1.25rem;
@@ -315,6 +314,10 @@ Page (Single)
 #page_content a:hover {
     background-color: #fff9e3;
     border-bottom: 2px solid #ffedae;
+}
+
+#page_content .js-plotly-plot a.modebar-btn {
+    border: 0px solid transparent;
 }
 
 @media (max-width:450px) {

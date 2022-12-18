@@ -10,6 +10,7 @@ summary: "
 date: "1900-01-01"
 type: paper
 katex: true
+plotly: true
 authors:
     - Adrian Letchford
 categories:
@@ -82,10 +83,10 @@ for i in range(10):
 # Images
 
 You can create an image with standard mardown:
-![Example image](example_investments.svg)
+![Example image](images/example_investments.svg)
 
 You can use a Hugo shortcode to create a figure with a caption:
-{{<figure src="example_investments.svg" title="Example figure." >}}
+{{<figure src="images/example_investments.svg" title="Example figure." >}}
 Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
 {{</figure>}}
 
@@ -96,6 +97,39 @@ When creating charts use SVGs. These will render as crisp as possible on all dev
 In python you can use [matplotlib](https://matplotlib.org/) to create charts. If you want to enhance them after you've generated the SVGs, [Figma](https://www.figma.com/) is a great and free tool.
 
 If you want to go for that handwritten notebook style, we use [Excalidraw](https://excalidraw.com/) to create these with a consistent style.
+
+# Interactive Plots
+
+There is a shortcode `csvplotly` for creating Plotly.js plots from CSV files. Wherever possible, use this option for showing data. Plotting data with code as part of your papers means we can keep the style OS Quant consistent and up to date.
+
+{{<csvplotly id="tesla-stock-plot" data="data/TSLA.csv">}}
+    var traces = [{
+        x: unpack(data, 'Date'),
+        close: unpack(data, 'Close'),
+        high: unpack(data, 'High'),
+        low: unpack(data, 'Low'),
+        open: unpack(data, 'Open'),
+        increasing: {line: {color: 'green'}, fillcolor:'green'},
+        decreasing: {line: {color: 'red'}, fillcolor:'red'},
+        type: 'candlestick',
+    }];
+    var layout = {
+        margin: {
+            l: 50,
+            r: 0,
+            b: 30,
+            t: 35,
+            pad: 10,
+        },
+        dragmode: 'zoom',
+        showlegend: false,
+        xaxis: {
+            rangeslider: {
+                visible: false
+            },
+        }
+    };
+{{</csvplotly>}}
 
 # Footnotes & references
 
