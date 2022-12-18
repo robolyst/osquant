@@ -1,0 +1,31 @@
+<script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/7.7.0/d3.min.js'></script>
+
+
+<script>
+
+    function unpack(data, key) {
+        return data.map(function(row) {
+            return row[key];
+        });
+    }
+
+    function plot(id, traces, layout) {
+        plotdiv = document.getElementById(id);
+
+        layout['plot_bgcolor'] = "transparent";
+        layout['paper_bgcolor'] = "transparent";
+        layout['modebar'] = {
+            bgcolor: "transparent",
+            color: "black",
+            activecolor: "#747474",
+        };
+        layout['font'] =  {
+            family: 'Source Sans Pro',
+            size: 16
+        };
+
+        Plotly.newPlot(plotdiv, traces, layout, {displaylogo: false, modeBarButtonsToRemove: ['toImage', 'lasso2d', 'select2d']});
+    }
+
+</script>
