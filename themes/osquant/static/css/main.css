@@ -296,6 +296,16 @@ Page (Single)
     font-size: 0.8rem;
 }
 
+#page_header .paper-meta .social {
+    display: inline;
+    width: 25px;
+    margin-left: 10px;
+}
+
+#page_header .paper-meta a:hover .social {
+    opacity: 0.3;
+}
+
 #page_content {
     margin-bottom: 5rem;
     line-height: 1.5em;

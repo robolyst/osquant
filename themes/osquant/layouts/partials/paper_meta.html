@@ -14,18 +14,15 @@
         </div>
         <div class="item">
             <div class="label">Published</div>
-            <div>{{ .Date.Format "2 January 2006" }}</div>
+            <div>
+                {{ .Date.Format "2 January 2006" }}
+                <a href="{{.Site.Params.github_content}}{{ .File.Dir }}"><img class="social" src="{{ .Site.BaseURL }}/img/social-1_logo-github.svg" /></a>
+            </div>
         </div>
         <div class="item">
             <div class="label">Length</div>
             <div>
                 {{ $minutes }} {{ cond (eq $minutes 1) "minute" "minutes" }}
-            </div>
-        </div>
-        <div class="item">
-            <div class="label">Paper Source</div>
-            <div>
-                <a class="tag" href="{{.Site.Params.github_content}}{{ .File.Dir }}">Github</a>
             </div>
         </div>
 
