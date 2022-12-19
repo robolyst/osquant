@@ -14,11 +14,7 @@
         <sep>in</sep>
         {{ end }}
 
-        {{ with (.GetTerms "categories") }}
-            {{ $links := apply . "partial" "category-link.html" "." }}
-            {{ $clean := apply $links "chomp" "." }}
-            {{ delimit $clean ", " " <sep>and</sep> " }}
-        {{ end }}
+        {{ partial "category-links.html" . }}
     </div>
     <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
     <div class="blurb">{{ .Summary }}</div>

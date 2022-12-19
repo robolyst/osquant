@@ -252,6 +252,14 @@ Page (Single)
     margin-bottom: 5rem;
 }
 
+#page_header .category, #page_header .category a {
+    font-weight: 600;
+    color: black;
+}
+
+#page_header .category a:hover {
+    text-decoration: underline;
+}
 
 #page_header .title {
     font-size: 2.75em;

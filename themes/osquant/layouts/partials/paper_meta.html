@@ -23,14 +23,6 @@
             </div>
         </div>
         <div class="item">
-            <div class="label">Category</div>
-            {{ range (.GetTerms "categories") }}
-                <div>
-                    <a href="{{ .Permalink }}">{{ .LinkTitle | title }}</a>
-                </div>
-            {{ end }}
-        </div>
-        <div class="item">
             <div class="label">Paper Source</div>
             <div>
                 <a class="tag" href="{{.Site.Params.github_content}}{{ .File.Dir }}">Github</a>

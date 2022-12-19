@@ -5,7 +5,8 @@
 
             <div id="page_header">
                 <div class='container'>
-                    <span class='title'>{{ .Title }}</span>
+                    <span class="category">{{ partial "category-links.html" . }}</span>
+                    <h1 class='title'>{{ .Title }}</h1>
                     <p class="blurb">{{ .Summary }}</p>
                     {{ partial "paper_meta.html" . }}
                 </div>
