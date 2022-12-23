@@ -35,12 +35,15 @@ menu:
     - identifier: mathematics
       name: Mathematics
       url: /categories/mathematics
+      weight: 1
     - identifier: engineering
       name: Engineering
       url: /categories/engineering
+      weight: 2
     - identifier: finance
       name: Finance
       url: /categories/finance
+      weight: 3
 
   author_guide:
     - identifier: visual
