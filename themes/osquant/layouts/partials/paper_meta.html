@@ -15,8 +15,7 @@
         <div class="item">
             <div class="label">Published</div>
             <div>
-                {{ .Date.Format "2 January 2006" }}
-                <a href="{{.Site.Params.github_content}}{{ .File.Dir }}"><img class="social" src="{{ .Site.BaseURL }}/img/social-1_logo-github.svg" /></a>
+                <a href="{{.Site.Params.github_content}}{{ .File.Dir }}">{{ .Date.Format "2 January 2006" }}</a>
             </div>
         </div>
         <div class="item">
