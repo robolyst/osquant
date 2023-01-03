@@ -2,34 +2,30 @@
 
     {{- partial "nav.html" . -}}
 
-    <div id="content">
 
-
-        <div id="page_header">
-            <div class='container'>
-                <div id="author_header">
-                    <div>
-                        <h1 class='title'>{{ .Title | title }}</h1>
-                        {{ .Content }}
-                        <div class="social-links">
-                            {{ with .Params.twitter }}<a href="https://twitter.com/{{ . }}"><img src="/img/twitter.svg" /></a>{{ end }}
-                            {{ with .Params.github }}<a href="https://github.com/{{ . }}"><img src="/img/github.svg" /></a>{{ end }}
-                            {{ with .Params.linkedin }}<a href="https://www.linkedin.com/in/{{ . }}"><img src="/img/linkedin.svg" /></a>{{ end }}
-                            {{ with .Params.instagram }}<a href="https://instagram.com/{{ . }}"><img src="/img/instagram.svg" /></a>{{ end }}
-                        </div>
+    <div id="page_header">
+        <div class='container'>
+            <div id="author_header">
+                <div>
+                    <h1 class='title'>{{ .Title | title }}</h1>
+                    {{ .Content }}
+                    <div class="social-links">
+                        {{ with .Params.twitter }}<a href="https://twitter.com/{{ . }}"><img src="/img/twitter.svg" /></a>{{ end }}
+                        {{ with .Params.github }}<a href="https://github.com/{{ . }}"><img src="/img/github.svg" /></a>{{ end }}
+                        {{ with .Params.linkedin }}<a href="https://www.linkedin.com/in/{{ . }}"><img src="/img/linkedin.svg" /></a>{{ end }}
+                        {{ with .Params.instagram }}<a href="https://instagram.com/{{ . }}"><img src="/img/instagram.svg" /></a>{{ end }}
                     </div>
-                    <img class="profile" src="{{ .Permalink }}/picture.png">
                 </div>
+                <img class="profile" src="{{ .Permalink }}/picture.png">
             </div>
         </div>
+    </div>
 
 
-
-        <div class="container">
-            {{ range .Pages.ByDate.Reverse }}
-                {{- partial "mini.html" . -}}
-            {{ end }}
-        </div>
+    <div class="container">
+        {{ range .Pages.ByDate.Reverse }}
+            {{- partial "mini.html" . -}}
+        {{ end }}
     </div>
 
 {{ end }}
