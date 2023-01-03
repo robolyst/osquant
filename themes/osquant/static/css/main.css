@@ -150,7 +150,7 @@ nav a:hover, .navbar-nav-hidden a:hover {
 
 .navbar {
     padding: 15px 0px 15px 0px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .navbar-nav {
