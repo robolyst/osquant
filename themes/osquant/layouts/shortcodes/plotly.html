@@ -1,4 +1,4 @@
-<div class="plot">
+<div class="plot" style='{{ with .Get "width" }} max-width: {{ . }}px; {{ end }}'>
     <div id='{{ .Get "id" }}'></div>
     <script>
 
@@ -11,6 +11,10 @@
             }
 
             {{ .Inner | safeJS }}
+
+            {{ with .Get "height" }}
+                layout['height'] = {{ . }};
+            {{ end }}
 
             if (typeof config == "undefined") {
                 var config = {};
