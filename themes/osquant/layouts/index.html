@@ -2,7 +2,7 @@
 
     {{- partial "nav.html" . -}}
 
-    <div id="section" class="container">
+    <div class="container">
         {{ .Content }}
 
         {{ range (sort (where .Site.RegularPages "Section" "papers")) }}

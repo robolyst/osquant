@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div id="section" class="container">
+    <div class="container">
         {{ range .Pages.ByDate.Reverse }}
             {{- partial "mini.html" . -}}
         {{ end }}
