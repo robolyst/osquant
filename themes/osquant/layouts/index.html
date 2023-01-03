@@ -2,14 +2,12 @@
 
     {{- partial "nav.html" . -}}
 
-    <div id="content">
-        <div id="section" class="container">
-            {{ .Content }}
+    <div id="section" class="container">
+        {{ .Content }}
 
-            {{ range (sort (where .Site.RegularPages "Section" "papers")) }}
-                {{- partial "mini.html" . -}}
-            {{ end }}
-        </div>
+        {{ range (sort (where .Site.RegularPages "Section" "papers")) }}
+            {{- partial "mini.html" . -}}
+        {{ end }}
     </div>
 
 {{ end }}
