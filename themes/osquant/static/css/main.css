@@ -502,7 +502,8 @@ Other
 }
 
 #author_header img {
-    border-radius: 30%;
+    background-color: #f5f5f5;
+    border-radius: 10%;
     max-width: 200px;
     max-height: 200px;
 }
