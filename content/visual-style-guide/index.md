@@ -52,6 +52,11 @@ Quisque mi justo, euismod ac leo nec, elementum eleifend purus.
 
 Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
 
+# Todo
+
+You can add todo notes to your drafts using the `todo` tag.
+
+<todo>Add chart showing a sine wave.</todo>
 # Maths
 
 ## Inline maths

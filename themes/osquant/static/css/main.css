@@ -87,6 +87,14 @@ callout {
     text-align: center;
 }
 
+todo {
+    display: block;
+    background-color: rgb(255, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: 5px;
+
+}
+
 blockquote {
     border-left: 3px solid #D2D2D2;
     padding-left: 1.5rem;
