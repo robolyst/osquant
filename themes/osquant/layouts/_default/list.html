@@ -2,27 +2,17 @@
 
     {{- partial "nav.html" . -}}
 
-    <div id="content">
-        <div id="single">
-
-            <div id="page_header">
-                <div class='container'>
-                    <h1 class='title'>{{ .Title | title }}</h1>
-                    <p class="blurb">{{ .Summary }}</p>
-                </div>
-            </div>
-
-            <div id="page_content">
-                {{ .Content }}
-            </div>
-
+    <div id="page_header">
+        <div class='container'>
+            <h1 class='title'>{{ .Title | title }}</h1>
+            <p class="blurb">{{ .Summary }}</p>
         </div>
+    </div>
 
-        <div id="section" class="container">
-            {{ range .Pages.ByDate.Reverse }}
-                {{- partial "mini.html" . -}}
-            {{ end }}
-        </div>
+    <div id="section" class="container">
+        {{ range .Pages.ByDate.Reverse }}
+            {{- partial "mini.html" . -}}
+        {{ end }}
     </div>
 
 {{ end }}
