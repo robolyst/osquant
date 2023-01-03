@@ -34,12 +34,12 @@ a:hover {
     text-decoration: none;
 }
 
-#content img {
+#page_content img {
     width: 100%;
     display: block;
 }
 
-#content {
+#page_content {
     min-height: 100%;
     /* padding-bottom: 8rem; */
 }
@@ -412,7 +412,7 @@ Other
     font-size: 0.8em;
 }
 
-#content table {
+#page_content table {
     margin-left: auto; 
     margin-right: auto;
     margin-top: 4rem;
@@ -421,31 +421,31 @@ Other
     text-align: center;
 }
 
-#content table th {
+#page_content table th {
     background-color: #f3f3f3;
     padding: 4pt 20pt;
 }
 
-#content table td {
+#page_content table td {
     padding: 4pt 20pt;
 }
 
-#content figure {
+#page_content figure {
     display: block;
     margin-bottom: 2rem;
 }
 
-#content figure img.medium {
+#page_content figure img.medium {
     width: 75%;
     margin: 0 auto;
 }
 
-#content figure img.small {
+#page_content figure img.small {
     width: 50%;
     margin: 0 auto;
 }
 
-#content figure figcaption {
+#page_content figure figcaption {
     padding-top: 10px;
     font-size: 0.85rem;
     line-height: 1.25rem;
@@ -454,27 +454,27 @@ Other
 }
 
 
-#content .katex { /* Inline math */
+#page_content .katex { /* Inline math */
     font-size: 1.2em;
 }
 
-#content .katex-display, #content mjx-container[jax="CHTML"][display="true"] { /* Block math */
+#page_content .katex-display, #page_content mjx-container[jax="CHTML"][display="true"] { /* Block math */
     margin-top: 20pt;
     margin-bottom: 20pt;
     margin: 3rem 0;
     display: block;
 }
 
-#content .katex-display .katex { /* Block math */
+#page_content .katex-display .katex { /* Block math */
     font-size: 1.1em;
 }
 
 @media (max-width:450px) {
-    #content table th {
+    #page_content table th {
         padding: 4pt 4pt;
     }
     
-    #content table td {
+    #page_content table td {
         padding: 4pt 4pt;
     }
 }
