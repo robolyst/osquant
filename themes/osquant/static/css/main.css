@@ -460,7 +460,7 @@ Other
     font-size: 1.2em;
 }
 
-#content .katex-display { /* Block math */
+#content .katex-display, #content mjx-container[jax="CHTML"][display="true"] { /* Block math */
     margin-top: 20pt;
     margin-bottom: 20pt;
     margin: 3rem 0;
