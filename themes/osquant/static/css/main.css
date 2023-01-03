@@ -517,3 +517,10 @@ Author profile
 #author_header .social-links a:hover img {
     opacity: 0.3;
 }
+
+
+#splash {
+    background-color: #f5f5f5;
+    padding: 0.01vh;
+    margin-bottom: 5rem;
+}
