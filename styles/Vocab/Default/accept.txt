@@ -19,6 +19,7 @@ structlog
 Filebeat
 Grafana
 [dD]ockerising
+[lL]eptokurtic
 
 Vapnik
 Jaakkola

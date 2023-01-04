@@ -57,6 +57,7 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
 You can add todo notes to your drafts using the `todo` tag.
 
 <todo>Add chart showing a sine wave.</todo>
+
 # Maths
 
 ## Inline maths
@@ -162,7 +163,6 @@ Or hard code everything:
             size: 12
         }
     };
-
     var trace2 = {
         x: [2, 3, 4, 5],
         y: [16, 5, 11, 9],
@@ -173,7 +173,6 @@ Or hard code everything:
             width: 3
         }
     };
-
     var trace3 = {
         x: [1, 2, 3, 4],
         y: [12, 9, 15, 12],
@@ -188,9 +187,7 @@ Or hard code everything:
             width: 1
         }
     };
-
     var traces = [trace1, trace2, trace3];
-
     var layout = {
         margin: {
             l: 50,
