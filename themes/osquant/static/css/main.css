@@ -455,9 +455,7 @@ Other
 }
 
 #page_content .katex-display, #page_content mjx-container[jax="CHTML"][display="true"] { /* Block math */
-    margin-top: 20pt;
-    margin-bottom: 20pt;
-    margin: 3rem 0;
+    margin: 2rem 0;
     display: block;
 }
 
