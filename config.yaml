@@ -20,7 +20,9 @@ sitemap:
 
 markup:
   highlight:
-    style: "monokailight" # dracula
+    # Code syntax highlighting. Examples of each style can be found
+    # here https://xyproto.github.io/splash/docs/
+    style: "github"
   goldmark:
     renderer:
       unsafe: true
