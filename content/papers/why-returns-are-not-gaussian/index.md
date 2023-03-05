@@ -150,10 +150,12 @@ Distributions: uniform, beta with high tails, exponential and show for n = 1, 10
 More precisely, returns do not meet the assumptions of a Gaussian distribution.
 
 For this discussion, we are going to think in terms of logged prices. That is, when I say "return" I mean change in logged price:
+
 $$
 \text{return at time } t = \frac{p_t - p_{t-1}}{p_{t-1}} \approx \log(p_t) - \log(p_{t-1})
 $$
-This means we can think of returns as summing together rater than multiplying together.
+
+This means we can think of returns as summing together rather than multiplying together.
 
 Think about what a daily return is. You could say that a daily return is the sum of 8 hourly returns. Since we know that a sum of \\(n = 8\\) values (8 trading hours in a day) is approximately Guassian, it makes sense that the daily returns ought to be Guassian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
 
@@ -170,6 +172,51 @@ Now to make our first assumption: Tick changes are Gaussian.
 - Assume that ticks are Gaussian and the number of ticks are Poisson
 - Calculate the kurtosis
 - The kurtosis is greater than 3. This means the distribution has fatter tails than a Gaussian distribution. We say the distribution is leptokurtic.
+
+
+$$
+\begin{aligned}
+\text{ticks} &\sim \mathcal{N}(\mu, \sigma^2) \\\
+N &\sim \text{Poisson}(\lambda) \\\
+\text{returns} &\sim \mathcal{N}(N\mu, N\sigma^2) \\\
+\end{aligned}
+$$
+
+## Moments
+
+|   | Raw Moments  | Central Moments             | Standard Moments                    |
+|---|--------------|-----------------------------|-------------------------------------|
+| 1 | $E[X] = \mu$ | 0                           | 0                                   |
+| 2 | $E[X^2]$     | $E[(X - \mu)^2] = \sigma^2$ | $E[(\frac{X - \mu}{\sigma})^2] = 1$ |
+| 3 | $E[X^3]$     | $E[(X - \mu)^3]$            | $E[(\frac{X - \mu}{\sigma})^3] = s$ |
+| 4 | $E[X^4]$     | $E[(X - \mu)^4]$            | $E[(\frac{X - \mu}{\sigma})^4] = k$ |
+
+Gaussian
+
+|   | Raw Moments                         | Central Moments | Standard Moments |
+|---|-------------------------------------|-----------------|------------------|
+| 1 | $\mu$                               | $0$             | $0$              |
+| 2 | $\mu + \sigma^2$                    | $\sigma^2$      | $1$              |
+| 3 | $\mu^3 + 3\mu\sigma^2$              | $0$             | $0 = s$          |
+| 4 | $\mu^4 +6\mu^2\sigma^2 + 3\sigma^4$ | $3\sigma^4$     | $3 = k$          |
+
+
+Poisson
+
+|   | Raw Moments                                     | Central Moments        | Standard Moments             |
+|---|-------------------------------------------------|------------------------|------------------------------|
+| 1 | $\lambda = \mu$                                 | $0$                    | $0$                          |
+| 2 | $\lambda^2 + \lambda$                           | $\lambda = \sigma^2$   | $1$                          |
+| 3 | $\lambda^3 + 3\lambda^2 + \lambda$              | $\lambda$              | $\lambda^{\frac{1}{2}} = s$  |
+| 4 | $\lambda^4 + 6\lambda^3 + 7\lambda^2 + \lambda$ | $3\lambda^2 + \lambda$ | $\lambda^{-1} + 3 = k$       |
+
+
+
+$$
+E[r|N] = E[N]\mu = \lambda\mu
+$$
+
+
 
 # More Gaussian at higher time frames
 

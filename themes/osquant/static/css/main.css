@@ -458,7 +458,7 @@ Other
     font-size: 1.2em;
 }
 
-#page_content .katex-display, #page_content mjx-container[jax="CHTML"][display="true"] { /* Block math */
+#page_content .katex-display, #page_content mjx-container[display="true"] { /* Block math */
     margin: 2rem 0;
     display: block;
 }
