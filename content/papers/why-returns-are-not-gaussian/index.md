@@ -176,12 +176,20 @@ R &\sim \mathcal{N}(N\mu, N\sigma^2) \\\
 \end{aligned}
 $$
 
-This is called a compound Poisson distribution[^4].
+This is a type of [compound Poisson distribution](https://en.wikipedia.org/wiki/Compound_Poisson_distribution).
 
 By making ticks Guassian, we guarantee that their sum is also Gaussian. Which means that any deviation from a Gaussian distribution will have to come from summing together $N \sim \text{Poisson}$ values.
 
-A distribution's tails are measured with the 4th standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
+A distribution's tails are measured with the 4th standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. If a distribution has a kurtosis larger than 3, then it has fatter tails than a Gaussian distribution. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
 
+Using the [method of moments](https://en.wikipedia.org/wiki/Method_of_moments_(statistics)) in [the appendix](#appendix-deriving-kurtosis) we show that:
+$$
+\text{kurtosis}(R) = 3 + \frac{E[T^4]}{\lambda E[T^2]^2}
+$$
+
+Both $E[T^4]$ and $E[T^2]$ are positive values. Therefore, $\text{kurtosis}(R) > 3$ which means that a Poisson sum of ticks is not Gaussian and has fatter tails.
+
+<todo>Show example sample distribution with $\mu = 0$, $\sigma = 1$ and give $\lambda$ some suitable value. Plot a matching Gaussian density over the top.</todo>
 
 # More Gaussian at higher time frames
 
@@ -192,6 +200,10 @@ A distribution's tails are measured with the 4th standard [moment](https://en.wi
 
 
 # Appendix: Deriving kurtosis
+
+<todo>Make this a collapsing Appendix</todo>
+
+There's a paper which shows the statistics of a compound Poisson distribution[^4]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poission sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
 
 The kurtosis of $R$ is:
 
