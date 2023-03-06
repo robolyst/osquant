@@ -182,7 +182,16 @@ By making ticks Guassian, we guarantee that their sum is also Gaussian. Which me
 
 A distribution's tails are measured with the 4th standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
 
-## Deriving kurtosis
+
+# More Gaussian at higher time frames
+
+- Higher time frames are sums of more ticks.
+- Under the Gaussian-Poisson model, this means n increases
+- As n increases, kurtosis gets closer to 3.
+- 3 is the same as a Gaussian
+
+
+# Appendix: Deriving kurtosis
 
 The kurtosis of $R$ is:
 
@@ -307,73 +316,6 @@ $$
                            &= 3 + \frac{3}{\lambda} \\\
 \end{aligned}
 $$
-
-# More Gaussian at higher time frames
-
-- Higher time frames are sums of more ticks.
-- Under the Gaussian-Poisson model, this means n increases
-- As n increases, kurtosis gets closer to 3.
-- 3 is the same as a Gaussian
-
-
-# Appendix: Deriving moments
-
-|   | Raw Moments                                                       | Central Moments                                  | Standard Moments             |
-|---|-------------------------------------------------------------------|--------------------------------------------------|------------------------------|
-| 1 | $E[R] = \lambda\mu = \mu_R$                                       | $0$                                              | $0$                          |
-| 2 | $E[R^2] = \lambda^2\mu^2 + \lambda E[T^2]$                        | $E[(R - \mu_R)^2] =\lambda E[T^2] = \sigma^2_R$  | $1$                          |
-| 3 | $E[R^3] = \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3]$ | $E[(R - \mu_R)^3] = \lambda E[T^3]$              | $\lambda^{\frac{1}{2}} = s$  |
-| 4 | $E[R^4] = E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4$   | $3\lambda^2 + \lambda$ | $\lambda^{-1} + 3 = k$       |
-
-## Raw moments
-
-$$
-\begin{aligned}
-E[R] &= E[E[R|N]] = E[N]\mu = \lambda\mu \\\
-\ \\\
-E[R^2] &= E[E[R^2|N]] = E[N^2]\mu^2 + E[N]\sigma^2 \\\
-       &= (\lambda^2 + \lambda)\mu^2 + \lambda\sigma^2 \\\
-       &= \lambda^2\mu^2 + \lambda(\mu^2 + \sigma^2) \\\
-       &= \lambda^2\mu^2 + \lambda E[T^2] \\\
-\ \\\
-E[R^3] &= E[E[R^3|N]] = E[N^3]\mu^3 + 3 E[N^2]\mu\sigma^2  \\\
-       &= (\lambda^3 + 3\lambda^2 + \lambda)\mu^3 + 3 (\lambda^2 + \lambda)\mu\sigma^2 \\\
-       &= \lambda^3\mu^3 + 3\lambda^2\mu^3 + \lambda\mu^3 + 3\lambda^2\mu\sigma^2 + 3\lambda\mu\sigma^2 \\\
-       &= \lambda^3\mu^3 + 3\lambda^2\mu^3 + 3\lambda^2\mu\sigma^2 + \lambda E[T^3] \\\
-       &= \lambda^3\mu^3 + 3\lambda^2\mu(\mu^2 + \sigma^2) + \lambda E[T^3] \\\
-       &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] \\\
-\ \\\
-E[R^4] &= E[E[R^4|N]] \\\
-       &= E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4 \\\
-\end{aligned}
-$$
-
-## Central moments
-
-$$
-\begin{aligned}
-E[(R - \mu_R)^2] &= E[R^2] - E[R]^2 \\\
-                 &= \lambda^2\mu^2 + \lambda E[T^2] - \lambda^2\mu^2 \\\
-                 &= \lambda E[T^2] \\\
-\ \\\
-E[(R - \mu_R)^3] &= E[R^3] - 3 E[R^2]E[R] + 2E[R]^3 \\\
-                 &= E[R^3] - 3 E[R^2]E[R] + 2\lambda^3\mu^3 \\\
-                 &= E[R^3] - 3 E[R^2]\lambda\mu + 2\lambda^3\mu^3 \\\
-                 &= E[R^3] - 3 (\lambda^2\mu^2 + \lambda E[T^2])\lambda\mu + 2\lambda^3\mu^3 \\\
-                 &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 (\lambda^2\mu^2 + \lambda E[T^2])\lambda\mu + 2\lambda^3\mu^3 \\\
-                 &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 (\lambda^3\mu^3 + \lambda^2\mu E[T^2]) + 2\lambda^3\mu^3 \\\
-                 &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 \lambda^3\mu^3 - 3 \lambda^2\mu E[T^2] + 2\lambda^3\mu^3 \\\
-                 &= 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 \lambda^2\mu E[T^2] \\\
-                 &= \lambda E[T^3] \\\
-\ \\\
-E[(R - \mu_R)^4] &= E[R^4] - 4 E[R]E[R^3] + 6 E[R]^2E[R^2] - 3E[R]^4 \\\
-                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2\mu^2 E[R^2] - 3\lambda^4\mu^4 \\\
-                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2\mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
-                 &= E[R^4] - 4 \lambda\mu (\lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] ) + 6 \lambda^2\mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
-                 &= E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4 - 4 \lambda\mu (\lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] ) + 6 \lambda^2\mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
-\end{aligned}
-$$
-
 
 {{% citation
     id="Cont2001"
