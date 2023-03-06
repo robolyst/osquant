@@ -145,7 +145,7 @@ What we will do is visualise a simulation of this for a couple of different dist
 Distributions: uniform, beta with high tails, exponential and show for n = 1, 10, 100, 1000
 </todo>
 
-# Returns are not Gaussian
+# Returns don't meet assumptions
 
 More precisely, returns do not meet the assumptions of a Gaussian distribution.
 
@@ -167,18 +167,82 @@ Each day's return is a sum of tick returns. The key thing to note is that each d
 
 # Returns have fat tails
 
-Now to make our first assumption: Tick changes are Gaussian.
+ We need to make two assumptions to show that fat tails make sense. First that ticks, $T$, are drawn from a Gaussian distribution. Second that returns, $R$, are a sum of $N$ ticks where $N$ is drawn from a Poisson distribution. This is written as:
+$$
+\begin{aligned}
+T &\sim \mathcal{N}(\mu, \sigma^2) \\\
+N &\sim \text{Poisson}(\lambda) \\\
+R &\sim \mathcal{N}(N\mu, N\sigma^2) \\\
+\end{aligned}
+$$
 
-- Assume that ticks are Gaussian and the number of ticks are Poisson
-- Calculate the kurtosis
-- The kurtosis is greater than 3. This means the distribution has fatter tails than a Gaussian distribution. We say the distribution is leptokurtic.
+By making ticks Guassian, we guarantee that their sum is also Gaussian. Which means that any deviation from a Gaussian distribution will have to come from summing together $N \sim \text{Poisson}$ values.
 
+A distribution's tails are measured with the 4th standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
+
+## Deriving kurtosis
+
+The kurtosis of $R$ is:
+
+$$
+\text{kurtosis}(R) = E\left[\left(\frac{R - \mu_R}{\sigma}\right)^4\right] 
+=  \frac{E[(R - \mu_R)^4]}{E[(R - \mu_R)^2]^2}
+$$
+
+The value $E[(R - \mu_R)^4]$ is known as the 4th central moment and $E[(R - \mu_R)^2]$ is the second central moment or [*variance*](https://en.wikipedia.org/wiki/Variance). Both of these can be expanded into raw moments:
 
 $$
 \begin{aligned}
-\text{ticks} &\sim \mathcal{N}(\mu, \sigma^2) \\\
-N &\sim \text{Poisson}(\lambda) \\\
-\text{returns} &\sim \mathcal{N}(N\mu, N\sigma^2) \\\
+E[(R - \mu_R)^2] &= E[R^2] - E[R]^2 \\\
+E[(R - \mu_R)^4] &= E[R^4] - 4 E[R]E[R^3] + 6 E[R]^2E[R^2] - 3E[R]^4 \\\
+\end{aligned}
+$$
+
+Each of the raw moments of $R$ can be written as functions of the raw moments of $T$ and $N$. To do this, we need a table of the raw moments of a Gaussian distribution ($T$) and a Poisson distribution ($N$)[^3][^2]:
+
+|   | Gaussian raw moments                         | Poisson raw moments                                      |
+|---|:---------------------------------------------|:---------------------------------------------------------|
+| 1 | $E[T] = \mu$                                 | $E[N] = \lambda$                                         |
+| 2 | $E[T^2] = \mu + \sigma^2$                    | $E[N^2] = \lambda^2 + \lambda$                           |
+| 3 | $E[T^3] = \mu^3 + 3\mu\sigma^2$              | $E[N^3] = \lambda^3 + 3\lambda^2 + \lambda$              |
+| 4 | $E[T^4] = \mu^4 +6\mu^2\sigma^2 + 3\sigma^4$ | $E[N^4] = \lambda^4 + 6\lambda^3 + 7\lambda^2 + \lambda$ |
+
+We note that $E[R^n]$ can be expanded with[^1]:
+$$
+E[R^n] = E[E[R^n|N]]
+$$
+Where $E[R^n|N]$ is a raw moment of a Gaussian distribution. Expanding the first raw moment we get:
+$$
+E[R] = E[E[R|N]] = E[N]\mu = \lambda\mu
+$$
+The second raw moment:
+$$
+\begin{aligned}
+E[R^2] &= E[E[R^2|N]] \\\
+       &= E[N^2]\mu^2 + E[N]\sigma^2 \\\
+       &= (\lambda^2 + \lambda)\mu^2 + \lambda\sigma^2 \\\
+       &= \lambda^2\mu^2 + \lambda(\mu^2 + \sigma^2) \\\
+       &= \lambda^2\mu^2 + \lambda E[T^2] \\\
+\end{aligned}
+$$
+The third raw moment:
+$$
+\begin{aligned}
+E[R^3] &= E[E[R^3|N]] \\\
+       &= E[N^3]\mu^3 + 3 E[N^2]\mu\sigma^2  \\\
+       &= (\lambda^3 + 3\lambda^2 + \lambda)\mu^3 + 3 (\lambda^2 + \lambda)\mu\sigma^2 \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu^3 + \lambda\mu^3 + 3\lambda^2\mu\sigma^2 + 3\lambda\mu\sigma^2 \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu^3 + 3\lambda^2\mu\sigma^2 + \lambda E[T^3] \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu(\mu^2 + \sigma^2) + \lambda E[T^3] \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] \\\
+\end{aligned}
+$$
+
+The fourth raw moment:
+$$
+\begin{aligned}
+E[R^4] &= E[E[R^4|N]] \\\
+       &= E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4 \\\
 \end{aligned}
 $$
 
@@ -186,10 +250,20 @@ $$
 
 |   | Raw Moments  | Central Moments             | Standard Moments                    |
 |---|--------------|-----------------------------|-------------------------------------|
-| 1 | $E[X] = \mu$ | 0                           | 0                                   |
-| 2 | $E[X^2]$     | $E[(X - \mu)^2] = \sigma^2$ | $E[(\frac{X - \mu}{\sigma})^2] = 1$ |
+| 1 | $E[X] = \mu$ | 0                           | $0$                                 |
+| 2 | $E[X^2]$     | $E[(X - \mu)^2] = \sigma^2$ | $1$                                 |
 | 3 | $E[X^3]$     | $E[(X - \mu)^3]$            | $E[(\frac{X - \mu}{\sigma})^3] = s$ |
 | 4 | $E[X^4]$     | $E[(X - \mu)^4]$            | $E[(\frac{X - \mu}{\sigma})^4] = k$ |
+
+The central moments can be expanded into functions of the raw moments:
+$$
+\begin{aligned}
+E[(X - \mu)^2] &= E[X^2] - E[X]^2 \\\
+E[(X - \mu)^3] &= E[X^3] - 3 E[X^2]E[X] + 2E[X]^3 \\\
+E[(X - \mu)^4] &= E[X^4] - 4 E[X]E[X^3] + 6 E[X]^2E[X^2] - 3E[X]^4 \\\
+\end{aligned}
+$$
+
 
 Gaussian
 
@@ -203,17 +277,24 @@ Gaussian
 
 Poisson
 
-|   | Raw Moments                                     | Central Moments        | Standard Moments             |
-|---|-------------------------------------------------|------------------------|------------------------------|
-| 1 | $\lambda = \mu$                                 | $0$                    | $0$                          |
-| 2 | $\lambda^2 + \lambda$                           | $\lambda = \sigma^2$   | $1$                          |
-| 3 | $\lambda^3 + 3\lambda^2 + \lambda$              | $\lambda$              | $\lambda^{\frac{1}{2}} = s$  |
-| 4 | $\lambda^4 + 6\lambda^3 + 7\lambda^2 + \lambda$ | $3\lambda^2 + \lambda$ | $\lambda^{-1} + 3 = k$       |
+|   | Raw Moments                                              | Central Moments        | Standard Moments             |
+|---|----------------------------------------------------------|------------------------|------------------------------|
+| 1 | $E[N] = \lambda = \text{mean}$                           | $0$                    | $0$                          |
+| 2 | $E[N^2] = \lambda^2 + \lambda$                           | $\lambda = \text{variance}$   | $1$                          |
+| 3 | $E[N^3] = \lambda^3 + 3\lambda^2 + \lambda$[^2]          | $\lambda$              | $\lambda^{\frac{1}{2}} = \text{skewness}$  |
+| 4 | $E[N^4] = \lambda^4 + 6\lambda^3 + 7\lambda^2 + \lambda$ | $3\lambda^2 + \lambda$ | $\lambda^{-1} + 3 = \text{kurtosis}$       |
 
-
+We can find each of the moments of our combined distribution by using the idea that[^1]:
 
 $$
-E[r|N] = E[N]\mu = \lambda\mu
+E[r] = E[E[r|N]]
+$$
+
+Where the inner expected value ($E[r|N]$) is the expected value of a Guassian random variable.
+
+The first raw moment is then:
+$$
+E[r] = E[E[r|N]] = E[N]\mu = \lambda\mu
 $$
 
 
@@ -225,6 +306,66 @@ $$
 - As n increases, kurtosis gets closer to 3.
 - 3 is the same as a Gaussian
 
+
+# Appendix: Deriving moments
+
+|   | Raw Moments                                                       | Central Moments                                  | Standard Moments             |
+|---|-------------------------------------------------------------------|--------------------------------------------------|------------------------------|
+| 1 | $E[R] = \lambda\mu = \mu_R$                                       | $0$                                              | $0$                          |
+| 2 | $E[R^2] = \lambda^2\mu^2 + \lambda E[T^2]$                        | $E[(R - \mu_R)^2] =\lambda E[T^2] = \sigma^2_R$  | $1$                          |
+| 3 | $E[R^3] = \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3]$ | $E[(R - \mu_R)^3] = \lambda E[T^3]$              | $\lambda^{\frac{1}{2}} = s$  |
+| 4 | $E[R^4] = E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4$   | $3\lambda^2 + \lambda$ | $\lambda^{-1} + 3 = k$       |
+
+## Raw moments
+
+$$
+\begin{aligned}
+E[R] &= E[E[R|N]] = E[N]\mu = \lambda\mu \\\
+\ \\\
+E[R^2] &= E[E[R^2|N]] = E[N^2]\mu^2 + E[N]\sigma^2 \\\
+       &= (\lambda^2 + \lambda)\mu^2 + \lambda\sigma^2 \\\
+       &= \lambda^2\mu^2 + \lambda(\mu^2 + \sigma^2) \\\
+       &= \lambda^2\mu^2 + \lambda E[T^2] \\\
+\ \\\
+E[R^3] &= E[E[R^3|N]] = E[N^3]\mu^3 + 3 E[N^2]\mu\sigma^2  \\\
+       &= (\lambda^3 + 3\lambda^2 + \lambda)\mu^3 + 3 (\lambda^2 + \lambda)\mu\sigma^2 \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu^3 + \lambda\mu^3 + 3\lambda^2\mu\sigma^2 + 3\lambda\mu\sigma^2 \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu^3 + 3\lambda^2\mu\sigma^2 + \lambda E[T^3] \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu(\mu^2 + \sigma^2) + \lambda E[T^3] \\\
+       &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] \\\
+\ \\\
+E[R^4] &= E[E[R^4|N]] \\\
+       &= E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4 \\\
+\end{aligned}
+$$
+
+## Central moments
+
+$$
+\begin{aligned}
+E[(R - \mu_R)^2] &= E[R^2] - E[R]^2 \\\
+                 &= \lambda^2\mu^2 + \lambda E[T^2] - \lambda^2\mu^2 \\\
+                 &= \lambda E[T^2] \\\
+\ \\\
+E[(R - \mu_R)^3] &= E[R^3] - 3 E[R^2]E[R] + 2E[R]^3 \\\
+                 &= E[R^3] - 3 E[R^2]E[R] + 2\lambda^3\mu^3 \\\
+                 &= E[R^3] - 3 E[R^2]\lambda\mu + 2\lambda^3\mu^3 \\\
+                 &= E[R^3] - 3 (\lambda^2\mu^2 + \lambda E[T^2])\lambda\mu + 2\lambda^3\mu^3 \\\
+                 &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 (\lambda^2\mu^2 + \lambda E[T^2])\lambda\mu + 2\lambda^3\mu^3 \\\
+                 &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 (\lambda^3\mu^3 + \lambda^2\mu E[T^2]) + 2\lambda^3\mu^3 \\\
+                 &= \lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 \lambda^3\mu^3 - 3 \lambda^2\mu E[T^2] + 2\lambda^3\mu^3 \\\
+                 &= 3\lambda^2\mu E[T^2] + \lambda E[T^3] - 3 \lambda^2\mu E[T^2] \\\
+                 &= \lambda E[T^3] \\\
+\ \\\
+E[(R - \mu_R)^4] &= E[R^4] - 4 E[R]E[R^3] + 6 E[R]^2E[R^2] - 3E[R]^4 \\\
+                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2\mu^2 E[R^2] - 3\lambda^4\mu^4 \\\
+                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2\mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
+                 &= E[R^4] - 4 \lambda\mu (\lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] ) + 6 \lambda^2\mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
+                 &= E[N^4]\mu^4 +6E[N^3]\mu^2\sigma^2 + 3 E[N^2]\sigma^4 - 4 \lambda\mu (\lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3] ) + 6 \lambda^2\mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
+\end{aligned}
+$$
+
+
 {{% citation
     id="Cont2001"
     author="Rama Cont"
@@ -235,3 +376,9 @@ $$
     volume="1"
     link="http://rama.cont.perso.math.cnrs.fr/pdf/empirical.pdf"
 %}}
+
+[^1]: [First and second raw moments of Poisson sum of random variables](https://math.stackexchange.com/a/1646479). Answer on Stack Exchange.
+
+[^2]: [Derivation of the third moment of Poisson distribution using Stein-Chen identity](https://math.stackexchange.com/questions/1075558/derivation-of-the-third-moment-of-poisson-distribution-using-stein-chen-identity). Question on Stack Exchange.
+
+[^3]: [Poisson Distribution](https://mathworld.wolfram.com/PoissonDistribution.html) by Wolfram Alpha.
