@@ -145,9 +145,9 @@ What we will do is visualise a simulation of this for a couple of different dist
 Distributions: uniform, beta with high tails, exponential and show for n = 1, 10, 100, 1000
 </todo>
 
-# Returns don't meet assumptions
+# Returns are not Gaussian
 
-More precisely, returns do not meet the assumptions of a Gaussian distribution.
+This is the first stylized fact and easy to check, returns are not Gaussian. It turns out, returns do not meet the assumptions of a Gaussian distribution.
 
 For this discussion, we are going to think in terms of logged prices. That is, when I say "return" I mean change in logged price:
 
@@ -193,10 +193,21 @@ Both $E[T^4]$ and $E[T^2]$ are positive values. Therefore, $\text{kurtosis}(R) >
 
 # More Gaussian at higher time frames
 
-- Higher time frames are sums of more ticks.
-- Under the Gaussian-Poisson model, this means n increases
-- As n increases, kurtosis gets closer to 3.
-- 3 is the same as a Gaussian
+The last stylised fact I want to touch on is the observation that returns become more Gaussian on higher timeframes. That is, weekly returns look more Gaussian than hourly returns.
+
+Higher timeframes mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. So, higher timeframes is equivalent to larger values for $\lambda$.
+
+As $\lambda$ gets bigger and bigger, $\text{kurtosis}(R)$ asymptotes towards 3:
+$$ 
+\lim_{\lambda \to \infty} \text{kurtosis}(R) = \lim_{\lambda \to \infty} \left[ 3 + \frac{E[T^4]}{\lambda E[T^2]^2} \right]= 3
+$$
+
+A kurtosis of $3$ is the same as a Gaussian distribution. This means, under the compound Poisson model, as the expected number of ticks increases returns become more Gaussian.
+
+# Conclusions
+
+Three common stylised facts about returns do intuitively make sense. 
+
 
 
 # Appendix: Deriving kurtosis
