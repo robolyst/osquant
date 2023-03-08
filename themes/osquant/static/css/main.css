@@ -95,9 +95,13 @@ blockquote {
 }
 
 div.highlight pre {
-    border-bottom: 2px solid #f0f0f0;
-    border-top: 2px solid #f0f0f0;
-    padding: 0.75rem;
+    border: 1px solid #ebebeb;
+    border-left: 3px solid #ebebeb;
+    border-radius: 5px;
+    padding-left: 1.0rem;
+    padding-right: 1.0rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
     background-color: rgba(0, 0, 0, 0.01) !important;
 }
 
