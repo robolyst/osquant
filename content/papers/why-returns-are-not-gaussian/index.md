@@ -23,7 +23,7 @@ The common stylised facts we are interested in here are [^Cont2001]:
 1. Returns have fat tails.
 1. Returns become more Gaussian on higher time frames and less Gaussian on lower time frame.
 
-I want to show you why these three properties actually make sense, even if we cannot prove that they are true. I’ll explain the first property based on the definition of a Gaussian distribution. The second and third can be proven if some intuitive assumptions are made.
+I want to show you why these three properties actually make sense, even if we cannot prove that they are true. I’ll explain the first property based on the definition of a Gaussian distribution. The second and third can be shown if some intuitive assumptions are made.
 
 I’ll start by breaking down the Gaussian distribution.
 
@@ -121,7 +121,7 @@ $$
     };
 {{</plotly>}}
 
-The Gaussian distribution pops up everywhere, and with good reason. It describes the average of \\(n\\) independently and identically distributed random samples from any distribution as \\(n\\) tends to infinity:
+The Gaussian distribution turns up everywhere, and with good reason. It describes the average of \\(n\\) independently and identically distributed random samples from any distribution as \\(n\\) tends to infinity:
 
 $$
 \frac{X_1 + \dots + X_n}{n} \sim \mathcal{N}(\mu, \sigma^2)
@@ -232,7 +232,7 @@ E[(R - \mu_R)^4] &= E[R^4] - 4 E[R]E[R^3] + 6 E[R]^2E[R^2] - 3E[R]^4 \\\
 \end{aligned}
 $$
 
-Each of the raw moments of $R$ can be written as functions of the raw moments of $T$ and $N$. To do this, we need a table of the raw moments of a Gaussian distribution ($T$)[&5] and a Poisson distribution ($N$)[^3][^2]:
+Each of the raw moments of $R$ can be written as functions of the raw moments of $T$ and $N$. To do this, we need a table of the raw moments of a Gaussian distribution ($T$)[^5] and a Poisson distribution ($N$)[^3][^2]:
 
 |   | Gaussian raw moments                         | Poisson raw moments                                      |
 |---|:---------------------------------------------|:---------------------------------------------------------|
