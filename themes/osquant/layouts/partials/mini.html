@@ -7,9 +7,7 @@
 <div class="mini {{ if .Params.feature }}feature{{ end }}">
     <div>
         {{ if .Params.feature }}
-            {{ with $featured }}
-                <a href="{{ .Permalink }}"><img src="{{ $featured.Permalink }}" /></a>
-            {{ end }}
+            <a href="{{ .Permalink }}">{{ with $featured }}<img src="{{ $featured.Permalink }}" />{{ end }}</a>
         {{ end }}
     </div>
     <div class="author">
