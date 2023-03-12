@@ -4,7 +4,7 @@ summary: "
 I want to share with you my intuition as to why asset returns are not Gaussian. This will not be a proof, but rather some points discussing why this phenomenon makes sense.
 "
 
-date: "2023-03-11"
+date: "2023-03-12"
 type: paper
 mathjax: true # Enable mathematics on the page
 plotly: true  # Enable plotly on the page
