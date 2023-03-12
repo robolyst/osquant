@@ -523,6 +523,31 @@ Author profile
     opacity: 0.3;
 }
 
+/* ----------------------------------------------------------------------------
+Appendix
+---------------------------------------------------------------------------- */
+
+details summary > * {
+    display: inline-block;
+}
+
+details>summary {
+    list-style: none;
+}
+
+summary::-webkit-details-marker {
+    display: none
+}
+
+summary::after {
+    content: '⭢';
+    font-size: 1.25em;
+    padding-left: 10px;
+}
+details[open] summary:after {
+    content: "⭣";
+}
+
 
 #splash {
     background-color: rgba(245, 245, 245, 0.5);
