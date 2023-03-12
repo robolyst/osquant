@@ -249,6 +249,17 @@ Page mini
     background-color: #747474;
 }
 
+.mini.feature {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 1em;
+}
+
+.mini img {
+    width: 100%;
+    margin-bottom: 1em;
+}
 
 
 /* ----------------------------------------------------------------------------

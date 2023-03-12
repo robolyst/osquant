@@ -1,8 +1,17 @@
 {{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
 {{ $minutes := math.Round (div $readTime 60) }}
 
+{{ $images := $.Resources.ByType "image" }}
+{{ $featured := $images.GetMatch "*feature*" }}
 
-<div class="mini">
+<div class="mini {{ if .Params.feature }}feature{{ end }}">
+    <div>
+        {{ if .Params.feature }}
+            {{ with $featured }}
+                <a href="{{ .Permalink }}"><img src="{{ $featured.Permalink }}" /></a>
+            {{ end }}
+        {{ end }}
+    </div>
     <div class="author">
         {{ with (.GetTerms "authors") }}
             {{ $links := apply . "partial" "author-link.html" "." }}
