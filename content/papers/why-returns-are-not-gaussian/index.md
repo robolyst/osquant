@@ -192,7 +192,7 @@ The last stylised fact I want to touch on is the observation that returns become
 Higher time frames mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. So, higher time frames is equivalent to larger values for $\lambda$.
 
 As $\lambda$ gets bigger and bigger, $\text{kurtosis}(R)$ asymptotes towards 3:
-$$ 
+$$
 \lim_{\lambda \to \infty} \text{kurtosis}(R) = \lim_{\lambda \to \infty} \left[ 3 + \frac{E[T^4]}{\lambda E[T^2]^2} \right]= 3
 $$
 
@@ -201,6 +201,7 @@ A kurtosis of $3$ is the same as a Gaussian distribution. This means, under the 
 # Conclusions
 
 Three of the common stylsed facts about returns appear to make sense:
+
 1. **Returns are not Gaussian** makes sense because a Guassian distrubtion models the sum of \\(n\\) things but returns are the sum of varying amounts of ticks.
 2. **Returns have fat tails** makes sense because we get fat tails when each sample is the sum of a different number of things.
 3. **More Guassian at higher time frames** makes sense because when each sample is the sum of a different number of things, kurtosis asymptotes to 3 as the number of things increases to infinity. A Guassian distribution has a kurtosis of 3.
@@ -209,12 +210,12 @@ These are not the only explainations for returns not being Guassian. For example
 
 # Appendix: Deriving kurtosis
 
-There's a paper which shows the statistics of a compound Poisson distribution[^4]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poission sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
+There's a paper which shows the statistics of a compound Poisson distribution[^Bening2022]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poission sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
 
 The kurtosis of $R$ is:
 
 $$
-\text{kurtosis}(R) = E\left[\left(\frac{R - \mu_R}{\sigma}\right)^4\right] 
+\text{kurtosis}(R) = E\left[\left(\frac{R - \mu_R}{\sigma}\right)^4\right]
 =  \frac{E[(R - \mu_R)^4]}{E[(R - \mu_R)^2]^2}
 $$
 
@@ -363,13 +364,22 @@ $$
     link="http://rama.cont.perso.math.cnrs.fr/pdf/empirical.pdf"
 %}}
 
+{{% citation
+    id="Bening2022"
+    author="Vladimir Bening, Victor Korolev"
+    title="Comparing Compound Poisson Distributions by Deficiency: Continuous-Time Case"
+    publication="Mathematics"
+    year="2022"
+    pages="223-236"
+    volume="10"
+    number="24"
+    link="https://www.mdpi.com/2227-7390/10/24/4712"
+%}}
+
 [^1]: [First and second raw moments of Poisson sum of random variables](https://math.stackexchange.com/a/1646479). Answer on Stack Exchange.
 
 [^2]: [Derivation of the third moment of Poisson distribution using Stein-Chen identity](https://math.stackexchange.com/questions/1075558/derivation-of-the-third-moment-of-poisson-distribution-using-stein-chen-identity). Question on Stack Exchange.
 
 [^3]: [Poisson Distribution](https://mathworld.wolfram.com/PoissonDistribution.html) by Wolfram Alpha.
-
-[^4]: https://www.mdpi.com/2227-7390/10/24/4712
-
 
 [^5]: [Raw Gaussian moments](https://math.stackexchange.com/a/4030443). Answer on Stack Exchange.
