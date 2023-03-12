@@ -229,12 +229,19 @@ $$
 
 Each of the raw moments of $R$ can be written as functions of the raw moments of $T$ and $N$. To do this, we need a table of the raw moments of a Gaussian distribution ($T$)[^5] and a Poisson distribution ($N$) [^3] [^2]:
 
-|   | Gaussian raw moments                         | Poisson raw moments                                      |
-|---|:---------------------------------------------|:---------------------------------------------------------|
-| 1 | $E[T] = \mu$                                 | $E[N] = \lambda$                                         |
-| 2 | $E[T^2] = \mu^2 + \sigma^2$                    | $E[N^2] = \lambda^2 + \lambda$                           |
-| 3 | $E[T^3] = \mu^3 + 3\mu\sigma^2$              | $E[N^3] = \lambda^3 + 3\lambda^2 + \lambda$              |
-| 4 | $E[T^4] = \mu^4 +6\mu^2\sigma^2 + 3\sigma^4$ | $E[N^4] = \lambda^4 + 6\lambda^3 + 7\lambda^2 + \lambda$ |
+|   | Gaussian raw moments                         |
+|---|:---------------------------------------------|
+| 1 | $E[T] = \mu$                                 |
+| 2 | $E[T^2] = \mu^2 + \sigma^2$                  |
+| 3 | $E[T^3] = \mu^3 + 3\mu\sigma^2$              |
+| 4 | $E[T^4] = \mu^4 +6\mu^2\sigma^2 + 3\sigma^4$ |
+
+|   | Poisson raw moments                                      |
+|---|:---------------------------------------------------------|
+| 1 | $E[N] = \lambda$                                         |
+| 2 | $E[N^2] = \lambda^2 + \lambda$                           |
+| 3 | $E[N^3] = \lambda^3 + 3\lambda^2 + \lambda$              |
+| 4 | $E[N^4] = \lambda^4 + 6\lambda^3 + 7\lambda^2 + \lambda$ |
 
 We note that $E[R^n]$ can be expanded with[^1]:
 $$
