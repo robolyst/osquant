@@ -378,6 +378,7 @@ a[href^="#fn:"]:after{ content: ']' }
 ol {
     padding-inline-start: 20px; /* needed for footnotes */
     list-style: outside decimal;
+    padding-left: 0px;
 }
 
 ol li {
