@@ -1,0 +1,8 @@
+<meta name=”twitter:card” content="summary" /> 
+<meta name=”twitter:site” content="{{.Site.Params.site_twitter_handler}}" /> 
+
+{{ range .Params.authors }}
+    {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+        <meta name=”twitter:creator content="@{{ .Params.twitter }}" /> 
+    {{ end }}
+{{ end }}
