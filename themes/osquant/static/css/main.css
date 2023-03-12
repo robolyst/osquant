@@ -377,7 +377,13 @@ a[href^="#fn:"]:after{ content: ']' }
 
 ol {
     padding-inline-start: 20px; /* needed for footnotes */
-    list-style: inside decimal;
+    list-style: outside decimal;
+}
+
+ol li {
+    margin-left: 17px;
+    padding-left: 3px;
+    margin-bottom: 3px;
 }
 
 ul {
@@ -417,7 +423,7 @@ Other
     margin-right: auto;
     margin-top: 4rem;
     margin-bottom: 4rem;
-    font-size: 0.8em;
+    font-size: 1em;
     text-align: center;
 }
 
@@ -432,6 +438,7 @@ Other
 
 #page_content figure {
     display: block;
+    margin-top: 2rem;
     margin-bottom: 2rem;
 }
 

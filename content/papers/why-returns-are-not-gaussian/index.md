@@ -1,10 +1,10 @@
 ---
 title: "Why Returns Are Not Gaussian"
 summary: "
-I want to share with you my intuition as to why asset returns are not Gaussian. This will not be a proof, but rather a reasonable explanation for this phenomenon.
+I want to share with you my intuition as to why asset returns are not Gaussian. This will not be a proof, but rather some points discussing why this phenomenon makes sense.
 "
 
-date: "2023-01-08"
+date: "2023-03-11"
 type: paper
 mathjax: true # Enable mathematics on the page
 plotly: true  # Enable plotly on the page
@@ -20,8 +20,8 @@ For decades, researchers have noted properties of returns that are consistent ac
 The common stylised facts we are interested in here are [^Cont2001]:
 
 1. Returns are not Gaussian.
-1. Returns have fat tails.
-1. Returns become more Gaussian on higher time frames and less Gaussian on lower time frame.
+2. Returns have fat tails.
+3. Returns become more Gaussian on higher time frames and less Gaussian on lower time frames.
 
 I want to show you why these three properties actually make sense, even if we cannot prove that they are true. I’ll explain the first property based on the definition of a Gaussian distribution. The second and third can be shown if some intuitive assumptions are made.
 
@@ -127,27 +127,27 @@ $$
 \frac{X_1 + \dots + X_n}{n} \sim \mathcal{N}(\mu, \sigma^2)
 $$
 
-We know this is true from the [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem). I’m not going to write out the proof here, you can read about the central limit theorem and proofs on [Wikipedia](https://en.wikipedia.org/wiki/Central_limit_theorem).
+We know this is true from the [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem).
 
 We can actually make the Gaussian distribution a bit more general. A Gaussian variable multiplied by some constant is still Gaussian. This means we can multiply an average value by the number of samples to turn it into a sum:
 
 $$
 \begin{aligned}
-X_1 + \dots + X_n &\sim n\mathcal{N}(\mu, \sigma^2) = \mathcal{N}(n\mu, n^2\sigma^2)
+X_1 + \dots + X_n &\sim n\mathcal{N}(\mu, \sigma^2) = \mathcal{N}(n\mu, n\sigma^2)
 \end{aligned}
 $$
 
 A Gaussian distribution models the sum of \\(n\\) independently and identically distributed random values as \\(n\\) tends to infinity.
 
-What we will do is visualise a simulation of this for a couple of different distributions:
+We can see this in action by taking \\(n\\) samples from a uniform distribution, summing, and plotting the distribution of those sums:
 
-<todo>
-Distributions: uniform, beta with high tails, exponential and show for n = 1, 10, 100, 1000
-</todo>
+{{<figure src="images/gaussian_sample_sizes.svg" title="Different sample sizes for a Gaussian distribution." >}}
+The distribtion of the sum of \\(n\\) samples from a uniform distribution. The red line is the best fit Guassian distribution. As \\(n\\) increases, the distribution becomes more Gaussian.
+{{</figure>}}
 
 # Returns are not Gaussian
 
-This is the first stylized fact and easy to check, returns are not Gaussian. It turns out, returns do not meet the assumptions of a Gaussian distribution.
+This is the first stylized fact is that returns are not Gaussian. It turns out, returns do not meet the assumptions of a Gaussian distribution.
 
 For this discussion, we are going to think in terms of logged prices. That is, when I say "return" I mean change in logged price:
 
@@ -157,11 +157,7 @@ $$
 
 This means we can think of returns as summing together rather than multiplying together.
 
-Think about what a daily return is. You could say that a daily return is the sum of 8 hourly returns. Since we know that a sum of \\(n = 8\\) values (8 trading hours in a day) is approximately Guassian, it makes sense that the daily returns ought to be Guassian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
-
-<todo>
-Graphic illustrating this breakdown
-</todo>
+A daily return is the sum of 8 hourly returns (8 trading hours in a day). Since we know that a sum of \\(n = 8\\) values is approximately Guassian, it makes sense that the daily returns ought to be Guassian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
 
 Each day's return is a sum of tick returns. The key thing to note is that each day has a different number of ticks. Bringing this back to the Gaussian distribution, each day is the sum of a different number of ticks. The \\(n\\) is different on each day. The Gaussian distribution assumes that \\(n\\) is the same for each sample. Therefore, returns on any time scale do not meet the assumptions of a Gaussian distribution.
 
@@ -189,13 +185,11 @@ $$
 
 Both $E[T^4]$ and $E[T^2]$ are positive values. Therefore, $\text{kurtosis}(R) > 3$ which means that a Poisson sum of ticks is not Gaussian and has fatter tails.
 
-<todo>Show example sample distribution with $\mu = 0$, $\sigma = 1$ and give $\lambda$ some suitable value. Plot a matching Gaussian density over the top.</todo>
-
 # More Gaussian at higher time frames
 
-The last stylised fact I want to touch on is the observation that returns become more Gaussian on higher timeframes. That is, weekly returns look more Gaussian than hourly returns.
+The last stylised fact I want to touch on is the observation that returns become more Gaussian on higher time frames. That is, weekly returns look more Gaussian than hourly returns.
 
-Higher timeframes mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. So, higher timeframes is equivalent to larger values for $\lambda$.
+Higher time frames mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. So, higher time frames is equivalent to larger values for $\lambda$.
 
 As $\lambda$ gets bigger and bigger, $\text{kurtosis}(R)$ asymptotes towards 3:
 $$ 
@@ -206,13 +200,14 @@ A kurtosis of $3$ is the same as a Gaussian distribution. This means, under the 
 
 # Conclusions
 
-Three common stylised facts about returns do intuitively make sense. 
+Three of the common stylsed facts about returns appear to make sense:
+1. **Returns are not Gaussian** makes sense because a Guassian distrubtion models the sum of \\(n\\) things but returns are the sum of varying amounts of ticks.
+2. **Returns have fat tails** makes sense because we get fat tails when each sample is the sum of a different number of things.
+3. **More Guassian at higher time frames** makes sense because when each sample is the sum of a different number of things, kurtosis asymptotes to 3 as the number of things increases to infinity. A Guassian distribution has a kurtosis of 3.
 
-
+These are not the only explainations for returns not being Guassian. For example, overnight shocks can cause the opening price to be wildly different from the previous day's close. The model in this paper does not include such shocks.
 
 # Appendix: Deriving kurtosis
-
-<todo>Make this a collapsing Appendix</todo>
 
 There's a paper which shows the statistics of a compound Poisson distribution[^4]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poission sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
 
@@ -300,24 +295,41 @@ $$
 \begin{aligned}
 E[(R - \mu_R)^4] &= E[R^4] - 4 E[R]E[R^3] + 6 E[R]^2E[R^2] - 3E[R]^4 \\\
                  &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2 \mu^2 E[R^2] - 3\lambda^4\mu^4 \\\
-                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2 \mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
-                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 (\lambda^4\mu^4 + \lambda^3 \mu^2 E[T^2]) - 3\lambda^4\mu^4 \\\
-                 &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] - 3\lambda^4\mu^4 \\\
-                 &= E[R^4] - 4 \lambda\mu E[R^3] + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
-                 &= E[R^4] - 4 \lambda\mu (\lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3]) + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
-                 &= E[R^4] - 4 (\lambda^4\mu^4 + 3\lambda^3\mu^2 E[T^2] + \lambda^2\mu E[T^3]) + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
-                 &= E[R^4] - 4 \lambda^4\mu^4 - 12\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3] + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
-                 &= E[R^4] - \lambda^4\mu^4 - 12\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3] + 6\lambda^3 \mu^2 E[T^2] \\\
-                 &= E[R^4] - \lambda^4\mu^4 - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
-                 &= E[R^4] - \lambda^4\mu^4 - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
-                 &= \lambda^4\mu^4 + 7\lambda^2\mu^4 + 6\lambda^3\mu^2 E[T^2] + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - \lambda^4\mu^4 - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
-                 &=  7\lambda^2\mu^4 + 6\lambda^3\mu^2 E[T^2] + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
-                 &=  7\lambda^2\mu^4 + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu E[T^3]  \\\
-                 &=  7\lambda^2\mu^4 + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu (\mu^3 + 3\mu\sigma^2)  \\\
-                 &=  7\lambda^2\mu^4 + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu^4 - 12\lambda^2\mu^2\sigma^2  \\\
-                 &=  7\lambda^2\mu^4 + 6\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu^4  \\\
-                 &=  3\lambda^2\mu^4 + 6\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4]  \\\
-                 &=  3\lambda^2 E[T^2]^2 + \lambda E[T^4]  \\\
+\end{aligned}
+$$
+Expanding out \\(E[R^2]\\):
+$$
+\begin{aligned}
+    &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^2 \mu^2 (\lambda^2\mu^2 + \lambda E[T^2]) - 3\lambda^4\mu^4 \\\
+    &= E[R^4] - 4 \lambda\mu E[R^3] + 6 (\lambda^4\mu^4 + \lambda^3 \mu^2 E[T^2]) - 3\lambda^4\mu^4 \\\
+    &= E[R^4] - 4 \lambda\mu E[R^3] + 6 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] - 3\lambda^4\mu^4 \\\
+    &= E[R^4] - 4 \lambda\mu E[R^3] + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
+\end{aligned}
+$$
+Expanding out \\(E[R^3]\\):
+$$
+\begin{aligned}
+    &= E[R^4] - 4 \lambda\mu (\lambda^3\mu^3 + 3\lambda^2\mu E[T^2] + \lambda E[T^3]) + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
+    &= E[R^4] - 4 (\lambda^4\mu^4 + 3\lambda^3\mu^2 E[T^2] + \lambda^2\mu E[T^3]) + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
+    &= E[R^4] - 4 \lambda^4\mu^4 - 12\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3] + 3 \lambda^4\mu^4 + 6\lambda^3 \mu^2 E[T^2] \\\
+    &= E[R^4] - \lambda^4\mu^4 - 12\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3] + 6\lambda^3 \mu^2 E[T^2] \\\
+    &= E[R^4] - \lambda^4\mu^4 - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
+    &= E[R^4] - \lambda^4\mu^4 - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
+\end{aligned}
+$$
+Expanding out \\(E[R^4]\\):
+$$
+\begin{aligned}
+                    &= \lambda^4\mu^4 + 7\lambda^2\mu^4 + 6\lambda^3\mu^2 E[T^2] + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] \\\
+                    & \quad - \lambda^4\mu^4 - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
+                    &=  7\lambda^2\mu^4 + 6\lambda^3\mu^2 E[T^2] + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] \\\
+                    & \quad - 6\lambda^3\mu^2 E[T^2] - 4\lambda^2\mu E[T^3]  \\\
+                    &=  7\lambda^2\mu^4 + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu E[T^3]  \\\
+                    &=  7\lambda^2\mu^4 + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu (\mu^3 + 3\mu\sigma^2)  \\\
+                    &=  7\lambda^2\mu^4 + 18\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu^4 - 12\lambda^2\mu^2\sigma^2  \\\
+                    &=  7\lambda^2\mu^4 + 6\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4] - 4\lambda^2\mu^4  \\\
+                    &=  3\lambda^2\mu^4 + 6\lambda^2\mu^2\sigma^2  + 3 \lambda^2\sigma^4 + \lambda E[T^4]  \\\
+E[(R - \mu_R)^4]    &=  3\lambda^2 E[T^2]^2 + \lambda E[T^4]  \\\
 \end{aligned}
 $$
 
