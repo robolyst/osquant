@@ -1,6 +1,4 @@
-{{ $title :=  ( .Get "title" | printf "Appendix: %s" ) }}
-
 <details>
-    <summary><h1 id='{{ anchorize ( $title ) }}'>{{ $title }}</h1></summary>
+    <summary><h2 id='{{ anchorize ( .Get "title" ) }}'>{{ .Get "title" }}</h2></summary>
     {{ .Inner }}
 </details>

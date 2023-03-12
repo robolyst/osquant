@@ -557,6 +557,8 @@ summary::after {
     content: '⭢';
     font-size: 1.25em;
     padding-left: 10px;
+    position: relative;
+    top: 2px;
 }
 details[open] summary:after {
     content: "⭣";

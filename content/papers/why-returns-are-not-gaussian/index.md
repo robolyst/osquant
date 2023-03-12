@@ -206,6 +206,8 @@ Three of the common stylized facts about returns appear to make sense:
 
 These are not the only explanations for returns not being Gaussian. For example, overnight shocks can cause the opening price to be wildly different from the previous day's close. The model in this paper does not include such shocks.
 
+# Appendix
+
 {{% appendix title="Deriving kurtosis" %}}
 
 There's a paper which shows the statistics of a compound Poisson distribution[^Bening2022]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poisson sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
