@@ -20,6 +20,7 @@ Filebeat
 Grafana
 [dD]ockerising
 [lL]eptokurtic
+Gaussians
 
 Vapnik
 Jaakkola

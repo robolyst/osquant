@@ -142,7 +142,7 @@ A Gaussian distribution models the sum of \\(n\\) independently and identically 
 We can see this in action by taking \\(n\\) samples from a uniform distribution, summing, and plotting the distribution of those sums:
 
 {{<figure src="images/gaussian_sample_sizes.svg" title="Different sample sizes for a Gaussian distribution." >}}
-The distribtion of the sum of \\(n\\) samples from a uniform distribution. The red line is the best fit Guassian distribution. As \\(n\\) increases, the distribution becomes more Gaussian.
+The distribtion of the sum of \\(n\\) samples from a uniform distribution. The red line is the best fit Gaussian distribution. As \\(n\\) increases, the distribution becomes more Gaussian.
 {{</figure>}}
 
 # Returns are not Gaussian
@@ -157,7 +157,7 @@ $$
 
 This means we can think of returns as summing together rather than multiplying together.
 
-A daily return is the sum of 8 hourly returns (8 trading hours in a day). Since we know that a sum of \\(n = 8\\) values is approximately Guassian, it makes sense that the daily returns ought to be Guassian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
+A daily return is the sum of 8 hourly returns (8 trading hours in a day). Since we know that a sum of \\(n = 8\\) values is approximately Gaussian, it makes sense that the daily returns ought to be Gaussian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
 
 Each day's return is a sum of tick returns. The key thing to note is that each day has a different number of ticks. Bringing this back to the Gaussian distribution, each day is the sum of a different number of ticks. The \\(n\\) is different on each day. The Gaussian distribution assumes that \\(n\\) is the same for each sample. Therefore, returns on any time scale do not meet the assumptions of a Gaussian distribution.
 
@@ -174,9 +174,9 @@ $$
 
 This is a type of [compound Poisson distribution](https://en.wikipedia.org/wiki/Compound_Poisson_distribution).
 
-By making ticks Guassian, we guarantee that their sum is also Gaussian. Which means that any deviation from a Gaussian distribution will have to come from summing together $N \sim \text{Poisson}$ values.
+By making ticks Gaussian, we guarantee that their sum is also Gaussian. Which means that any deviation from a Gaussian distribution will have to come from summing together $N \sim \text{Poisson}$ values.
 
-A distribution's tails are measured with the 4th standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. If a distribution has a kurtosis larger than 3, then it has fatter tails than a Gaussian distribution. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
+A distribution's tails are measured with the fourth standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. If a distribution has a kurtosis larger than 3, then it has fatter tails than a Gaussian distribution. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
 
 Using the [method of moments](https://en.wikipedia.org/wiki/Method_of_moments_(statistics)) in [the appendix](#appendix-deriving-kurtosis) we show that:
 $$
@@ -189,7 +189,7 @@ Both $E[T^4]$ and $E[T^2]$ are positive values. Therefore, $\text{kurtosis}(R) >
 
 The last stylised fact I want to touch on is the observation that returns become more Gaussian on higher time frames. That is, weekly returns look more Gaussian than hourly returns.
 
-Higher time frames mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. So, higher time frames is equivalent to larger values for $\lambda$.
+Higher time frames mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. This is equivalent to larger values for $\lambda$.
 
 As $\lambda$ gets bigger and bigger, $\text{kurtosis}(R)$ asymptotes towards 3:
 $$
@@ -200,17 +200,17 @@ A kurtosis of $3$ is the same as a Gaussian distribution. This means, under the 
 
 # Conclusions
 
-Three of the common stylsed facts about returns appear to make sense:
+Three of the common stylized facts about returns appear to make sense:
 
-1. **Returns are not Gaussian** makes sense because a Guassian distrubtion models the sum of \\(n\\) things but returns are the sum of varying amounts of ticks.
+1. **Returns are not Gaussian** makes sense because a Gaussian distribution models the sum of \\(n\\) things but returns are the sum of varying amounts of ticks.
 2. **Returns have fat tails** makes sense because we get fat tails when each sample is the sum of a different number of things.
-3. **More Guassian at higher time frames** makes sense because when each sample is the sum of a different number of things, kurtosis asymptotes to 3 as the number of things increases to infinity. A Guassian distribution has a kurtosis of 3.
+3. **More Gaussian at higher time frames** makes sense because when each sample is the sum of a different number of things, kurtosis asymptotes to 3 as the number of things increases to infinity. A Gaussian distribution has a kurtosis of 3.
 
-These are not the only explainations for returns not being Guassian. For example, overnight shocks can cause the opening price to be wildly different from the previous day's close. The model in this paper does not include such shocks.
+These are not the only explanations for returns not being Gaussian. For example, overnight shocks can cause the opening price to be wildly different from the previous day's close. The model in this paper does not include such shocks.
 
 # Appendix: Deriving kurtosis
 
-There's a paper which shows the statistics of a compound Poisson distribution[^Bening2022]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poission sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
+There's a paper which shows the statistics of a compound Poisson distribution[^Bening2022]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poisson sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
 
 The kurtosis of $R$ is:
 
@@ -219,7 +219,7 @@ $$
 =  \frac{E[(R - \mu_R)^4]}{E[(R - \mu_R)^2]^2}
 $$
 
-The value $E[(R - \mu_R)^4]$ is known as the 4th central moment and $E[(R - \mu_R)^2]$ is the second central moment or [*variance*](https://en.wikipedia.org/wiki/Variance). Both of these can be expanded into raw moments:
+The value $E[(R - \mu_R)^4]$ is known as the fourth central moment and $E[(R - \mu_R)^2]$ is the second central moment or [*variance*](https://en.wikipedia.org/wiki/Variance). Both of these can be expanded into raw moments:
 
 $$
 \begin{aligned}
@@ -228,7 +228,7 @@ E[(R - \mu_R)^4] &= E[R^4] - 4 E[R]E[R^3] + 6 E[R]^2E[R^2] - 3E[R]^4 \\\
 \end{aligned}
 $$
 
-Each of the raw moments of $R$ can be written as functions of the raw moments of $T$ and $N$. To do this, we need a table of the raw moments of a Gaussian distribution ($T$)[^5] and a Poisson distribution ($N$)[^3][^2]:
+Each of the raw moments of $R$ can be written as functions of the raw moments of $T$ and $N$. To do this, we need a table of the raw moments of a Gaussian distribution ($T$)[^5] and a Poisson distribution ($N$) [^3] [^2]:
 
 |   | Gaussian raw moments                         | Poisson raw moments                                      |
 |---|:---------------------------------------------|:---------------------------------------------------------|
