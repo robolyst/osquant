@@ -176,7 +176,7 @@ By making ticks Gaussian, we guarantee that their sum is also Gaussian. Which me
 
 A distribution's tails are measured with the fourth standard [moment](https://en.wikipedia.org/wiki/Moment_(mathematics)) commonly known as [*kurtosis*](https://en.wikipedia.org/wiki/Kurtosis). A Gaussian distribution has a kurtosis of 3. If a distribution has a kurtosis larger than 3, then it has fatter tails than a Gaussian distribution. Therefore, we need to show that $\text{kurtosis}(R) > 3$.
 
-Using the [method of moments](https://en.wikipedia.org/wiki/Method_of_moments_(statistics)) in [the appendix](#appendix-deriving-kurtosis) we show that:
+Using the [method of moments](https://en.wikipedia.org/wiki/Method_of_moments_(statistics)) in [the appendix](#deriving-kurtosis) we show that:
 $$
 \text{kurtosis}(R) = 3 + \frac{E[T^4]}{\lambda E[T^2]^2}
 $$
