@@ -1,7 +1,7 @@
 ---
 title: "Why Returns Are Not Gaussian"
 summary: "
-I want to share with you my intuition as to why asset returns are not Gaussian. This will not be a proof, but rather some points discussing why this phenomenon makes sense.
+Using the method of moments and building a compound distribution you can demonstrate some of the stylized facts of returns.
 "
 
 date: "2023-03-12"
@@ -12,12 +12,12 @@ feature: true
 authors:
     - Adrian Letchford
 categories:
-    - finance
+    - mathematics
 ---
 
-For decades, researchers have noted properties of returns that are consistent across different assets. These properties have become known as *stylised facts.* They are measurable, but, researchers have not been able to prove that they must be true.
+For decades, researchers have noted properties of returns that are consistent across different assets. These properties have become known as *stylized facts.* They are measurable, but, researchers have not been able to prove that they must be true.
 
-The common stylised facts we are interested in here are [^Cont2001]:
+The common stylized facts we are interested in here are [^Cont2001]:
 
 1. Returns are not Gaussian.
 2. Returns have fat tails.
@@ -185,7 +185,7 @@ Both $E[T^4]$ and $E[T^2]$ are positive values. Therefore, $\text{kurtosis}(R) >
 
 # More Gaussian at higher time frames
 
-The last stylised fact I want to touch on is the observation that returns become more Gaussian on higher time frames. That is, weekly returns look more Gaussian than hourly returns.
+The last stylized fact I want to touch on is the observation that returns become more Gaussian on higher time frames. That is, weekly returns look more Gaussian than hourly returns.
 
 Higher time frames mean that returns are sums of more ticks, or, larger $N$ in the compound Poisson model we're using. Getting larger values for $N$ means the expected value $E[N] = \lambda$ is larger. This is equivalent to larger values for $\lambda$.
 
