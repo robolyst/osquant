@@ -372,7 +372,6 @@ $$
     title="Comparing Compound Poisson Distributions by Deficiency: Continuous-Time Case"
     publication="Mathematics"
     year="2022"
-    pages="223-236"
     volume="10"
     number="24"
     link="https://www.mdpi.com/2227-7390/10/24/4712"
