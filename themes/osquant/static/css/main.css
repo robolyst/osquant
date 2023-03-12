@@ -468,7 +468,21 @@ Other
 #page_content .katex-display, #page_content mjx-container[display="true"] { /* Block math */
     margin: 2rem 0;
     display: block;
+    overflow-x: auto;
+    overflow-y: clip;
+    scroll-padding: 20px;
 }
+
+#page_content mjx-container[display="true"]::-webkit-scrollbar{
+    height: 15px;
+}
+#page_content mjx-container[display="true"]::-webkit-scrollbar-thumb{
+    border-radius: 100px;
+    border: 5px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 
 #page_content .katex-display .katex { /* Block math */
     font-size: 1.1em;

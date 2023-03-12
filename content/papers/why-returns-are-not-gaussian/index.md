@@ -132,9 +132,7 @@ We know this is true from the [central limit theorem](https://en.wikipedia.org/w
 We can actually make the Gaussian distribution a bit more general. A Gaussian variable multiplied by some constant is still Gaussian. This means we can multiply an average value by the number of samples to turn it into a sum:
 
 $$
-\begin{aligned}
-X_1 + \dots + X_n &\sim n\mathcal{N}(\mu, \sigma^2) = \mathcal{N}(n\mu, n\sigma^2)
-\end{aligned}
+X_1 + \dots + X_n \sim n\mathcal{N}(\mu, \sigma^2) = \mathcal{N}(n\mu, n\sigma^2)
 $$
 
 A Gaussian distribution models the sum of \\(n\\) independently and identically distributed random values as \\(n\\) tends to infinity.
