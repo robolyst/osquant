@@ -207,7 +207,7 @@ These are not the only explanations for returns not being Gaussian. For example,
 
 # Appendix
 
-{{% appendix title="Deriving kurtosis" %}}
+## Deriving kurtosis
 
 There's a paper which shows the statistics of a compound Poisson distribution[^Bening2022]. However, I'm not sure how they derived the values. Here, I will use the method of moments to derive the kurtosis of a Poisson sum of Gaussians. The derivation just uses algebra, though it is a little tedious.
 
@@ -351,8 +351,6 @@ $$
                            &= 3 + \frac{3}{\lambda} \\\
 \end{aligned}
 $$
-
-{{% /appendix %}}
 
 {{% citation
     id="Cont2001"
