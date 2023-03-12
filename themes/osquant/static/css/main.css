@@ -119,8 +119,8 @@ Define the page size
 
 @media (max-width:1000px) {
     .container, #page_content > *  {
-        padding-right: 10vw;
-        padding-left: 10vw;
+        padding-right: 5vw;
+        padding-left: 5vw;
     }
 }
 
