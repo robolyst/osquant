@@ -10,7 +10,6 @@ mathjax: true # Enable mathematics on the page
 plotly: true  # Enable plotly on the page
 authors:
     - Adrian Letchford
-draft: true
 categories:
     - finance
 ---
