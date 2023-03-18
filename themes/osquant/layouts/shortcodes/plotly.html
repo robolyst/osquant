@@ -10,20 +10,31 @@
                 var data = await d3.csv(url);
             }
 
+            // Set the plot element before {{ .Inner }} so
+            // that user code can use it.
+            plotdiv = document.getElementById(id);
+
+            // Load the plot's JS from either the 'src' attribute
+            // or from .Inner
+
+            {{ with .Page.Resources.GetMatch (.Get "src") }}
+                {{ .Content | safeJS }}
+            {{ end }}
+
             {{ .Inner | safeJS }}
 
             // From the {{ .Inner }} code, we expect to get
             // * traces
             // * layout
             // * config
+            // * frames
             //
             // If any of these are missing, set to the empty
             // object.
             if (typeof traces == "undefined") { var traces = {}; }
             if (typeof layout == "undefined") { var layout = {}; }
             if (typeof config == "undefined") { var config = {}; }
-
-            plotdiv = document.getElementById(id);
+            if (typeof frames == "undefined") { var frames = []; }
 
             // Set a bunch of default values so that plots
             // have a consistent style across the site.
@@ -55,6 +66,7 @@
                 data: traces,
                 layout: layout,
                 config: config,
+                frames: frames,
             });
         }
 
