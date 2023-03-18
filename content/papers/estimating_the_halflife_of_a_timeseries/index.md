@@ -65,7 +65,7 @@ The half-life is defined as the time \\(h\\) it takes for \\(X_t\\) to decay hal
 $$
 E[Y_{t+h}] = \frac{1}{2}Y_t
 $$
-The equation \\((\ref{2})\\) gives us:
+Equation \\((\ref{2})\\) gives us:
 $$
 E[Y_{t+h}] = \lambda^h Y_t
 $$
