@@ -10,27 +10,4 @@
         });
     }
 
-    function plot(id, traces, layout, config) {
-        plotdiv = document.getElementById(id);
-
-        layout['plot_bgcolor'] = "transparent";
-        layout['paper_bgcolor'] = "transparent";
-        layout['modebar'] = {
-            bgcolor: "transparent",
-            color: "black",
-            activecolor: "#747474",
-        };
-        layout['font'] =  {
-            family: 'Source Sans Pro',
-            size: 18,
-            color: 'black'
-        };
-
-        config['displaylogo'] = false;
-        config['modeBarButtonsToRemove'] = ['toImage', 'lasso2d', 'select2d'];
-        config['responsive'] = true;
-
-        Plotly.newPlot(plotdiv, traces, layout, config);
-    }
-
 </script>

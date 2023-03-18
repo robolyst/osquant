@@ -12,15 +12,50 @@
 
             {{ .Inner | safeJS }}
 
+            // From the {{ .Inner }} code, we expect to get
+            // * traces
+            // * layout
+            // * config
+            //
+            // If any of these are missing, set to the empty
+            // object.
+            if (typeof traces == "undefined") { var traces = {}; }
+            if (typeof layout == "undefined") { var layout = {}; }
+            if (typeof config == "undefined") { var config = {}; }
+
+            plotdiv = document.getElementById(id);
+
+            // Set a bunch of default values so that plots
+            // have a consistent style across the site.
+
             {{ with .Get "height" }}
                 layout['height'] = {{ . }};
             {{ end }}
 
-            if (typeof config == "undefined") {
-                var config = {};
-            }
+            layout['plot_bgcolor'] = "transparent";
+            layout['paper_bgcolor'] = "transparent";
+            layout['modebar'] = {
+                bgcolor: "transparent",
+                color: "black",
+                activecolor: "#747474",
+            };
+            layout['font'] =  {
+                family: 'Source Sans Pro',
+                size: 18,
+                color: 'black'
+            };
 
-            plot(id, traces, layout, config);
+            config['displaylogo'] = false;
+            config['modeBarButtonsToRemove'] = ['toImage', 'lasso2d', 'select2d'];
+            config['responsive'] = true;
+
+            // Draw the plot
+
+            Plotly.newPlot(plotdiv, {
+                data: traces,
+                layout: layout,
+                config: config,
+            });
         }
 
         load_and_plot();
