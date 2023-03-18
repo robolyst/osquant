@@ -30,3 +30,5 @@ Winther
 Ahn
 Impens
 Higgs
+[Rr]egressible
+Vasicek

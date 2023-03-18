@@ -473,8 +473,15 @@ Other
 }
 
 
-#page_content .katex { /* Inline math */
-    font-size: 1.2em;
+.katex { /* Inline math */
+    font-size: 1em;
+}
+
+.katex .tag .vlist-t2 {
+    /* Stop the equation numbers from poking
+    out the right, causing overflow and a
+    scroll bar to appear. */
+    margin-right: 0;
 }
 
 #page_content .katex-display, #page_content mjx-container[display="true"] { /* Block math */
