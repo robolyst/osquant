@@ -54,9 +54,9 @@ $$
 
 If we set \\(Y_t\\) to be the distance from the mean \\(X_t - \mu\\) then:
 $$
-\begin{aligned}
+\begin{align}
 Y_t = \lambda Y_{t-1} + \epsilon_t \label{2}
-\end{aligned}
+\end{align}
 $$
 
 # Half-life
