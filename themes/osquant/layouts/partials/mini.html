@@ -29,10 +29,6 @@
         <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
         <span class="space">·</span>
         <span>{{ $minutes }} min read</span>
-        <!-- {{ if (.GetTerms "tags") }}<span class="space">·</span>{{ end }}
-        {{ range (.GetTerms "tags") }}
-            <a class="tag" href="{{ .Permalink }}">{{ .LinkTitle }}</a>
-        {{ end }} -->
         {{ if .Params.draft }}<span class="tag">Draft</span>{{ end }}
     </div>
 </div>

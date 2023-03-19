@@ -28,7 +28,6 @@ markup:
       unsafe: true
 
 taxonomies:
-  tag: tags
   author: authors
   category: categories
 
