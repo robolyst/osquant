@@ -4,7 +4,7 @@ summary: "The half-life of a stationary series can be estimated with a linear re
 date: "2023-03-18"
 type: paper
 katex: true # Enable mathematics on the page
-feature: false
+feature: true
 authors:
     - Adrian Letchford
 categories:
