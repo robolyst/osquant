@@ -15,7 +15,7 @@ categories:
 
 # Model
 
-Define the [weakly stationary](https://en.wikipedia.org/wiki/Stationary_process) process \\(X\\) as:
+Define the [weakly stationary](https://en.wikipedia.org/wiki/Stationary_process#Weak_or_wide-sense_stationarity) process \\(X\\) as:
 $$
 \begin{align}
 X_t = c + \lambda X_{t-1} + \epsilon_t, \quad 0 < \lambda < 1 \label{1}
