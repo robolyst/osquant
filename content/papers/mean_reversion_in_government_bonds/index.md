@@ -7,6 +7,7 @@ type: paper
 katex: true # Enable mathematics on the page
 plotly: true  # Enable plotly on the page
 feature: false
+date: "2023-03-21"
 authors:
     - Adrian Letchford
 categories:
@@ -87,7 +88,44 @@ $$
 $$
 
 
+# ETF Model
 
+A bond ETF's returns are:
+$$
+\begin{aligned}
+R(r_t)  &= \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
+\end{aligned}
+$$
+
+The first derivative is:
+$$
+\begin{aligned}
+R^\prime(r_t) &=\frac{d}{dr_t} \frac{r_{t-1}}{r_t} - \frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t} (1 + \frac{r_t}{p})^{-pT} \right] + \frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} \\\
+&=\frac{d}{dr_t} \frac{r_{t-1}}{r_t} - \frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t}\right] (1 + \frac{r_t}{p})^{-pT} -  \frac{r_{t-1}}{r_t} \frac{d}{dr_t}\left[ (1 + \frac{r_t}{p})^{-pT}\right]  + \frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} \\\
+&=\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t}\right] \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) + (1 -  \frac{r_{t-1}}{r_t}) \frac{d}{dr_t}\left[ (1 + \frac{r_t}{p})^{-pT}\right] \\\
+\end{aligned}
+$$
+
+We have:
+$$
+\frac{d}{dr_t} \frac{r_{t-1}}{r_t} = \frac{r_{t-1}}{r_t^2}
+$$
+and using [Wolfram Alpha](https://www.wolframalpha.com/input?i=%281+%2B+x%2Fa%29%5E%28-c%29) I get:
+$$
+\frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} = -\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}
+$$
+giving:
+$$
+\begin{aligned}
+R^\prime(r_t) &=\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) - (1 -  \frac{r_{t-1}}{r_t})\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
+\end{aligned}
+$$
+
+
+The first order [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) is:
+$$
+R(r_t) = R(r_{t-1}) + \frac{R^\prime(r_{t-1})}{1!}(r_t - r_{t-1})
+$$ 
 
 {{% citation
     id="Souleymanou2021"
