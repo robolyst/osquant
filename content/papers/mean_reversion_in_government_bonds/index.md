@@ -3,7 +3,6 @@ title: "Mean reversion in government bonds"
 summary: "
 Using the Vasicek model, you can calculate the expected return of a government bond spread. Furthermore, you can calculate the expected value of trading a yield curve inversion with ETFs.
 "
-date: "2023-03-21"
 type: paper
 katex: true # Enable mathematics on the page
 plotly: true  # Enable plotly on the page
@@ -45,8 +44,8 @@ $$
 and the conditional moments of the spread are [^Holy2022]:
 $$
 \begin{aligned}
-E[s_l(t) | s_l(0)] &= s_l(0) e^{-\theta_s t} + \mu_s(1 - e^{-\theta_s t}) \\\
-\text{var}[s_l(t) | s_l(0)] &= \frac{\sigma_l^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
+E[s(t) | s(0)] &= s(0) e^{-\theta_s t} + \mu_s(1 - e^{-\theta_s t}) \\\
+\text{var}[s(t) | s(0)] &= \frac{\sigma_s^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
 \end{aligned}
 $$
 
@@ -58,14 +57,14 @@ And the moments of the short term rates are:
 
 $$
 \begin{aligned}
-E[r_s(t)|r_s(0)] &= E[r_l(t) | r_l(0)] - E[s_l(t) | s_l(0)] \\\
-& = r_l(0) - s_l(0) e^{-\theta_s t} - \mu_s(1 - e^{-\theta_s t}) \\\
+E[r_s(t)|r_s(0)] &= E[r_l(t) | r_l(0)] - E[s(t) | s(0)] \\\
+& = r_l(0) - s(0) e^{-\theta_s t} - \mu_s(1 - e^{-\theta_s t}) \\\
 \end{aligned}
 $$
 
 $$
 \begin{aligned}
-\text{var}[r_s(t)|r_s(0)] &= \text{var}[r_l(t) | r_l(0)] + \text{var}[s_l(t) | s_l(0)] \\\
+\text{var}[r_s(t)|r_s(0)] &= \text{var}[r_l(t) | r_l(0)] + \text{var}[s(t) | s(0)] \\\
 & = \sigma_l^2 t + \frac{\sigma_l^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
 \end{aligned}
 $$
@@ -77,7 +76,7 @@ $$
 [1, -1]
 \left[\begin{matrix}
 \text{var}[r_l(t) | r_l(0)] & 0 \\\
-0 & \text{var}[s_l(t) | s_l(0)] \\\
+0 & \text{var}[s(t) | s(0)] \\\
 \end{matrix}\right]
 \left[\begin{matrix}
 1 \\\
