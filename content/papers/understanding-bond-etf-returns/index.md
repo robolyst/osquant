@@ -63,7 +63,7 @@ If we imagine the ETF buying a bond, holding for a period of time and then selli
 $$
 \text{interest}\_{t} = \frac{r_{t-1}}{260}
 $$
-Here, we are going to assume that the bond's yield is equal to the market interest rate. The bond's yield at the time of purchase (yesterday) is \\(r_{t-1}\\).
+Here, we are assuming that the bond's yield is equal to the market interest rate. The bond's yield at the time of purchase (yesterday) is \\(r_{t-1}\\).
 
 If we assume that the ETF is always buying bonds at par value (\\(C = r_{t-1}\\)) with a notional of $1 (\\(P_{t-1} = N = 1\\)) then the return on capital is:
 $$
@@ -100,9 +100,11 @@ The results look like:
 The code to fetch the data and calculate the returns is:
 
 ```python
+# pip install pandas pandas_datareader yfinance matplotlib
 from datetime import datetime
 import pandas as pd
 from pandas_datareader import data
+import yfinance as yf
 import matplotlib.pyplot as plt
 
 def bond_etf_returns(series, maturity, freq, p):
@@ -123,17 +125,29 @@ def bond_etf_returns(series, maturity, freq, p):
     rates['returns'] = rates['capital'] + rates['coupon'] + rates['interest'] - 1
     return rates
 
+# Parameters
+ticker ='TLT'
+rates_code = 'DGS30'
+maturity = 25
+frequency = 260
+coupons = 2
+
 # Fetch data
 start = datetime(2002, 7, 30)
-tlt = data.get_data_yahoo('TLT', start)['Adj Close']
-dgs30 = data.get_data_fred('DGS30', start)
+tlt = yf.download(ticker, start)['Adj Close']
+dgs30 = data.get_data_fred(rates_code, start) / 100
 
 # Clean data
 df = pd.concat((tlt, dgs30), axis=1).resample('B').last().fillna(method='ffill')
 df['returns'] = df['Adj Close'].pct_change()
 
 # Estimated returns
-estimated = bond_etf_returns(df['DGS30'] / 100, maturity=25, freq=260, p=2)
+estimated = bond_etf_returns(
+    series=df[rates_code],
+    maturity=maturity,
+    freq=frequency,
+    p=coupons,
+)
 
 plt.figure()
 
@@ -145,6 +159,20 @@ plt.plot((1 + estimated['returns']).cumprod())
 plt.plot((1 + df['returns']).cumprod())
 ```
 
+We can repeat this analysis across the following US bond ETFs:
+* [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT)
+* [iShares 7-10 Year Treasury Bond ETF](https://www.ishares.com/us/products/239456/ishares-710-year-treasury-bond-etf) (IEF)
+* [iShares 1-3 Year Treasury Bond ETF](https://www.ishares.com/us/products/239452/ishares-13-year-treasury-bond-etf) (SHY)
+
+and we will find the following set of parameters:
+
+| Ticker  | Rates | Maturity \\(T\\) | Frequency \\(f\\) | Coupons \\(p\\) |
+|---------|-------|------------------|-------------------|-----------------|
+| TLT     | DGS30 | 25               | 260               | 2               |
+| IEF     | DGS10 | 8.5              | 215               | 2               |
+| SHY     | DGS3  | 2                | 270               | 2               |
+
+I am not sure why the frequency value changes for each of the funds. If I were to use 260 for all of them, the estimated returns will deviate fairly significantly. It might be explained by the funds not tracking exactly according to this model and varying the frequency term is akin to fitting a regression model.
 # Distribution of returns
 
 The previous section found that a fund's return can be estimated with:
