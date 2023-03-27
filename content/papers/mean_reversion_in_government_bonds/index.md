@@ -6,7 +6,7 @@ Using the Vasicek model, you can calculate the expected return of a government b
 type: paper
 katex: true # Enable mathematics on the page
 feature: false
-date: "2023-03-21"
+date: "2023-03-27"
 authors:
     - Adrian Letchford
 categories:
@@ -15,23 +15,59 @@ categories:
 notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3
 ---
 
-
-<cell id="rates_plot"></cell>
-<cell id="dgs30_plot"></cell>
-<cell id="viewof_halflife"></cell>
-<cell id="equation_alpha"></cell>
-
 # Interest rate model
 
-## Model the long rate
+Excellent write up of this model with noise[^Holy2022].
+
+We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). We'll combine these two models to create a model of the short term rate \\(r_s(t)\\). This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021].
+
+For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [5 year US government treasury yields (DGS5)](https://fred.stlouisfed.org/series/DGS5).
+
+The data looks like:
+<cell id="rates_plot"></cell>
+
+## Model the long term rate
+
+We want to make as few assumptions as possible about the underlying interest rate. We will model the interest rate of the long term bond \\(r_l(t)\\) as Brownian motion:
+$$
+d r_l(t) = \sigma_l dW_l(t)
+$$
+
+Which means that this processes has normally distributed increments. The conditional moments of the long term rates are:
+$$
+\begin{aligned}
+E[r_l(t) | r_l(0)] &= r_l(0) \\\
+\text{var}[r_l(t) | r_l(0)] &= \sigma_l^2 t \\\
+\end{aligned}
+$$
+
+You can play with the long term interest rate model here:
 
 <cell id="long_rate_model_plot"></cell>
 
 Model parameters:
 
 <cell id="viewof_long_sigma"></cell>
+<cell id="viewof_position"></cell>
 
 ## Model the spread
+
+We are going to assume that the spread between the long term rate and the short term rate \\(s(t)\\) is mean reverting. For this we will use an [Ornstein–Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process) that is uncorrelated to the long term rate:
+$$
+\begin{aligned}
+d s(t) &= \theta_s (\mu_s - s(t))dt + \sigma_s dW_s(t) \\\
+E[dW_l(t)dW_s(t)] &= 0 \\\
+\end{aligned}
+$$
+The conditional moments of the spread are [^Holy2022]:
+$$
+\begin{aligned}
+E[s(t) | s(0)] &= s(0) e^{-\theta_s t} + \mu_s(1 - e^{-\theta_s t}) \\\
+\text{var}[s(t) | s(0)] &= \frac{\sigma_s^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
+\end{aligned}
+$$
+
+You can play with the spread model here:
 
 <cell id="spread_model_plot"></cell>
 
@@ -40,42 +76,15 @@ Model parameters:
 <cell id="viewof_spread_mean"></cell>
 <cell id="viewof_spread_speed"></cell>
 <cell id="viewof_spread_std"></cell>
+<cell id="viewof_position_2"></cell>
 
-# Vasicek model
-
-Excellent write up of this model with noise[^Holy2022].
-
-We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021] .
-
-We model both the interest rate of the long term bond \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t)\\) as an [Ornstein–Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process):
-$$
-\begin{aligned}
-d r_l(t) &= \sigma_l dW_l(t) \\\
-d s(t) &= \theta_s (\mu_s - s(t))dt + \sigma_s dW_s(t) \\\
-E[dW_l(t)dW_s(t)] &= 0 \\\
-\end{aligned}
-$$
-
-Which means that both of these processes have independently normally distributed increments. The conditional moments of the long term rates are:
-$$
-\begin{aligned}
-E[r_l(t) | r_l(0)] &= r_l(0) \\\
-\text{var}[r_l(t) | r_l(0)] &= \sigma_l^2 t \\\
-\end{aligned}
-$$
-and the conditional moments of the spread are [^Holy2022]:
-$$
-\begin{aligned}
-E[s(t) | s(0)] &= s(0) e^{-\theta_s t} + \mu_s(1 - e^{-\theta_s t}) \\\
-\text{var}[s(t) | s(0)] &= \frac{\sigma_s^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
-\end{aligned}
-$$
+## Model the short term rate
 
 Based on the defintion of the spread \\(s(t) = r_l(t) - r_s(t)\\) the short term rate is:
 $$
 r_s(t) = r_l(t) - s(t)
 $$
-And the moments of the short term rates are:
+Which gives us  the moments of the short term rates as functions of the long term rate and spread:
 
 $$
 \begin{aligned}
@@ -107,6 +116,17 @@ $$
 &= \text{var}[r_l(t) | r_l(0)] \\\
 \end{aligned}
 $$
+
+
+<cell id="long_short_rate_model_plot"></cell>
+
+Model parameters:
+
+<cell id="viewof_long_sigma_2"></cell>
+<cell id="viewof_spread_mean_2"></cell>
+<cell id="viewof_spread_speed_2"></cell>
+<cell id="viewof_spread_std_2"></cell>
+<cell id="viewof_position_3"></cell>
 
 
 # ETF Model
