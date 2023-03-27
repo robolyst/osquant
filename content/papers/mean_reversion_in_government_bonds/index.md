@@ -20,6 +20,21 @@ categories:
 {{<plotly id="interest_rates_with_ewm" data="data.csv" src="interest_rates_with_ewm.js" />}}
 
 
+<cell id="dgs30_plot"></cell>
+<cell id="viewof_halflife"></cell>
+<cell id="equation_alpha"></cell>
+
+
+<script type="module">
+  import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+  import define from "https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3";
+  new Runtime().module(define, name => {
+    if (name === undefined) return;
+    var elements = document.querySelectorAll("cell#" + name.replace(' ', '_'));
+    if (elements.length > 0) return new Inspector(elements[0]);
+  });
+</script>
+
 # Vasicek model
 
 Excellent write up of this model with noise[^Holy2022].
