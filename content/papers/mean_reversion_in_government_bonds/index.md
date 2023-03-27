@@ -131,12 +131,32 @@ Model parameters:
 
 # ETF Model
 
-A bond ETF's returns are:
+# Estimating parameters
+
+# Estimating portfolio weights
+
+# Results
+
+# Conclusions
+
+# Appendix
+## Bond return Taylor expansion
+
+A previous paper titled [Understanding bond ETF returns]({{< ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
 $$
 \begin{aligned}
 R(r_t)  &= \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
 \end{aligned}
 $$
+This is a very difficult equation to work with. If we knew the moments of \\(r_t\\) I'm not sure how you would calculate the moments of \\(R(r_t)\\).
+
+However, this function appears to be almost linear. The chart below shows that this function is very close to a straight line:
+
+<cell id="etf_return_plot"></cell>
+
+This chart suggests a [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) could be used to simplify \\(R(r_t)\\) and allow us to estimate the moments of \\(R(r_t)\\). On the chart I've put the first order Taylor expansion in red.
+
+### First order Taylor expansion
 
 The first derivative is:
 $$
@@ -149,24 +169,26 @@ $$
 
 We have:
 $$
-\frac{d}{dr_t} \frac{r_{t-1}}{r_t} = \frac{r_{t-1}}{r_t^2}
+\frac{d}{dr_t} \frac{r_{t-1}}{r_t} = -\frac{r_{t-1}}{r_t^2}
 $$
-and using [Wolfram Alpha](https://www.wolframalpha.com/input?i=%281+%2B+x%2Fa%29%5E%28-c%29) I get:
+and (lazily) using [Wolfram Alpha](https://www.wolframalpha.com/input?i=%281+%2B+x%2Fa%29%5E%28-c%29) I get:
 $$
 \frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} = -\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}
 $$
 giving:
 $$
 \begin{aligned}
-R^\prime(r_t) &=\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) - (1 -  \frac{r_{t-1}}{r_t})\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
+R^\prime(r_t) &= -\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) - (1 -  \frac{r_{t-1}}{r_t})\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
 \end{aligned}
 $$
 
 
-The first order [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) is:
+The first order Taylor expansion is:
 $$
-R(r_t) = R(r_{t-1}) + \frac{R^\prime(r_{t-1})}{1!}(r_t - r_{t-1})
-$$ 
+R_1(r_t) = R(r_{t-1}) + \frac{R^\prime(r_{t-1})}{1!}(r_t - r_{t-1})
+$$
+
+### Second order Taylor expansion
 
 {{% citation
     id="Souleymanou2021"
