@@ -5,7 +5,6 @@ Using the Vasicek model, you can calculate the expected return of a government b
 "
 type: paper
 katex: true # Enable mathematics on the page
-plotly: true  # Enable plotly on the page
 feature: false
 date: "2023-03-21"
 authors:
@@ -13,27 +12,34 @@ authors:
 categories:
     - mathematics
     - finance
+notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3
 ---
 
 
-{{<plotly id="interest_rates" data="data.csv" src="interest_rates.js" />}}
-{{<plotly id="interest_rates_with_ewm" data="data.csv" src="interest_rates_with_ewm.js" />}}
-
-
+<cell id="rates_plot"></cell>
 <cell id="dgs30_plot"></cell>
 <cell id="viewof_halflife"></cell>
 <cell id="equation_alpha"></cell>
 
+# Interest rate model
 
-<script type="module">
-  import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-  import define from "https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3";
-  new Runtime().module(define, name => {
-    if (name === undefined) return;
-    var elements = document.querySelectorAll("cell#" + name.replace(' ', '_'));
-    if (elements.length > 0) return new Inspector(elements[0]);
-  });
-</script>
+## Model the long rate
+
+<cell id="long_rate_model_plot"></cell>
+
+Model parameters:
+
+<cell id="viewof_long_sigma"></cell>
+
+## Model the spread
+
+<cell id="spread_model_plot"></cell>
+
+Model parameters:
+
+<cell id="viewof_spread_mean"></cell>
+<cell id="viewof_spread_speed"></cell>
+<cell id="viewof_spread_std"></cell>
 
 # Vasicek model
 
