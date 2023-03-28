@@ -138,7 +138,7 @@ Model parameters:
 # Conclusions
 
 # Appendix
-## Bond return Taylor expansion
+## Taylor expansion of bond returns
 
 A previous paper titled [Understanding bond ETF returns]({{< ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
 $$
