@@ -227,23 +227,69 @@ R^{\prime\prime}(r_t) =& \ 2\frac{r_{t-1}}{r_t^3} \left(1 - (1 + \frac{r_t}{p})^
 & -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\ 
 & -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
 & - (1 - \frac{r_{t-1}}{r_t})\frac{d}{dr_t}\left[\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
-\\\
 \end{aligned}
 $$
-
 The last term we will ignore because we are only interested in taking the second derivative at \\(R^{\prime\prime}(r_{t-1})\\) where the last term equals 0:
 $$
 R^{\prime\prime}(r_{t-1}) = 2\frac{1}{r_{t-1}^2} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) -2\frac{1}{r_{t-1}}\frac{pT}{p + r_{t-1}} (\frac{p + r_{t-1}}{p})^{-pT}
 $$
 Which gives us the second order Taylor expansion:
 $$
+R_2(r_t) = R(r_{t-1}) + R^\prime(r_{t-1})(r_t - r_{t-1}) + R^{\prime\prime}(r_{t-1}) \frac{1}{2}(r_t - r_{t-1})^2
+$$
+We can rewrite this into a polynomial of \\(r_t\\) giving us a second order Taylor approximation to the original function:
+$$
 \begin{aligned}
 R(r_{t-1}) &= \frac{r_{t-1}}{f} \\\
 R^\prime(r_{t-1}) &= -\frac{1}{r_{t-1}} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) \\\
 R^{\prime\prime}(r_{t-1}) &= 2\frac{1}{r_{t-1}^2} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) -2\frac{1}{r_{t-1}}\frac{pT}{p + r_{t-1}} (\frac{p + r_{t-1}}{p})^{-pT} \\\ 
-R_2(r_t) &= R(r_{t-1}) + R^\prime(r_{t-1})(r_t - r_{t-1}) + R^{\prime\prime}(r_{t-1}) \frac{1}{2}(r_t - r_{t-1})^2
+C_0(r_{t-1}) &= R(r_{t-1}) - R^\prime(r_{t-1})r_{t-1} + R^{\prime\prime}(r_{t-1}) \frac{1}{2}r_{t-1}^2 \\\
+C_1(r_{t-1}) &= R^\prime(r_{t-1}) - R^{\prime\prime}(r_{t-1}) r_{t-1} \\\
+C_2(r_{t-1}) &= R^{\prime\prime}(r_{t-1}) \frac{1}{2} \\\
+R_2(r_t) &= C_0(r_{t-1}) + C_1(r_{t-1}) r_t + C_2(r_{t-1}) r_t^2 \\\
 \end{aligned}
 $$
+
+## Moments of bond returns
+
+In the previous section we derived the second order Taylor expansion of bond returns \\(R_2(r_t)\\). Here, we'll derive the moments of \\(R_2(r_t)\\) based on the moments of the rate \\(r_t\\).
+
+### First moment (mean)
+$$
+E[R_2(r_t)] = C_0 + C_1 E[r_t] + C_2 E[r_t^2]
+$$
+
+### Second moment
+$$
+\begin{aligned}
+E[R_2(r_t)^2] &= E[(C_0 + C_1 r_t + C_2 r_t^2)(C_0 + C_1 r_t + C_2 r_t^2)] \\\
+&= E[C_0^2 + 2C_0C_1r_t + (2C_0 C_2 + C_1^2 )r_t^2 + 2C_1C_2 r_t^3 + C_2^2 r_t^4] \\\
+&= C_0^2 + 2C_0C_1E[r_t] + (2C_0 C_2 + C_1^2 )E[r_t^2] + 2C_1C_2 E[r_t^3] + C_2^2 E[r_t^4] \\\
+\end{aligned}
+$$
+
+### Second standardised moment (variance)
+
+From the definition of [variance](https://en.wikipedia.org/wiki/Variance#Definition), we can break this down into: 
+$$
+E[(R_2(r_t) - E[R_2(r_t)])^2] = E[R_2(r_t)^2] - E[R_2(r_t)]^2
+$$
+
+### Covariance
+$$
+\begin{aligned}
+\text{cov}(R_2(r_l), R_2(r_s)) &= E[(R_2(r_l) - \mu_l)(R_2(r_s) - \mu_s)] \\\
+& = E[R_2(r_l)R_2(r_s)] -\mu_s E[R_2(r_l)] - \mu_l E[R_2(r_s)] + \mu_l \mu_s
+\end{aligned}
+$$
+
+where:
+$$
+\begin{aligned}
+ E[R_2(r_{lt})R_2(r_{st})] = E[(C_0(r_{t-1}) + C_1(r_{t-1}) r_t + C_2(r_{t-1}) r_t^2 )(C_0(r_{t-1}) + C_1(r_{t-1}) r_t + C_2(r_{t-1}) r_t^2 )]
+\end{aligned}
+$$
+
 
 
 {{% citation
