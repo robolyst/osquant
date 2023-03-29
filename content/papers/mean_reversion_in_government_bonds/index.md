@@ -246,7 +246,6 @@ R_2(r_t) &= R(r_{t-1}) + R^\prime(r_{t-1})(r_t - r_{t-1}) + R^{\prime\prime}(r_{
 $$
 
 
-
 {{% citation
     id="Souleymanou2021"
     author="Souleymanou"
