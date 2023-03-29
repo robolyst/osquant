@@ -4,6 +4,10 @@
     { "handle": "filesystem" },
     { "src": "/.*", "status": 404, "dest": "/404.html" }
   ],
-  "framework": "hugo",
+  "build": {
+    "env": {
+      "HUGO_VERSION": "0.111.3"
+    }
+  },
   "buildCommand": "./build.sh"
 }
