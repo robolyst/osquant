@@ -186,7 +186,19 @@ $$
 R_1(r_t) = R(r_{t-1}) + \frac{R^\prime(r_{t-1})}{1!}(r_t - r_{t-1})
 $$
 
+Because we have taken the Taylor expansion around \\(r_{t-1}\\) instead of 0, some of the terms in \\(R(r_{t-1})\\) and \\(R^\prime(r_{t-1})\\) cancel out giving:
+$$
+\begin{aligned}
+R(r_{t-1})  &= \frac{r_{t-1}}{f}  \\\
+R^\prime(r_{t-1}) &= -\frac{1}{r_{t-1}} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) \\\
+R_1(r_t) &= R(r_{t-1}) + R^\prime(r_{t-1})(r_t - r_{t-1})
+\end{aligned}
+$$
+
 ### Second order Taylor expansion
+
+
+
 
 {{% citation
     id="Souleymanou2021"
