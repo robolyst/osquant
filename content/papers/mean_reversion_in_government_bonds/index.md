@@ -247,7 +247,6 @@ $$
 
 
 
-
 {{% citation
     id="Souleymanou2021"
     author="Souleymanou"
