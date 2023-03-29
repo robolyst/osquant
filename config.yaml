@@ -1,4 +1,4 @@
-# baseURL: "https://osquant.com"
+baseURL: "https://osquant.com"
 languageCode: "en-us"
 title: "Open Source Quant"
 theme: "osquant"
