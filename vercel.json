@@ -8,5 +8,6 @@
     "env": {
       "HUGO_VERSION": "0.96.0"
     }
-  }
+  },
+  "buildCommand": "./build.sh"
 }
