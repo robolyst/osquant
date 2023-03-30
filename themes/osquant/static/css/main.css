@@ -105,11 +105,30 @@ div.highlight pre {
     background-color: rgba(0, 0, 0, 0.01) !important;
 }
 
+
+#splash {
+    background-color: rgba(245, 245, 245, 0.5);
+    padding: 0.01vh;
+    margin-bottom: 5rem;
+}
+
+
+#page_content feature {
+    background-color: rgba(245, 245, 245, 0.5);
+    display: block;
+    max-width: 100%;
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+}
+
+
 /* -------------------
 Define the page size
 ------------------- */
 
-.container, #page_content > * {
+.container,
+#page_content > *,
+#page_content feature > * {
     max-width: 750px;
     padding-right: 15px;
     padding-left: 15px;
@@ -118,7 +137,9 @@ Define the page size
 }
 
 @media (max-width:1000px) {
-    .container, #page_content > *  {
+    .container,
+    #page_content > *,
+    #page_content feature > * {
         padding-right: 5vw;
         padding-left: 5vw;
     }
@@ -578,11 +599,4 @@ summary::after {
 }
 details[open] summary:after {
     content: "⭣";
-}
-
-
-#splash {
-    background-color: rgba(245, 245, 245, 0.5);
-    padding: 0.01vh;
-    margin-bottom: 5rem;
 }

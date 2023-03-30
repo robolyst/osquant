@@ -126,8 +126,44 @@ Model parameters:
 <cell id="viewof_spread_std_2"></cell>
 <cell id="viewof_position_3"></cell>
 
+## Interest rate model summary
+
+Moments of the long term rate:
+$$
+\begin{aligned}
+E[r_l(t) | r_l(0)] &= r_l(0) \\\
+\text{var}[r_l(t) | r_l(0)] &= \sigma_l^2 t \\\
+\end{aligned}
+$$
+
+Moments of the short term rate:
+$$
+\begin{aligned}
+E[r_s(t)|r_s(0)] &= r_l(0) - s(0) e^{-\theta_s t} - \mu_s(1 - e^{-\theta_s t}) \\\
+\text{var}[r_s(t)|r_s(0)] &= \sigma_l^2 t + \frac{\sigma_l^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
+\end{aligned}
+$$
+
+Covariance:
+$$
+\begin{aligned}
+\text{cov}(r_l(t), r_s(t) | r_l(0), r_s(0)) &= \text{var}[r_l(t) | r_l(0)] \\\
+\end{aligned}
+$$
 
 # ETF Model
+
+
+<feature>
+
+<cell id="etf_model_plot"></cell>
+
+Model parameters:
+<cell id="viewof_long_sigma_4"></cell>
+<cell id="viewof_position_4"></cell>
+
+</feature>
+
 
 # Estimating parameters
 
@@ -286,10 +322,27 @@ $$
 where:
 $$
 \begin{aligned}
- E[R_2(r_{lt})R_2(r_{st})] = E[(C_0(r_{t-1}) + C_1(r_{t-1}) r_t + C_2(r_{t-1}) r_t^2 )(C_0(r_{t-1}) + C_1(r_{t-1}) r_t + C_2(r_{t-1}) r_t^2 )]
+    E[R_2(r_{lt})R_2(r_{st})] &= E[(C_0(r_{l,t-1}) + C_1(r_{l,t-1}) r_{lt} + C_2(r_{l,t-1}) r_{lt}^2 ) \\\
+    &\quad\times(C_0(r_{s,t-1}) + C_1(r_{s,t-1}) r_{st} + C_2(r_{s,t-1}) r_{st}^2 )]\\\
+    \\\
+    &= C_0(r_{l,t-1})(C_0(r_{s,t-1}) \\\
+    &\quad + C_0C_1(r_{s,t-1}) E[r_{st}] \\\
+    &\quad + C_0C_2(r_{s,t-1}) E[r_{st}^2] \\\
+    &\quad + C_1(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}] \\\
+    &\quad + C_1(r_{l,t-1})C_1(r_{s,t-1}) E[r_{st} r_{lt}] \\\
+    &\quad + C_1(r_{l,t-1})C_2(r_{s,t-1}) E[r_{st}^2 r_{lt}] \\\
+    &\quad + C_2(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}^2] \\\
+    &\quad + C_2(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt}^2 r_{st}] \\\
+    &\quad + C_2(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt}^2 r_{st}^2] \\\
 \end{aligned}
 $$
 
+Where:
+$$
+E[r_{lt}^i r_{st}^j] = 
+$$
+
+Can use [this method](https://mathoverflow.net/questions/330162/correlation-between-square-of-normal-random-variables#comment822946_330162) to solve this.
 
 
 {{% citation
@@ -313,6 +366,7 @@ $$
     volume="5"
     link="http://public.kenan-flagler.unc.edu/faculty/lundblac/bcrp/vasicek77.pdf"
 %}}
+
 
 {{% citation
     id="Holy2022"
