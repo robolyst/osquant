@@ -167,6 +167,28 @@ Model parameters:
 
 # Estimating parameters
 
+We need to estimate the parameters \\(\sigma_l\\), \\(\mu_s\\), \\(\theta_s\\) and \\(\sigma_s\\).
+
+The volatiltiy of the long rate \\(\sigma_l\\) can be done with an EWA of the squared changes in the long rate.
+
+For the parameters of the Ornstien-Uhlenbeck process for the spread, we'll refer to the unconditional moments as given by [^Holy2022]:
+$$
+\begin{aligned}
+E[s(t)] &= \mu_s \\\
+\text{var}[s(t)] &= \frac{\sigma_s^2}{2\theta_s} \\\
+\text{cov}[s(t), s(i)] &= \frac{\sigma_s^2}{2\theta_s} e^{-\theta_s|t-i|}
+\end{aligned}
+$$
+We can use an EWA to estimate these moments and then solve the equations giving us:
+$$
+\begin{aligned}
+\mu_s &= E[s(t)] \\\
+\theta_s &= \log(\frac{\text{var}[s(t)]}{\text{cov}[s(t), s(t-1)]}) \\\
+\sigma_s &= \sqrt{2 \theta_s \text{var}[s(t)]} \\\
+\end{aligned}
+$$
+If the same halflife is used for all parameters, then this becomes a single parameter model. For a reasonable estimate of what the halflife should be, you can use the method from a previous paper [Estimating the halflife of a time series]({{< ref "/papers/estimating_the_halflife_of_a_time_series" >}}).
+
 # Estimating portfolio weights
 
 # Results
@@ -343,6 +365,122 @@ E[r_{lt}^i r_{st}^j] =
 $$
 
 Can use [this method](https://mathoverflow.net/questions/330162/correlation-between-square-of-normal-random-variables#comment822946_330162) to solve this.
+
+---
+
+Say we have two Gaussian random variables \\(a\\) and \\(b\\) with means \\(\mu_a\\) and \\(\mu_b\\), variances \\(\sigma^2_a\\) and \\(\sigma^2_b\\) and covariance \\(\sigma^2_{ab}\\). We can write these two variables as functions of three uncorrelated standard normals \\(A\\), \\(B\\) and \\(Z\\):
+$$
+\begin{aligned}
+a &= \mu_a + \left(\sqrt{\sigma^2_a - \frac{\sigma^4_{ab}}{\sigma_b^2}}\right) A  + \frac{\sigma^2_{ab}}{\sigma_b} Z \\\
+b &= \mu_b + \left(\sqrt{\sigma^2_b - \frac{\sigma^4_{ab}}{\sigma_a^2}}\right) B + \frac{\sigma^2_{ab}}{\sigma_a} Z \\\
+\end{aligned}
+$$
+
+
+We can use this to calculate co-moments of \\(a\\) and \\(b\\):
+$$
+\begin{aligned}
+E[ab] &= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)] \\\
+&= E[\mu_a (\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z) + \hat{\sigma}_a A (\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z) + \hat{\sigma}\_{az} Z (\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)] \\\
+&= E[\mu_a \mu_b + \mu_a \hat{\sigma}_b B + \mu_a \hat{\sigma}\_{bz} Z + \hat{\sigma}_a A \mu_b + \hat{\sigma}_a A \hat{\sigma}_b B + \hat{\sigma}_a A \hat{\sigma}\_{bz} Z + \hat{\sigma}\_{az} Z \mu_b + \hat{\sigma}\_{az} Z \hat{\sigma}_b B + \hat{\sigma}\_{az} Z \hat{\sigma}\_{bz} Z] \\\
+&= \mu_a\mu_b + \hat{\sigma}\_{az} \hat{\sigma}\_{bz} \\\
+&= \mu_a\mu_b + \frac{\sigma^2\_{ab}}{\sigma_b} \frac{\sigma^2\_{ab}}{\sigma_a} \\\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+E[a^2b] &= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)] \\\
+&= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_a \mu_b + \mu_a \hat{\sigma}_b B + \mu_a \hat{\sigma}\_{bz} Z + \hat{\sigma}_a A \mu_b + \hat{\sigma}_a A \hat{\sigma}_b B + \hat{\sigma}_a A \hat{\sigma}\_{bz} Z + \hat{\sigma}\_{az} Z \mu_b + \hat{\sigma}\_{az} Z \hat{\sigma}_b B + \hat{\sigma}\_{az} Z \hat{\sigma}\_{bz} Z)] \\\
+&= E[\mu_a\mu_a \mu_b + \hat{\sigma}_a A \hat{\sigma}_a A \mu_b + \hat{\sigma}\_{az} Z \mu_a \hat{\sigma}\_{bz} Z + \hat{\sigma}\_{az} Z \hat{\sigma}\_{az} Z \mu_b + \hat{\sigma}\_{az} Z \hat{\sigma}\_{az} Z \hat{\sigma}\_{bz} Z] \\\
+&= \mu_a\mu_a \mu_b + \hat{\sigma}_a^2 \mu_b + \hat{\sigma}\_{az}\mu_a \hat{\sigma}\_{bz} + \hat{\sigma}\_{az}^2 \mu_b \\\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+E[a^2b^2] &= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)^2(\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)^2] \\\
+&= E[
+    \mu_a^2 \mu_b^2
+    + 2 \mu_a^2 \mu_b \hat{\sigma}_b B
+    + 2 \mu_a^2 \mu_b \hat{\sigma}\_{bz} Z
+    + \mu_a^2 \hat{\sigma}_b^2 B^2
+    + 2 \mu_a^2 \hat{\sigma}_b \hat{\sigma}\_{bz} B Z
+    + \mu_a^2 \hat{\sigma}\_{bz}^2 Z^2
+    + \mu_a \mu_b^2 \hat{\sigma}_a A
+    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}_b A B
+    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}\_{bz} A Z
+    + \mu_a \hat{\sigma}_a \hat{\sigma}_b^2 A B^2
+    + 2 \mu_a \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{bz} A B Z
+    + \mu_a \hat{\sigma}_a \hat{\sigma}\_{bz}^2 A Z^2
+    + \mu_a \mu_b^2 \hat{\sigma}\_{az} Z
+    + 2 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}_b B Z
+    + 2 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} Z^2
+    + \mu_a \hat{\sigma}\_{az} \hat{\sigma}_b^2 B^2 Z
+    + 2 \mu_a \hat{\sigma}\_{az} \hat{\sigma}_b \hat{\sigma}\_{bz} B Z^2
+    + \mu_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 Z^3
+    + \mu_a \mu_b^2 \hat{\sigma}_a A
+    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}_b A B
+    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}\_{bz} A Z
+    + \mu_a \hat{\sigma}_a \hat{\sigma}_b^2 A B^2
+    + 2 \mu_a \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{bz} A B Z
+    + \mu_a \hat{\sigma}_a \hat{\sigma}\_{bz}^2 A Z^2
+    + \mu_b^2 \hat{\sigma}_a^2 A^2
+    + 2 \mu_b \hat{\sigma}_a^2 \hat{\sigma}_b A^2 B
+    + 2 \mu_b \hat{\sigma}_a^2 \hat{\sigma}\_{bz} A^2 Z
+    + \hat{\sigma}_a^2 \hat{\sigma}_b^2 A^2 B^2
+    + 2 \hat{\sigma}_a^2 \hat{\sigma}_b \hat{\sigma}\_{bz} A^@ B Z
+    + \hat{\sigma}_a^2 \hat{\sigma}\_{bz}^2 A^2 Z^2
+    + \mu_b^2 \hat{\sigma}_a \hat{\sigma}\_{az} A Z
+    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}_b A B Z
+    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz} A Z^2
+    + \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}_b^2 A B^2 Z
+    + 2 \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}_b \hat{\sigma}\_{bz} A B Z^2
+    + \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 A Z^3
+    + \mu_a \mu_b^2 \hat{\sigma}\_{az} Z
+    + 2 \mu_a \mu_b \hat{\sigma}_b \hat{\sigma}\_{az} B Z
+    + 2 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} Z^2
+    + \mu_a \hat{\sigma}_b^2 \hat{\sigma}\_{az} B^2 Z
+    + 2 \mu_a \hat{\sigma}_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} B Z^2
+    + \mu_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 Z^3
+    + \mu_b^2 \hat{\sigma}_a \hat{\sigma}\_{az} A Z
+    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{az} A B Z
+    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz} A Z^2
+    + \hat{\sigma}_a \hat{\sigma}_b^2 \hat{\sigma}\_{az} A B^2 Z
+    + 2 \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} A B ^2
+    + \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 A Z^3
+    + \mu_b^2 \hat{\sigma}\_{az}^2 Z^2
+    + 2 \mu_b \hat{\sigma}\_{az}^2 \hat{\sigma}_b B Z^2
+    + 2 \mu_b \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz} Z^3
+    + \hat{\sigma}\_{az}^2 \hat{\sigma}_b^2 B^2 Z^2
+    + 2 \hat{\sigma}\_{az}^2 \hat{\sigma}_b \hat{\sigma}\_{bz} B Z^3
+    + \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz}^2 Z^4
+] \\\
+&= E[
+    \mu_a^2 \mu_b^2
+    + \mu_a^2 \hat{\sigma}_b^2 B^2
+    + \mu_b^2 \hat{\sigma}_a^2 A^2
+    + \mu_a^2 \hat{\sigma}\_{bz}^2 Z^2
+    + \mu_b^2 \hat{\sigma}\_{az}^2 Z^2
+    + 4 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} Z^2
+    + \hat{\sigma}_a^2 \hat{\sigma}_b^2 A^2 B^2
+    + \hat{\sigma}_a^2 \hat{\sigma}\_{bz}^2 A^2 Z^2
+    + \hat{\sigma}_b^2 \hat{\sigma}\_{az}^2 B^2 Z^2
+    + \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz}^2 Z^4
+] \\\
+&=  \mu_a^2 \mu_b^2
+    + \mu_a^2 \hat{\sigma}_b^2
+    + \mu_b^2 \hat{\sigma}_a^2
+    + \mu_a^2 \hat{\sigma}\_{bz}^2
+    + \mu_b^2 \hat{\sigma}\_{az}^2
+    + 4 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz}
+    + \hat{\sigma}_a^2 \hat{\sigma}_b^2 
+    + \hat{\sigma}_a^2 \hat{\sigma}\_{bz}^2
+    + \hat{\sigma}_b^2 \hat{\sigma}\_{az}^2
+    + \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz}^2 \\\
+\end{aligned}
+$$
+
 
 
 {{% citation
