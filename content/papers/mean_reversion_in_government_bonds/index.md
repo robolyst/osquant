@@ -347,24 +347,19 @@ $$
     E[R_2(r_{lt})R_2(r_{st})] &= E[(C_0(r_{l,t-1}) + C_1(r_{l,t-1}) r_{lt} + C_2(r_{l,t-1}) r_{lt}^2 ) \\\
     &\quad\times(C_0(r_{s,t-1}) + C_1(r_{s,t-1}) r_{st} + C_2(r_{s,t-1}) r_{st}^2 )]\\\
     \\\
-    &= C_0(r_{l,t-1})(C_0(r_{s,t-1}) \\\
-    &\quad + C_0C_1(r_{s,t-1}) E[r_{st}] \\\
-    &\quad + C_0C_2(r_{s,t-1}) E[r_{st}^2] \\\
+    &= C_0(r_{l,t-1})C_0(r_{s,t-1}) \\\
     &\quad + C_1(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}] \\\
-    &\quad + C_1(r_{l,t-1})C_1(r_{s,t-1}) E[r_{st} r_{lt}] \\\
-    &\quad + C_1(r_{l,t-1})C_2(r_{s,t-1}) E[r_{st}^2 r_{lt}] \\\
+    &\quad + C_0(r_{l,t-1})C_1(r_{s,t-1}) E[r_{st}] \\\
     &\quad + C_2(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}^2] \\\
+    &\quad + C_0(r_{l,t-1})C_2(r_{s,t-1}) E[r_{st}^2] \\\
+    &\quad + C_1(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt} r_{st}] \\\
+    &\quad + C_1(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt} r_{st}^2] \\\
     &\quad + C_2(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt}^2 r_{st}] \\\
     &\quad + C_2(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt}^2 r_{st}^2] \\\
 \end{aligned}
 $$
 
-Where:
-$$
-E[r_{lt}^i r_{st}^j] = 
-$$
-
-Can use [this method](https://mathoverflow.net/questions/330162/correlation-between-square-of-normal-random-variables#comment822946_330162) to solve this.
+Can use [this method](https://mathoverflow.net/questions/330162/correlation-between-square-of-normal-random-variables#comment822946_330162) to solve the expected monomials.
 
 ---
 
