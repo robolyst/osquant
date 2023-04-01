@@ -31,7 +31,6 @@ Very often, you can calculate the moments of a function of a random value based 
 
 If X is a Gaussian distribution, \\(X \sim \mathcal{N}(\mu, \sigma^2)\\), then the moments are [^1] [^2]:
 
-
 | Raw moments                                      | Central moments                  | Standardised moments                              |
 |:-------------------------------------------------|:---------------------------------|:--------------------------------------------------|
 | \\(E[X] = \mu\\)                                 | \\(E[X - \mu] = 0\\)             | \\(E[\frac{X - \mu}{\sigma}] = 0\\)               |
@@ -46,7 +45,6 @@ Co-moments involve multiple random variables. For example, \\(E[XY]\\) is a co-m
 ## How to derive
 
 The trick to deriving Gaussian co-moments is to write the two variables as linear combinations of three standard normal distributions (\\(\hat{X},\hat{Y},\hat{Z} \sim \mathcal{N}(0, 1)\\)). Then, expand out the expected value into combinations of \\(E[\hat{X}^i\hat{Y}^j\hat{Z}^k]\\) which resolve to \\(E[\hat{X}^i]E[\hat{Y}^j]E[\hat{Z}^k]\\) [^3].
-
 
 Say we have two Gaussian random variables \\(X\\) and \\(Y\\) with means \\(\mu_X\\) and \\(\mu_Y\\), variances \\(\sigma^2_X\\) and \\(\sigma^2_Y\\) and covariance \\(\sigma^2_{XY}\\). We can write these two variables as functions of three uncorrelated standard normals \\(\hat{X}\\), \\(\hat{Y}\\) and \\(\hat{Z}\\):
 $$
@@ -104,8 +102,6 @@ E[X^2Y] &= E[(\mu_X + \hat{\sigma}_X \hat{X} + \sigma\_{XY} \hat{Z})^2(\mu_Y + \
 &= \mu_X^2\mu_Y  + 2 \mu_X\sigma\_{XY}^2 + \mu_Y\sigma^2\_X \label{2}\tag{2}
 \end{aligned}
 $$
-
-
 
 $$
 \begin{aligned}
