@@ -21,6 +21,7 @@ Grafana
 [dD]ockerising
 [lL]eptokurtic
 Gaussians
+stationarity
 
 Vapnik
 Jaakkola

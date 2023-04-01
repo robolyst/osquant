@@ -160,6 +160,7 @@ plt.plot((1 + df['returns']).cumprod())
 ```
 
 We can repeat this analysis across the following US bond ETFs:
+
 * [iShares 20+ Year Treasury Bond ETF](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf) (TLT)
 * [iShares 7-10 Year Treasury Bond ETF](https://www.ishares.com/us/products/239456/ishares-710-year-treasury-bond-etf) (IEF)
 * [iShares 1-3 Year Treasury Bond ETF](https://www.ishares.com/us/products/239452/ishares-13-year-treasury-bond-etf) (SHY)
@@ -173,6 +174,7 @@ and we will find the following set of parameters:
 | SHY     | DGS3  | 2                | 270               | 2               |
 
 I am not sure why the frequency value changes for each of the funds. If I were to use 260 for all of them, the estimated returns will deviate fairly significantly. It might be explained by the funds not tracking exactly according to this model and varying the frequency term is akin to fitting a regression model.
+
 # Distribution of returns
 
 The previous section found that a fund's return can be estimated with:
