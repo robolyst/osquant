@@ -25,7 +25,7 @@ Moments are broken down into raw, central and standardised moments. They are als
 
 where \\(\mu\\) is the mean, \\(\sigma^2\\) is the variance, \\(s\\) is the skewness, and \\(\kappa\\) is the kurtosis.
 
-Very often, you can calculate the moments of a function of a random value based on the moments of that random variable. I frequently find myself calculating the moments of functions of Gaussian random variables. Here, I list out the moments of the Gaussian distribution for reference and describe a method for calculating co-moments.
+Often, you can calculate the moments of a function of a random value based on the moments of that random variable. I frequently find myself calculating the moments of functions of Gaussian random variables. Here, I list out the moments of the Gaussian distribution for reference and describe a method for calculating co-moments.
 
 # Gaussian moments
 
@@ -90,7 +90,7 @@ $$
 &\quad + \sigma_{XY}\mu_Y E[\hat{Z}] + \sigma_{XY} \hat{\sigma}\_Y E[\hat{Y}]E[\hat{Z}] + \sigma_{XY}^2 E[\hat{Z}^2]\\\
 \end{aligned}
 $$
-And replace all the Gaussian moments with their values from the table above (i.e. \\(E[\hat{Y}] = 0\\)):
+And replace all the Gaussian moments with their values from the table above (for example \\(E[\hat{Y}] = 0\\)):
 $$
 E[XY] = \mu_X\mu_Y + \sigma_{XY}^2 \tag{1}
 $$
