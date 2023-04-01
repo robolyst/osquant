@@ -25,7 +25,7 @@ Moments are broken down into raw, central and standardised moments. They are als
 
 where \\(\mu\\) is the mean, \\(\sigma^2\\) is the variance, \\(s\\) is the skewness, and \\(\kappa\\) is the kurtosis.
 
-Very often, you can calculate the moments of a function of a random value based on the moments of that random variable. I frequently find myself calculating the moments of functions of Gaussian random variables. I've listed out the moments of the Gaussian distribution here for reference and described a method for calculating co-moments.
+Very often, you can calculate the moments of a function of a random value based on the moments of that random variable. I frequently find myself calculating the moments of functions of Gaussian random variables. Here, I list out the moments of the Gaussian distribution for reference and describe a method for calculating co-moments.
 
 # Gaussian moments
 
@@ -100,9 +100,7 @@ $$
 Two other co-moments that come up often are:
 $$
 \begin{aligned}
-E[X^2Y] &= E[(\mu_X + \hat{\sigma}_X \hat{X} + \sigma\_{XY} \hat{Z})(\mu_X + \hat{\sigma}_X \hat{X} + \sigma\_{XY} \hat{Z})(\mu_Y + \hat{\sigma}_Y \hat{Y} + \sigma\_{XY} \hat{Z})] \\\
-&= \mu_X^2\mu_Y  + 2 \mu_X\sigma\_{XY}^2 E[\hat{Z}^2] + \mu_Y \hat{\sigma}_X^2 E[\hat{X}^2] + \mu_Y \sigma\_{XY}^2 E[\hat{Z}^2] \\\
-&= \mu_X^2\mu_Y  + 2 \mu_X\sigma\_{XY}^2 + \mu_Y \hat{\sigma}_X^2 + \mu_Y \sigma\_{XY}^2 \\\
+E[X^2Y] &= E[(\mu_X + \hat{\sigma}_X \hat{X} + \sigma\_{XY} \hat{Z})^2(\mu_Y + \hat{\sigma}_Y \hat{Y} + \sigma\_{XY} \hat{Z})] \\\
 &= \mu_X^2\mu_Y  + 2 \mu_X\sigma\_{XY}^2 + \mu_Y\sigma^2\_X \label{2}\tag{2}
 \end{aligned}
 $$
@@ -112,16 +110,6 @@ $$
 $$
 \begin{aligned}
 E[X^2Y^2] &= E[(\mu_X + \hat{\sigma}\_X \hat{X} + \sigma\_{XY} \hat{Z})^2(\mu_Y + \hat{\sigma}\_Y \hat{Y} + \sigma_{XY} \hat{Z})^2] \\\
-&= \hat{\sigma}\_X^{2} \hat{\sigma}\_Y^{2}
-\+ \hat{\sigma}\_X^{2} \sigma_{XY}^{2}
-\+ \hat{\sigma}\_X^{2} \mu_{Y}^{2}
-\+ \hat{\sigma}\_Y^{2} \sigma_{XY}^{2}
-\+ \hat{\sigma}\_Y^{2} \mu_{X}^{2} \\\
-&\quad + 3 \sigma_{XY}^{4}
-\+ \mu_{X}^{2} \sigma_{XY}^{2}
-\+ 4 \mu_{X} \mu_{Y} \sigma_{XY}^{2}
-\+ \mu_{Y}^{2} \sigma_{XY}^{2}
-\+ \mu_{X}^{2} \mu_{Y}^{2} \\\
 &= \sigma^2_X\sigma^2_Y
 \+ \sigma^2_X \mu_{Y}^{2}
 \+ \sigma^2_Y \mu_{X}^{2}
