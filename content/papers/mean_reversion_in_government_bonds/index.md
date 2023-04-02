@@ -6,7 +6,7 @@ Using the Vasicek model, you can calculate the expected return of a government b
 type: paper
 katex: true # Enable mathematics on the page
 feature: false
-date: "2023-03-27"
+date: "2023-04-01"
 authors:
     - Adrian Letchford
 categories:
@@ -358,124 +358,6 @@ $$
     &\quad + C_2(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt}^2 r_{st}^2] \\\
 \end{aligned}
 $$
-
-Can use [this method](https://mathoverflow.net/questions/330162/correlation-between-square-of-normal-random-variables#comment822946_330162) to solve the expected monomials.
-
----
-
-Say we have two Gaussian random variables \\(a\\) and \\(b\\) with means \\(\mu_a\\) and \\(\mu_b\\), variances \\(\sigma^2_a\\) and \\(\sigma^2_b\\) and covariance \\(\sigma^2_{ab}\\). We can write these two variables as functions of three uncorrelated standard normals \\(A\\), \\(B\\) and \\(Z\\):
-$$
-\begin{aligned}
-a &= \mu_a + \left(\sqrt{\sigma^2_a - \frac{\sigma^4_{ab}}{\sigma_b^2}}\right) A  + \frac{\sigma^2_{ab}}{\sigma_b} Z \\\
-b &= \mu_b + \left(\sqrt{\sigma^2_b - \frac{\sigma^4_{ab}}{\sigma_a^2}}\right) B + \frac{\sigma^2_{ab}}{\sigma_a} Z \\\
-\end{aligned}
-$$
-
-
-We can use this to calculate co-moments of \\(a\\) and \\(b\\):
-$$
-\begin{aligned}
-E[ab] &= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)] \\\
-&= E[\mu_a (\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z) + \hat{\sigma}_a A (\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z) + \hat{\sigma}\_{az} Z (\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)] \\\
-&= E[\mu_a \mu_b + \mu_a \hat{\sigma}_b B + \mu_a \hat{\sigma}\_{bz} Z + \hat{\sigma}_a A \mu_b + \hat{\sigma}_a A \hat{\sigma}_b B + \hat{\sigma}_a A \hat{\sigma}\_{bz} Z + \hat{\sigma}\_{az} Z \mu_b + \hat{\sigma}\_{az} Z \hat{\sigma}_b B + \hat{\sigma}\_{az} Z \hat{\sigma}\_{bz} Z] \\\
-&= \mu_a\mu_b + \hat{\sigma}\_{az} \hat{\sigma}\_{bz} \\\
-&= \mu_a\mu_b + \frac{\sigma^2\_{ab}}{\sigma_b} \frac{\sigma^2\_{ab}}{\sigma_a} \\\
-\end{aligned}
-$$
-
-$$
-\begin{aligned}
-E[a^2b] &= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)] \\\
-&= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)(\mu_a \mu_b + \mu_a \hat{\sigma}_b B + \mu_a \hat{\sigma}\_{bz} Z + \hat{\sigma}_a A \mu_b + \hat{\sigma}_a A \hat{\sigma}_b B + \hat{\sigma}_a A \hat{\sigma}\_{bz} Z + \hat{\sigma}\_{az} Z \mu_b + \hat{\sigma}\_{az} Z \hat{\sigma}_b B + \hat{\sigma}\_{az} Z \hat{\sigma}\_{bz} Z)] \\\
-&= E[\mu_a\mu_a \mu_b + \hat{\sigma}_a A \hat{\sigma}_a A \mu_b + \hat{\sigma}\_{az} Z \mu_a \hat{\sigma}\_{bz} Z + \hat{\sigma}\_{az} Z \hat{\sigma}\_{az} Z \mu_b + \hat{\sigma}\_{az} Z \hat{\sigma}\_{az} Z \hat{\sigma}\_{bz} Z] \\\
-&= \mu_a\mu_a \mu_b + \hat{\sigma}_a^2 \mu_b + \hat{\sigma}\_{az}\mu_a \hat{\sigma}\_{bz} + \hat{\sigma}\_{az}^2 \mu_b \\\
-\end{aligned}
-$$
-
-$$
-\begin{aligned}
-E[a^2b^2] &= E[(\mu_a + \hat{\sigma}_a A + \hat{\sigma}\_{az} Z)^2(\mu_b + \hat{\sigma}_b B + \hat{\sigma}\_{bz} Z)^2] \\\
-&= E[
-    \mu_a^2 \mu_b^2
-    + 2 \mu_a^2 \mu_b \hat{\sigma}_b B
-    + 2 \mu_a^2 \mu_b \hat{\sigma}\_{bz} Z
-    + \mu_a^2 \hat{\sigma}_b^2 B^2
-    + 2 \mu_a^2 \hat{\sigma}_b \hat{\sigma}\_{bz} B Z
-    + \mu_a^2 \hat{\sigma}\_{bz}^2 Z^2
-    + \mu_a \mu_b^2 \hat{\sigma}_a A
-    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}_b A B
-    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}\_{bz} A Z
-    + \mu_a \hat{\sigma}_a \hat{\sigma}_b^2 A B^2
-    + 2 \mu_a \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{bz} A B Z
-    + \mu_a \hat{\sigma}_a \hat{\sigma}\_{bz}^2 A Z^2
-    + \mu_a \mu_b^2 \hat{\sigma}\_{az} Z
-    + 2 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}_b B Z
-    + 2 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} Z^2
-    + \mu_a \hat{\sigma}\_{az} \hat{\sigma}_b^2 B^2 Z
-    + 2 \mu_a \hat{\sigma}\_{az} \hat{\sigma}_b \hat{\sigma}\_{bz} B Z^2
-    + \mu_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 Z^3
-    + \mu_a \mu_b^2 \hat{\sigma}_a A
-    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}_b A B
-    + 2 \mu_a \mu_b \hat{\sigma}_a \hat{\sigma}\_{bz} A Z
-    + \mu_a \hat{\sigma}_a \hat{\sigma}_b^2 A B^2
-    + 2 \mu_a \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{bz} A B Z
-    + \mu_a \hat{\sigma}_a \hat{\sigma}\_{bz}^2 A Z^2
-    + \mu_b^2 \hat{\sigma}_a^2 A^2
-    + 2 \mu_b \hat{\sigma}_a^2 \hat{\sigma}_b A^2 B
-    + 2 \mu_b \hat{\sigma}_a^2 \hat{\sigma}\_{bz} A^2 Z
-    + \hat{\sigma}_a^2 \hat{\sigma}_b^2 A^2 B^2
-    + 2 \hat{\sigma}_a^2 \hat{\sigma}_b \hat{\sigma}\_{bz} A^@ B Z
-    + \hat{\sigma}_a^2 \hat{\sigma}\_{bz}^2 A^2 Z^2
-    + \mu_b^2 \hat{\sigma}_a \hat{\sigma}\_{az} A Z
-    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}_b A B Z
-    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz} A Z^2
-    + \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}_b^2 A B^2 Z
-    + 2 \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}_b \hat{\sigma}\_{bz} A B Z^2
-    + \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 A Z^3
-    + \mu_a \mu_b^2 \hat{\sigma}\_{az} Z
-    + 2 \mu_a \mu_b \hat{\sigma}_b \hat{\sigma}\_{az} B Z
-    + 2 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} Z^2
-    + \mu_a \hat{\sigma}_b^2 \hat{\sigma}\_{az} B^2 Z
-    + 2 \mu_a \hat{\sigma}_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} B Z^2
-    + \mu_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 Z^3
-    + \mu_b^2 \hat{\sigma}_a \hat{\sigma}\_{az} A Z
-    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{az} A B Z
-    + 2 \mu_b \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz} A Z^2
-    + \hat{\sigma}_a \hat{\sigma}_b^2 \hat{\sigma}\_{az} A B^2 Z
-    + 2 \hat{\sigma}_a \hat{\sigma}_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} A B ^2
-    + \hat{\sigma}_a \hat{\sigma}\_{az} \hat{\sigma}\_{bz}^2 A Z^3
-    + \mu_b^2 \hat{\sigma}\_{az}^2 Z^2
-    + 2 \mu_b \hat{\sigma}\_{az}^2 \hat{\sigma}_b B Z^2
-    + 2 \mu_b \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz} Z^3
-    + \hat{\sigma}\_{az}^2 \hat{\sigma}_b^2 B^2 Z^2
-    + 2 \hat{\sigma}\_{az}^2 \hat{\sigma}_b \hat{\sigma}\_{bz} B Z^3
-    + \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz}^2 Z^4
-] \\\
-&= E[
-    \mu_a^2 \mu_b^2
-    + \mu_a^2 \hat{\sigma}_b^2 B^2
-    + \mu_b^2 \hat{\sigma}_a^2 A^2
-    + \mu_a^2 \hat{\sigma}\_{bz}^2 Z^2
-    + \mu_b^2 \hat{\sigma}\_{az}^2 Z^2
-    + 4 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz} Z^2
-    + \hat{\sigma}_a^2 \hat{\sigma}_b^2 A^2 B^2
-    + \hat{\sigma}_a^2 \hat{\sigma}\_{bz}^2 A^2 Z^2
-    + \hat{\sigma}_b^2 \hat{\sigma}\_{az}^2 B^2 Z^2
-    + \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz}^2 Z^4
-] \\\
-&=  \mu_a^2 \mu_b^2
-    + \mu_a^2 \hat{\sigma}_b^2
-    + \mu_b^2 \hat{\sigma}_a^2
-    + \mu_a^2 \hat{\sigma}\_{bz}^2
-    + \mu_b^2 \hat{\sigma}\_{az}^2
-    + 4 \mu_a \mu_b \hat{\sigma}\_{az} \hat{\sigma}\_{bz}
-    + \hat{\sigma}_a^2 \hat{\sigma}_b^2 
-    + \hat{\sigma}_a^2 \hat{\sigma}\_{bz}^2
-    + \hat{\sigma}_b^2 \hat{\sigma}\_{az}^2
-    + \hat{\sigma}\_{az}^2 \hat{\sigma}\_{bz}^2 \\\
-\end{aligned}
-$$
-
 
 
 {{% citation
