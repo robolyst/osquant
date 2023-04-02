@@ -1,7 +1,7 @@
 ---
 title: "Mean reversion in government bonds"
 summary: "
-Using the Vasicek model, you can calculate the expected return of a government bond spread. Furthermore, you can calculate the expected value of trading a yield curve inversion with ETFs.
+Using the Vasicek model, you can calculate the expected return of a government bond spread. Furthermore, you can calculate the expected value of trading a yield curve inversion.
 "
 type: paper
 katex: true # Enable mathematics on the page
