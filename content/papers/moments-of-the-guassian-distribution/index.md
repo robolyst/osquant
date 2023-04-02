@@ -6,6 +6,7 @@ A reference page listing the moments of a Guassian distribution and shows how to
 date: "2023-04-01"
 type: paper
 katex: true
+feature: true
 authors:
     - Adrian Letchford
 categories:
