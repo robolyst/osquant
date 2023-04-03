@@ -15,6 +15,14 @@ categories:
 notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3
 ---
 
+Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the the X year and X year U.S. Treaturies:
+
+<cell id="interest_rates_plot"></cell>
+
+The yields across different maturities is referred to as a yield curve. There are complicated way of modeling these yield curves. However, in this paper, we're going to focus on modelling the two yields in the above chart; a short term rate and a long term rate. Rather than trying to model the exact interest rates, we're going to model the spread between them as a mean reverting process.
+
+Once we have this mean reverting process, we'll derive the expected rates, their variances and covariance and calculate the expected return and variances of ETFs that hold bonds of similar maturities.
+
 # Interest rate model
 
 We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). We'll combine these two models to create a model of the short term rate \\(r_s(t)\\). This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021].
