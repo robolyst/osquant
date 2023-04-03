@@ -17,7 +17,7 @@ notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integrat
 
 Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the the X year and X year U.S. Treaturies:
 
-<cell id="interest_rates_plot"></cell>
+<plot id="interest_rates_plot"></plot>
 
 The yields across different maturities is referred to as a yield curve. There are complicated way of modeling these yield curves. However, in this paper, we're going to focus on modelling the two yields in the above chart; a short term rate and a long term rate. Rather than trying to model the exact interest rates, we're going to model the spread between them as a mean reverting process.
 
@@ -96,16 +96,18 @@ You can play with the model here:
 
 For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [5 year US government treasury yields (DGS5)](https://fred.stlouisfed.org/series/DGS5).
 
-
-<cell id="interest_rate_model_plot"></cell>
-
-Model parameters:
-
-<cell id="viewof_long_sigma"></cell>
-<cell id="viewof_spread_mean"></cell>
-<cell id="viewof_spread_speed"></cell>
-<cell id="viewof_spread_std"></cell>
-<cell id="viewof_position"></cell>
+<div class="row align-items-center">
+    <div class="col-12 col-xl-8">
+        <plot id="interest_rate_model_plot"></plot>
+    </div>
+    <div class="col col-xl-4">
+        <cell id="viewof_long_sigma"></cell>
+        <cell id="viewof_spread_mean"></cell>
+        <cell id="viewof_spread_speed"></cell>
+        <cell id="viewof_spread_std"></cell>
+        <cell id="viewof_position"></cell>
+    </div>
+</div>
 
 </feature>
 
@@ -119,6 +121,7 @@ Model parameters:
 Model parameters:
 <cell id="viewof_long_sigma_4"></cell>
 <cell id="viewof_position_4"></cell>
+
 
 </feature>
 
