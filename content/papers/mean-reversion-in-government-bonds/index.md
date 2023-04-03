@@ -25,66 +25,31 @@ Once we have this mean reverting process, we'll derive the expected rates, their
 
 # Interest rate model
 
-We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). We'll combine these two models to create a model of the short term rate \\(r_s(t)\\). This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021].
+We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). We'll combine these to create a model of the short term rate \\(r_s(t)\\). We'll use an [Ornstein–Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process) for the spread. This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021].
 
-For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [5 year US government treasury yields (DGS5)](https://fred.stlouisfed.org/series/DGS5).
-
-The data looks like:
-<cell id="rates_plot"></cell>
-
-## Model the long term rate
-
-We want to make as few assumptions as possible about the underlying interest rate. We will model the interest rate of the long term bond \\(r_l(t)\\) as Brownian motion:
+We want to make as few assumptions as possible about the underlying interest rate. We will model the interest rate of the long term bond \\(r_l(t)\\) as Brownian motion and the spread \\(r_s(t)\\) as a mean reverting Ornstein–Uhlenbeck process that is uncorrelated to the long term rate:
 $$
-d r_l(t) = \sigma_l dW_l(t)
+\begin{aligned}
+d r_l(t) &= \sigma_l dW_l(t) \\\
+d s(t) &= \theta_s (\mu_s - s(t))dt + \sigma_s dW_s(t) \\\
+E[dW_l(t)dW_s(t)] &= 0 \\\
+\end{aligned}
 $$
 
-Which means that this processes has normally distributed increments. The conditional moments of the long term rates are:
+Which means that these processes have normally distributed increments. The conditional moments of the long term rates are:
 $$
 \begin{aligned}
 E[r_l(t) | r_l(0)] &= r_l(0) \\\
 \text{var}[r_l(t) | r_l(0)] &= \sigma_l^2 t \\\
 \end{aligned}
 $$
-
-You can play with the long term interest rate model here:
-
-<cell id="long_rate_model_plot"></cell>
-
-Model parameters:
-
-<cell id="viewof_long_sigma"></cell>
-<cell id="viewof_position"></cell>
-
-## Model the spread
-
-We are going to assume that the spread between the long term rate and the short term rate \\(s(t)\\) is mean reverting. For this we will use an [Ornstein–Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process) that is uncorrelated to the long term rate:
-$$
-\begin{aligned}
-d s(t) &= \theta_s (\mu_s - s(t))dt + \sigma_s dW_s(t) \\\
-E[dW_l(t)dW_s(t)] &= 0 \\\
-\end{aligned}
-$$
-The conditional moments of the spread are [^Holy2022]:
+and the conditional moments of the spread are [^Holy2022]:
 $$
 \begin{aligned}
 E[s(t) | s(0)] &= s(0) e^{-\theta_s t} + \mu_s(1 - e^{-\theta_s t}) \\\
 \text{var}[s(t) | s(0)] &= \frac{\sigma_s^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
 \end{aligned}
 $$
-
-You can play with the spread model here:
-
-<cell id="spread_model_plot"></cell>
-
-Model parameters:
-
-<cell id="viewof_spread_mean"></cell>
-<cell id="viewof_spread_speed"></cell>
-<cell id="viewof_spread_std"></cell>
-<cell id="viewof_position_2"></cell>
-
-## Model the short term rate
 
 Based on the defintion of the spread \\(s(t) = r_l(t) - r_s(t)\\) the short term rate is:
 $$
@@ -123,41 +88,26 @@ $$
 \end{aligned}
 $$
 
+You can play with the model here:
 
-<cell id="long_short_rate_model_plot"></cell>
+<feature>
+
+## Interest rate model demo
+
+For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [5 year US government treasury yields (DGS5)](https://fred.stlouisfed.org/series/DGS5).
+
+
+<cell id="interest_rate_model_plot"></cell>
 
 Model parameters:
 
-<cell id="viewof_long_sigma_2"></cell>
-<cell id="viewof_spread_mean_2"></cell>
-<cell id="viewof_spread_speed_2"></cell>
-<cell id="viewof_spread_std_2"></cell>
-<cell id="viewof_position_3"></cell>
+<cell id="viewof_long_sigma"></cell>
+<cell id="viewof_spread_mean"></cell>
+<cell id="viewof_spread_speed"></cell>
+<cell id="viewof_spread_std"></cell>
+<cell id="viewof_position"></cell>
 
-## Interest rate model summary
-
-Moments of the long term rate:
-$$
-\begin{aligned}
-E[r_l(t) | r_l(0)] &= r_l(0) \\\
-\text{var}[r_l(t) | r_l(0)] &= \sigma_l^2 t \\\
-\end{aligned}
-$$
-
-Moments of the short term rate:
-$$
-\begin{aligned}
-E[r_s(t)|r_s(0)] &= r_l(0) - s(0) e^{-\theta_s t} - \mu_s(1 - e^{-\theta_s t}) \\\
-\text{var}[r_s(t)|r_s(0)] &= \sigma_l^2 t + \frac{\sigma_l^2}{2 \theta_s}(1 - e^{-2\theta_s t}) \\\
-\end{aligned}
-$$
-
-Covariance:
-$$
-\begin{aligned}
-\text{cov}(r_l(t), r_s(t) | r_l(0), r_s(0)) &= \text{var}[r_l(t) | r_l(0)] \\\
-\end{aligned}
-$$
+</feature>
 
 # ETF Model
 
