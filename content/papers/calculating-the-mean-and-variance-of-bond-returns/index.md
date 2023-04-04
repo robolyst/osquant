@@ -21,13 +21,13 @@ $$
 R(r_t)  &= \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
 \end{aligned}
 $$
-where \\(R(r_t)\\) is the ETF's return at time \\(t\\), \\(r_t\\) is the market bond yield, \\(f\\) is the data frequency in times per year (i.e. daily is approximately \\(f = 260\\)), \\(p\\) is the number of coupon payments per year and \\(T\\) is the time to maturity in years.
+where \\(R(r_t)\\) is the ETF's return at time \\(t\\), \\(r_t\\) is the market bond yield, \\(f\\) is the data frequency in times per year (for example, daily is approximately \\(f = 260\\)), \\(p\\) is the number of coupon payments per year and \\(T\\) is the time to maturity in years.
 
-This is a very difficult equation to work with. If we knew the moments of \\(r_t\\) I'm not sure how you would calculate the moments of \\(R(r_t)\\). However, this function appears to be almost linear. The chart below shows that this function is very close to a straight line:
+This is a difficult equation to work with. If we knew the moments of \\(r_t\\) I'm not sure how you would calculate the moments of \\(R(r_t)\\). However, this function appears to be almost linear. The chart below shows that this function is close to a straight line:
 
 <plot id="etf_return_plot"></plot>
 
-Notice that the ETF return is nearly a straight line. There is a slight bend which suggests that a second order [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) could be used to simplify \\(R(r_t)\\) and allow us to estimate the moments of \\(R(r_t)\\).
+Notice that the ETF return is nearly a straight line. A slight bend in the line suggests that a second order [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) could be used to simplify \\(R(r_t)\\) and allow us to estimate the moments of \\(R(r_t)\\).
 
 # First order Taylor expansion
 
@@ -59,7 +59,6 @@ R^\prime(r_t) &= -\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\righ
 \end{aligned}
 $$
 
-
 The first order Taylor expansion is:
 $$
 R_1(r_t) = R(r_{t-1}) + \frac{R^\prime(r_{t-1})}{1!}(r_t - r_{t-1})
@@ -83,11 +82,11 @@ You can see in the chart below that the first order expansion is a pretty good a
 Taking the second derivative is quite tedious. Starting off:
 $$
 \begin{aligned}
-R^{\prime\prime}(r_t) = \frac{d}{dr_t}R^\prime(r_t) =& -\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right)\right] \\\ 
+R^{\prime\prime}(r_t) = \frac{d}{dr_t}R^\prime(r_t) =& -\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right)\right] \\\
 & - \frac{d}{dr_t} \left[(1 - \frac{r_{t-1}}{r_t})\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
 \\\
-=& -\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t^2}\right] \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) \\\ 
-& -\frac{r_{t-1}}{r_t^2} \frac{d}{dr_t} \left[\left(1 - (1 + \frac{r_t}{p})^{-pT}\right)\right] \\\ 
+=& -\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t^2}\right] \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) \\\
+& -\frac{r_{t-1}}{r_t^2} \frac{d}{dr_t} \left[\left(1 - (1 + \frac{r_t}{p})^{-pT}\right)\right] \\\
 & - \frac{d}{dr_t} \left[(1 - \frac{r_{t-1}}{r_t})\right]\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
 & - (1 - \frac{r_{t-1}}{r_t})\frac{d}{dr_t}\left[\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
 \\\
@@ -100,8 +99,8 @@ $$
 and using equations \\(\eqref{1}\\) & \\(\eqref{2}\\) we can solve the first three terms:
 $$
 \begin{aligned}
-R^{\prime\prime}(r_t) =& \ 2\frac{r_{t-1}}{r_t^3} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) \\\ 
-& -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\ 
+R^{\prime\prime}(r_t) =& \ 2\frac{r_{t-1}}{r_t^3} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) \\\
+& -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
 & -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
 & - (1 - \frac{r_{t-1}}{r_t})\frac{d}{dr_t}\left[\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
 \end{aligned}
@@ -119,7 +118,7 @@ $$
 \begin{aligned}
 R(r_{t-1}) &= \frac{r_{t-1}}{f} \\\
 R^\prime(r_{t-1}) &= -\frac{1}{r_{t-1}} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) \\\
-R^{\prime\prime}(r_{t-1}) &= 2\frac{1}{r_{t-1}^2} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) -2\frac{1}{r_{t-1}}\frac{pT}{p + r_{t-1}} (\frac{p + r_{t-1}}{p})^{-pT} \\\ 
+R^{\prime\prime}(r_{t-1}) &= 2\frac{1}{r_{t-1}^2} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) -2\frac{1}{r_{t-1}}\frac{pT}{p + r_{t-1}} (\frac{p + r_{t-1}}{p})^{-pT} \\\
 C_0 &= R(r_{t-1}) - R^\prime(r_{t-1})r_{t-1} + R^{\prime\prime}(r_{t-1}) \frac{1}{2}r_{t-1}^2 \\\
 C_1 &= R^\prime(r_{t-1}) - R^{\prime\prime}(r_{t-1}) r_{t-1} \\\
 C_2 &= R^{\prime\prime}(r_{t-1}) \frac{1}{2} \\\
@@ -140,7 +139,7 @@ $$
 \text{mean}[R_2(r_t)] = E[R_2(r_t)] = C_0 + C_1 E[r_t] + C_2 E[r_t^2]
 $$
 
-From the definition of [variance](https://en.wikipedia.org/wiki/Variance#Definition), we get: 
+From the definition of [variance](https://en.wikipedia.org/wiki/Variance#Definition), we get:
 $$
 \text{var}[R_2(r_t)] = E[(R_2(r_t) - E[R_2(r_t)])^2] = E[R_2(r_t)^2] - E[R_2(r_t)]^2
 $$
@@ -153,7 +152,7 @@ E[R_2(r_t)^2] &= E[(C_0 + C_1 r_t + C_2 r_t^2)(C_0 + C_1 r_t + C_2 r_t^2)] \\\
 \end{aligned}
 $$
 
-The mean and variance above require we know the first 4 raw moments of the yield: \\(E[r_t]\\), \\(E[r_t^2]\\), \\(E[r_t^3]\\) and \\(E[r_t^4]\\). Common models of interest rates assume a Gaussian distribution (for example [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)) or a Lognormal distribution (for example [Black–Karasinski model](https://en.wikipedia.org/wiki/Black%E2%80%93Karasinski_model)).
+The mean and variance above require we know the first 4 raw moments of the yield: \\(E[r_t]\\), \\(E[r_t^2]\\), \\(E[r_t^3]\\) and \\(E[r_t^4]\\). Common models of interest rates assume a Gaussian distribution (for example [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)) or a Log--normal distribution (for example [Black--Karasinski model](https://en.wikipedia.org/wiki/Black%E2%80%93Karasinski_model)).
 
 The table gives the [Gaussian moments]({{< ref "/papers/moments-of-the-guassian-distribution" >}}) :
 
@@ -164,10 +163,9 @@ The table gives the [Gaussian moments]({{< ref "/papers/moments-of-the-guassian-
 | \\(E[r_t^3]\\)  | \\(\mu^3 + 3\mu\sigma^2\\)               |
 | \\(E[r_t^4]\\)  | \\(\mu^4 +6\mu^2\sigma^2 + 3\sigma^4\\)  |
 
-The kth Lognormal moment evaluates as [^1]:
+The \\(k^\text{th}\\) Log--normal moment evaluates as [^1]:
 $$
 E[r_t^k] = e^{\frac{k (2 \mu + k \sigma^2)}{2}}
 $$
-
 
 [^1]: [How to compute moments of log normal distribution](https://math.stackexchange.com/a/628692). Answer on Stack Exchange.
