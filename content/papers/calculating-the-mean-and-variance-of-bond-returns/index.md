@@ -6,7 +6,7 @@ Bond returns are a function of yields. Calculating the expected value of this fu
 type: paper
 katex: true # Enable mathematics on the page
 feature: true
-date: "2023-04-04"
+date: "2023-04-05"
 authors:
     - Adrian Letchford
 categories:
