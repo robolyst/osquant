@@ -163,9 +163,10 @@ The table gives the [Gaussian moments]({{< ref "/papers/moments-of-the-guassian-
 | \\(E[r_t^3]\\)  | \\(\mu^3 + 3\mu\sigma^2\\)               |
 | \\(E[r_t^4]\\)  | \\(\mu^4 +6\mu^2\sigma^2 + 3\sigma^4\\)  |
 
-The \\(k^\text{th}\\) Log--normal moment evaluates as [^1]:
+The \\(k^\text{th}\\) Log--normal moment evaluates as [^1] [^2]:
 $$
 E[r_t^k] = e^{\frac{k (2 \mu + k \sigma^2)}{2}}
 $$
 
 [^1]: [How to compute moments of log normal distribution](https://math.stackexchange.com/a/628692). Answer on Stack Exchange.
+[^2]: [The Log--normal Distribution](https://www.randomservices.org/random/special/LogNormal.html).
