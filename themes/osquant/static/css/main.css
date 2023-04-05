@@ -432,17 +432,17 @@ Other
     margin-right: auto;
     margin-top: 3rem;
     margin-bottom: 3rem;
-    font-size: 1em;
     text-align: center;
 }
 
 #page_content table th {
-    background-color: #f3f3f3;
-    padding: 4pt 15pt;
+    padding: 0pt 10pt;
+    font-weight: 600;
+    border-bottom: 1px solid #dfdfdf;
 }
 
 #page_content table td {
-    padding: 4pt 15pt;
+    padding: 4pt 10pt;
 }
 
 #page_content figure {
