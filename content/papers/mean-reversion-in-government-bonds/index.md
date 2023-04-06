@@ -6,7 +6,7 @@ Using the Vasicek model, you can calculate the expected return of a government b
 type: paper
 katex: true # Enable mathematics on the page
 feature: false
-date: "2023-04-01"
+date: "2023-04-05"
 authors:
     - Adrian Letchford
 categories:
@@ -111,21 +111,6 @@ For the long term rates we'll use the [30 year US government treasury yields (DG
 
 </feature>
 
-# ETF Model
-
-
-<feature>
-
-<cell id="etf_model_plot"></cell>
-
-Model parameters:
-<cell id="viewof_long_sigma_4"></cell>
-<cell id="viewof_position_4"></cell>
-
-
-</feature>
-
-
 # Estimating parameters
 
 We need to estimate the parameters \\(\sigma_l\\), \\(\mu_s\\), \\(\theta_s\\) and \\(\sigma_s\\).
@@ -148,7 +133,22 @@ $$
 \sigma_s &= \sqrt{2 \theta_s \text{var}[s(t)]} \\\
 \end{aligned}
 $$
-If the same halflife is used for all parameters, then this becomes a single parameter model. For a reasonable estimate of what the halflife should be, you can use the method from a previous paper [Estimating the halflife of a time series]({{< ref "/papers/estimating_the_halflife_of_a_time_series" >}}).
+If the same half-life is used for all parameters, then this becomes a single parameter model. For a reasonable estimate of what the half-life should be, you can use the method from a previous paper [Estimating the half-life of a time series]({{< ref "/papers/estimating_the_halflife_of_a_time_series" >}}).
+
+
+# ETF Model
+
+
+<feature>
+
+<cell id="etf_model_plot"></cell>
+
+Model parameters:
+<cell id="viewof_long_sigma_4"></cell>
+<cell id="viewof_position_4"></cell>
+
+
+</feature>
 
 # Estimating portfolio weights
 
