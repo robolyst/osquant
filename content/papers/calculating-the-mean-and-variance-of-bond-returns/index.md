@@ -168,7 +168,6 @@ $$
 E[r_t^k] = e^{\frac{k (2 \mu + k \sigma^2)}{2}}
 $$
 
-
 <!-- ### Covariance
 $$
 \begin{aligned}
@@ -194,7 +193,6 @@ $$
     &\quad + C_2(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt}^2 r_{st}^2] \\\
 \end{aligned}
 $$ -->
-
 
 [^1]: [How to compute moments of log normal distribution](https://math.stackexchange.com/a/628692). Answer on Stack Exchange.
 [^2]: [The Log--normal Distribution](https://www.randomservices.org/random/special/LogNormal.html).

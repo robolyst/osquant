@@ -74,7 +74,7 @@ $$
 The covariance between the long and short term rate is:
 $$
 \begin{aligned}
-\text{cov}(r_l(t), r_s(t) | r_l(0), r_s(0)) &= 
+\text{cov}(r_l(t), r_s(t) | r_l(0), r_s(0)) &=
 [1, -1]
 \left[\begin{matrix}
 \text{var}[r_l(t) | r_l(0)] & 0 \\\
@@ -138,6 +138,7 @@ If the same half-life is used for all parameters, then this becomes a single par
 You can see the estimated values for the four parameters here:
 
 <plot id="parameters_plot"></plot>
+
 # ETF Model
 
 We now have a model of the long bond yields and a model of the short bond yields. The next step is to create a model of future ETF returns so that we can trade.
@@ -164,7 +165,6 @@ The equations for the \\(C_i\\) values are a little long and tedious. Their valu
 
 The moments of the yield \\(r_t\\) are all Gaussian moments which means we can calculate the mean and variance above given the parameters below:
 
-
 | ETF     | Rates | Maturity \\(T\\) | Frequency \\(f\\) | Coupons \\(p\\) |
 |---------|-------|------------------|-------------------|-----------------|
 | [TLT](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf)     | DGS30 | 25               | 260               | 2               |
@@ -176,7 +176,7 @@ Here I plot the expected 1-step ahead returns for TLT and SHY:
 
 # Simple trading
 
-To test out this model, I made a simple mean variance optimisation to find weights that create a spread. That is, the weights sum to zero. I assume that there are zero trading costs, trading happens at the mid price and the correlation between the ETFs is 1. 
+To test out this model, I made a simple mean variance optimisation to find weights that create a spread. That is, the weights sum to zero. I assume that there are zero trading costs, trading happens at the mid price and the correlation between the ETFs is 1.
 
 Here are the results compared with an equally weighted portfolio:
 
@@ -203,7 +203,6 @@ These results show that you can model fairly sophisticated interest rate behavio
     link="https://ijbssnet.com/journals/Vol_12_No_2_February_2021/8.pdf"
 %}}
 
-
 {{% citation
     id="Vasichek1977"
     author="Oldrich A. Vasicek"
@@ -213,7 +212,6 @@ These results show that you can model fairly sophisticated interest rate behavio
     volume="5"
     link="http://public.kenan-flagler.unc.edu/faculty/lundblac/bcrp/vasicek77.pdf"
 %}}
-
 
 {{% citation
     id="Holy2022"
