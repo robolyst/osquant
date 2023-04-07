@@ -10,3 +10,6 @@ Run the deveopment site
 hugo server --buildDrafts -F
 ```
 
+# Notes
+
+RSS feed is located at `/index.xml`
