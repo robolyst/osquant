@@ -12,7 +12,7 @@ authors:
 categories:
     - mathematics
     - finance
-notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3
+notebook: ./notebook.js
 ---
 
 Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the 30 year and 3 year U.S. Treasuries in the plot below. Notice that the 3 year yield bounces up and down mostly below the 30 year yield.
