@@ -168,5 +168,33 @@ $$
 E[r_t^k] = e^{\frac{k (2 \mu + k \sigma^2)}{2}}
 $$
 
+
+<!-- ### Covariance
+$$
+\begin{aligned}
+\text{cov}(R_2(r_l), R_2(r_s)) &= E[(R_2(r_l) - \mu_l)(R_2(r_s) - \mu_s)] \\\
+& = E[R_2(r_l)R_2(r_s)] -\mu_s E[R_2(r_l)] - \mu_l E[R_2(r_s)] + \mu_l \mu_s
+\end{aligned}
+$$
+
+where:
+$$
+\begin{aligned}
+    E[R_2(r_{lt})R_2(r_{st})] &= E[(C_0(r_{l,t-1}) + C_1(r_{l,t-1}) r_{lt} + C_2(r_{l,t-1}) r_{lt}^2 ) \\\
+    &\quad\times(C_0(r_{s,t-1}) + C_1(r_{s,t-1}) r_{st} + C_2(r_{s,t-1}) r_{st}^2 )]\\\
+    \\\
+    &= C_0(r_{l,t-1})C_0(r_{s,t-1}) \\\
+    &\quad + C_1(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}] \\\
+    &\quad + C_0(r_{l,t-1})C_1(r_{s,t-1}) E[r_{st}] \\\
+    &\quad + C_2(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}^2] \\\
+    &\quad + C_0(r_{l,t-1})C_2(r_{s,t-1}) E[r_{st}^2] \\\
+    &\quad + C_1(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt} r_{st}] \\\
+    &\quad + C_1(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt} r_{st}^2] \\\
+    &\quad + C_2(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt}^2 r_{st}] \\\
+    &\quad + C_2(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt}^2 r_{st}^2] \\\
+\end{aligned}
+$$ -->
+
+
 [^1]: [How to compute moments of log normal distribution](https://math.stackexchange.com/a/628692). Answer on Stack Exchange.
 [^2]: [The Log--normal Distribution](https://www.randomservices.org/random/special/LogNormal.html).

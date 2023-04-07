@@ -1,7 +1,7 @@
 ---
 title: "Mean reversion in government bonds"
 summary: "
-Using the Vasicek model, you can calculate the expected return of a government bond spread. Furthermore, you can calculate the expected value of trading a yield curve inversion.
+Using the Ornstein–Uhlenbeck process, you can calculate the expected spread between bond yields of different maturities. These expected values can then be used to estimated the expected value of treasury ETF spreads.
 "
 type: paper
 katex: true # Enable mathematics on the page
@@ -15,11 +15,11 @@ categories:
 notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3
 ---
 
-Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the the X year and X year U.S. Treaturies:
+Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the the 30 year and 3 year U.S. Treaturies in the plot below. Notice that the 3 year yield bounces up and down mostly below the 30 year yield.
 
 <plot id="interest_rates_plot"></plot>
 
-The yields across different maturities is referred to as a yield curve. There are complicated way of modeling these yield curves. However, in this paper, we're going to focus on modelling the two yields in the above chart; a short term rate and a long term rate. Rather than trying to model the exact interest rates, we're going to model the spread between them as a mean reverting process.
+The yields across different maturities is referred to as a yield curve. There are complicated way of modeling these yield curves. However, in this post, we're going to focus on modelling the two yields in the above chart; a short term rate and a long term rate. Rather than trying to model the exact interest rates, we're going to model the spread between them as a mean reverting process.
 
 Once we have this mean reverting process, we'll derive the expected rates, their variances and covariance and calculate the expected return and variances of ETFs that hold bonds of similar maturities.
 
@@ -94,7 +94,7 @@ You can play with the model here:
 
 ## Interest rate model demo
 
-For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [5 year US government treasury yields (DGS5)](https://fred.stlouisfed.org/series/DGS5).
+For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [3 year US government treasury yields (DGS3)](https://fred.stlouisfed.org/series/DGS3).
 
 <div class="row align-items-center">
     <div class="col-12 col-xl-8">
@@ -135,191 +135,62 @@ $$
 $$
 If the same half-life is used for all parameters, then this becomes a single parameter model. For a reasonable estimate of what the half-life should be, you can use the method from a previous paper [Estimating the half-life of a time series]({{< ref "/papers/estimating_the_halflife_of_a_time_series" >}}).
 
+You can see the estimated values for the four parameters here:
 
+<plot id="parameters_plot"></plot>
 # ETF Model
 
+We now have a model of the long bond yields and a model of the short bond yields. The next step is to create a model of future ETF returns so that we can trade.
 
-<feature>
+I'm going to refer to a previous article [Calculating the mean and variance of bond returns]({{< ref "/papers/calculating-the-mean-and-variance-of-bond-returns" >}}). There I derived the second order Taylor expansion of bond ETF returns as a function of yield and estimated their mean and variance.
 
-<cell id="etf_model_plot"></cell>
-
-Model parameters:
-<cell id="viewof_long_sigma_4"></cell>
-<cell id="viewof_position_4"></cell>
-
-
-</feature>
-
-# Estimating portfolio weights
-
-# Results
-
-# Conclusions
-
-# Appendix
-## Taylor expansion of bond returns
-
-A previous paper titled [Understanding bond ETF returns]({{< ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
-$$
-\begin{aligned}
-R(r_t)  &= \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
-\end{aligned}
-$$
-This is a very difficult equation to work with. If we knew the moments of \\(r_t\\) I'm not sure how you would calculate the moments of \\(R(r_t)\\).
-
-However, this function appears to be almost linear. The chart below shows that this function is very close to a straight line:
-
-<cell id="etf_return_plot"></cell>
-
-This chart suggests a second order [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) could be used to simplify \\(R(r_t)\\) and allow us to estimate the moments of \\(R(r_t)\\). I've shown the derivation of the second order Taylor expansion is in the notes that follow. The chart below shows that this is a good approximation for the ETF returns.
-
-<cell id="taylor_expansion_plot"></cell>
-
-### First order Taylor expansion
-
-The first derivative is:
-$$
-\begin{aligned}
-R^\prime(r_t) &=\frac{d}{dr_t} \frac{r_{t-1}}{r_t} - \frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t} (1 + \frac{r_t}{p})^{-pT} \right] + \frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} \\\
-&=\frac{d}{dr_t} \frac{r_{t-1}}{r_t} - \frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t}\right] (1 + \frac{r_t}{p})^{-pT} -  \frac{r_{t-1}}{r_t} \frac{d}{dr_t}\left[ (1 + \frac{r_t}{p})^{-pT}\right]  + \frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} \\\
-&=\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t}\right] \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) + (1 -  \frac{r_{t-1}}{r_t}) \frac{d}{dr_t}\left[ (1 + \frac{r_t}{p})^{-pT}\right] \\\
-\end{aligned}
-$$
-
-We have:
-$$
-\begin{equation}
-\frac{d}{dr_t} \frac{r_{t-1}}{r_t} = -\frac{r_{t-1}}{r_t^2} \label{A1}\tag{A1}
-\end{equation}
-$$
-and (lazily) using [Wolfram Alpha](https://www.wolframalpha.com/input?i=%281+%2B+x%2Fa%29%5E%28-c%29) I get:
-$$
-\begin{equation}
-\frac{d}{dr_t}(1 + \frac{r_t}{p})^{-pT} = -\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \label{A2}\tag{A2}
-\end{equation}
-$$
-giving:
-$$
-\begin{aligned}
-R^\prime(r_t) &= -\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) - (1 -  \frac{r_{t-1}}{r_t})\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
-\end{aligned}
-$$
-
-
-The first order Taylor expansion is:
-$$
-R_1(r_t) = R(r_{t-1}) + \frac{R^\prime(r_{t-1})}{1!}(r_t - r_{t-1})
-$$
-
-Because we have taken the Taylor expansion around \\(r_{t-1}\\) instead of 0, some of the terms in \\(R(r_{t-1})\\) and \\(R^\prime(r_{t-1})\\) cancel out giving:
-$$
-\begin{aligned}
-R(r_{t-1})  &= \frac{r_{t-1}}{f}  \\\
-R^\prime(r_{t-1}) &= -\frac{1}{r_{t-1}} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) \\\
-R_1(r_t) &= R(r_{t-1}) + R^\prime(r_{t-1})(r_t - r_{t-1})
-\end{aligned}
-$$
-
-### Second order Taylor expansion
-
-Taking the second derivative is quite tedious. Starting off:
-$$
-\begin{aligned}
-R^{\prime\prime}(r_t) = \frac{d}{dr_t}R^\prime(r_t) =& -\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t^2} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right)\right] \\\ 
-& - \frac{d}{dr_t} \left[(1 - \frac{r_{t-1}}{r_t})\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
-\\\
-=& -\frac{d}{dr_t} \left[\frac{r_{t-1}}{r_t^2}\right] \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) \\\ 
-& -\frac{r_{t-1}}{r_t^2} \frac{d}{dr_t} \left[\left(1 - (1 + \frac{r_t}{p})^{-pT}\right)\right] \\\ 
-& - \frac{d}{dr_t} \left[(1 - \frac{r_{t-1}}{r_t})\right]\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
-& - (1 - \frac{r_{t-1}}{r_t})\frac{d}{dr_t}\left[\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
-\\\
-\end{aligned}
-$$
-We have:
-$$
-\frac{d}{dr_t} \frac{r_{t-1}}{r_t^2} = -2\frac{r_{t-1}}{r_t^3}
-$$
-and using equations \\(\eqref{A1}\\) & \\(\eqref{A2}\\) we can solve the first three terms:
-$$
-\begin{aligned}
-R^{\prime\prime}(r_t) =& \ 2\frac{r_{t-1}}{r_t^3} \left(1 - (1 + \frac{r_t}{p})^{-pT}\right) \\\ 
-& -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\ 
-& -\frac{r_{t-1}}{r_t^2}\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT} \\\
-& - (1 - \frac{r_{t-1}}{r_t})\frac{d}{dr_t}\left[\frac{pT}{p + r_t} (\frac{p + r_t}{p})^{-pT}\right] \\\
-\end{aligned}
-$$
-The last term we will ignore because we are only interested in taking the second derivative at \\(R^{\prime\prime}(r_{t-1})\\) where the last term equals 0:
-$$
-R^{\prime\prime}(r_{t-1}) = 2\frac{1}{r_{t-1}^2} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) -2\frac{1}{r_{t-1}}\frac{pT}{p + r_{t-1}} (\frac{p + r_{t-1}}{p})^{-pT}
-$$
-Which gives us the second order Taylor expansion:
-$$
-R_2(r_t) = R(r_{t-1}) + R^\prime(r_{t-1})(r_t - r_{t-1}) + R^{\prime\prime}(r_{t-1}) \frac{1}{2}(r_t - r_{t-1})^2
-$$
-We can rewrite this into a polynomial of \\(r_t\\) giving us a second order Taylor approximation to the original function:
-$$
-\begin{aligned}
-R(r_{t-1}) &= \frac{r_{t-1}}{f} \\\
-R^\prime(r_{t-1}) &= -\frac{1}{r_{t-1}} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) \\\
-R^{\prime\prime}(r_{t-1}) &= 2\frac{1}{r_{t-1}^2} \left(1 - (1 + \frac{r_{t-1}}{p})^{-pT}\right) -2\frac{1}{r_{t-1}}\frac{pT}{p + r_{t-1}} (\frac{p + r_{t-1}}{p})^{-pT} \\\ 
-C_0(r_{t-1}) &= R(r_{t-1}) - R^\prime(r_{t-1})r_{t-1} + R^{\prime\prime}(r_{t-1}) \frac{1}{2}r_{t-1}^2 \\\
-C_1(r_{t-1}) &= R^\prime(r_{t-1}) - R^{\prime\prime}(r_{t-1}) r_{t-1} \\\
-C_2(r_{t-1}) &= R^{\prime\prime}(r_{t-1}) \frac{1}{2} \\\
-R_2(r_t) &= C_0(r_{t-1}) + C_1(r_{t-1}) r_t + C_2(r_{t-1}) r_t^2 \\\
-\end{aligned}
-$$
-
-## Moments of bond returns
-
-In the previous section we derived the second order Taylor expansion of bond returns \\(R_2(r_t)\\). Here, we'll derive the moments of \\(R_2(r_t)\\) based on the moments of the rate \\(r_t\\).
-
-### First moment (mean)
+The mean is:
 $$
 E[R_2(r_t)] = C_0 + C_1 E[r_t] + C_2 E[r_t^2]
 $$
 
-### Second moment
+And the variance is:
 $$
 \begin{aligned}
-E[R_2(r_t)^2] &= E[(C_0 + C_1 r_t + C_2 r_t^2)(C_0 + C_1 r_t + C_2 r_t^2)] \\\
-&= E[C_0^2 + 2C_0C_1r_t + (2C_0 C_2 + C_1^2 )r_t^2 + 2C_1C_2 r_t^3 + C_2^2 r_t^4] \\\
-&= C_0^2 + 2C_0C_1E[r_t] + (2C_0 C_2 + C_1^2 )E[r_t^2] + 2C_1C_2 E[r_t^3] + C_2^2 E[r_t^4] \\\
+\text{var}[R_2(r_t)] &= E[R_2(r_t)^2] - E[R_2(r_t)]^2 \\\
+\\\
+E[R_2(r_t)^2] &= C_0^2 + 2C_0C_1E[r_t] + (2C_0 C_2 + C_1^2 )E[r_t^2] \\\
+&\quad + 2C_1C_2 E[r_t^3] + C_2^2 E[r_t^4] \\\
 \end{aligned}
 $$
+Where \\(R_2(r_t)\\) is the estimated ETF return and \\(r_t\\) is the bond yield at time \\(t\\). The \\(C_i\\) values are functions of the previous period's bond yield \\(r_{t-1}\\), the frequency of the yields \\(f\\), the number of coupons paid per year \\(p\\) and the time to expiration in years \\(T\\).
 
-### Second standardised moment (variance)
+The equations for the \\(C_i\\) values are a little long and tedious. Their value is that they create a polynomial of the ETF returns as a function of \\(r_t\\). This makes estimating moments simpler. You can refer to the article if you're interested in their derivation.
 
-From the definition of [variance](https://en.wikipedia.org/wiki/Variance#Definition), we can break this down into: 
-$$
-E[(R_2(r_t) - E[R_2(r_t)])^2] = E[R_2(r_t)^2] - E[R_2(r_t)]^2
-$$
+The moments of the yield \\(r_t\\) are all Gaussian moments which means we can calculate the mean and variance above given the parameters below:
 
-### Covariance
-$$
-\begin{aligned}
-\text{cov}(R_2(r_l), R_2(r_s)) &= E[(R_2(r_l) - \mu_l)(R_2(r_s) - \mu_s)] \\\
-& = E[R_2(r_l)R_2(r_s)] -\mu_s E[R_2(r_l)] - \mu_l E[R_2(r_s)] + \mu_l \mu_s
-\end{aligned}
-$$
 
-where:
-$$
-\begin{aligned}
-    E[R_2(r_{lt})R_2(r_{st})] &= E[(C_0(r_{l,t-1}) + C_1(r_{l,t-1}) r_{lt} + C_2(r_{l,t-1}) r_{lt}^2 ) \\\
-    &\quad\times(C_0(r_{s,t-1}) + C_1(r_{s,t-1}) r_{st} + C_2(r_{s,t-1}) r_{st}^2 )]\\\
-    \\\
-    &= C_0(r_{l,t-1})C_0(r_{s,t-1}) \\\
-    &\quad + C_1(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}] \\\
-    &\quad + C_0(r_{l,t-1})C_1(r_{s,t-1}) E[r_{st}] \\\
-    &\quad + C_2(r_{l,t-1})C_0(r_{s,t-1}) E[r_{lt}^2] \\\
-    &\quad + C_0(r_{l,t-1})C_2(r_{s,t-1}) E[r_{st}^2] \\\
-    &\quad + C_1(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt} r_{st}] \\\
-    &\quad + C_1(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt} r_{st}^2] \\\
-    &\quad + C_2(r_{l,t-1})C_1(r_{s,t-1}) E[r_{lt}^2 r_{st}] \\\
-    &\quad + C_2(r_{l,t-1})C_2(r_{s,t-1}) E[r_{lt}^2 r_{st}^2] \\\
-\end{aligned}
-$$
+| ETF     | Rates | Maturity \\(T\\) | Frequency \\(f\\) | Coupons \\(p\\) |
+|---------|-------|------------------|-------------------|-----------------|
+| [TLT](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf)     | DGS30 | 25               | 260               | 2               |
+| [SHY](https://www.ishares.com/us/products/239452/ishares-13-year-treasury-bond-etf)     | DGS3  | 2                | 270               | 2               |
 
+Here I plot the expected returns for TLT and SHY:
+
+<plot id="expected_return_plot"></plot>
+
+# Simple trading
+
+To test out this model, I made a simple mean variance optimisation to find weights that create a spread. That is, the weights sum to zero. I assume that there are zero trading costs, trading happens at the mid price and the correlation between the ETFs is 1. 
+
+Here are the results compared with an equally weighted portfolio:
+
+<plot id="trade_performance_plot"></plot>
+
+Straight away, without any parameter tuning we can get better positions in the two ETFs. Comparing against both an equally weighted portfolio and buying and holding TLT, the Sharpe ratio is higher and the drawdowns are lower:
+
+| Strategy          | Sharpe | Drawdown  |
+|-------------------|--------|-----------|
+| Buy and hold TLT  | 0.41   | -44.14%   |
+| Equal positions   | 0.50   | -26.85%   |
+| TLT & SHY spread  | 0.53   | -18.96%   |
+
+These results show that you can model fairly sophisticated interest rate behaviour and take on positiosn with ETFs.
 
 {{% citation
     id="Souleymanou2021"
