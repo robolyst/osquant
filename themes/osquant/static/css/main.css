@@ -105,11 +105,42 @@ div.highlight pre {
     background-color: rgba(0, 0, 0, 0.01) !important;
 }
 
+
+#splash {
+    background-color: rgba(245, 245, 245, 0.5);
+    padding: 0.01vh;
+    margin-bottom: 5rem;
+}
+
+
+#page_content feature {
+    background-color: rgba(245, 245, 245, 0.5);
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 40pt;
+    padding-bottom: 40pt;
+}
+
+
+#page_content plot {
+    display: block;
+    margin-top: 20pt;
+    margin-bottom: 20pt;
+}
+
+#page_content plot figure {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
 /* -------------------
 Define the page size
 ------------------- */
 
-.container, #page_content > * {
+.container,
+#page_content > *,
+#page_content feature > * {
     max-width: 750px;
     padding-right: 15px;
     padding-left: 15px;
@@ -117,8 +148,16 @@ Define the page size
     margin-right: auto;
 }
 
+#page_content feature > * {
+    max-width: 1300px;
+    padding-right: 5vw;
+    padding-left: 5vw;
+}
+
 @media (max-width:1000px) {
-    .container, #page_content > *  {
+    .container,
+    #page_content > *,
+    #page_content feature > * {
         padding-right: 5vw;
         padding-left: 5vw;
     }
@@ -578,11 +617,4 @@ summary::after {
 }
 details[open] summary:after {
     content: "⭣";
-}
-
-
-#splash {
-    background-color: rgba(245, 245, 245, 0.5);
-    padding: 0.01vh;
-    margin-bottom: 5rem;
 }
