@@ -170,7 +170,7 @@ The moments of the yield \\(r_t\\) are all Gaussian moments which means we can c
 | [TLT](https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf)     | DGS30 | 25               | 260               | 2               |
 | [SHY](https://www.ishares.com/us/products/239452/ishares-13-year-treasury-bond-etf)     | DGS3  | 2                | 270               | 2               |
 
-Here I plot the expected returns for TLT and SHY:
+Here I plot the expected 1-step ahead returns for TLT and SHY:
 
 <plot id="expected_return_plot"></plot>
 
