@@ -15,19 +15,19 @@ categories:
 notebook: https://api.observablehq.com/@dradrian-workspace/example-hugo-integration.js?v=3
 ---
 
-Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the the 30 year and 3 year U.S. Treaturies in the plot below. Notice that the 3 year yield bounces up and down mostly below the 30 year yield.
+Interest rates are not necessarily a pure [random walk](https://en.wikipedia.org/wiki/Random_walk). This assumption falls out from noticing that yields of different bond maturities must be in some way related. Have a look at the yields of the 30 year and 3 year U.S. Treasuries in the plot below. Notice that the 3 year yield bounces up and down mostly below the 30 year yield.
 
 <plot id="interest_rates_plot"></plot>
 
-The yields across different maturities is referred to as a yield curve. There are complicated way of modeling these yield curves. However, in this post, we're going to focus on modelling the two yields in the above chart; a short term rate and a long term rate. Rather than trying to model the exact interest rates, we're going to model the spread between them as a mean reverting process.
+The yields across different maturities is referred to as a yield curve. Yield curve models can get complicated with the need to parameterise the various shapes that the curve can have. However, in this post, we're going to focus on modelling the two yields in the above chart; a short term rate and a long term rate. Rather than trying to model the exact interest rates, we're going to model the spread between them as a mean reverting process.
 
 Once we have this mean reverting process, we'll derive the expected rates, their variances and covariance and calculate the expected return and variances of ETFs that hold bonds of similar maturities.
 
 # Interest rate model
 
-We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). We'll combine these to create a model of the short term rate \\(r_s(t)\\). We'll use an [Ornstein–Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process) for the spread. This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021].
+We're going to create a model of the long term interest rate \\(r_l(t)\\) and the spread between the long term rate and the short term rate \\(s(t) = r_l(t) - r_s(t)\\). We'll combine these to create a model of the short term rate \\(r_s(t)\\). We'll use an [Ornstein—Uhlenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process) for the spread. This is a type of [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)[^Vasichek1977] known as a two-factor equilibrium Vasicek model [^Souleymanou2021].
 
-We want to make as few assumptions as possible about the underlying interest rate. We will model the interest rate of the long term bond \\(r_l(t)\\) as Brownian motion and the spread \\(r_s(t)\\) as a mean reverting Ornstein–Uhlenbeck process that is uncorrelated to the long term rate:
+We want to make as few assumptions as possible about the underlying interest rate. We will model the interest rate of the long term bond \\(r_l(t)\\) as Brownian motion and the spread \\(r_s(t)\\) as a mean reverting Ornstein—Uhlenbeck process that is uncorrelated to the long term rate:
 $$
 \begin{aligned}
 d r_l(t) &= \sigma_l dW_l(t) \\\
@@ -51,7 +51,7 @@ E[s(t) | s(0)] &= s(0) e^{-\theta_s t} + \mu_s(1 - e^{-\theta_s t}) \\\
 \end{aligned}
 $$
 
-Based on the defintion of the spread \\(s(t) = r_l(t) - r_s(t)\\) the short term rate is:
+Based on the definition of the spread \\(s(t) = r_l(t) - r_s(t)\\) the short term rate is:
 $$
 r_s(t) = r_l(t) - s(t)
 $$
@@ -115,7 +115,7 @@ For the long term rates we'll use the [30 year US government treasury yields (DG
 
 We need to estimate the parameters \\(\sigma_l\\), \\(\mu_s\\), \\(\theta_s\\) and \\(\sigma_s\\).
 
-The volatiltiy of the long rate \\(\sigma_l\\) can be done with an EWA of the squared changes in the long rate.
+The volatility of the long rate \\(\sigma_l\\) can be done with an EWA of the squared changes in the long rate.
 
 For the parameters of the Ornstien-Uhlenbeck process for the spread, we'll refer to the unconditional moments as given by [^Holy2022]:
 $$
@@ -190,7 +190,7 @@ Straight away, without any parameter tuning we can get better positions in the t
 | Equal positions   | 0.50   | -26.85%   |
 | TLT & SHY spread  | 0.53   | -18.96%   |
 
-These results show that you can model fairly sophisticated interest rate behaviour and take on positiosn with ETFs.
+These results show that you can model fairly sophisticated interest rate behaviour and take on position with ETFs.
 
 {{% citation
     id="Souleymanou2021"
