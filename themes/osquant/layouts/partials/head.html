@@ -20,4 +20,7 @@
     {{ if .Params.plotly }}{{ partial "plotly.html" . }}{{ end }}
 
     <link type="text/css" rel="stylesheet" href="{{ $css }}">
+
+    <link rel="alternate" type="application/rss+xml" href="{{.Site.BaseURL }}/index.xml" title="{{ .Site.Title }}">
+
 </head>
