@@ -33,3 +33,4 @@ Impens
 Higgs
 [Rr]egressible
 Vasicek
+Telegraf
