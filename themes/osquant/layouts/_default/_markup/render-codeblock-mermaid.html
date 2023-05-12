@@ -1,0 +1,19 @@
+<p>
+    <div class="mermaid">
+        %%{
+            init: {
+            'theme': 'base',
+            'themeVariables': {
+                'primaryColor': 'rgba(0, 0, 0, 0.01)',
+                'primaryBorderColor': '#000',
+                'lineColor': '#000',
+                'fontSize': '18px'
+            }
+            }
+        }%%
+
+        {{ .Inner | safeHTML }}
+    </div>
+</p>
+
+{{ .Page.Store.Set "hasMermaid" true }}

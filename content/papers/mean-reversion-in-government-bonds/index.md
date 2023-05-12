@@ -5,7 +5,6 @@ Using the Ornstein–Uhlenbeck process, you can calculate the expected spread be
 "
 type: paper
 katex: true # Enable mathematics on the page
-feature: true
 date: "2023-04-08"
 authors:
     - Adrian Letchford

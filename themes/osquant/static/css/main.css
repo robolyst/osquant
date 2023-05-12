@@ -618,3 +618,7 @@ summary::after {
 details[open] summary:after {
     content: "⭣";
 }
+
+.mermaid {
+    text-align: center;
+}
