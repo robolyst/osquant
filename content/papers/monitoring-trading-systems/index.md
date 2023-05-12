@@ -29,6 +29,7 @@ flowchart LR
 ```
 
 The steps involved are:
+
 1. Create an app that logs a price
 2. Switch to JSON logs
 3. Setup time series database
@@ -77,7 +78,7 @@ price 102.82811428242694
 
 Dockerising the trading app makes integrating with the monitoring services easier later. Setup your file structure like this:
 
-```
+```files
 repo/
 ├── trader/
 │   ├── Dockerfile
@@ -98,6 +99,7 @@ COPY trader.py /app/trader.py
 ```
 
 We want to be able to run this app with the command `docker-compose up` so put the following into the `docker-compose.yml` file:
+
 ```yaml
 # filename: docker-compose.yml
 version: '3.7'
@@ -117,9 +119,10 @@ volumes:
   logdata:
 ```
 
-Here we've told Docker to build the service called `trader` which runs the command `python trader.py` in the container and stores the logs in a volume called `logdata`. 
+Here we've told Docker to build the service called `trader` which runs the command `python trader.py` in the container and stores the logs in a volume called `logdata`.
 
 If you go ahead and run the following command you will see logs in your console:
+
 ```bash
 docker-compose up
 ```
@@ -129,6 +132,7 @@ docker-compose up
 The Python package [structlog](https://www.structlog.org/en/stable/) creates structured logs for you. The package includes a JSON formatter which we're going to use.
 
 Setting up JSON logs is as easy as configuring `structlog` and wrapping the default logger from our demo trading app above. The updated `trader.py` script looks like:
+
 ```python
 from time import sleep
 import numpy as np
@@ -183,11 +187,10 @@ Perfectly machine readable.
 
 # 3. Setup time series database
 
- We're going to use [QuestDB](https://questdb.io/) as our time series database. QuestDB ingests logs blazingly fast and returns SQL queries in milliseconds.
+ We're going to use [QuestDB](https://questdb.io/) as our time series database. QuestDB ingests logs lightening fast and returns SQL queries in milliseconds.
 
 ![QuestDB website screenshot](images/questdb.png)
 
- 
 QuestDB is free and open source. You can add a QuestDB service to the `docker-compose.yml` file with:
 
 ```yaml
@@ -204,7 +207,9 @@ questdb:
     timeout: 10s
     retries: 50
 ```
+
 Here, we've instructed Docker to leave open three ports:
+
 - `9000` gives you a web app to play with QuestDB
 - `9009` is the port we will send logs to
 - `8812` is the port we'll use to run SQL queries
@@ -213,13 +218,13 @@ Take note of the health check. QuestDB can take a moment to start up. We will wa
 
 # 4. Setup a log shipper
 
-We need a way of moving logs from the `trader.logs` file into QuestDB. Programs that move logs are often termmed log shippers.
+We need a way of moving logs from the `trader.logs` file into QuestDB. Programs that move logs are often termed log shippers.
 
 In this setup, we'll be using [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/).
 
 ![Telegraf website screenshot](images/telegraf.png)
 
-Telegraf is ideal because it is able to read JSON logs and and send them in [InfluxDB's Line Protocol](https://docs.influxdata.com/influxdb/v1.3/write_protocols/line_protocol_tutorial/) format via TCP. QuestDB accepts logs in InfluxDB's Line Protocol format on port `9009`.
+Telegraf is ideal because it is able to read JSON logs and send them in [InfluxDB's Line Protocol](https://docs.influxdata.com/influxdb/v1.3/write_protocols/line_protocol_tutorial/) format via TCP. QuestDB accepts logs in InfluxDB's Line Protocol format on port `9009`.
 
 Telegraf uses a `telegraf.conf` file for configuration. We want to tell Filebeat where the log file lives and where QuestDB lives. We can do this with:
 
@@ -251,7 +256,6 @@ Telegraf uses a `telegraf.conf` file for configuration. We want to tell Filebeat
   data_format = "influx"
 ```
 
-
 The Telegraf service can then be created with:
 
 ```yaml
@@ -268,6 +272,7 @@ telegraf:
     - logdata:/var/log/trader
     - ./telegraf.conf:/etc/telegraf/telegraf.conf
 ```
+
 Here we've told Docker to give `telegraf` access to the same volume (`logdata`) as the `trader` service. This means that `telegraf` can read the logs produced by `trader`.
 
 # 5. Visualise
