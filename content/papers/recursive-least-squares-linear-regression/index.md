@@ -1,7 +1,7 @@
 ---
 title: "Recursive least-squares linear regression"
 summary: "
-blah blah blah
+Rather than recalculating a least--squares model on each new data point, you can simply update the fitted weights. This saves you computational time and allows you to add a higher weight to recent data.
 "
 type: paper
 katex: true # Enable mathematics on the page
@@ -12,6 +12,11 @@ categories:
     - mathematics
 ---
 
+*I first learned about this algorithm in the book Kernel Adaptive Filter: A Comprehensive Introduction[^Liu-2010] sometime in 2012 or 2013. This book goes in depth into how to build kernel filters and does a fantastic job of easing you into the mathematics. I highly recommend having a read if you can.*
+
+In my trading algorithms, at each time period, I use a linear regression to predict future returns of each instrument in my portfolio. I previously fit this regression at each time step. However, the solution to the least--squares problem can be rewritten so that the weight vector is updated at each time period without refitting the entire model. This means that my algorithm run significantly faster speeding up back tests.
+
+
 # Least squares
 
 Define a sequence of training data \\( \\{ \boldsymbol{x}_t, y_t \\}\_{t=1}^{i-1} \\) where we want to predict \\( y_t \\) with \\( \boldsymbol{x}_t \\). We can use least-squares to define a minimisation problem:
@@ -21,44 +26,54 @@ $$
 $$
 
 Denote:
-
 $$
 \begin{aligned}
-\boldsymbol{X}\_{i-1} &= [ \boldsymbol{x}_1,  \dots, \boldsymbol{x}\_{T-1} ] \\\
+\boldsymbol{X}\_{i-1} &= [ \boldsymbol{x}_1,  \dots, \boldsymbol{x}\_{T-1} ]^T \\\
 \boldsymbol{y}\_{i-1} &= [ y_1,  \dots, y\_{T-1} ]^T \\\
 \end{aligned}
 $$
 
-The solution to the problem above is:
-
+Which allows us to rewrite the problem above as:
 $$
-\boldsymbol{w}_{i-1} = (\boldsymbol{X}\_{i-1} \boldsymbol{X}\_{i-1}^T)^{-1} \boldsymbol{X}\_{i-1} \boldsymbol{y}\_{i-1}
+\boldsymbol{w}\_{i-1} = \min_{\boldsymbol{w}} ||\boldsymbol{y}\_{i-1} - \boldsymbol{X}\_{i-1}\boldsymbol{w}||^2
+$$
+
+The solution is:
+$$
+\begin{aligned}
+\boldsymbol{w}_{i-1} = (\boldsymbol{X}\_{i-1}^T \boldsymbol{X}\_{i-1})^{-1} \boldsymbol{X}\_{i-1} \boldsymbol{y}\_{i-1} \label{1}\tag{1}
+\end{aligned}
+$$
+
+This is used to make a prediction of \\( y_i \\):
+$$
+\boldsymbol{x}_i^T\boldsymbol{w}\_{i-1}
 $$
 
 
 # Recursive least-squares
+We can derive a recursive formula for \\( \boldsymbol{w}\_{i-1} \\) so that we do not have to recalculate Eq. \\( \ref{1} \\) at each time step.
 
-Now denote:
+Denote:
 $$
 \begin{aligned}
-\boldsymbol{X}\_{T} &= [ \boldsymbol{X}\_{T-1}, \boldsymbol{x}_{T} ] \\\
-\boldsymbol{y}\_{T} &= [ \boldsymbol{y}\_{T-1}^T,  y\_{T}]^T \\\
+\boldsymbol{X}\_{i} &= \left[\begin{matrix}\boldsymbol{X}\_{i-1} \\\ \boldsymbol{x}_{i} \end{matrix}\right] \\\
+\boldsymbol{y}\_{i} &= \left[\begin{matrix}\boldsymbol{y}\_{i-1} \\\ y\_{i} \end{matrix}\right] \\\
 \end{aligned}
 $$
 
-And define the matrices:
+And define the inverse correlation matrices:
 $$
 \begin{aligned}
-\boldsymbol{P}\_{T-1} &= (\boldsymbol{X}\_{T-1} \boldsymbol{X}\_{T-1}^T)^{-1} \\\
-\boldsymbol{P}\_{T} &= (\boldsymbol{X}\_{T} \boldsymbol{X}\_{T}^T)^{-1} \\\
+\boldsymbol{P}\_{i-1} &= (\boldsymbol{X}\_{i-1}^T \boldsymbol{X}\_{i-1})^{-1} \\\
+\boldsymbol{P}\_{i} &= (\boldsymbol{X}\_{i}^T \boldsymbol{X}\_{i})^{-1} \\\
 \end{aligned}
 $$
 
 Observe that:
 $$
 \begin{aligned}
-\boldsymbol{X}\_{T} \boldsymbol{X}\_{T}^T &= \boldsymbol{X}\_{T-1} \boldsymbol{X}\_{T-1}^T + \boldsymbol{y}_T\boldsymbol{y}_T^T \\\
-\boldsymbol{P}\_{T}^{-1} &= \boldsymbol{P}\_{T-1}^{-1} + \boldsymbol{y}_T\boldsymbol{y}_T^T \\\
+\boldsymbol{P}\_{i} &= (\boldsymbol{X}\_{i-1}^T \boldsymbol{X}\_{i-1} + \boldsymbol{x}_i\boldsymbol{x}_i^T)^{-1} \\\
 \end{aligned}
 $$
 
@@ -69,26 +84,26 @@ $$
 $$
 with the following substitutions:
 $$
-\boldsymbol{A} = \boldsymbol{P}\_{T-1}, \quad
-\boldsymbol{b} = \boldsymbol{y}_T, \quad
-\boldsymbol{c} = \boldsymbol{y}_T
+\boldsymbol{A} = \boldsymbol{X}\_{i-1}^T \boldsymbol{X}\_{i-1}, \quad
+\boldsymbol{b} = \boldsymbol{x}_i, \quad
+\boldsymbol{c} = \boldsymbol{x}_i
 $$
 
-we can derive a recursive formula for \\( \boldsymbol{P}_T \\):
+we can derive a recursive formula for \\( \boldsymbol{P}_i \\):
 $$
-\boldsymbol{P}_T = \left[ \boldsymbol{P}\_{T-1} - \frac{\boldsymbol{P}\_{T-1}\boldsymbol{y}_T\boldsymbol{y}_T^T\boldsymbol{P}\_{T-1}}{1 + \boldsymbol{y}_T^T \boldsymbol{P}\_{T-1} \boldsymbol{y}_T} \right]
+\boldsymbol{P}_i = \left[ \boldsymbol{P}\_{i-1} - \frac{\boldsymbol{P}\_{i-1}\boldsymbol{x}_i\boldsymbol{x}_i^T\boldsymbol{P}\_{i-1}}{1 + \boldsymbol{x}_i^T \boldsymbol{P}\_{i-1} \boldsymbol{x}_i} \right]
 $$
 
-This leads us to a recursive formula for \\( \boldsymbol{w}_T \\):
+This leads us to a recursive formula for \\( \boldsymbol{w}_i \\):
 $$
 \begin{aligned}
-\boldsymbol{w}_T &= \boldsymbol{P}_T \boldsymbol{X}_T \boldsymbol{y}_T \\\
-&= \left[ \boldsymbol{P}\_{T-1} - \frac{\boldsymbol{P}\_{T-1}\boldsymbol{y}_T\boldsymbol{y}_T^T\boldsymbol{P}\_{T-1}}{1 + \boldsymbol{y}_T^T \boldsymbol{P}\_{T-1} \boldsymbol{y}_T} \right][\boldsymbol{X}\_{T-1}\boldsymbol{y}\_{T-1} + \boldsymbol{x}_T y_T] \\\
-&= \boldsymbol{w}\_{T-1} + \frac{\boldsymbol{P}\_{T-1}\boldsymbol{y}_T}{1 + \boldsymbol{y}_T^T \boldsymbol{P}\_{T-1} \boldsymbol{y}_T} [y_T - \boldsymbol{x}_T^T\boldsymbol{w}\_{T-1}]
+\boldsymbol{w}_i &= \boldsymbol{P}_i \boldsymbol{X}_i \boldsymbol{y}_i \\\
+&= \left[ \boldsymbol{P}\_{i-1} - \frac{\boldsymbol{P}\_{i-1}\boldsymbol{x}_i\boldsymbol{x}_i^T\boldsymbol{P}\_{i-1}}{1 + \boldsymbol{x}_i^T \boldsymbol{P}\_{i-1} \boldsymbol{x}_i} \right][\boldsymbol{X}\_{i-1}\boldsymbol{y}\_{i-1} + \boldsymbol{x}_i y_i] \\\
+&= \boldsymbol{w}\_{i-1} + \frac{\boldsymbol{P}\_{i-1}\boldsymbol{x}_i}{1 + \boldsymbol{x}_i^T \boldsymbol{P}\_{i-1} \boldsymbol{x}_i} [y_i - \boldsymbol{x}_i^T\boldsymbol{w}\_{i-1}]
 \end{aligned}
 $$
 
-I've skipped steps in the derivation of \\( \boldsymbol{w}_T \\) above. The missing steps are made up of tedious algebra. If you're curious, the full derivation can be found on page 96 of Kernel Adaptive Filtering[^Liu-2010].
+I've skipped steps in the derivation of \\( \boldsymbol{w}_i \\) above. The missing steps are made up of tedious algebra. If you're curious, the full derivation can be found on page 96 of Kernel Adaptive Filtering[^Liu-2010].
 
 The recursive linear regression algorithm keeps track of \\( \boldsymbol{P} \\) and \\( \boldsymbol{w} \\) and updates them on each data point.
 
@@ -99,14 +114,14 @@ The next question is what should the initial values be? The weight vector can be
 We can add a L2 regularisation to the minimisation problem:
 
 $$
-\boldsymbol{w}\_{i-1} = \min_{\boldsymbol{w}} \sum_{t=1}^{i-1} ( y_{t} - \boldsymbol{x}_t^T\boldsymbol{w})^2 + \lambda ||\boldsymbol{w}||^2
+\boldsymbol{w}\_i = \min_{\boldsymbol{w}} \sum_{t=1}^{i} ( y_{t} - \boldsymbol{x}_t^T\boldsymbol{w})^2 + \lambda ||\boldsymbol{w}||^2
 $$
 
 Where \\( \lambda \\) is the regularisation term and is a positive number.
 
 The solution to this problem is:
 $$
-\boldsymbol{w}_{i-1} = (\boldsymbol{X}\_{i-1} \boldsymbol{X}\_{i-1}^T + \lambda \boldsymbol{I})^{-1} \boldsymbol{X}\_{i-1} \boldsymbol{y}\_{i-1}
+\boldsymbol{w}_{i} = (\boldsymbol{X}\_{i} \boldsymbol{X}\_{i}^T + \lambda \boldsymbol{I})^{-1} \boldsymbol{X}\_{i} \boldsymbol{y}\_{i}
 $$
 
 Where \\( \boldsymbol{I} \\) is the identity matrix. This means that the initial value for \\( \boldsymbol{P} \\) can be set to:
@@ -187,7 +202,7 @@ Note that the regularisation term is multiplied by \\( \beta^i \\) which means t
 
 The solution is given by:
 $$
-\boldsymbol{w}_i = (\boldsymbol{X}_i \boldsymbol{B}_i \boldsymbol{X}_i^T + \beta^i \lambda \boldsymbol{I})^{-1} \boldsymbol{X}_i \boldsymbol{B}_i \boldsymbol{y}_i
+\boldsymbol{w}_i = (\boldsymbol{X}_i^T \boldsymbol{B}_i \boldsymbol{X}_i + \beta^i \lambda \boldsymbol{I})^{-1} \boldsymbol{X}_i \boldsymbol{B}_i \boldsymbol{y}_i
 $$
 where:
 $$
@@ -251,6 +266,10 @@ class ExpL2Regression:
 
 # L1 regularisation
 
+This seems to show a simple algo[^Gao-2021] though there seems to be weird differences to the above.
+
+The original paper I think[^Eksioglu-2011]
+
 {{% citation
     id="Liu-2010"
     author="Weifeng Liu, José C. Principe, and Simon Haykin"
@@ -259,3 +278,26 @@ class ExpL2Regression:
     publisher="Wiley"
     link="https://www.wiley.com/en-gb/Kernel+Adaptive+Filtering%3A+A+Comprehensive+Introduction-p-9780470447536"
 %}}
+
+{{% citation
+    id="Gao-2021"
+    author="Wei Gao, Jie Chen, Cédric Richard, Wentao Shi, and Qunfei Zhang"
+    title="Transient Performance Analysis of the L1-RLS"
+    publication="IEEE Signal Processing Letters"
+    year="2021"
+    pages="90-94"
+    volume="29"
+    link="https://hal.science/hal-03347324/document"
+%}}
+
+{{% citation
+    id="Eksioglu-2011"
+    author="E.M. Eksioglu"
+    title="Sparsity regularised recursive least squares adaptive filtering"
+    publication="IET Signal Process"
+    year="2011"
+    pages="480-487"
+    volume="5"
+    number="5"
+%}}
+
