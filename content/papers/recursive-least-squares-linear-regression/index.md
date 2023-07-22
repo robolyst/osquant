@@ -17,10 +17,9 @@ feature: true
 
 In my trading algorithms, at each time period, I use a linear regression to predict future returns of each instrument in my portfolio. I previously fit this regression at each time step. However, the solution to the least--squares problem can be rewritten so that the weight vector is updated at each time period without refitting the entire model. This means that my algorithm run significantly faster speeding up back tests.
 
-
 # Least squares
 
-Define a sequence of training data \\( \\{ \boldsymbol{x}_t, y_{t} \\}\_{t=1}^{i-1} \\) where we want to predict \\( y_{t} \\) with \\( \boldsymbol{x}_t \\). We can use least-squares to define a minimisation problem:
+Define a sequence of training data \\( \\{ \boldsymbol{x}\_{t}, y_{t} \\}\_{t=1}^{i-1} \\) where we want to predict \\( y_{t} \\) with \\( \boldsymbol{x}_t \\). We can use least-squares to define a minimisation problem:
 
 $$
 \boldsymbol{w}\_{i-1} = \min_{\boldsymbol{w}} \sum_{t=1}^{i-1} ( y_{t} - \boldsymbol{x}_t^T\boldsymbol{w})^2
@@ -46,13 +45,13 @@ $$
 \end{aligned}
 $$
 
-This is used to make a prediction of \\( y_i \\):
+This is used to make a prediction of \\( y_{i} \\):
 $$
 \boldsymbol{x}_i^T\boldsymbol{w}\_{i-1}
 $$
 
-
 # Recursive least-squares
+
 We can derive a recursive formula for \\( \boldsymbol{w}\_{i-1} \\) so that we do not have to recalculate Eq. \\( \ref{1} \\) at each time step.
 
 Denote:
@@ -108,7 +107,7 @@ I've skipped steps in the derivation of \\( \boldsymbol{w}_i \\) above. The miss
 
 The recursive linear regression algorithm keeps track of \\( \boldsymbol{P} \\) and \\( \boldsymbol{w} \\) and updates them on each data point.
 
-The next question is what should the initial values be? The weight vector can be set to zero. A common strategy for \\( \boldsymbol{P} \\) is to collect an initial set of data and explicitly calculate \\( \boldsymbol{P} \\). However, as the matrix is updated, it may become rank deficient. This can be solved by regularising \\( \boldsymbol{w} \\).
+The next question is what should the initial values be? The weight vector \\( \boldsymbol{w} \\) can be set to zero. A common strategy for \\( \boldsymbol{P} \\) is to collect an initial set of data and explicitly calculate \\( \boldsymbol{P} \\). However, as the matrix is updated, it may become rank deficient. This can be solved by regularising \\( \boldsymbol{w} \\).
 
 # L2 regularisation
 
@@ -130,7 +129,6 @@ $$
 \boldsymbol{P}_0 = \lambda^{-1} \boldsymbol{I}
 $$
 Note that because we are calculating the inverse of \\( \lambda \\) we cannot set it to 0; it must strictly be greater than 0.
-
 
 ----
 **Algorithm 1** - Recursive linear regression with L2 regularisation
@@ -161,6 +159,7 @@ $$
 ----
 
 In Python, this looks like:
+
 ```python
 import numpy as np
 
@@ -183,7 +182,6 @@ class L2Regression:
     def predict(self, x: np.ndarray) -> float:
         return self.w @ x
 ```
-
 
 # Exponential weighting
 
@@ -241,6 +239,7 @@ $$
 ----
 
 In Python, this looks like:
+
 ```python
 import numpy as np
 
@@ -272,7 +271,6 @@ If you wish to adapt a sparse model fit, a L1--norm regularisation is usually us
 $$
 \boldsymbol{w}\_{i} = \min_{\boldsymbol{w}} \sum_{t=1}^{i} \beta^{i-t}( y_{t} - \boldsymbol{x}_t^T\boldsymbol{w})^2 + \beta^i \lambda ||\boldsymbol{w}||^2 + \gamma ||\boldsymbol{w}||_1
 $$
-
 
 Eksioglu[^Eksioglu-2011] derived an L1--norm version of the recursive least--squares algorithm. The derivation is quite involved and surmounts to adding an extra term to the weight vector \\( \boldsymbol{w}_i \\).
 
@@ -316,6 +314,7 @@ $$
 Two new parameters have been introduced. \\( \gamma \\) is the L1 regularisation parameter. Set this to a positive non-zero value. \\( \epsilon \\) is a small positive value to prevent division by zero when weights are zero.
 
 In Python this looks like:
+
 ```python
 import numpy as np
 
@@ -370,4 +369,3 @@ class ExpL1L2Regression:
     volume="5"
     number="5"
 %}}
-
