@@ -1,15 +1,16 @@
 ---
 title: "Recursive least-squares linear regression"
 summary: "
-Rather than recalculating a least--squares model on each new data point, you can simply update the fitted weights. This saves you computational time and allows you to add a higher weight to recent data.
+Rather than recalculating a least--squares model on each new data point, you can simply update the fitted coefficients. This saves you computational time and allows you to place greater emphasis on recent data.
 "
 type: paper
 katex: true # Enable mathematics on the page
-date: "2023-07-17"
+date: "2023-07-22"
 authors:
     - Adrian Letchford
 categories:
     - mathematics
+feature: true
 ---
 
 *I first learned about this algorithm in the book Kernel Adaptive Filter: A Comprehensive Introduction[^Liu-2010] sometime in 2012 or 2013. This book goes in depth into how to build kernel filters and does a fantastic job of easing you into the mathematics. I highly recommend having a read if you can.*
@@ -19,7 +20,7 @@ In my trading algorithms, at each time period, I use a linear regression to pred
 
 # Least squares
 
-Define a sequence of training data \\( \\{ \boldsymbol{x}_t, y_t \\}\_{t=1}^{i-1} \\) where we want to predict \\( y_t \\) with \\( \boldsymbol{x}_t \\). We can use least-squares to define a minimisation problem:
+Define a sequence of training data \\( \\{ \boldsymbol{x}_t, y_{t} \\}\_{t=1}^{i-1} \\) where we want to predict \\( y_{t} \\) with \\( \boldsymbol{x}_t \\). We can use least-squares to define a minimisation problem:
 
 $$
 \boldsymbol{w}\_{i-1} = \min_{\boldsymbol{w}} \sum_{t=1}^{i-1} ( y_{t} - \boldsymbol{x}_t^T\boldsymbol{w})^2
@@ -266,9 +267,89 @@ class ExpL2Regression:
 
 # L1 regularisation
 
-This seems to show a simple algo[^Gao-2021] though there seems to be weird differences to the above.
+If you wish to adapt a sparse model fit, a L1--norm regularisation is usually used. Adding such a term to the problem definition gives:
 
-The original paper I think[^Eksioglu-2011]
+$$
+\boldsymbol{w}\_{i} = \min_{\boldsymbol{w}} \sum_{t=1}^{i} \beta^{i-t}( y_{t} - \boldsymbol{x}_t^T\boldsymbol{w})^2 + \beta^i \lambda ||\boldsymbol{w}||^2 + \gamma ||\boldsymbol{w}||_1
+$$
+
+
+Eksioglu[^Eksioglu-2011] derived an L1--norm version of the recursive least--squares algorithm. The derivation is quite involved and surmounts to adding an extra term to the weight vector \\( \boldsymbol{w}_i \\).
+
+The extra term is:
+$$
+\gamma \left(\frac{\beta - 1}{\beta}\right) (\boldsymbol{I} - \boldsymbol{k}_i \boldsymbol{x}_i^T) \boldsymbol{P}\_{i-1} \frac{\text{sign}(\boldsymbol{w}\_{i-1})}{|\boldsymbol{w}\_{i-1}| + \epsilon}
+$$
+
+Which gives us the following algorithm:
+
+----
+**Algorithm 3** - Exponentially weighted recursive linear regression with L1 & L2 regularisation
+
+---
+*Parameters*
+$$
+\lambda \gt 0, \quad 0 \lt \beta \lt 1, \quad \gamma > 0, \quad \epsilon > 0
+$$
+
+*Initialise*
+$$
+\boldsymbol{w}\_0 = 0, \quad \boldsymbol{P}\_0 = \lambda^{-1} \boldsymbol{I}
+$$
+
+*Computation*
+
+For \\( i \geq 1 \\):
+$$
+\begin{aligned}
+r_i &= 1 + \beta^{-1} \boldsymbol{x}\_i^T \boldsymbol{P}\_{i-1} \boldsymbol{x}\_i \\\
+\boldsymbol{k}_i &= \beta^{-1} \frac{\boldsymbol{P}\_{i-1}\boldsymbol{x}_i}{r_i} \\\
+e_i &= y_i - \boldsymbol{x}\_i^T \boldsymbol{w}\_{i-1} \\\
+\boldsymbol{P}_i &= \beta^{-1} \boldsymbol{P}\_{i-1} - \boldsymbol{k}_i \boldsymbol{k}_i^T r_i \\\
+\boldsymbol{z}_i &= \gamma \left(\frac{\beta - 1}{\beta}\right) (\boldsymbol{I} - \boldsymbol{k}_i \boldsymbol{x}_i^T) \boldsymbol{P}\_{i-1} \frac{\text{sign}(\boldsymbol{w}\_{i-1})}{|\boldsymbol{w}\_{i-1}| + \epsilon} \\\
+\boldsymbol{w}_i &= \boldsymbol{w}\_{i-1} + \boldsymbol{k}_i e_i + \boldsymbol{z}_i \\\
+\end{aligned}
+$$
+
+----
+
+Two new parameters have been introduced. \\( \gamma \\) is the L1 regularisation parameter. Set this to a positive non-zero value. \\( \epsilon \\) is a small positive value to prevent division by zero when weights are zero.
+
+In Python this looks like:
+```python
+import numpy as np
+
+class ExpL1L2Regression:
+    
+    def __init__(self, num_features: int, lam: float, halflife: float, gamma: float, epsilon: float):
+        self.n = num_features
+        self.lam = lam
+        self.gamma = gamma
+        self.epsilon = epsilon
+        self.beta = np.exp(np.log(0.5) / halflife)
+        self.w = np.zeros(self.n)
+        self.P = np.diag(np.ones(self.n) * self.lam)
+        
+    def update(self, x: np.ndarray, y: float) -> None:
+        r = 1 + (x.T @ self.P @ x) / self.beta
+        k = (self.P @ x) / (r * self.beta)
+        e = y - x @ self.w
+
+        k = k.reshape(-1, 1)
+        self.P = self.P / self.beta - (k @ k.T) * r
+
+        extra = (
+            self.gamma * ((self.beta - 1) / self.beta)
+            * (np.eye(self.n) - k @ self.w.reshape(1, -1))
+            @ self.P @ (np.sign(self.w) / (np.abs(self.w) + self.epsilon))
+        )
+
+        self.w = self.w + k.flatten() * e + extra
+
+        
+    def predict(self, x: np.ndarray) -> float:
+        return self.w @ x
+```
 
 {{% citation
     id="Liu-2010"
@@ -277,17 +358,6 @@ The original paper I think[^Eksioglu-2011]
     year="2010"
     publisher="Wiley"
     link="https://www.wiley.com/en-gb/Kernel+Adaptive+Filtering%3A+A+Comprehensive+Introduction-p-9780470447536"
-%}}
-
-{{% citation
-    id="Gao-2021"
-    author="Wei Gao, Jie Chen, Cédric Richard, Wentao Shi, and Qunfei Zhang"
-    title="Transient Performance Analysis of the L1-RLS"
-    publication="IEEE Signal Processing Letters"
-    year="2021"
-    pages="90-94"
-    volume="29"
-    link="https://hal.science/hal-03347324/document"
 %}}
 
 {{% citation
