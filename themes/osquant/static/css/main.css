@@ -109,7 +109,7 @@ div.highlight pre {
 #splash {
     background-color: rgba(245, 245, 245, 0.5);
     padding: 0.01vh;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
 }
 
 
@@ -621,4 +621,53 @@ details[open] summary:after {
 
 .mermaid {
     text-align: center;
+}
+
+/* ----------------------------------------------------------------------------
+Twitter callout
+---------------------------------------------------------------------------- */
+
+.callout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    row-gap: 1rem;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    background-color: #F9F9F9;
+    border-radius: 5px;
+    line-height: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.callout .title {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+#page_content .callout a.twitter-follow {
+    display: block;
+    background-color: #4A99E9;
+    border-radius: 5px;
+    text-decoration: none;
+    border-bottom: none;
+    box-shadow: none;
+    text-align: center;
+    font-weight: 600;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#page_content .callout a.twitter-follow:hover {
+    background-color: #428AD2;
 }

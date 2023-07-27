@@ -1,0 +1,13 @@
+{{ range .Params.authors }}
+    {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+        <div class="container">
+            <div class="callout">
+                <span>
+                    <span class="title">Like what you see?</span>
+                    <span class="subtext">Follow {{ .Params.first_name }} on Twitter to be notified of new content.</span>
+                </span>
+                <a href="https://twitter.com/{{ .Params.twitter }}" class="twitter-follow">Follow</a>
+            </div>
+        </div>
+    {{ end }}
+{{ end }}
