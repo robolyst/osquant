@@ -1,5 +1,8 @@
 {{ define "main" }}
 
+{{ $images := $.Resources.ByType "image" }}
+{{ $featured := $images.GetMatch "*feature*" }}
+
     <div id="splash">
 
         {{- partial "nav.html" . -}}
@@ -13,7 +16,14 @@
             </div>
         </div>
 
+        <div id="hero">
+            <div class="container">
+                {{ with $featured }}<img src="{{ $featured.Permalink }}" />{{ end }}
+            </div>
+        </div>
+
     </div>
+
 
     <div id="page_content">
         {{- partial "twitter-call-to-action.html" . -}}

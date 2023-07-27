@@ -303,8 +303,8 @@ Page (Single)
 ---------------------------------------------------------------------------- */
 
 #page_header {
-    margin-top: 5rem;
-    margin-bottom: 5rem;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
 }
 
 #page_header .category, #page_header .category a {
@@ -398,6 +398,15 @@ Page (Single)
         font-size: 1.2rem;
         line-height: 1.5em;
     }
+}
+
+#hero {
+    background: linear-gradient(180deg, transparent 0%, transparent 50%, #FDFDFD 50%, #FDFDFD 100%);
+}
+
+#hero img {
+    width: 100%;
+    border-radius: 5px;
 }
 
 /* ------- Footnotes ------- */
