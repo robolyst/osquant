@@ -140,7 +140,8 @@ Define the page size
 
 .container,
 #page_content > *,
-#page_content feature > * {
+#page_content feature > *,
+#page_content bigfeature > * {
     max-width: 750px;
     padding-right: 15px;
     padding-left: 15px;
@@ -148,7 +149,7 @@ Define the page size
     margin-right: auto;
 }
 
-#page_content feature > * {
+#page_content bigfeature > * {
     max-width: 1300px;
     padding-right: 5vw;
     padding-left: 5vw;
@@ -156,8 +157,7 @@ Define the page size
 
 @media (max-width:1000px) {
     .container,
-    #page_content > *,
-    #page_content feature > * {
+    #page_content > * {
         padding-right: 5vw;
         padding-left: 5vw;
     }
@@ -417,6 +417,7 @@ Page (Single)
     color: #747474;
     border-top: 1px solid #EAEAEA;
     padding-top: 2rem;
+    overflow-wrap: anywhere;
 }
 
 #page_content .footnotes hr {

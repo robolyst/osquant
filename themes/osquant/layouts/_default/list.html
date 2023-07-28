@@ -10,8 +10,9 @@
     </div>
 
     <div class="container">
-        {{ range .Pages.ByDate.Reverse }}
-            {{- partial "mini.html" . -}}
+        {{ range $index, $element := .Pages.ByDate.Reverse }}
+            {{ .Scratch.Set "index" $index }}
+            {{ partial "mini.html" . }}
         {{ end }}
     </div>
 

@@ -10,7 +10,6 @@ authors:
     - Adrian Letchford
 categories:
     - mathematics
-feature: true
 ---
 
 *I first learned about this algorithm in the book Kernel Adaptive Filter: A Comprehensive Introduction[^Liu-2010] sometime in 2012 or 2013. This book goes in depth into how to build kernel filters and does a fantastic job of easing you into the mathematics. I highly recommend having a read if you can.*
