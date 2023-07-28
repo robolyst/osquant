@@ -88,7 +88,7 @@ Some useful facts to note:
 
 **Positive eigenvalues** - A positive-semidefinite matrix has positive eigenvalues. We can prove this by remembering that \\( \boldsymbol{x}^T\boldsymbol{A}\boldsymbol{x} \geq 0 \\) for all \\( \boldsymbol{x} \\) including eigenvectors. This means that if \\( \boldsymbol{x} \\) is an eigen-vector with corresponding eigenvalue \\( \lambda \\) then we can say \\( \lambda\boldsymbol{x}^T\boldsymbol{x} \geq 0 \\) which means that \\( \lambda \geq 0 \\).
 
-**Only one positive-semidefinite square root** - There are two ways of taking the square root of a number, a negative number and a positive number. Therefore, the diagonal matrix \\( \boldsymbol{D} \\) has \\(2^n\\) possible square roots but only one of them has all positive values making it the only positive-semidefinite square root.
+**Only one positive-semidefinite square root** - The square root of a positive number can be one of two values; a negative and a positive value. Therefore, the diagonal matrix \\( \boldsymbol{D} \\) has \\(2^n\\) possible square roots but only one of them has all positive values making it the only positive-semidefinite square root.
 
 <feature>
 
