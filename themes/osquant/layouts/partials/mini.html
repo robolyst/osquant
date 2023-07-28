@@ -6,7 +6,7 @@
 
 <div class="mini {{ if .Params.feature }}feature{{ end }}">
     <div>
-        {{ if .Params.feature }}
+        {{ if ( eq (.Scratch.Get "index") 0 ) }}
             <a href="{{ .Permalink }}">{{ with $featured }}<img src="{{ $featured.Permalink }}" class="feature" />{{ end }}</a>
         {{ end }}
     </div>

@@ -89,7 +89,7 @@ $$
 
 You can play with the model here:
 
-<feature>
+<bigfeature>
 
 ## Interest rate model demo
 
@@ -108,7 +108,7 @@ For the long term rates we'll use the [30 year US government treasury yields (DG
     </div>
 </div>
 
-</feature>
+</bigfeature>
 
 # Estimating parameters
 

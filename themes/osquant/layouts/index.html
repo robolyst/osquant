@@ -5,8 +5,9 @@
     <div class="container">
         {{ .Content }}
 
-        {{ range (sort (where .Site.RegularPages "Section" "papers")) }}
-            {{- partial "mini.html" . -}}
+        {{ range $index, $element := (sort (where .Site.RegularPages "Section" "papers")) }}
+            {{ .Scratch.Set "index" $index }}
+            {{ partial "mini.html" . }}
         {{ end }}
     </div>
 
