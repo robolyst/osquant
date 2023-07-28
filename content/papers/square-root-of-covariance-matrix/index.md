@@ -37,7 +37,6 @@ $$
 
 In this post, I want to show you how to calculate \\( \sqrt{\boldsymbol{\Sigma}} \\) and explore what the vector of standard deviations \\( \boldsymbol{\sigma} \\) can tell us about our portfolio.
 
-
 # Positive-semidefinite matrix
 
 For the square root calculation to work, we require that the covariance matrix be positive-semidefinite.
@@ -55,7 +54,7 @@ The square root of a positive-semidefinite matrix can be found by performing an 
 $$
 \boldsymbol{\Sigma} = \boldsymbol{V}\boldsymbol{D}\boldsymbol{V}^{-1}
 $$
-Where \\( \boldsymbol{V} \\) is a matrix whose columns are the eigenvectors of \\( \boldsymbol{\Sigma} \\) and \\( \boldsymbol{D} \\) is the diagonal matrix whose elements are the corresponding eigenvalues. 
+Where \\( \boldsymbol{V} \\) is a matrix whose columns are the eigenvectors of \\( \boldsymbol{\Sigma} \\) and \\( \boldsymbol{D} \\) is the diagonal matrix whose elements are the corresponding eigenvalues.
 
 We can write:
 
@@ -89,7 +88,7 @@ Some useful facts to note:
 
 **Positive eigenvalues** - A positive-semidefinite matrix has positive eigenvalues. We can prove this by remembering that \\( \boldsymbol{x}^T\boldsymbol{A}\boldsymbol{x} \geq 0 \\) for all \\( \boldsymbol{x} \\) including eigenvectors. This means that if \\( \boldsymbol{x} \\) is an eigen-vector with corresponding eigenvalue \\( \lambda \\) then we can say \\( \lambda\boldsymbol{x}^T\boldsymbol{x} \geq 0 \\) which means that \\( \lambda \geq 0 \\).
 
-**Only one positive-semidefinite square root** - There are two ways of taking the square root of a number, a negative number and a positive number. Therefore, the diagonal matrix \\( \boldsymbol{D} \\) has \\(2^n\\) possible square roots but only one of them has all positive values making it the only positive-semidefinite square root. 
+**Only one positive-semidefinite square root** - There are two ways of taking the square root of a number, a negative number and a positive number. Therefore, the diagonal matrix \\( \boldsymbol{D} \\) has \\(2^n\\) possible square roots but only one of them has all positive values making it the only positive-semidefinite square root.
 
 <feature>
 
@@ -134,7 +133,6 @@ Here's an example using two assets. You can play with the variances, correlation
 
 # Interpretation
 
-
 Each element of the vector \\(\boldsymbol{\sigma} = \sqrt{\boldsymbol{\Sigma}}\boldsymbol{w}\\) tells you how much of your portfolio's standard deviation is held in that component. Squaring and summing the values gives you the portfolio's variance.
 
 ## Captures exposure
@@ -153,7 +151,7 @@ $$
 
 The vector \\(\boldsymbol{\sigma} \\) tells us our exposure to an asset. Notice in the example above that the allocation to asset 2 is 0. Yet, because asset 1 is 100% correlated with asset 2, we have the same amount of exposure to asset 2 as we do to asset 1.
 
-The vector \\(\boldsymbol{\sigma} \\) also tells you the direction of your exposure to a particular asset. If we change the example above so that the correlation is -1 then the portfolio has an effective short position in asset 2: 
+The vector \\(\boldsymbol{\sigma} \\) also tells you the direction of your exposure to a particular asset. If we change the example above so that the correlation is -1 then the portfolio has an effective short position in asset 2:
 $$
 \begin{aligned}
 \sigma_1 &= 1 \\\
