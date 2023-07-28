@@ -8,7 +8,6 @@ date: "2023-03-12"
 type: paper
 mathjax: true # Enable mathematics on the page
 plotly: true  # Enable plotly on the page
-feature: false
 authors:
     - Adrian Letchford
 categories:

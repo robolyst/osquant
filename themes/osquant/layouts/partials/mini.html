@@ -4,7 +4,7 @@
 {{ $images := $.Resources.ByType "image" }}
 {{ $featured := $images.GetMatch "*feature*" }}
 
-<div class="mini {{ if .Params.feature }}feature{{ end }}">
+<div class="mini">
     <div>
         {{ if ( eq (.Scratch.Get "index") 0 ) }}
             <a href="{{ .Permalink }}">{{ with $featured }}<img src="{{ $featured.Permalink }}" class="feature" />{{ end }}</a>
