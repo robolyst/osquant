@@ -1,7 +1,7 @@
 ---
 title: "Square root of a portfolio covariance matrix"
 summary: "
-The square root of your portfolio's covariance matrix gives you a powerful way of understanding where your return variance is coming from. Here I show how to calculate the square root and and I created an interactive example to explore how it works.
+The square root of your portfolio's covariance matrix gives you a powerful way of understanding where your portfolio variance is coming from. Here I show how to calculate the square root and provide an interactive example to explore how it works.
 "
 type: paper
 katex: true # Enable mathematics on the page
@@ -11,7 +11,7 @@ authors:
 categories:
     - mathematics
     - finance
-notebook: https://api.observablehq.com/d/f0af168967249909.js?v=3
+notebook: ./notebook.js
 ---
 
 You're likely familiar with calculating the variance of a portfolio given a covariance matrix of the portfolio's components. Denote the covariance matrix with \\( \boldsymbol{\Sigma} \\) and the vector of portfolio weights as \\( \boldsymbol{w} \\). The portfolio's variance is:
@@ -89,7 +89,7 @@ Some useful facts to note:
 
 **Positive eigenvalues** - A positive-semidefinite matrix has positive eigenvalues. We can prove this by remembering that \\( \boldsymbol{x}^T\boldsymbol{A}\boldsymbol{x} \geq 0 \\) for all \\( \boldsymbol{x} \\) including eigenvectors. This means that if \\( \boldsymbol{x} \\) is an eigen-vector with corresponding eigenvalue \\( \lambda \\) then we can say \\( \lambda\boldsymbol{x}^T\boldsymbol{x} \geq 0 \\) which means that \\( \lambda \geq 0 \\).
 
-**Only one positive-semidefinite square root** - A positive-semidefinite matrix has \\(2^n\\) square roots but only one of them is also positive-semidefinite. There are two ways of taking the square root of a positive number, a negative number and a positive number. Therefore, the diagonal matrix \\( \boldsymbol{D} \\) has \\(2^n\\) possible square roots but only one of them has all positive values. 
+**Only one positive-semidefinite square root** - There are two ways of taking the square root of a number, a negative number and a positive number. Therefore, the diagonal matrix \\( \boldsymbol{D} \\) has \\(2^n\\) possible square roots but only one of them has all positive values making it the only positive-semidefinite square root. 
 
 <feature>
 
@@ -100,10 +100,10 @@ Here's an example using two assets. You can play with the variances, correlation
 ### Create the covariance matrix and square root
 
 <div class="row align-items-center">
-    <div class="col">
+    <div class="col-12 col-md-6">
         <cell id="cov_matrix"></cell>
     </div>
-    <div class="col">
+    <div class="col-12 col-md-6">
         <cell id="viewof_std1"></cell>
         <cell id="viewof_std2"></cell>
         <cell id="viewof_rho"></cell>
@@ -113,19 +113,19 @@ Here's an example using two assets. You can play with the variances, correlation
 ### Set the portfolio weights
 
 <div class="row align-items-center">
-    <div class="col">
+    <div class="col-12 col-md-6">
         <cell id="w_vector"></cell>
     </div>
-    <div class="col">
+    <div class="col-12 col-md-6">
         <cell id="viewof_w1"></cell>
         <cell id="viewof_w2"></cell>
     </div>
 </div>
 
-### Component std
+### Component and portfolio std
 
 <div class="row">
-    <div class="col">
+    <div class="col-12 col-md-6">
         <cell id="component_std"></cell>
     </div>
 </div>
@@ -135,8 +135,68 @@ Here's an example using two assets. You can play with the variances, correlation
 # Interpretation
 
 
+Each element of the vector \\(\boldsymbol{\sigma} = \sqrt{\boldsymbol{\Sigma}}\boldsymbol{w}\\) tells you how much of your portfolio's standard deviation is held in that component. Squaring and summing the values gives you the portfolio's variance.
 
+## Captures exposure
 
+The correlation between assets is taken into account and the standard deviation is distributed across the correlated assets. For example, if the correlation between the two assets is 1 and we only invested into one asset we'd see the variance distributed between the two assets:
+$$
+\begin{aligned}
+\sigma_1 &= 1 \\\
+\sigma_2 &= 1 \\\
+\rho &= 1 \\\
+w_1 &= 1 \\\
+w_2 &= 0 \\\
+\text{then} \\ \boldsymbol{\sigma} &= \left[\begin{matrix}0.707\\\0.707\end{matrix}\right]
+\end{aligned}
+$$
 
+The vector \\(\boldsymbol{\sigma} \\) tells us our exposure to an asset. Notice in the example above that the allocation to asset 2 is 0. Yet, because asset 1 is 100% correlated with asset 2, we have the same amount of exposure to asset 2 as we do to asset 1.
+
+The vector \\(\boldsymbol{\sigma} \\) also tells you the direction of your exposure to a particular asset. If we change the example above so that the correlation is -1 then the portfolio has an effective short position in asset 2: 
+$$
+\begin{aligned}
+\sigma_1 &= 1 \\\
+\sigma_2 &= 1 \\\
+\rho &= -1 \\\
+w_1 &= 1 \\\
+w_2 &= 0 \\\
+\text{then} \\ \boldsymbol{\sigma} &= \left[\begin{matrix}0.707 \\\ -0.707\end{matrix}\right]
+\end{aligned}
+$$
+
+## Captures correlated risk
+
+We can also see the effects of correlation on how risky our positions are. Take for example a situation where we hold a larger position in a less risky asset:
+$$
+\begin{aligned}
+\sigma_1 &= 0.3 \\\
+\sigma_2 &= 0.7 \\\
+\rho &= 0 \\\
+w_1 &= 0.5 \\\
+w_2 &= 0.2 \\\
+\text{then} \\ \boldsymbol{\sigma} &= \left[\begin{matrix}0.15 \\\ 0.14\end{matrix}\right] \\\
+\sigma &= 0.205
+\end{aligned}
+$$
+The positions \\( w_1 \\) and \\(w_2\\) have been set so that the level of risk in each asset is roughly the same.
+
+Now, if these two assets were correlated, how does that change the riskiness of the positions?
+$$
+\begin{aligned}
+\sigma_1 &= 0.3 \\\
+\sigma_2 &= 0.7 \\\
+\rho &= 1 \\\
+w_1 &= 0.5 \\\
+w_2 &= 0.2 \\\
+\text{then} \\ \boldsymbol{\sigma} &= \left[\begin{matrix}0.114 \\\ 0.267\end{matrix}\right] \\\
+\sigma &= 0.29
+\end{aligned}
+$$
+The level of risk in the first asset lowers from 0.15 to 0.114 but the second asset increases from 0.14 to 0.267. This increase in the second asset is large enough to raise the riskiness of the total portfolio.
+
+# Summary
+
+The square root of a covariance matrix provides a way of measuring the amount of portfolio variance associated with each component. You can quantify exposure, direction and correlated risk.
 
 [^1]: https://en.wikipedia.org/wiki/Square_root_of_a_matrix#Matrices_with_distinct_eigenvalues

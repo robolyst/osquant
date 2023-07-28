@@ -417,6 +417,7 @@ Page (Single)
     color: #747474;
     border-top: 1px solid #EAEAEA;
     padding-top: 2rem;
+    overflow-wrap: anywhere;
 }
 
 #page_content .footnotes hr {
