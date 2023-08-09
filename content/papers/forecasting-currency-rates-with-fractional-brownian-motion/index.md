@@ -1,7 +1,7 @@
 ---
 title: "Forecasting currency rates with fractional brownian motion"
 summary: "
-blah blah blah
+Fractional Brownian motion is a stochastic process that can model mean reversion. Predicting future values turns out to be a simple linear model. This model has significant predictive power when applied to currencies.
 "
 type: paper
 katex: true
@@ -11,7 +11,7 @@ authors:
 categories:
     - mathematics
     - finance
-notebook: https://api.observablehq.com/d/60be1865dc6d5a1e.js?v=3
+notebook: ./notebook.js
 ---
 
 # Fractional Brownian motion
@@ -26,14 +26,18 @@ The Hurst parameter \\( H \\) controls the auto-correlation in the process. When
 
 Sometimes the mathematics behind stochastic processes can seem a little mystifying. Here's an interactive example where you can play around with the Hurst exponent to see how the process changes.
 
-<todo>Interactive fBm example</todo>
+<cell id="viewof_H"></cell>
 
-Normally, when dealing with price data, we like to convert the price series into returns, or the difference between log returns. The covariance above can be reworked into the covariance between increments[^Garcin-2021]:
+<plot id="fbms_plot"></plot>
+
+The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the coviariance matrix can be found in a preious article: {{< xref "square-root-of-covariance-matrix" >}}.
+
+Intuitively, from playing with the Hurst exponent in the chart above, we can see that when \\(H = 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0 \\) there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
 $$
 \mathbb{E}[(X_t - X_s)(X_v - X_u)] = \sigma^2 \frac{1}{2}(|u - t|^{2H} + |v - s|^{2H} - |v - t|^{2H} - |u - s|^{2H})
 $$
 
-If we're looking at a h-step ahead covariance of logged prices, this would mean that:
+If we're looking at a h-step ahead covariance of a differenced time series, this would mean that:
 $$
 \begin{aligned}
 s &= t - 1 \\\
@@ -45,6 +49,8 @@ so the covariance function becomes:
 $$
 \mathbb{E}[(X_t - X\_{t - 1})(X\_{t + h} - X\_{t + h - 1})] = \sigma^2 \frac{1}{2}(|h - 1|^{2H} + |h + 1|^{2H} - 2|h|^{2H})
 $$
+
+We can see in the chart below that when \\(H = 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0 \\) there are negative auto-correlations.
 
 <plot id="incremental_cov_plot"></plot>
 
@@ -85,19 +91,72 @@ def fbm_weights(window, H):
     return weights.flatten()
 ```
 
-The weights look something like this:
+Using the parameters `window = 30` and `H = 0.45`, the weights look like:
+<plot id="weights_plot"></plot>
+
+If we have a Pandas DataFrame of prices we can predict the next step ahead price with:
 ```python
-weights = fbm_weights(window=3000, H=0.45)
-plt.plot(np.log(weights))  # import matplotlib.pyplot as plt
+# prices = pandas.DataFrame of currency prices
+weights = fbm_weights(window=100, H=0.45)
+predicted_price = prices.rolling(100).apply(lambda x: weights @ x)
 ```
 
-An example of 
-This is a linear combination of past prices
-1. Calculate weights as function of window, volatility and Hurst exponent
-2. See if forecasts of H < 0.5 are better than H = 0.5
+# Forecasting currency returns
 
+Taking the `predicted_price` DataFrame above, we can calculate the expected return for each currency with:
+```python
+predicted_return = predicted_price / price - 1
+```
 
+I find that calculating mispricing yields a stronger signal than predicting returns. In this context, if we predict that a currency is expected to return 1% but it actually returns 2%, then we say that the currency is 1% mispriced and we expect it to move lower by 1%.
 
+We can calculate this mispricing with:
+```python
+actual_returns = prices.pct_change()
+mispricing = predicted_return.shift(1) - actual_returns
+```
+The `mispricing` DataFrame will contain positive values for currencies that we believe are undervalued and negative values for currencies we believe are overvalued.
+
+We can then normalise these mispricings so that currencies with a higher mispricing have a greater weight in our portfolio. We normalise so that absolute sum of the portfolio weights equals 1:
+```python
+portfolio_weights = mispricing.divide(mispricing.abs().sum(1), axis=0)
+```
+
+We can get an idea of the strength of this signal by looking at an equity curve without transaction costs:
+```python
+portfolio_returns = (actual_returns * portfolio_weights.shift(1)).sum(1)
+capital = (1 + portfolio_returns).cumprod()
+```
+
+As an example, I use a dataset (the `prices` DataFrame) of 30 minute prices of the following pairs:
+```
+CAD_USD
+EUR_USD
+JPY_USD
+SEK_USD
+GBP_USD
+SGD_USD
+PLN_USD
+CHF_USD
+AUD_USD
+NOK_USD
+CZK_USD
+NZD_USD
+DKK_USD
+CNH_USD
+HUF_USD
+```
+which are most of the currencies on Oanda except for `HKD` which is pegged to the `USD` and some of the less traded currencies.
+
+Calculating `capital` on this dataset gives me:
+
+<plot id="capital_plot"></plot>
+
+This is a fairly basic model, all we've done is derive a linear filter of past prices. Yet, there appears to be a fair amount of predictive power. The problem is that if I were to include transaction costs, all performance dissapears. This predictive signal isn't strong enough to overcome transaction costs and is more suitable as a feature in a machine learning model.
+
+# Summary
+
+Here we've made a linear filter of past prices that predicts future returns derived from the fractional brownian motion stochastic process. This filter demonstrates predictive power, however, not enough to overcome transaction costs. Specifically, the signal does not overcome the spread.
 
 # Appendix
 
