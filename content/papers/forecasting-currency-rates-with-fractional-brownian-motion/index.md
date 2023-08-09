@@ -22,7 +22,7 @@ $$
 $$
 where \\( \sigma \\) is the volatility parameter and \\( H \in (0, 1) \\) is the Hurst exponent.
 
-The Hurst parameter \\( H \\) controls the auto-correlation in the process. When \\(H = 0.5 \\) then you get regular Brownian motion --- where the increments are an uncorrelated Gaussian process. When \\(H \lt 0 \\) then you get a process that is more mean reverting and when \\( H \gt 0.5 \\) you get a process that exhibits sustained trends.
+The Hurst parameter \\( H \\) controls the auto-correlation in the process. When \\(H = 0.5 \\) then you get regular Brownian motion --- where the increments are an uncorrelated Gaussian process. When \\(H \lt 0.5 \\) then you get a process that is more mean reverting and when \\( H \gt 0.5 \\) you get a process that exhibits sustained trends.
 
 Sometimes the mathematics behind stochastic processes can seem a little mystifying. Here's an interactive example where you can play around with the Hurst exponent to see how the process changes.
 
@@ -32,7 +32,7 @@ Sometimes the mathematics behind stochastic processes can seem a little mystifyi
 
 The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the covariance matrix can be found in a previous article: {{< xref "square-root-of-covariance-matrix" >}}.
 
-Intuitively, from playing with the Hurst exponent in the chart above, we can see that when \\(H = 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0 \\) there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
+Intuitively, from playing with the Hurst exponent in the chart above, we can see that when \\(H \gt 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0.5 \\) there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
 $$
 \mathbb{E}[(X_t - X_s)(X_v - X_u)] = \sigma^2 \frac{1}{2}(|u - t|^{2H} + |v - s|^{2H} - |v - t|^{2H} - |u - s|^{2H})
 $$
@@ -50,7 +50,7 @@ $$
 \mathbb{E}[(X_t - X\_{t - 1})(X\_{t + h} - X\_{t + h - 1})] = \sigma^2 \frac{1}{2}(|h - 1|^{2H} + |h + 1|^{2H} - 2|h|^{2H})
 $$
 
-We can see in the chart below that when \\(H = 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0 \\) there are negative auto-correlations.
+We can see in the chart below that when \\(H \gt 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0.5 \\) there are negative auto-correlations.
 
 <plot id="incremental_cov_plot"></plot>
 
