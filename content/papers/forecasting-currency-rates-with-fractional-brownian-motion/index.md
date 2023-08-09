@@ -5,7 +5,7 @@ Fractional Brownian motion is a stochastic process that can model mean reversion
 "
 type: paper
 katex: true
-date: "2023-08-02"
+date: "2023-08-09"
 authors:
     - Adrian Letchford
 categories:
