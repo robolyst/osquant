@@ -16,7 +16,7 @@ notebook: ./notebook.js
 
 # Fractional Brownian motion
 
-Fractional Brownian motion (or fBm for short) is defined as a stochastic Gaussian process \\( X_t \\) that starts at zero \\( X_0 = 0 \\) has an expectation of zero \\( \mathbb{E}[X_t] = 0 \\) and has the following covariance[^Garcin-2021]:
+Fractional Brownian motion is defined as a stochastic Gaussian process \\(X_t\\) that starts at zero \\( X_0 = 0 \\) has an expectation of zero \\( \mathbb{E}[X_t] = 0 \\) and has the following covariance[^Garcin-2021]:
 $$
 \mathbb{E}[X_t X_s] = \sigma^2 \frac{1}{2}(|t|^{2H} + |s|^{2H} - |t - s|^{2H}) \label{1}\tag{1}
 $$
@@ -30,7 +30,7 @@ Sometimes the mathematics behind stochastic processes can seem a little mystifyi
 
 <plot id="fbms_plot"></plot>
 
-The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the coviariance matrix can be found in a preious article: {{< xref "square-root-of-covariance-matrix" >}}.
+The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the covariance matrix can be found in a previous article: {{< xref "square-root-of-covariance-matrix" >}}.
 
 Intuitively, from playing with the Hurst exponent in the chart above, we can see that when \\(H = 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0 \\) there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
 $$
@@ -152,11 +152,11 @@ Calculating `capital` on this dataset gives me:
 
 <plot id="capital_plot"></plot>
 
-This is a fairly basic model, all we've done is derive a linear filter of past prices. Yet, there appears to be a fair amount of predictive power. The problem is that if I were to include transaction costs, all performance dissapears. This predictive signal isn't strong enough to overcome transaction costs and is more suitable as a feature in a machine learning model.
+This is a fairly basic model, all we've done is derive a linear filter of past prices. Yet, there appears to be a fair amount of predictive power. The problem is that if I were to include transaction costs, all performance disappears. This predictive signal isn't strong enough to overcome transaction costs and is more suitable as a feature in a machine learning model.
 
 # Summary
 
-Here we've made a linear filter of past prices that predicts future returns derived from the fractional brownian motion stochastic process. This filter demonstrates predictive power, however, not enough to overcome transaction costs. Specifically, the signal does not overcome the spread.
+Here we've made a linear filter of past prices that predicts future returns derived from the fractional Brownian motion stochastic process. This filter demonstrates predictive power, however, not enough to overcome transaction costs. Specifically, the signal does not overcome the spread.
 
 # Appendix
 
