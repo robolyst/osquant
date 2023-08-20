@@ -161,7 +161,7 @@ P &=E e^{-rt} (1 - \mathcal{N}(d_2)) - S (1 - \mathcal{N}(d_1)) \label{4}\tag{4}
 \end{align}
 $$
 
-
+<todo>This has an interpretation section that might be good: http://www.timworrall.com/fin-40008/bscholes.pdf</todo>
 
 
 
