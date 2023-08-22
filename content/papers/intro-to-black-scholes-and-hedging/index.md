@@ -113,7 +113,6 @@ where:
 - \\( S = \\) the price of a stock that **does not pay** dividends.
 - \\( E = \\) the exercise price.
 - \\( t = \\) the time to expiration in years.
-- \\( t = \\) time to expiration in years.
 - \\( \sigma = \\) the annual standard deviation of the stock price returns.
 - \\( r = \\) the annual risk free rate.
 - \\( \mathcal{N} = \\) the cumulative normal distribution function.
@@ -195,6 +194,17 @@ d_2 &= d_1 - \sigma \sqrt{t}
 $$
 This has been modified so that the forward value of the stock is adjusted by the dividend yeild.
 
+# Implied Volatility
+
+The inputs to the option model above are the underlying price, the exercise price, the time to expiration, the risk free rate and the expected volatility. All of these quantities are known except for the expected volatility.
+
+In fact, if you look at market prices, then the current option price is also known. If you were to plug in the current option price and solve for the volatility \\( \sigma \\) you would get the market's expectation for volatility. This is called implied volatility---the volatility implied by the market price.
+
+Unfortunately, there is no closed form solution for the implied volatility. However, the Black-Scholes model shows us that the price of an option is monotonic in \\( \sigma \\). This means that we can use any root finding method to solve for \\( \sigma \\) in:
+$$
+f(\sigma, S, E, t, r) - C = 0
+$$
+where \\( f(\cdot) \\) is the theoretical of a call option.
 
 # Greeks
 
@@ -220,12 +230,10 @@ $$
 
 ## Vega
 
-Vega \\( \mathcal{V} \\) measures the change in option value relative to changes in the underlying's volatility:
+Vega[^vega] \\( \mathcal{V} \\) measures the change in option value relative to changes in the underlying's volatility:
 $$
 \mathcal{V} = \frac{\delta V}{\delta \sigma}
 $$
-
-*Side note, "vega" is not a greek letter! Wikipedia suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.*
 
 ## Theta
 
@@ -250,12 +258,19 @@ $$
 \Gamma = \frac{\delta \Delta}{\delta S} = \frac{\delta^2 V}{\delta S^2}
 $$
 
+For a long options position gamma is positive. This is true for both calls and puts.
+
 Most options have opposite sign theta and gamma. So a long call has negative theta and positive gamma.
 
 When a trader is delta hedging a portfolio, they may also try and get their net gamma position to zero. This ensures that the hedge remains effective over a larger range of price movements.
 
+A positive gamma means you will benefit from price movements. A negative gamma means you will be hurt from price movements.
+
 
 ## Table of greeks
+
+this includes annual dividend yield: https://en.wikipedia.org/wiki/Greeks_(finance)#Formulae_for_European_option_Greeks
+
 
 |                      | Call                     | Put                          |
 | ---------------------|--------------------------|------------------------------|
@@ -265,7 +280,13 @@ When a trader is delta hedging a portfolio, they may also try and get their net 
 | Theta \\( \Theta \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} - r E e^{-rt}\mathcal{N}(d_2) \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} + r E e^{-rt}\mathcal{N}(-d_2) \\) |
 | Rho \\( \rho \\) | \\( E t e^{-rt}\mathcal{N}(d_2) \\) | \\( -E t e^{-rt}\mathcal{N}(-d_2) \\) |
 
+# Position analysis
 
+In a simplified world, traders who are trading stocks only have to worry about one risk, the price changing. However, as we've learned, the value of an options contract changes based on a number of different factors. These factors are mainly the price of the underlying, the expected volatility, the risk free rate and the passage of time.
+
+The greeks above all measure the option's sensitivity to changes in each of these factors and are a way of measuring and tracking risks.
+
+# Delta-hedging
 
 
 Acknowledgements
@@ -281,6 +302,8 @@ $$
 d u(X_t, t) = \frac{\delta u(X_t, t)}{\delta t} dt + \frac{\delta u(X_t, t)}{\delta X_t} d X_t + \frac{1}{2} \frac{\delta^2 u(X_t, t)}{\delta X_t^2} v(X_t)dt
 $$
 A good explaination of Itô's lemma can be found [here](https://math.nyu.edu/~goodman/teaching/StochCalc2018/notes/Lesson4.pdf).
+
+[^vega]: "Vega" is not a greek letter! Wikipedia suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.
 
 {{% citation
     id="Natenberg2015"
