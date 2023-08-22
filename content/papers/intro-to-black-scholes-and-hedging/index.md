@@ -280,11 +280,13 @@ this includes annual dividend yield: https://en.wikipedia.org/wiki/Greeks_(finan
 | Theta \\( \Theta \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} - r E e^{-rt}\mathcal{N}(d_2) \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} + r E e^{-rt}\mathcal{N}(-d_2) \\) |
 | Rho \\( \rho \\) | \\( E t e^{-rt}\mathcal{N}(d_2) \\) | \\( -E t e^{-rt}\mathcal{N}(-d_2) \\) |
 
-# Position analysis
+# Portfolio analysis
 
-In a simplified world, traders who are trading stocks only have to worry about one risk, the price changing. However, as we've learned, the value of an options contract changes based on a number of different factors. These factors are mainly the price of the underlying, the expected volatility, the risk free rate and the passage of time.
+In a simplified world, traders who are trading stocks only have to worry about one risk, the price changing. However, as we've learned, the value of an option contract changes based on a number of different factors. These factors are mainly the price of the underlying, the expected volatility, the risk free rate and the passage of time.
 
-The greeks above all measure the option's sensitivity to changes in each of these factors and are a way of measuring and tracking risks.
+The greeks above all measure an option's sensitivity to changes in each of these factors and are a way of measuring and tracking risks.
+
+These risk measures (delta, gamma, theta, vega and rho) are all additive. This means that if you have a complex portfolio of call and put options at varying strikes and expiries (but the same underlying) then you can sum together their greeks to estimate the risks of the whole portfolio.
 
 # Delta-hedging
 
@@ -303,7 +305,7 @@ d u(X_t, t) = \frac{\delta u(X_t, t)}{\delta t} dt + \frac{\delta u(X_t, t)}{\de
 $$
 A good explaination of Itô's lemma can be found [here](https://math.nyu.edu/~goodman/teaching/StochCalc2018/notes/Lesson4.pdf).
 
-[^vega]: "Vega" is not a greek letter! Wikipedia suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.
+[^vega]: "Vega" is not a greek letter! [Wikipedia](https://en.wikipedia.org/wiki/Greeks_(finance)#Vega) suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.
 
 {{% citation
     id="Natenberg2015"
