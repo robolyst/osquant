@@ -193,6 +193,79 @@ d_1 &= \frac{\log(S/E) + [r - y + (\sigma^2 / 2)]t}{\sigma \sqrt{t}} \\\
 d_2 &= d_1 - \sigma \sqrt{t}
 \end{align}
 $$
+This has been modified so that the forward value of the stock is adjusted by the dividend yeild.
+
+
+# Greeks
+
+The "greeks" are a set of derivatives measuring how sensitive an option is to underlying changes. These values are used in hedging. A trader is able to isolate the various factors that impact an option's price and hedge away those risks.
+
+## Delta
+
+We've met delta before. Delta \\( \Delta \\) measures the change of the option value with respect to the underlying's price:
+$$
+\Delta = \frac{\delta V}{\delta S}
+$$
+
+For a long call option, delta will be between 0.0 and 1.0. Delta will be zero if the option is far out of the money or one if deep in the money. This is the same for a short put positions. For both a long put and short call, delta is between 0.0 and -1.0.
+
+THe total delta of a portfolio of options on the same underlying can be calculated by summing the deltas for each individual option.
+
+The delta of the underlying is always one, so a trader could "delta-hedge" a portfolio of options by buying or shorting the number of shares indicated by the sum of deltas.
+
+We learned before that a long call and a short put position at the same strike is equilavent to a forward contract. A forward contract has a delta of one. We can then say that the delta of a call minus the delta of a put equals one:
+$$
+\Delta C - \Delta P = 1
+$$
+
+## Vega
+
+Vega \\( \mathcal{V} \\) measures the change in option value relative to changes in the underlying's volatility:
+$$
+\mathcal{V} = \frac{\delta V}{\delta \sigma}
+$$
+
+*Side note, "vega" is not a greek letter! Wikipedia suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.*
+
+## Theta
+
+Theta \\( \Theta \\) measures the change in option value relative to the passage of time:
+$$
+\Theta = \frac{\delta V}{\delta t}
+$$
+Theta is almost always negative for a long option position. This is known as "time decay". The value of the option decreases over time. For a short option position, theta is positive.
+
+You can break down the value of an option into two parts, the intrinsic value and the time value. The intrinsic value of an option is the money you would make if you exercised the option imediately. So a call option whose strike is $10 below the current price has an intrisic value of $10. The remaining value of the option is the time value--the value in being able to wait to exercise.
+
+## Rho
+Rho \\( \rho \\) measures the change in option value relative to the changes in the risk free interest rate:
+$$
+\rho = \frac{\delta V}{\delta r}
+$$
+An option's value is least sensitive to the risk free rate making this a little used greek.
+
+## Gamma
+Gamma \\( \Gamma \\) measures the change in the delta with respect to the underlying's price:
+$$
+\Gamma = \frac{\delta \Delta}{\delta S} = \frac{\delta^2 V}{\delta S^2}
+$$
+
+Most options have opposite sign theta and gamma. So a long call has negative theta and positive gamma.
+
+When a trader is delta hedging a portfolio, they may also try and get their net gamma position to zero. This ensures that the hedge remains effective over a larger range of price movements.
+
+
+## Table of greeks
+
+|                      | Call                     | Put                          |
+| ---------------------|--------------------------|------------------------------|
+| Delta \\( \Delta \\) | \\( \mathcal{N}(d_1) \\) | \\( \mathcal{N}(d_1) - 1 \\) |
+| Gamma \\( \Gamma \\) <td colspan=2> \\( \frac{ \mathcal{N}^{\prime}(d_1)}{S \sigma \sqrt{t}} \\) |
+| Vega \\( \mathcal{V} \\) <td colspan=2> \\( S \mathcal{N}^{\prime}(d_1) \sqrt{t} \\) |
+| Theta \\( \Theta \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} - r E e^{-rt}\mathcal{N}(d_2) \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} + r E e^{-rt}\mathcal{N}(-d_2) \\) |
+| Rho \\( \rho \\) | \\( E t e^{-rt}\mathcal{N}(d_2) \\) | \\( -E t e^{-rt}\mathcal{N}(-d_2) \\) |
+
+
 
 
 Acknowledgements
