@@ -118,21 +118,6 @@ where:
 - \\( r = \\) the annual risk free rate.
 - \\( \mathcal{N} = \\) the cumulative normal distribution function.
 
-## Types of options contracts
-
-So far, we have only looked at a **European** style **call** option on a stock that **does not pay** dividends. An option can be either European or America, a call or a put and the underlying stock may or may not pay a dividend. This gives us 8 types of options:
-
-| Style    | Side | Dividends |
-|----------|------|-----------|
-| European | call | No        |
-| European | put  | No        |
-| American | call | No        |
-| American | put  | No        |
-| European | call | Yes       |
-| European | put  | Yes       |
-| American | call | Yes       |
-| American | put  | Yes       |
-
 ## Put options
 
 Let's now price a **European** style **put** option on a stock that **does not pay** dividends.
@@ -164,15 +149,57 @@ $$
 <todo>This has an interpretation section that might be good: http://www.timworrall.com/fin-40008/bscholes.pdf</todo>
 
 
+# Options with Dividends
 
+So far, we've only been looking at options on stocks that do not pay a dividend. Let's now price a **European** style **call** option on a stock that **does pay** dividends.
 
+When considering dividends, rather than account for a fixed amount, we work with the dividend yield. Let's say that the stock pays a dividend equal to the yield \\( y \\). This means that over the time \\( dt \\), \\(y S dt \\) dividends are received. All else being equal, that the stock will decrease in value by \\(y S dt \\). The stochastic model for the stock becomes:
+$$
+dS = \mu S dt + \sigma S d W - y S dt = (\mu - y) S dt + \sigma S d W
+$$
 
+Similarly to before, we construct a portfolio \\( \Pi = \Delta S - V \\) where \\( V \\) is the price of the option and \\( \Delta \\) will be picked so that the option is perfectly hedged. Because the stock pays a dividend, this portfolio will increase in value by  \\( \Delta y S dt \\):
+$$
+d\Pi = \Delta dS - dV + \Delta y S dt
+$$
+
+If we replace \\( dV \\) with it's expansion from Itô's lemma:
+$$
+d\Pi = \Delta dS - \frac{\delta V}{\delta t} dt - \frac{\delta V}{\delta S} dS - \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt + \Delta y S dt
+$$
+
+As before, if we pick \\( \Delta = \frac{\delta V}{\delta S} \\) to exactly offset any change in \\( V \\):
+$$
+d\Pi = - \frac{\delta V}{\delta t} dt - \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt + \frac{\delta V}{\delta S} y S dt
+$$
+
+Since the value of the portfolio is risk free we have:
+$$
+d\Pi = r \Pi dt = r(\frac{\delta V}{\delta S} S - V)dt = - \frac{\delta V}{\delta t} dt - \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt + \frac{\delta V}{\delta S} y S dt
+$$
+rearranging:
+$$
+\frac{\delta V}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} + (r - y)\frac{\delta V}{\delta S} S  - rV = 0
+$$
+
+We can see tha that this equation is nearly identical to the Black-Scholes equation except that the risk free rate on the value of the stock has been offset by the dividend.
+
+The value of a call option on a stock with dividends can be calculated with:
+$$
+\begin{align}
+C &= e^{-yt}S \mathcal{N}(d_1) - E e^{-rt} \mathcal{N}(d_2) \\\
+\\\
+d_1 &= \frac{\log(S/E) + [r - y + (\sigma^2 / 2)]t}{\sigma \sqrt{t}} \\\
+d_2 &= d_1 - \sigma \sqrt{t}
+\end{align}
+$$
 
 
 Acknowledgements
 
 The derivation of the Black-Scholes equation was inspired by [this article](https://www.linkedin.com/pulse/option-pricing-how-its-related-simulating-temperature-yafus-siddiqui/).
 
+The derivation of dividends was inspired by [this article](https://www.math.tamu.edu/~mike.stecher/425/Sp12/optionsForDividendStocks.pdf).
 
 
 
