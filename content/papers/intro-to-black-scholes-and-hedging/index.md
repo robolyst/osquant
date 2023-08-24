@@ -65,9 +65,9 @@ We're assuming that the price of the stock \\( S \\) follows a [geometric Browni
 $$
 dS = \mu S dt + \sigma S d W
 $$
-where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion.
+where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion. Generally, we treat \\( \mu \\) as equal to zero.
 
-As for \\( dV \\), all we know at the moment is that \\( V \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. But all it says is that such a function can be expanded in a similar way to a Taylor series where the higher order terms are zero.
+As for \\( dV \\), all we know at the moment is that \\( V \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. All it says is that such a function can be expanded in a similar way to a Taylor series where higher order terms are zero.
 
 Applying this expansion to \\( dV \\) we get:
 $$
@@ -86,7 +86,7 @@ $$
 substituting this in and cancelling out the \\( dt \\) term we get:
 $$
 \begin{align}
-r \left( V - \frac{\delta V}{\delta S} S \right) = \frac{\delta V}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} \label{2}\tag{2}
+r V - rS\frac{\delta V}{\delta S} = \frac{\delta V}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} \label{2}\tag{2}
 \end{align}
 $$
 
