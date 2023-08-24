@@ -1,7 +1,7 @@
 ---
-title: "Intro to Black-Scholes and option hedging"
+title: "Intro to Black-Scholes, implied volatility and hedging"
 summary: "
-A break down of how the black-scholes option pricing model works and how you can use it to hedge risks.
+A break down of how the black-scholes option pricing model works, what implied volatility is and how you can use the model to hedge risks.
 "
 
 date: "2023-08-19"
@@ -14,15 +14,19 @@ categories:
     - mathematics
 ---
 
-*I'm a little embarrased to admit this, but I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula by heart! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up a piece here on the the Black-Scholes model and how to use it to hedge. I hope this helps you as much as it helps me.*
+I'm a little embarrased to admit this, but I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up the Black-Scholes model here; being as succinct and practical as I can.
 
-# Black-Scholes basics
+This write up deals with the ideas and mathematics behind the Black-Scholes model. I assume you know what an option contract is and you know the difference between a [call](https://en.wikipedia.org/wiki/Call_option) and a [put](https://en.wikipedia.org/wiki/Put_option) opition.
+
+I hope this helps you as much as it helped me.
+
+# Black-Scholes setup
 
 The Black-Scholes model answers the question: what should the price of an option be?
 
-The idea behind the Black-Scholes model is to perfectly hedge the option with a position in the underlying. If the hedge should break even, you can solve for the option's price giving us the Black-Scholes formula.
+The idea behind the Black-Scholes model is to perfectly hedge the option with a position in the underlying. Assuming the hedge breaks even, you can solve for the option's price giving us the Black-Scholes formula.
 
-There are a few different types of option contracts. We'll start with the most basic one; a **European** style **call** option on a stock that **does not pay** dividends.
+There are a few different [types of option contracts](https://en.wikipedia.org/wiki/Option_style). Black-Scholes handles European style options. We'll start with a **European** style **call** option on a stock that **does not pay** dividends.
 
 A European call option gives the purcahser the right to buy a fixed number of shares at a fixed price on a fixed dated.
 
@@ -32,7 +36,7 @@ $$
 $$
 Where \\( V \\) is the price of the option, \\( S \\) is the price of the stock and \\( \Delta \\) is the number of shares we've sold to hedge the position.
 
-For this portfolio to be "correctly hedged" we do not want it's value to change if the price of the option changes or the price of the stock changes. However, this is not entirely true. We do need to take the time value of money into account. A given amount of value ought to increase over time by the risk free rate. This means that our correctly hedged portfolio should increase in value by the risk free rate. We write this as:
+For this portfolio to be "correctly hedged" we do not want it's value to change if the price of the option changes or the price of the stock changes. However, we do need to take the time value of money into account. A given amount of value ought to increase over time by the risk free rate. This means that our correctly hedged portfolio should increase in value by the risk free rate. We write this as:
 $$
 d\Pi = r \Pi dt = dV - \Delta dS
 $$
@@ -57,15 +61,15 @@ The full list of assumptions requried to solve for \\(V\\) are:
 
 # Deriving the Black-Scholes equation
 
-We're assuming that the price of the stock \\( S \\) follows a [geometric Brownian motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion) process with a fixed drift and volatility. This means that the logged prices are a Brownian motion. I find it a little easier to say that the changes in the logged prices are Gaussian with a fixed mean and variance. We write this as:
+We're assuming that the price of the stock \\( S \\) follows a [geometric Brownian motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion) process with a fixed drift and volatility. This means that the logged prices are a Brownian motion. We write this as:
 $$
 dS = \mu S dt + \sigma S d W
 $$
-where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion (standard Gaussian).
+where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion.
 
-As for \\( dV \\), all we know at the moment is that V is a function of the price of the stock \\( S \\) and time \\( t \\). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving this takes a bit of time, so we're just going to consider it magical and jump straight into the formula for \\( dV \\).
+As for \\( dV \\), all we know at the moment is that \\( V \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. But all it says is that such a function can be expanded in a similar way to a Taylor series where the higher order terms are zero.
 
-Using Itô's lemma we can break down \\( dV \\):
+Applying this expansion to \\( dV \\) we get:
 $$
 dV = \frac{\delta V}{\delta t} dt + \frac{\delta V}{\delta S} dS + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt
 $$
