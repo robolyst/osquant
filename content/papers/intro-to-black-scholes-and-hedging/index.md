@@ -15,9 +15,9 @@ categories:
     - mathematics
 ---
 
-I'm a little embarrased to admit this, I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up the Black-Scholes model here; being as succinct and practical as I can.
+I'm a little embarrassed to admit this, I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up the Black-Scholes model here; being as succinct and practical as I can.
 
-This write up deals with the ideas and mathematics behind the Black-Scholes model. I assume you know what an option contract is and you know the difference between a [call](https://en.wikipedia.org/wiki/Call_option) and a [put](https://en.wikipedia.org/wiki/Put_option) opition.
+This write up deals with the ideas and mathematics behind the Black-Scholes model. I assume you know what an option contract is and you know the difference between a [call](https://en.wikipedia.org/wiki/Call_option) and a [put](https://en.wikipedia.org/wiki/Put_option) option.
 
 I hope this helps you as much as it helped me.
 
@@ -25,11 +25,11 @@ I hope this helps you as much as it helped me.
 
 The Black-Scholes model answers the question: what should the price of an option be?
 
-The idea behind the Black-Scholes model is to perfectly hedge the option with a position in the underlying. Assuming the hedge breaks even, you can solve for the option's price giving us the Black-Scholes formula.
+The idea behind the Black-Scholes model is to perfectly hedge the option with a position in the stock. Assuming the hedge breaks even, you can solve for the option's price giving us the Black-Scholes formula.
 
-There are a few different [types of option contracts](https://en.wikipedia.org/wiki/Option_style). Black-Scholes handles European style options. We'll start with a **European** style **call** option on a stock that **does not pay** dividends.
+Option contract come in a [few different types](https://en.wikipedia.org/wiki/Option_style). Black-Scholes handles European style options. We'll start with a **European** style **call** option on a stock that **does not pay** dividends.
 
-A European call option gives the purcahser the right to buy a fixed number of shares at a fixed price on a fixed dated.
+A European call option gives the purchaser the right to buy a fixed number of shares at a fixed price on a fixed dated.
 
 If you were to buy a call option, and the price of the stock goes up, then the value of the call option also goes up. To hedge this call option so that your total position value doesn't change you would need to sell some number of the stock. We can write such a portfolio like this:
 $$
@@ -51,14 +51,14 @@ $$
 
 The intuition here is that the return on the total position (option + stock) should be equal to the risk free rate. This is what we call an arbitrage free assumption.
 
-The full list of assumptions requried to solve for \\( C \\) are:
+The full list of assumptions required to solve for \\( C \\) are:
 
-1. There exists a risk free asset with a fixed rate of return for the life of the option.
+1. A risk free asset exists with a fixed rate of return for the life of the option.
 1. The market is arbitrage free.
 1. You can borrow and lend any amount of money at the risk free rate.
 1. You can buy or sell any amount of the stock. This includes short selling and fractional amounts.
-1. There are no transaction costs (no bid-ask spread or commissions).
-1. The instantaneous log return of the underlying's price is a geometric Brownian motion with constant drift and volatility.
+1. Trading does not cost money (no bid-ask spread or commissions).
+1. The instantaneous log return of the stock's price is a geometric Brownian motion with constant drift and volatility.
 
 # Deriving the Black-Scholes equation
 
@@ -68,7 +68,7 @@ dS = \mu S dt + \sigma S d W
 $$
 where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion. Generally, we treat \\( \mu \\) as equal to zero.
 
-As for \\( dC \\), all we know at the moment is that \\( C \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. All it says is that such a function can be expanded in a similar way to a Taylor series where higher order terms are zero.
+As for \\( dC \\), all we know at the moment is that \\( C \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). Luckily, some clever people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. All it says is that such a function can be expanded in a similar way to a Taylor series where higher order terms are zero.
 
 Applying this expansion to \\( dC \\) we get:
 $$
@@ -84,7 +84,7 @@ If we want the number of shares sold \\( \Delta \\) to exactly offset any change
 $$
 \Delta = \frac{\delta C}{\delta S}
 $$
-substituting this in and cancelling out the \\( dt \\) term we get:
+substituting this in and cancelling out the \\(dt\\) term we get:
 $$
 \begin{align}
 r C - r\frac{\delta C}{\delta S}S = \frac{\delta C}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} \label{2}\tag{2}
@@ -134,13 +134,13 @@ where:
 
 Let's now price a **European** style **put** option on a stock that **does not pay** dividends.
 
-A European put option gives the purcahser the right to sell a fixed number of shares at a fixed price on a fixed dated.
+A European put option gives the purchaser the right to sell a fixed number of shares at a fixed price on a fixed dated.
 
 To find the price of a put option, we need to use an idea call **put-call parity.**
 
 Imagine you purchased a call option and sold a put option at the same strike. If the stock is above the strike at expiration, you would exercise the call option buying the shares at the strike. If the stock is below the strike, the purchaser will exercise resulting in you buying the shares at the strike. This portfolio of a long call option and a short put option is equivalent to a single forward contract at the same strike and expiry (assuming no arbitrage).
 
-This means that the value of the call minus the value of the put must equal the present value of the forward price of the underlying minus the exercise price:
+This means that the value of the call minus the value of the put must equal the present value of the forward price of the stock minus the exercise price:
 $$
 C - P = \frac{Se^{rt} - E}{e^{rt}} = S - Ee^{-rt}
 $$
@@ -160,9 +160,9 @@ $$
 
 # Options with Dividends
 
-So far, we've only been looking at options on stocks that do not pay a dividend. Let's now price a **European** style **call** option on a stock that **does pay** dividends.
+The basic Black-Scholes model only addresses options on stocks that do not pay a dividend. Let's now price a **European** style **call** option on a stock that **does pay** dividends.
 
-When considering dividends, rather than account for a fixed amount, we work with the dividend yield. Let's say that the stock pays dividends equal to the annual yield \\( y \\). This means that over the time \\( dt \\), \\(y S dt \\) dividends are received. All else being equal, the stock will decrease in value by \\(y S dt \\). The stochastic model for the stock becomes:
+When considering dividends, rather than account for a fixed amount, we work with the dividend yield. Let's say that the stock pays dividends equal to the annual yield \\( y \\). This means that over the time \\(dt\\), \\(ySdt\\) dividends are received. All else being equal, the stock will decrease in value by \\(ySdt\\). The stochastic model for the stock becomes:
 $$
 dS = \mu S dt + \sigma S d W - y S dt = (\mu - y) S dt + \sigma S d W
 $$
@@ -171,7 +171,7 @@ Similarly to before, we construct a portfolio that is long some stock and short 
 $$
 \Pi = \Delta S - C
 $$
-where \\( C \\) is the price of the call option and \\( \Delta \\) will be picked so that the option is perfectly hedged. Because the stock pays a dividend, this portfolio will increase in value by  \\( \Delta y S dt \\):
+where \\( C \\) is the price of the call option and \\( \Delta \\) will be picked so that the option is perfectly hedged. Because the stock pays a dividend, this portfolio will increase in value by  \\(\Delta ySdt\\):
 $$
 d\Pi = \Delta dS - dC + \Delta y S dt
 $$
@@ -195,7 +195,7 @@ $$
 \frac{\delta C}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} + (r - y)\frac{\delta C}{\delta S} S  - rC = 0
 $$
 
-We can see tha that this equation is nearly identical to the Black-Scholes equation (\\(\ref{2}\\)) except that the risk free rate on the value of the stock has been offset by the dividend[^dividend-yield].
+We can see that this equation is nearly identical to the Black-Scholes equation (\\(\ref{2}\\)) except that the risk free rate on the value of the stock has been offset by the dividend[^dividend-yield].
 
 ## Call options
 
@@ -233,7 +233,7 @@ $$
 
 # Implied Volatility
 
-The inputs to the option model above are the underlying price, the exercise price, the time to expiration, the risk free rate and the expected volatility. All of these quantities are known except for the expected volatility.
+The inputs to the option model above are the stock price, the exercise price, the time to expiration, the risk free rate and the expected volatility. All of these quantities are known except for the expected volatility.
 
 In fact, if you look at market prices, then the current option price is also known. If you were to plug in the current option price and solve for the volatility \\( \sigma \\) you would get the market's expectation for volatility. This is called implied volatility---the volatility implied by the market price.
 
@@ -243,31 +243,31 @@ f(\sigma, S, E, t, r) - C = 0
 $$
 where \\( f(\cdot) \\) is the theoretical value of a call option.
 
-[Scipy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box.
+[SciPy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box.
 
 # Greeks
 
-The "greeks" are a set of derivatives measuring how sensitive an option is to underlying changes. These values are used in hedging. A trader is able to isolate the various factors that impact an option's price and hedge away those risks.
+The "Greeks" are a set of derivatives measuring how sensitive an option is to different factors. These values are used in hedging. A trader is able to isolate the various factors that impact an option's price and hedge away those risks.
 
 ## Delta
 
-We've met delta before. Delta \\( \Delta \\) measures the change of the option value with respect to the underlying's price:
+We've met delta before. Delta \\( \Delta \\) measures the change of the option value with respect to the stock's price:
 $$
 \Delta = \frac{\delta V}{\delta S}
 $$
 
-A neat interpretation of this is that delta \\( \Delta \\) tells you how many units of the underlying you are exposed to. For example, if an option's delta is 1, then for every $1 change in the underlying we would expect the option's value to change by $1. In other words, 1 option behaves just like 1 unit of the underlying. If the delta was 0.5, then 1 option would behave like 0.5 underlyings.
+A neat interpretation of this is that delta \\( \Delta \\) tells you how many units of the stock you are exposed to. For example, if an option's delta is 1, then for every $1 change in the stock we would expect the option's value to change by $1. In other words, 1 option behaves just like 1 unit of the stock. If the delta was 0.5, then 1 option would behave like 0.5 units of stock.
 
 For a long call option, delta will be between 0.0 and 1.0. Delta will be zero if the option is far out of the money or one if deep in the money. This is the same for a short put positions. For both a long put and short call, delta is between 0.0 and -1.0.
 
-We learned before that a long call and a short put position at the same strike is equilavent to a forward contract. A forward contract has a delta of one. We can then say that the delta of a call minus the delta of a put equals one:
+We learned before that a long call and a short put position at the same strike is equivalent to a forward contract. A forward contract has a delta of one. We can then say that the delta of a call minus the delta of a put equals one:
 $$
 \Delta C - \Delta P = 1
 $$
 
 ## Vega
 
-Vega[^vega] \\( \mathcal{V} \\) measures the change in option value relative to changes in the underlying's volatility:
+Vega[^vega] \\( \mathcal{V} \\) measures the change in option value relative to changes in the stock's volatility:
 $$
 \mathcal{V} = \frac{\delta V}{\delta \sigma}
 $$
@@ -278,19 +278,19 @@ Theta \\( \Theta \\) measures the change in option value relative to the passage
 $$
 \Theta = \frac{\delta V}{\delta t}
 $$
-Theta is almost always negative for a long option position. This is known as "time decay". The value of the option decreases over time. For a short option position, theta is positive.
+Theta is almost always negative for a long option position. This is known as "time decay." The value of the option decreases over time. For a short option position, theta is positive.
 
-You can break down the value of an option into two parts, the intrinsic value and the time value. The intrinsic value of an option is the money you would make if you exercised the option imediately. So a call option whose strike is $10 below the current price has an intrisic value of $10. The remaining value of the option is the time value--the value in being able to wait to exercise.
+You can break down the value of an option into two parts, the intrinsic value and the time value. The intrinsic value of an option is the money you would make if you exercised the option immediately. For example, a call option whose strike is $10 below the current price has an intrinsic value of $10. The remaining value of the option is the time value--the value in being able to wait to exercise.
 
 ## Rho
 Rho \\( \rho \\) measures the change in option value relative to the changes in the risk free interest rate:
 $$
 \rho = \frac{\delta V}{\delta r}
 $$
-An option's value is least sensitive to the risk free rate making this a little used greek.
+An option's value is least sensitive to the risk free rate making this a little used Greek.
 
 ## Gamma
-Gamma \\( \Gamma \\) measures the change in the delta with respect to the underlying's price:
+Gamma \\( \Gamma \\) measures the change in the delta with respect to the stock's price:
 $$
 \Gamma = \frac{\delta \Delta}{\delta S} = \frac{\delta^2 V}{\delta S^2}
 $$
@@ -299,12 +299,12 @@ A positive gamma means you will benefit from price movements. A negative gamma m
 
 For a long options position gamma is positive. This is true for both calls and puts.
 
-Most options have opposite sign theta and gamma. So a long call has negative theta and positive gamma. That is, a long call's value decreases over time and increases with volatility.
+Most options have opposite sign theta and gamma. For example, a long call has negative theta and positive gamma. That is, a long call's value decreases over time and increases with volatility.
 
 
-## Table of greeks
+## Table of Greeks
 
-Here are the calculations for the greeks for both calls and puts[^greeks]:
+Here are the calculations for the Greeks for both calls and puts[^greeks]:
 
 |                      | Call                     | Put                          |
 | ---------------------|--------------------------|------------------------------|
@@ -321,33 +321,33 @@ Here are the calculations for the greeks for both calls and puts[^greeks]:
 
 # Portfolio analysis
 
-In a simplified world, traders who are trading stocks only have to worry about one risk, the price changing. However, as we've learned, the value of an option contract changes based on a number of different factors. These factors are mainly the price of the underlying, the expected volatility, the risk free rate and the passage of time.
+In a simplified world, traders who are trading stocks only have to worry about one risk, the price changing. However, as we've learned, the value of an option contract changes based on a number of different factors. These factors are mainly the price of the stock, the expected volatility, the risk free rate and the passage of time.
 
-The greeks above all measure an option's sensitivity to changes in each of these factors and are a way of measuring and tracking risks.
+The Greeks above all measure an option's sensitivity to changes in each of these factors and are a way of measuring and tracking risks.
 
-These risk measures (delta, gamma, theta, vega and rho) are all additive. This means that if you have a complex portfolio of call and put options at varying strikes and expiries (but the same underlying) then you can sum together their greeks to estimate the risks of the whole portfolio.
+These risk measures (delta, gamma, theta, vega and rho) are all additive. This means that if you have a complex portfolio of call and put options at varying strikes and expiries (but the same stock) then you can sum together their Greeks to estimate the risks of the whole portfolio.
 
 # Option hedging
 
-If you wanted to capture the value of an option you would have to buy or sell that option. As we've learned, an option's value changes with the underlying price. Which means that buying or selling an option contract means you are exposed to the risk that the underlying's price moves against you.
+If you wanted to capture the value of an option you would have to buy or sell that option. As we've learned, an option's value changes with the stock price. Which means that buying or selling an option contract means you are exposed to the risk that the stock's price moves against you.
 
-We learned before that an option's delta tells you how many units of the underlying you are exposed to. So, if you had a call option with a delta of 1, you could sell one unit of stock and be theoretically protected against movements in the stock's price. This kind of hedge is called **delta-hedging.** We say theoretically because the delta is the instintanious delta. After some time, your option's delta will not be 1 anymore.
+We learned before that an option's delta tells you how many units of the stock you are exposed to. For example, if you had a call option with a delta of 1, you could sell one unit of stock and be theoretically protected against movements in the stock's price. This kind of hedge is called **delta-hedging.** We say theoretically because the delta is the instantaneous delta. After some time, your option's delta will not be 1 anymore.
 
-The idea behind delta-hedging is to always maintain a total delta of 0. We can look at the deltas in our entire portfolio and sum them together. We want to maintain a total delta of 0. The delta of the underlying is always 1. If the portfolio has a net delta above zero, we need to sell the underlying. If the portfolio has a net delta below zero, we need to buy the underlying. As you can imagine, doing this repeatedly incurs transaction costs and becomes expensive. It wouldn't be practical to constantly hedge your option positions, you have to periodically hedge. Either re-heding every fixed period or re-hedging when your delta becomes too large.
+The idea behind delta-hedging is to always maintain a total delta of 0. We can look at the deltas in our entire portfolio and sum them together. We want to maintain a total delta of 0. The delta of the stock is always 1. If the portfolio has a net delta above zero, we need to sell the stock. If the portfolio has a net delta below zero, we need to buy the stock. As you can imagine, doing this repeatedly incurs transaction costs and becomes expensive. It wouldn't be practical to constantly hedge your option positions, you have to periodically hedge. Either re-heding every fixed period or re-hedging when your delta becomes too large.
 
 # Summary
 
-This write up provides an introduction to the Black-Scholes model and how to use it to estimate implied volatility and hedge option positions. There is significantly more detail and nauance than presented here. I'd encourage you to read through the book "Option Volatility & Pricing" [^Natenberg2015] to dive deeper into options.
+This write up provides an introduction to the Black-Scholes model and how to use it to estimate implied volatility and hedge option positions. I have only covered the surface of this topic. I'd encourage you to read through the book "Option Volatility & Pricing" [^Natenberg2015] to dive deeper into options.
 
 
 
-[^ito]: Itô's lemma. If \\( X_t \\) is a stochastic process with infinitesimal variance \\(v(X_t)\\) and if \\( u(X_t, t) \\) is a function with enough derivatives then \\( u(X_t, t) \\) is another stochastic process that satisfies:
+[^ito]: Itô's lemma. If \\(X_t\\) is a stochastic process with infinitesimal variance \\(v(X_t)\\) and if \\( u(X_t, t) \\) is a function with enough derivatives then \\( u(X_t, t) \\) is another stochastic process that satisfies:
 $$
 d u(X_t, t) = \frac{\delta u(X_t, t)}{\delta t} dt + \frac{\delta u(X_t, t)}{\delta X_t} d X_t + \frac{1}{2} \frac{\delta^2 u(X_t, t)}{\delta X_t^2} v(X_t)dt
 $$
-A good explaination of Itô's lemma can be found [here](https://math.nyu.edu/~goodman/teaching/StochCalc2018/notes/Lesson4.pdf).
+A good explanation of Itô's lemma can be found [here](https://math.nyu.edu/~goodman/teaching/StochCalc2018/notes/Lesson4.pdf).
 
-[^vega]: "Vega" is not a greek letter! [Wikipedia](https://en.wikipedia.org/wiki/Greeks_(finance)#Vega) suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.
+[^vega]: "Vega" is not a Greek letter! [Wikipedia](https://en.wikipedia.org/wiki/Greeks_(finance)#Vega) suggests that it is a variation on the Greek letter nu (\\( \nu \\)) which looks like a "v" and "-ega" was added to the end to make it sound like the Greek letters beta, eta and theta.
 
 [^greeks]: Greeks calculations lifted from Wikipedia's ["Greeks (finance)"](https://en.wikipedia.org/wiki/Greeks_(finance)#Formulae_for_European_option_Greeks) page.
 
