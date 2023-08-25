@@ -91,7 +91,7 @@ r C - r\frac{\delta C}{\delta S}S = \frac{\delta C}{\delta t} + \frac{1}{2} \sig
 \end{align}
 $$
 
-This is the famous Black-Scholes equation. Before looking at the solution to this equation, it is helpful to get an appreciation for what it is saying.
+This is the famous Black-Scholes equation[^equation]. Before looking at the solution to this equation, it is helpful to get an appreciation for what it is saying.
 
 ## Intuition behind the equation
 
@@ -195,7 +195,7 @@ $$
 \frac{\delta C}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} + (r - y)\frac{\delta C}{\delta S} S  - rC = 0
 $$
 
-We can see tha that this equation is nearly identical to the Black-Scholes equation (\\(\ref{2}\\)) except that the risk free rate on the value of the stock has been offset by the dividend.
+We can see tha that this equation is nearly identical to the Black-Scholes equation (\\(\ref{2}\\)) except that the risk free rate on the value of the stock has been offset by the dividend[^dividend-yield].
 
 ## Call options
 
@@ -334,14 +334,6 @@ The delta of the underlying is always one, so a trader could "delta-hedge" a por
 When a trader is delta hedging a portfolio, they may also try and get their net gamma position to zero. This ensures that the hedge remains effective over a larger range of price movements.
 
 
-# Acknowledgements
-
-The derivation of the Black-Scholes equation was inspired by [this article](https://www.linkedin.com/pulse/option-pricing-how-its-related-simulating-temperature-yafus-siddiqui/).
-
-The derivation of dividends was inspired by [this article](https://www.math.tamu.edu/~mike.stecher/425/Sp12/optionsForDividendStocks.pdf).
-
-
-
 [^ito]: Itô's lemma. If \\( X_t \\) is a stochastic process with infinitesimal variance \\(v(X_t)\\) and if \\( u(X_t, t) \\) is a function with enough derivatives then \\( u(X_t, t) \\) is another stochastic process that satisfies:
 $$
 d u(X_t, t) = \frac{\delta u(X_t, t)}{\delta t} dt + \frac{\delta u(X_t, t)}{\delta X_t} d X_t + \frac{1}{2} \frac{\delta^2 u(X_t, t)}{\delta X_t^2} v(X_t)dt
@@ -351,6 +343,10 @@ A good explaination of Itô's lemma can be found [here](https://math.nyu.edu/~go
 [^vega]: "Vega" is not a greek letter! [Wikipedia](https://en.wikipedia.org/wiki/Greeks_(finance)#Vega) suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.
 
 [^greeks]: Greeks calculations lifted from Wikipedia's ["Greeks (finance)"](https://en.wikipedia.org/wiki/Greeks_(finance)#Formulae_for_European_option_Greeks) page.
+
+[^dividend-yield]: The derivation of dividends was inspired by [this article](https://www.math.tamu.edu/~mike.stecher/425/Sp12/optionsForDividendStocks.pdf).
+
+[^equation]: The derivation of the Black-Scholes equation was inspired by [this article](https://www.linkedin.com/pulse/option-pricing-how-its-related-simulating-temperature-yafus-siddiqui/).
 
 {{% citation
     id="Natenberg2015"
