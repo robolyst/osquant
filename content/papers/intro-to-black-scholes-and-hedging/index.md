@@ -7,6 +7,7 @@ A break down of how the black-scholes option pricing model works, what implied v
 date: "2023-08-19"
 type: paper
 mathjax: true # Enable mathematics on the page
+# katex: true
 plotly: true  # Enable plotly on the page
 authors:
     - Adrian Letchford
@@ -14,7 +15,7 @@ categories:
     - mathematics
 ---
 
-I'm a little embarrased to admit this, but I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up the Black-Scholes model here; being as succinct and practical as I can.
+I'm a little embarrased to admit this, I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up the Black-Scholes model here; being as succinct and practical as I can.
 
 This write up deals with the ideas and mathematics behind the Black-Scholes model. I assume you know what an option contract is and you know the difference between a [call](https://en.wikipedia.org/wiki/Call_option) and a [put](https://en.wikipedia.org/wiki/Put_option) opition.
 
@@ -32,25 +33,25 @@ A European call option gives the purcahser the right to buy a fixed number of sh
 
 If you were to buy a call option, and the price of the stock goes up, then the value of the call option also goes up. To hedge this call option so that your total position value doesn't change you would need to sell some number of the stock. We can write such a portfolio like this:
 $$
-\Pi = V - \Delta S
+\Pi = C - \Delta S
 $$
-Where \\( V \\) is the price of the option, \\( S \\) is the price of the stock and \\( \Delta \\) is the number of shares we've sold to hedge the position.
+Where \\( C \\) is the price of the call option, \\( S \\) is the price of the stock and \\( \Delta \\) is the number of shares we've sold to hedge the position.
 
 For this portfolio to be "correctly hedged" we do not want it's value to change if the price of the option changes or the price of the stock changes. However, we do need to take the time value of money into account. A given amount of value ought to increase over time by the risk free rate. This means that our correctly hedged portfolio should increase in value by the risk free rate. We write this as:
 $$
-d\Pi = r \Pi dt = dV - \Delta dS
+d\Pi = r \Pi dt = dC - \Delta dS
 $$
 where \\( r\\) is the risk free rate and \\( dt\\) is the amount of time that passes. Since we know the value of the portfolio \\( \Pi \\):
 $$
 \begin{align}
-r (V - \Delta S) dt = dV - \Delta dS \label{1} \tag{1}
+r (C - \Delta S) dt = dC - \Delta dS \label{1} \tag{1}
 \end{align}
 $$
 
 
 The intuition here is that the return on the total position (option + stock) should be equal to the risk free rate. This is what we call an arbitrage free assumption.
 
-The full list of assumptions requried to solve for \\(V\\) are:
+The full list of assumptions requried to solve for \\( C \\) are:
 
 1. There exists a risk free asset with a fixed rate of return for the life of the option.
 1. The market is arbitrage free.
@@ -67,43 +68,49 @@ dS = \mu S dt + \sigma S d W
 $$
 where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion. Generally, we treat \\( \mu \\) as equal to zero.
 
-As for \\( dV \\), all we know at the moment is that \\( V \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. All it says is that such a function can be expanded in a similar way to a Taylor series where higher order terms are zero.
+As for \\( dC \\), all we know at the moment is that \\( C \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). As luck would have it, very smart people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. All it says is that such a function can be expanded in a similar way to a Taylor series where higher order terms are zero.
 
-Applying this expansion to \\( dV \\) we get:
+Applying this expansion to \\( dC \\) we get:
 $$
-dV = \frac{\delta V}{\delta t} dt + \frac{\delta V}{\delta S} dS + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt
+dC = \frac{\delta C}{\delta t} dt + \frac{\delta C}{\delta S} dS + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} dt
 $$
 
 Substituting this into Eq. (\\( \ref{1} \\)) gives us:
 $$
-r (V - \Delta S) dt = \left(\frac{\delta V}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} \right) dt + \left(\frac{\delta V}{\delta S} - \Delta \right) dS
+r (C - \Delta S) dt = \left(\frac{\delta C}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} \right) dt + \left(\frac{\delta C}{\delta S} - \Delta \right) dS
 $$
 
-If we want the number of shares sold \\( \Delta \\) to exactly offset any change in \\( V \\), then we can imply that:
+If we want the number of shares sold \\( \Delta \\) to exactly offset any change in \\( C \\), then we can imply that:
 $$
-\Delta = \frac{\delta V}{\delta S}
+\Delta = \frac{\delta C}{\delta S}
 $$
 substituting this in and cancelling out the \\( dt \\) term we get:
 $$
 \begin{align}
-r V - rS\frac{\delta V}{\delta S} = \frac{\delta V}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} \label{2}\tag{2}
+r C - r\frac{\delta C}{\delta S}S = \frac{\delta C}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} \label{2}\tag{2}
 \end{align}
 $$
 
-This is the famous Black-Scholes equation. You can substitute \\( V \\) for a \\( C \\) in the case of a call option or \\( P \\) for a put option.
+This is the famous Black-Scholes equation. Before looking at the solution to this equation, it is helpful to get an appreciation for what it is saying.
 
-Before looking at the solution to this equation, it is helpful to get an appreciation for what it is saying.
+## Intuition behind the equation
 
-# Intuition behind the equation
+In a no arbitrage world, any investment should return the risk free rate. The left hand side of equation (\\(\ref{2}\\)) is the amount of money we should make if we invested in the risk free asset instead of buying the option and hedging with stock.
 
-Equation (\\(\ref{2}\\)) looks pretty intimidating. The left hand side is just the amount of money we should make if we just invested in the risk free asset. The left right hand side says that this should equal the amount of money gained/lossed over time plus any money gained/lossed by the price movement in the stock.
+An option has value for two reasons. The first is that you have the choice to exercise in the future. This is know as the time value of an option. The second is that an option protects you against volatility in the stock.
 
-<todo>graphic highlighting each bit in the equation</todo>
+The right hand side of equation (\\(\ref{2}\\)) says that the risk free returns should equal the time value and the volatility value of the option. That is, the risk free returns should equal the amount of money gained/lost over time plus any money gained/lost by the volatility in the stock.
+
+![Black-Scholes equation](black-scholes.svg)
 
 
 # Solving the Black-Scholes equation
 
-The solution to the Black-Scholes equation above (\\(\ref{2}\\)) gives us the Black-Scholes model[^Natenberg2015]:
+Deriving the solution to the Black-Scholes equation (\\(\ref{2}\\)) above is fairly involved and out of the scope of this article. We'll skip the derivation and go straight to the solution.
+
+## Call options
+
+The solution to the Black-Scholes equation above (\\(\ref{2}\\)) gives us the Black-Scholes model for the price of a call option[^Natenberg2015]:
 $$
 \begin{align}
 C &= S \mathcal{N}(d_1) - E e^{-rt} \mathcal{N}(d_2) \label{3}\tag{3} \\\
@@ -121,6 +128,8 @@ where:
 - \\( r = \\) the annual risk free rate.
 - \\( \mathcal{N} = \\) the cumulative normal distribution function.
 
+<!-- This has an interpretation section that might be good: http://www.timworrall.com/fin-40008/bscholes.pdf -->
+
 ## Put options
 
 Let's now price a **European** style **put** option on a stock that **does not pay** dividends.
@@ -131,11 +140,10 @@ To find the price of a put option, we need to use an idea call **put-call parity
 
 Imagine you purchased a call option and sold a put option at the same strike. If the stock is above the strike at expiration, you would exercise the call option buying the shares at the strike. If the stock is below the strike, the purchaser will exercise resulting in you buying the shares at the strike. This portfolio of a long call option and a short put option is equivalent to a single forward contract at the same strike and expiry (assuming no arbitrage).
 
-This means that the value of the call minus the value of the put must equal the present value of the forward price of the underlying minus the exercise price
+This means that the value of the call minus the value of the put must equal the present value of the forward price of the underlying minus the exercise price:
 $$
 C - P = \frac{Se^{rt} - E}{e^{rt}} = S - Ee^{-rt}
 $$
-<todo>I don't intuitively understand this 👆🏻</todo>
 
 This equivalence is what put-call parity refers to.
 
@@ -149,45 +157,49 @@ P &=E e^{-rt} (1 - \mathcal{N}(d_2)) - S (1 - \mathcal{N}(d_1)) \label{4}\tag{4}
 \end{align}
 $$
 
-<todo>This has an interpretation section that might be good: http://www.timworrall.com/fin-40008/bscholes.pdf</todo>
-
 
 # Options with Dividends
 
 So far, we've only been looking at options on stocks that do not pay a dividend. Let's now price a **European** style **call** option on a stock that **does pay** dividends.
 
-When considering dividends, rather than account for a fixed amount, we work with the dividend yield. Let's say that the stock pays a dividend equal to the yield \\( y \\). This means that over the time \\( dt \\), \\(y S dt \\) dividends are received. All else being equal, that the stock will decrease in value by \\(y S dt \\). The stochastic model for the stock becomes:
+When considering dividends, rather than account for a fixed amount, we work with the dividend yield. Let's say that the stock pays dividends equal to the annual yield \\( y \\). This means that over the time \\( dt \\), \\(y S dt \\) dividends are received. All else being equal, the stock will decrease in value by \\(y S dt \\). The stochastic model for the stock becomes:
 $$
 dS = \mu S dt + \sigma S d W - y S dt = (\mu - y) S dt + \sigma S d W
 $$
 
-Similarly to before, we construct a portfolio \\( \Pi = \Delta S - V \\) where \\( V \\) is the price of the option and \\( \Delta \\) will be picked so that the option is perfectly hedged. Because the stock pays a dividend, this portfolio will increase in value by  \\( \Delta y S dt \\):
+Similarly to before, we construct a portfolio that is long some stock and short a call option:
 $$
-d\Pi = \Delta dS - dV + \Delta y S dt
+\Pi = \Delta S - C
+$$
+where \\( C \\) is the price of the call option and \\( \Delta \\) will be picked so that the option is perfectly hedged. Because the stock pays a dividend, this portfolio will increase in value by  \\( \Delta y S dt \\):
+$$
+d\Pi = \Delta dS - dC + \Delta y S dt
 $$
 
-If we replace \\( dV \\) with it's expansion from Itô's lemma:
+If we replace \\( dC \\) with it's expansion from Itô's lemma:
 $$
-d\Pi = \Delta dS - \frac{\delta V}{\delta t} dt - \frac{\delta V}{\delta S} dS - \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt + \Delta y S dt
+d\Pi = \Delta dS - \frac{\delta C}{\delta t} dt - \frac{\delta C}{\delta S} dS - \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} dt + \Delta y S dt
 $$
 
-As before, if we pick \\( \Delta = \frac{\delta V}{\delta S} \\) to exactly offset any change in \\( V \\):
+As before, we pick \\( \Delta = \frac{\delta C}{\delta S} \\) to exactly offset any change in \\( C \\):
 $$
-d\Pi = - \frac{\delta V}{\delta t} dt - \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt + \frac{\delta V}{\delta S} y S dt
+d\Pi = - \frac{\delta C}{\delta t} dt - \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} dt + \frac{\delta C}{\delta S} y S dt
 $$
 
 Since the value of the portfolio is risk free we have:
 $$
-d\Pi = r \Pi dt = r(\frac{\delta V}{\delta S} S - V)dt = - \frac{\delta V}{\delta t} dt - \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} dt + \frac{\delta V}{\delta S} y S dt
+d\Pi = r \Pi dt = r(\frac{\delta C}{\delta S} S - C)dt = - \frac{\delta C}{\delta t} dt - \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} dt + \frac{\delta C}{\delta S} y S dt
 $$
 rearranging:
 $$
-\frac{\delta V}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 V}{\delta S^2} + (r - y)\frac{\delta V}{\delta S} S  - rV = 0
+\frac{\delta C}{\delta t} + \frac{1}{2} \sigma^2S^2\frac{\delta^2 C}{\delta S^2} + (r - y)\frac{\delta C}{\delta S} S  - rC = 0
 $$
 
-We can see tha that this equation is nearly identical to the Black-Scholes equation except that the risk free rate on the value of the stock has been offset by the dividend.
+We can see tha that this equation is nearly identical to the Black-Scholes equation (\\(\ref{2}\\)) except that the risk free rate on the value of the stock has been offset by the dividend.
 
-The value of a call option on a stock with dividends can be calculated with:
+## Call options
+
+The solution to the equation above gives us the model for the price of a call option:
 $$
 \begin{align}
 C &= e^{-yt}S \mathcal{N}(d_1) - E e^{-rt} \mathcal{N}(d_2) \\\
@@ -196,7 +208,28 @@ d_1 &= \frac{\log(S/E) + [r - y + (\sigma^2 / 2)]t}{\sigma \sqrt{t}} \\\
 d_2 &= d_1 - \sigma \sqrt{t}
 \end{align}
 $$
-This has been modified so that the forward value of the stock is adjusted by the dividend yeild.
+where:
+- \\( C = \\) the theoretical value of a **European** style **call** option.
+- \\( S = \\) the price of a stock that **does pay** dividends.
+- \\( y = \\) the annual dividend yield.
+- \\( E = \\) the exercise price.
+- \\( t = \\) the time to expiration in years.
+- \\( \sigma = \\) the annual standard deviation of the stock price returns.
+- \\( r = \\) the annual risk free rate.
+- \\( \mathcal{N} = \\) the cumulative normal distribution function.
+
+## Put options
+
+If we take the put-call parity and plug in the price of a call option, we get:
+$$
+\begin{align}
+C - P &= S - Ee^{-rt} \\\
+P &= C - S + Ee^{-rt} \\\
+P &= e^{-yt}S \mathcal{N}(d_1) - E e^{-rt} \mathcal{N}(d_2) - S + Ee^{-rt} \\\
+P &=E e^{-rt} (1 - \mathcal{N}(d_2)) - S (1 - e^{-yt}\mathcal{N}(d_1)) \\\
+\end{align}
+$$
+
 
 # Implied Volatility
 
@@ -208,7 +241,9 @@ Unfortunately, there is no closed form solution for the implied volatility. Howe
 $$
 f(\sigma, S, E, t, r) - C = 0
 $$
-where \\( f(\cdot) \\) is the theoretical of a call option.
+where \\( f(\cdot) \\) is the theoretical value of a call option.
+
+[Scipy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box.
 
 # Greeks
 
@@ -222,10 +257,6 @@ $$
 $$
 
 For a long call option, delta will be between 0.0 and 1.0. Delta will be zero if the option is far out of the money or one if deep in the money. This is the same for a short put positions. For both a long put and short call, delta is between 0.0 and -1.0.
-
-THe total delta of a portfolio of options on the same underlying can be calculated by summing the deltas for each individual option.
-
-The delta of the underlying is always one, so a trader could "delta-hedge" a portfolio of options by buying or shorting the number of shares indicated by the sum of deltas.
 
 We learned before that a long call and a short put position at the same strike is equilavent to a forward contract. A forward contract has a delta of one. We can then say that the delta of a call minus the delta of a put equals one:
 $$
@@ -262,27 +293,29 @@ $$
 \Gamma = \frac{\delta \Delta}{\delta S} = \frac{\delta^2 V}{\delta S^2}
 $$
 
+A positive gamma means you will benefit from price movements. A negative gamma means you will be hurt from price movements and prefer the price stays the same.
+
 For a long options position gamma is positive. This is true for both calls and puts.
 
-Most options have opposite sign theta and gamma. So a long call has negative theta and positive gamma.
-
-When a trader is delta hedging a portfolio, they may also try and get their net gamma position to zero. This ensures that the hedge remains effective over a larger range of price movements.
-
-A positive gamma means you will benefit from price movements. A negative gamma means you will be hurt from price movements.
+Most options have opposite sign theta and gamma. So a long call has negative theta and positive gamma. That is, a long call's value decreases over time and increases with volatility.
 
 
 ## Table of greeks
 
-this includes annual dividend yield: https://en.wikipedia.org/wiki/Greeks_(finance)#Formulae_for_European_option_Greeks
-
+Here are the calculations for the greeks for both calls and puts[^greeks]:
 
 |                      | Call                     | Put                          |
 | ---------------------|--------------------------|------------------------------|
-| Delta \\( \Delta \\) | \\( \mathcal{N}(d_1) \\) | \\( \mathcal{N}(d_1) - 1 \\) |
-| Gamma \\( \Gamma \\) <td colspan=2> \\( \frac{ \mathcal{N}^{\prime}(d_1)}{S \sigma \sqrt{t}} \\) |
-| Vega \\( \mathcal{V} \\) <td colspan=2> \\( S \mathcal{N}^{\prime}(d_1) \sqrt{t} \\) |
-| Theta \\( \Theta \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} - r E e^{-rt}\mathcal{N}(d_2) \\) | \\( - \frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} + r E e^{-rt}\mathcal{N}(-d_2) \\) |
-| Rho \\( \rho \\) | \\( E t e^{-rt}\mathcal{N}(d_2) \\) | \\( -E t e^{-rt}\mathcal{N}(-d_2) \\) |
+| **Delta** \\( \Delta \\) | \\( e^{-yt} \mathcal{N}(d_1) \\) | \\( e^{-yt}(\mathcal{N}(d_1) - 1) \\) |
+| **Gamma** \\( \Gamma \\) <td colspan=2> \\( e^{-yt} \frac{ \mathcal{N}^{\prime}(d_1)}{S \sigma \sqrt{t}} \\) |
+| **Vega** \\( \mathcal{V} \\) <td colspan=2> \\( S e^{-yt} \mathcal{N}^{\prime}(d_1) \sqrt{t} \\) |
+| **Rho** \\( \rho \\) | \\( E t e^{-rt}\mathcal{N}(d_2) \\) | \\( -E t e^{-rt}\mathcal{N}(-d_2) \\) |
+
+
+|      | Theta \\( \Theta \\)     |
+| -----|--------------------------|
+| **Call** | \\( - e^{-yt}\frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} - r E e^{-rt}\mathcal{N}(d_2) + y S e^{-yt} \mathcal{N}(d_1) \\)   |
+| **Put**  | \\( - e^{-yt}\frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} + r E e^{-rt}\mathcal{N}(-d_2) - y S e^{-yt} \mathcal{N}(-d_1) \\) |
 
 # Portfolio analysis
 
@@ -294,8 +327,14 @@ These risk measures (delta, gamma, theta, vega and rho) are all additive. This m
 
 # Delta-hedging
 
+The total delta of a portfolio of options on the same underlying can be calculated by summing the deltas for each individual option.
 
-Acknowledgements
+The delta of the underlying is always one, so a trader could "delta-hedge" a portfolio of options by buying or shorting the number of shares indicated by the sum of deltas.
+
+When a trader is delta hedging a portfolio, they may also try and get their net gamma position to zero. This ensures that the hedge remains effective over a larger range of price movements.
+
+
+# Acknowledgements
 
 The derivation of the Black-Scholes equation was inspired by [this article](https://www.linkedin.com/pulse/option-pricing-how-its-related-simulating-temperature-yafus-siddiqui/).
 
@@ -310,6 +349,8 @@ $$
 A good explaination of Itô's lemma can be found [here](https://math.nyu.edu/~goodman/teaching/StochCalc2018/notes/Lesson4.pdf).
 
 [^vega]: "Vega" is not a greek letter! [Wikipedia](https://en.wikipedia.org/wiki/Greeks_(finance)#Vega) suggests that it is a variation on the greek letter nu (\\( \nu \\)) which looks like a "v" and "ega" was added to the end to make it sound like the greek letters beta, eta and theta.
+
+[^greeks]: Greeks calculations lifted from Wikipedia's ["Greeks (finance)"](https://en.wikipedia.org/wiki/Greeks_(finance)#Formulae_for_European_option_Greeks) page.
 
 {{% citation
     id="Natenberg2015"
