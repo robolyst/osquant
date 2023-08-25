@@ -256,6 +256,8 @@ $$
 \Delta = \frac{\delta V}{\delta S}
 $$
 
+A neat interpretation of this is that delta \\( \Delta \\) tells you how many units of the underlying you are exposed to. For example, if an option's delta is 1, then for every $1 change in the underlying we would expect the option's value to change by $1. In other words, 1 option behaves just like 1 unit of the underlying. If the delta was 0.5, then 1 option would behave like 0.5 underlyings.
+
 For a long call option, delta will be between 0.0 and 1.0. Delta will be zero if the option is far out of the money or one if deep in the money. This is the same for a short put positions. For both a long put and short call, delta is between 0.0 and -1.0.
 
 We learned before that a long call and a short put position at the same strike is equilavent to a forward contract. A forward contract has a delta of one. We can then say that the delta of a call minus the delta of a put equals one:
@@ -325,13 +327,18 @@ The greeks above all measure an option's sensitivity to changes in each of these
 
 These risk measures (delta, gamma, theta, vega and rho) are all additive. This means that if you have a complex portfolio of call and put options at varying strikes and expiries (but the same underlying) then you can sum together their greeks to estimate the risks of the whole portfolio.
 
-# Delta-hedging
+# Option hedging
 
-The total delta of a portfolio of options on the same underlying can be calculated by summing the deltas for each individual option.
+If you wanted to capture the value of an option you would have to buy or sell that option. As we've learned, an option's value changes with the underlying price. Which means that buying or selling an option contract means you are exposed to the risk that the underlying's price moves against you.
 
-The delta of the underlying is always one, so a trader could "delta-hedge" a portfolio of options by buying or shorting the number of shares indicated by the sum of deltas.
+We learned before that an option's delta tells you how many units of the underlying you are exposed to. So, if you had a call option with a delta of 1, you could sell one unit of stock and be theoretically protected against movements in the stock's price. This kind of hedge is called **delta-hedging.** We say theoretically because the delta is the instintanious delta. After some time, your option's delta will not be 1 anymore.
 
-When a trader is delta hedging a portfolio, they may also try and get their net gamma position to zero. This ensures that the hedge remains effective over a larger range of price movements.
+The idea behind delta-hedging is to always maintain a total delta of 0. We can look at the deltas in our entire portfolio and sum them together. We want to maintain a total delta of 0. The delta of the underlying is always 1. If the portfolio has a net delta above zero, we need to sell the underlying. If the portfolio has a net delta below zero, we need to buy the underlying. As you can imagine, doing this repeatedly incurs transaction costs and becomes expensive. It wouldn't be practical to constantly hedge your option positions, you have to periodically hedge. Either re-heding every fixed period or re-hedging when your delta becomes too large.
+
+# Summary
+
+This write up provides an introduction to the Black-Scholes model and how to use it to estimate implied volatility and hedge option positions. There is significantly more detail and nauance than presented here. I'd encourage you to read through the book "Option Volatility & Pricing" [^Natenberg2015] to dive deeper into options.
+
 
 
 [^ito]: Itô's lemma. If \\( X_t \\) is a stochastic process with infinitesimal variance \\(v(X_t)\\) and if \\( u(X_t, t) \\) is a function with enough derivatives then \\( u(X_t, t) \\) is another stochastic process that satisfies:
