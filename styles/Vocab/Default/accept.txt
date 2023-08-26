@@ -38,3 +38,6 @@ Woodbury
 Oanda
 mispricing
 mispriced
+SciPy
+[Vv]ega
+expiries
