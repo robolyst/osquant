@@ -25,7 +25,7 @@ The Black-Scholes model answers the question: what should the price of an option
 
 The idea behind the Black-Scholes model is to perfectly hedge the option with a position in the stock. Assuming the hedge breaks even, you can solve for the option's price giving us the Black-Scholes formula.
 
-Option contract come in a [few different types](https://en.wikipedia.org/wiki/Option_style). Black-Scholes handles European style options. We'll start with a **European** style **call** option on a stock that **does not pay** dividends.
+Option contracts come in a [few different types](https://en.wikipedia.org/wiki/Option_style). Black-Scholes handles European style options. We'll start with a **European** style **call** option on a stock that **does not pay** dividends.
 
 A European [call option](https://en.wikipedia.org/wiki/Call_option) gives the purchaser the right to buy a fixed number of shares at a fixed price on a fixed dated.
 
@@ -35,7 +35,7 @@ $$
 $$
 Where \\( C \\) is the price of the call option, \\( S \\) is the price of the stock and \\( \Delta \\) is the number of shares we've sold to hedge the position.
 
-For this portfolio to be "correctly hedged" we do not want it's value to change if the price of the option changes or the price of the stock changes. However, we do need to take the time value of money into account. A given amount of value ought to increase over time by the risk free rate. This means that our correctly hedged portfolio should increase in value by the risk free rate. We write this as:
+For this portfolio to be "correctly hedged" we do not want it's value to change if the price of the stock changes. However, we do need to take the time value of money into account. A given amount of value ought to increase over time by the risk free rate. This means that our correctly hedged portfolio should increase in value by the risk free rate. We write this as:
 $$
 d\Pi = r \Pi dt = dC - \Delta dS
 $$
@@ -46,12 +46,12 @@ r (C - \Delta S) dt = dC - \Delta dS \label{1} \tag{1}
 \end{align}
 $$
 
-
-The intuition here is that the return on the total position (option + stock) should be equal to the risk free rate. This is what we call an arbitrage free assumption.
+The intuition here is that the return on the total position (option - stock) should be equal to the risk free rate. This is a combination of two assumptions. The first is that the investor should be risk neutral, that is, so long as the long term return is the same, the investor shouldn't care about added risk. The second assumption is an arbitrage free market.
 
 The full list of assumptions required to solve for \\( C \\) are:
 
 1. A risk free asset exists with a fixed rate of return for the life of the option.
+1. The investor is risk neutral.
 1. The market is arbitrage free.
 1. You can borrow and lend any amount of money at the risk free rate.
 1. You can buy or sell any amount of the stock. This includes short selling and fractional amounts.
