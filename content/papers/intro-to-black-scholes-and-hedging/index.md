@@ -4,7 +4,7 @@ summary: "
 A break down of how the black-scholes option pricing model works, what implied volatility is and how you can use the model to hedge risks.
 "
 
-date: "2023-08-19"
+date: "2023-08-26"
 type: paper
 mathjax: true # Enable mathematics on the page
 # katex: true
