@@ -431,17 +431,14 @@ The Greeks above all measure an option's sensitivity to changes in each of these
 
 These risk measures (delta, gamma, theta, vega and rho) are all additive. This means that if you have a complex portfolio of call and put options at varying strikes and expiries (but the same stock) then you can sum together their Greeks to estimate the risks of the whole portfolio.
 
-<todo>Add example table of a portfolio. Can lift from the book.</todo>
-
 # Option hedging
 
-If you wanted to capture the value of an option you would have to buy or sell that option. As we've learned, an option's value changes with the stock price. Which means that buying or selling an option contract means you are exposed to the risk that the stock's price moves against you.
+If you wanted to capture the value of an option you would have to buy or sell that option. As we've learned, an option's value changes with the stock price. Which means that by buying or selling an option contract you are exposed to the risk that the stock's price moves against you.
 
 We learned before that an option's delta tells you how many units of the stock you are exposed to. For example, if you had a call option with a delta of 1, you could sell one unit of stock and be theoretically protected against movements in the stock's price. This kind of hedge is called **delta-hedging.** We say theoretically because the delta is the instantaneous delta. After some time, your option's delta will not be 1 anymore.
 
 The idea behind delta-hedging is to always maintain a total delta of 0. We can look at the deltas in our entire portfolio and sum them together. We want to maintain a total delta of 0. The delta of the stock is always 1. If the portfolio has a net delta above zero, we need to sell the stock. If the portfolio has a net delta below zero, we need to buy the stock. As you can imagine, doing this repeatedly incurs transaction costs and becomes expensive. It wouldn't be practical to constantly hedge your option positions, you have to periodically hedge. Either re-heding every fixed period or re-hedging when your delta becomes too large.
 
-<todo>Add example table of a hedged portfolio. Can lift from the book.</todo>
 
 # Summary
 
