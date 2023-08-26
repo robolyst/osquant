@@ -15,9 +15,7 @@ categories:
     - mathematics
 ---
 
-I'm a little embarrassed to admit this, I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up the Black-Scholes model here; being as succinct and practical as I can.
-
-This write up deals with the ideas and mathematics behind the Black-Scholes model. I assume you know what an option contract is and you know the difference between a [call](https://en.wikipedia.org/wiki/Call_option) and a [put](https://en.wikipedia.org/wiki/Put_option) option.
+I'm a little embarrassed to admit this, I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up an easy intro to the Black-Scholes model here.
 
 I hope this helps you as much as it helped me.
 
@@ -29,7 +27,7 @@ The idea behind the Black-Scholes model is to perfectly hedge the option with a 
 
 Option contract come in a [few different types](https://en.wikipedia.org/wiki/Option_style). Black-Scholes handles European style options. We'll start with a **European** style **call** option on a stock that **does not pay** dividends.
 
-A European call option gives the purchaser the right to buy a fixed number of shares at a fixed price on a fixed dated.
+A European [call option](https://en.wikipedia.org/wiki/Call_option) gives the purchaser the right to buy a fixed number of shares at a fixed price on a fixed dated.
 
 If you were to buy a call option, and the price of the stock goes up, then the value of the call option also goes up. To hedge this call option so that your total position value doesn't change you would need to sell some number of the stock. We can write such a portfolio like this:
 $$
@@ -66,7 +64,7 @@ We're assuming that the price of the stock \\( S \\) follows a [geometric Browni
 $$
 dS = \mu S dt + \sigma S d W
 $$
-where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion. Generally, we treat \\( \mu \\) as equal to zero.
+where \\( \mu \\) is the mean of the stock's returns, \\( \sigma \\) is the volatility and \\(dW\\) is the change in a Brownian motion. Generally, we treat \\( \mu \\) as equal to zero. The key idea here is that the stock price \\(S\\) is treated as a stochastic process.
 
 As for \\( dC \\), all we know at the moment is that \\( C \\) is a function of \\( S \\) (the price of the stock) and \\( t \\) (time). Luckily, some clever people have already figured out what a function of a stochastic process and time looks like. Itô's lemma tells us [^ito]. Deriving Itô's lemma takes a bit of time. All it says is that such a function can be expanded in a similar way to a Taylor series where higher order terms are zero.
 
@@ -121,7 +119,7 @@ d_2 &= d_1 - \sigma \sqrt{t}
 $$
 where:
 - \\( C = \\) the theoretical value of a **European** style **call** option before expiration.
-- \\( S = \\) the price of a stock that **does not pay** dividends.
+- \\( S = \\) the spot price of a stock that **does not pay** dividends.
 - \\( E = \\) the exercise price.
 - \\( t = \\) the time to expiration in years.
 - \\( \sigma = \\) the annual standard deviation of the stock price returns.
@@ -140,7 +138,7 @@ The value at expiration is know as the option's intrinsic value. The difference 
 
 Let's now price a **European** style **put** option on a stock that **does not pay** dividends.
 
-A European put option gives the purchaser the right to sell a fixed number of shares at a fixed price on a fixed dated.
+A European [put option](https://en.wikipedia.org/wiki/Put_option) gives the purchaser the right to sell a fixed number of shares at a fixed price on a fixed dated.
 
 To find the price of a put option, we need to use an idea call **put-call parity.**
 
@@ -171,7 +169,54 @@ The value at expiration is know as the option's intrinsic value. The difference 
 
 ## Code
 
-<todo>Include some basic code</todo>
+Putting all this into Python code looks like:
+
+```python
+from enum import Enum
+from dataclasses import dataclass
+
+import numpy as np
+from scipy.stats import norm
+
+class OptionType(Enum):
+    CALL = 1
+    PUT = 2
+
+@dataclass
+class BlackScholes:
+    type: OptionType
+    spot: float
+    exercise: float
+    years: float
+    volatility: float
+    risk_free_rate: float
+
+    @property
+    def d1(self) -> float:
+        a = np.log(self.spot / self.exercise)
+        b = (self.risk_free_rate + (self.volatility**2 / 2)) * self.years
+        c = self.volatility * np.sqrt(self.years)
+        return (a + b) / c
+
+    @property
+    def d2(self) -> float:
+        return self.d1 - self.volatility * np.sqrt(self.years)
+
+    def price(self) -> float:
+        N = norm.cdf
+        discount = np.exp(-self.risk_free_rate * self.years)
+        presentE = self.exercise * discount
+        Nd1 = N(self.d1)
+        Nd2 = N(self.d2)
+
+        if self.type == OptionType.CALL:
+            return self.spot * Nd1 - presentE * Nd2
+
+        elif self.type == OptionType.PUT:
+            return presentE * (1 - Nd2) - self.spot * (1 - Nd1)
+
+        raise Exception("Unkown option type.")
+```
 
 # Options with Dividends
 
@@ -244,24 +289,6 @@ P &= e^{-yt}S \mathcal{N}(d_1) - E e^{-rt} \mathcal{N}(d_2) - S + Ee^{-rt} \\\
 P &=E e^{-rt} (1 - \mathcal{N}(d_2)) - S (1 - e^{-yt}\mathcal{N}(d_1)) \\\
 \end{align}
 $$
-
-# Implied Volatility
-
-The inputs to the option model above are the stock price, the exercise price, the time to expiration, the risk free rate and the expected volatility. All of these quantities are known except for the expected volatility.
-
-In fact, if you look at market prices, then the current option price is also known. If you were to plug in the current option price and solve for the volatility \\( \sigma \\) you would get the market's expectation for volatility. This is called implied volatility---the volatility implied by the market price.
-
-Unfortunately, there is no closed form solution for the implied volatility. However, the Black-Scholes model shows us that the price of an option is monotonic in \\( \sigma \\). This means that we can use any root finding method to solve for \\( \sigma \\) in:
-$$
-f(\sigma, S, E, t, r) - C = 0
-$$
-where \\( f(\cdot) \\) is the theoretical value of a call option.
-
-<todo>Add diagram showing the monotonicity of volatility.</todo>
-
-[SciPy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box.
-
-<todo>Add code</todo>
 
 # Greeks
 
@@ -336,6 +363,65 @@ Here are the calculations for the Greeks for both calls and puts[^greeks]:
 | -----|--------------------------|
 | **Call** | \\( - e^{-yt}\frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} - r E e^{-rt}\mathcal{N}(d_2) + y S e^{-yt} \mathcal{N}(d_1) \\)   |
 | **Put**  | \\( - e^{-yt}\frac{S\mathcal{N}^{\prime}(d_1) \sigma}{2\sqrt{t}} + r E e^{-rt}\mathcal{N}(-d_2) - y S e^{-yt} \mathcal{N}(-d_1) \\) |
+
+where the introduced term \\(\mathcal{N}^{\prime}\\) is the standard normal probability density function.
+
+# Implied Volatility
+
+The inputs to the option model above are the stock price, the exercise price, the time to expiration, the risk free rate and the expected volatility. All of these quantities are known except for the expected volatility.
+
+In fact, if you look at market prices, then the current option price is also known. If you were to plug in the current option price and solve for the volatility \\( \sigma \\) you would get the market's expectation for volatility. This is called implied volatility---the volatility implied by the market price.
+
+Unfortunately, there is no closed form solution for the implied volatility. However, the Black-Scholes model shows us that the price of an option is monotonic in \\( \sigma \\). This means that we can use any root finding method to solve for \\( \sigma \\) in:
+$$
+f(\sigma, S, E, t, r) - C = 0
+$$
+where \\( f(\cdot) \\) is the theoretical value of a call option.
+
+{{<figure src="implied_volatility.svg" title="Call option value as a function of volatility." >}}
+The value of an option is monotonic in the volatility. This means that you can use any root finding algorithm to solve for volatility. In fact, you could use a binary search to find the implied volatility of the option.
+{{</figure>}}
+
+[SciPy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box. One of the most common and fast ones is the [Newton-Raphson](https://en.wikipedia.org/wiki/Newton%27s_method) method. This method requires knowing the derivative of your function. Luckily, from the Greeks section, we have the derivative of the value of an option with respect to volatility: vega.
+
+In fact, we can quickly and easily modify the `BlackScholes` class above to be able to estimate implied volatility:
+
+```python
+from scipy.optimize import newton
+
+@dataclass
+class BlackScholes:
+    # Everything from the BlackScholes class above and then:
+
+    @property
+    def vega(self) -> float:
+        return self.spot * norm.pdf(self.d1) * np.sqrt(self.years)
+
+    @staticmethod
+    def find_implied_volatility(
+        type: OptionType,
+        spot: float,
+        exercise: float,
+        years: float,
+        target_price: float,
+        risk_free_rate: float,
+    ) -> float:
+        model = lambda vol: BlackScholes(
+            type=type,
+            spot=spot,
+            exercise=exercise,
+            years=years,
+            volatility=vol,
+            risk_free_rate=risk_free_rate,
+        )
+        
+        func = lambda vol: model(vol).price() - target_price
+        fprime = lambda vol:  model(vol).vega
+
+        return newton(func=func, fprime=fprime, x0=1.0)
+```
+
+Traders will calculate the implied volatility of available option contracts. The implied volatility of different contracts are rarely if ever the same. Once the trader estimates the implied volatility of each contract, they will need some sort of method to select a single value.
 
 # Portfolio analysis
 
