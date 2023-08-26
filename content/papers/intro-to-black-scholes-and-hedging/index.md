@@ -120,7 +120,7 @@ d_2 &= d_1 - \sigma \sqrt{t}
 \end{align}
 $$
 where:
-- \\( C = \\) the theoretical value of a **European** style **call** option.
+- \\( C = \\) the theoretical value of a **European** style **call** option before expiration.
 - \\( S = \\) the price of a stock that **does not pay** dividends.
 - \\( E = \\) the exercise price.
 - \\( t = \\) the time to expiration in years.
@@ -129,6 +129,12 @@ where:
 - \\( \mathcal{N} = \\) the cumulative normal distribution function.
 
 <!-- This has an interpretation section that might be good: http://www.timworrall.com/fin-40008/bscholes.pdf -->
+
+The value of a call option relative to the stock price looks like:
+
+{{<figure src="call_option.svg" title="Call option payoff diagram." >}}
+The value at expiration is know as the option's intrinsic value. The difference between the option's theoretical value and the value at expiration is the options time value.
+{{</figure>}}
 
 ## Put options
 
@@ -157,6 +163,15 @@ P &=E e^{-rt} (1 - \mathcal{N}(d_2)) - S (1 - \mathcal{N}(d_1)) \label{4}\tag{4}
 \end{align}
 $$
 
+The value of a put option relative to the stock price looks like:
+
+{{<figure src="put_option.svg" title="Put option payoff diagram." >}}
+The value at expiration is know as the option's intrinsic value. The difference between the option's theoretical value and the value at expiration is the options time value.
+{{</figure>}}
+
+## Code
+
+<todo>Include some basic code</todo>
 
 # Options with Dividends
 
@@ -230,7 +245,6 @@ P &=E e^{-rt} (1 - \mathcal{N}(d_2)) - S (1 - e^{-yt}\mathcal{N}(d_1)) \\\
 \end{align}
 $$
 
-
 # Implied Volatility
 
 The inputs to the option model above are the stock price, the exercise price, the time to expiration, the risk free rate and the expected volatility. All of these quantities are known except for the expected volatility.
@@ -243,7 +257,11 @@ f(\sigma, S, E, t, r) - C = 0
 $$
 where \\( f(\cdot) \\) is the theoretical value of a call option.
 
+<todo>Add diagram showing the monotonicity of volatility.</todo>
+
 [SciPy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box.
+
+<todo>Add code</todo>
 
 # Greeks
 
@@ -327,6 +345,8 @@ The Greeks above all measure an option's sensitivity to changes in each of these
 
 These risk measures (delta, gamma, theta, vega and rho) are all additive. This means that if you have a complex portfolio of call and put options at varying strikes and expiries (but the same stock) then you can sum together their Greeks to estimate the risks of the whole portfolio.
 
+<todo>Add example table of a portfolio. Can lift from the book.</todo>
+
 # Option hedging
 
 If you wanted to capture the value of an option you would have to buy or sell that option. As we've learned, an option's value changes with the stock price. Which means that buying or selling an option contract means you are exposed to the risk that the stock's price moves against you.
@@ -334,6 +354,8 @@ If you wanted to capture the value of an option you would have to buy or sell th
 We learned before that an option's delta tells you how many units of the stock you are exposed to. For example, if you had a call option with a delta of 1, you could sell one unit of stock and be theoretically protected against movements in the stock's price. This kind of hedge is called **delta-hedging.** We say theoretically because the delta is the instantaneous delta. After some time, your option's delta will not be 1 anymore.
 
 The idea behind delta-hedging is to always maintain a total delta of 0. We can look at the deltas in our entire portfolio and sum them together. We want to maintain a total delta of 0. The delta of the stock is always 1. If the portfolio has a net delta above zero, we need to sell the stock. If the portfolio has a net delta below zero, we need to buy the stock. As you can imagine, doing this repeatedly incurs transaction costs and becomes expensive. It wouldn't be practical to constantly hedge your option positions, you have to periodically hedge. Either re-heding every fixed period or re-hedging when your delta becomes too large.
+
+<todo>Add example table of a hedged portfolio. Can lift from the book.</todo>
 
 # Summary
 
