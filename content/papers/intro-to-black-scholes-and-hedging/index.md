@@ -384,7 +384,7 @@ The value of an option is monotonic in the volatility. This means that you can u
 
 [SciPy](https://scipy.org/) has a bunch of [root finding algorithms](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding) that will easily work out of the box. One of the most common and fast ones is the [Newton-Raphson](https://en.wikipedia.org/wiki/Newton%27s_method) method. This method requires knowing the derivative of your function. Luckily, from the Greeks section, we have the derivative of the value of an option with respect to volatility: vega.
 
-In fact, we can quickly and easily modify the `BlackScholes` class above to be able to estimate implied volatility:
+We can quickly and easily modify the `BlackScholes` class above to be able to estimate implied volatility:
 
 ```python
 from scipy.optimize import newton
