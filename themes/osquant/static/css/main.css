@@ -5,6 +5,7 @@ Global variables
 :root {
     --light-bg-color: #F9F9F9;
     --light-border-color: #EAEAEA;
+    --light-text-color: #747474;
 }
 
 /* ----------------------------------------------------------------------------
@@ -246,11 +247,11 @@ Page mini
 }
 
 .mini .author a:hover {
-    color:#747474;
+    color: var(--light-text-color);
 }
 
 .mini .author sep {
-    color:#747474;
+    color: var(--light-text-color);
 }
 
 .mini .title {
@@ -260,12 +261,12 @@ Page mini
 }
 
 .mini .title:hover {
-    color:#747474;
+    color: var(--light-text-color);
     text-decoration:underline;
 }
 
 .mini .blurb {
-    color:#747474;
+    color: var(--light-text-color);
 }
 
 .mini .meta {
@@ -273,7 +274,7 @@ Page mini
     margin-bottom: 0.5rem;
     font-weight: 400;
     font-size: 0.8rem;
-    color:#747474;
+    color: var(--light-text-color);
 }
 
 .mini .meta .space {
@@ -292,23 +293,19 @@ Page mini
 }
 
 .mini a.tag {
-    color:#747474;
+    color: var(--light-text-color);
 }
 
 .mini a.tag:hover {
     color:#ececec;
-    background-color: #747474;
+    background-color: var(--light-text-color);
 }
 
 .mini img.feature {
     border-radius: 10px;
-}
-
-.mini img {
     width: 100%;
     margin-bottom: 1em;
 }
-
 
 /* ----------------------------------------------------------------------------
 Page (Single)
@@ -427,7 +424,7 @@ Back matter
 #backmatter {
     margin-top: 5rem;
     font-size: 0.8rem;
-    color: #747474;
+    color: var(--light-text-color);
     padding-bottom: 3rem;
     overflow-wrap: anywhere;
     background-color: var(--light-bg-color);
