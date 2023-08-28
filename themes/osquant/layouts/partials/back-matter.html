@@ -1,1 +1,14 @@
-{{ delimit (findRE `(?s)<div class=\"footnotes\" role=\"doc-endnotes\">.*</div>` .Content) "" | safeHTML }}
+{{ $markdown_footnotes := delimit (findRE `(?s)<div class=\"footnotes\" role=\"doc-endnotes\">.*</div>` .Content) "" }}
+
+{{ with $markdown_footnotes }} {{/* Only show the backmatter if there is content */}}
+    <div id="backmatter">
+
+        <h1>Footnotes</h1>
+
+        {{ with $markdown_footnotes }}
+            <h2>References & Notes</h2>
+            {{ . | safeHTML }}
+        {{ end }}
+
+    </div>
+{{ end }}

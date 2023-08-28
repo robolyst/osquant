@@ -4,6 +4,7 @@ Global variables
 
 :root {
     --light-bg-color: #F9F9F9;
+    --light-border-color: #EAEAEA;
 }
 
 /* ----------------------------------------------------------------------------
@@ -363,7 +364,6 @@ Page (Single)
 }
 
 #page_content {
-    margin-bottom: 5rem;
     line-height: 1.5em;
 }
 
@@ -420,16 +420,38 @@ Page (Single)
     border-radius: 5px;
 }
 
-/* ------- Footnotes ------- */
+/* ----------------------------------------------------------------------------
+Back matter
+---------------------------------------------------------------------------- */
 
-#page_content .footnotes {
+#backmatter {
     margin-top: 5rem;
     font-size: 0.8rem;
     color: #747474;
-    border-top: 1px solid #EAEAEA;
-    padding-top: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
     overflow-wrap: anywhere;
+    overflow: hidden;
+    background-color: var(--light-bg-color);
+    border-top: 1px solid var(--light-border-color);
+    border-bottom: 1px solid var(--light-border-color);
 }
+
+#backmatter h1 {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#backmatter h2 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-top: 10pt;
+    margin-bottom: 10pt;
+}
+
+/* ------- Footnotes ------- */
 
 #page_content .footnotes hr {
     visibility: hidden;
@@ -474,8 +496,6 @@ footer {
     padding-bottom: 1rem;
     font-weight: 300;
     font-size: 0.8rem;
-    /* background-color: white; */
-    /* border-top: 1px solid #EAEAEA; */
 }
 
 
