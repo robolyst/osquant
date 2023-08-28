@@ -1,12 +1,13 @@
 /* ----------------------------------------------------------------------------
 Global variables
 ---------------------------------------------------------------------------- */
+$light-bg-color: #F9F9F9;
+$light-border-color: #EAEAEA;
+$light-text-color: #747474;
 
-:root {
-    --light-bg-color: #F9F9F9;
-    --light-border-color: #EAEAEA;
-    --light-text-color: #747474;
-}
+// Media query breakpoints
+$phone: 600px; // Anything smaller than this is a phone.
+$tablet: 1000px; // Anything smaller than this is a phone.
 
 /* ----------------------------------------------------------------------------
 Global styles
@@ -14,6 +15,14 @@ Global styles
 html {
     height: 100%;
     font-size: 18px; /* rem units are based on this */
+
+    @media (max-width: $tablet) {
+        font-size: 16px;
+    }
+
+    @media (max-width: $phone) {
+        font-size: 14px;
+    }
 }
 
 body {
@@ -22,11 +31,9 @@ body {
     height: 100%;
 }
 
-@media (max-width:600px) {
-    html {
-        font-size: 14px;
-    }
-}
+/* ----------------------------------------------------------------------------
+Global elements
+---------------------------------------------------------------------------- */
 
 a {
     color: #374D9E;
@@ -36,16 +43,6 @@ a {
 a:hover {
     color: #EB5757;
     text-decoration: none;
-}
-
-#page_content img {
-    width: 100%;
-    display: block;
-}
-
-#page_content {
-    min-height: 100%;
-    /* padding-bottom: 8rem; */
 }
 
 h1 {
@@ -93,7 +90,7 @@ callout {
 
 todo {
     display: block;
-    background-color: rgb(255, 0, 0, 0.2);
+    background-color: rgba(255, 0, 0, 0.2);
     padding: 0.5rem;
     border-radius: 5px;
 
@@ -112,37 +109,47 @@ div.highlight pre {
     padding-right: 1.0rem;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-    background-color: var(--light-bg-color) !important;
+    background-color: $light-bg-color !important;
 }
 
+/* ----------------------------------------------------------------------------
+
+---------------------------------------------------------------------------- */
 
 #splash {
-    background-color: var(--light-bg-color);
+    background-color: $light-bg-color;
     padding: 0.01vh;
     margin-bottom: 3rem;
 }
 
+#page_content {
+    min-height: 100%;
 
-#page_content feature,
-#page_content bigfeature {
-    background-color: var(--light-bg-color);
-    display: block;
-    max-width: 100%;
-    overflow: hidden;
-    margin-top: 40pt;
-    padding-bottom: 40pt;
-}
+    img {
+        width: 100%;
+        display: block;
+    }
 
+    feature,
+    bigfeature {
+        background-color: $light-bg-color;
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        margin-top: 40pt;
+        padding-bottom: 40pt;
+    }
 
-#page_content plot {
-    display: block;
-    margin-top: 20pt;
-    margin-bottom: 20pt;
-}
+    plot {
+        display: block;
+        margin-top: 20pt;
+        margin-bottom: 20pt;
 
-#page_content plot figure {
-    margin-top: 0px;
-    margin-bottom: 0px;
+        figure {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    }
 }
 
 /* -------------------
@@ -202,7 +209,8 @@ nav a:hover, .navbar-nav-hidden a:hover {
 
 .navbar {
     padding: 15px 0px 15px 0px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: $light-bg-color;
+    border-bottom: 1px solid $light-border-color;
 }
 
 .navbar-nav {
@@ -234,77 +242,54 @@ nav a:hover, .navbar-nav-hidden a:hover {
 Page mini
 ---------------------------------------------------------------------------- */
 .mini {
-    margin-top: 4rem;
-}
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    color: $light-text-color;
+    border-bottom: 1px solid $light-border-color;
 
-.mini .author {
-    font-size: 0.8rem;
-}
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-column-gap: 2rem;
 
-.mini .author a {
-    color: #212529;
-    font-weight: 600;
-}
+    @media (max-width: $phone) {
+        display: flex;
+        flex-direction: column-reverse;
+    }
 
-.mini .author a:hover {
-    color: var(--light-text-color);
-}
+    a {
+        color: #212529;
+        font-weight: 600;
 
-.mini .author sep {
-    color: var(--light-text-color);
-}
+        &:hover {
+            color: $light-text-color;
+            text-decoration: underline;
+        }
+    }
 
-.mini .title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: black;
-}
+    .title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: black;
+    }
 
-.mini .title:hover {
-    color: var(--light-text-color);
-    text-decoration:underline;
-}
+    img.feature {
+        border-radius: 10px;
+        width: 100%;
+        margin-bottom: 1em;
+    }
 
-.mini .blurb {
-    color: var(--light-text-color);
-}
+    .meta {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 400;
+        font-size: 0.8rem;
+        color: $light-text-color;
 
-.mini .meta {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 400;
-    font-size: 0.8rem;
-    color: var(--light-text-color);
-}
-
-.mini .meta .space {
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
-.mini .tag {
-    text-transform: lowercase;
-    background-color: #ececec;
-    display: inline-block;
-    border-radius: 5px;
-    margin-right: 1rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-}
-
-.mini a.tag {
-    color: var(--light-text-color);
-}
-
-.mini a.tag:hover {
-    color:#ececec;
-    background-color: var(--light-text-color);
-}
-
-.mini img.feature {
-    border-radius: 10px;
-    width: 100%;
-    margin-bottom: 1em;
+        .space {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -424,12 +409,12 @@ Back matter
 #backmatter {
     margin-top: 5rem;
     font-size: 0.8rem;
-    color: var(--light-text-color);
+    color: $light-text-color;
     padding-bottom: 3rem;
     overflow-wrap: anywhere;
-    background-color: var(--light-bg-color);
-    border-top: 1px solid var(--light-border-color);
-    border-bottom: 1px solid var(--light-border-color);
+    background-color: $light-bg-color;
+    border-top: 1px solid $light-border-color;
+    border-bottom: 1px solid $light-border-color;
 }
 
 #backmatter h1 {
@@ -447,7 +432,7 @@ Back matter
 }
 
 #backmatter pre {
-    border: 1px solid var(--light-border-color);
+    border: 1px solid $light-border-color;
     padding: 1rem;
 }
 
@@ -682,7 +667,7 @@ Twitter callout
     padding-bottom: 20px;
     padding-left: 40px;
     padding-right: 40px;
-    background-color: var(--light-bg-color);
+    background-color: $light-bg-color;
     border-radius: 5px;
     line-height: 2rem;
     margin-top: 3rem;

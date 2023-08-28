@@ -1,7 +1,7 @@
 ---
 title: "Intro to Black-Scholes, implied volatility and hedging"
 summary: "
-A break down of how the black-scholes option pricing model works, what implied volatility is and how you can use the model to hedge risks.
+A break down of how the Black-Scholes option pricing model works, what implied volatility is and how you can use the model to hedge risks.
 "
 
 date: "2023-08-26"
