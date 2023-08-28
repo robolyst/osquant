@@ -1,4 +1,12 @@
 /* ----------------------------------------------------------------------------
+Global variables
+---------------------------------------------------------------------------- */
+
+:root {
+    --light-bg-color: #F9F9F9;
+}
+
+/* ----------------------------------------------------------------------------
 Global styles
 ---------------------------------------------------------------------------- */
 html {
@@ -102,19 +110,20 @@ div.highlight pre {
     padding-right: 1.0rem;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-    background-color: rgba(0, 0, 0, 0.01) !important;
+    background-color: var(--light-bg-color) !important;
 }
 
 
 #splash {
-    background-color: rgba(245, 245, 245, 0.5);
+    background-color: var(--light-bg-color);
     padding: 0.01vh;
     margin-bottom: 3rem;
 }
 
 
-#page_content feature {
-    background-color: rgba(245, 245, 245, 0.5);
+#page_content feature,
+#page_content bigfeature {
+    background-color: var(--light-bg-color);
     display: block;
     max-width: 100%;
     overflow: hidden;
@@ -649,7 +658,7 @@ Twitter callout
     padding-bottom: 20px;
     padding-left: 40px;
     padding-right: 40px;
-    background-color: #F9F9F9;
+    background-color: var(--light-bg-color);
     border-radius: 5px;
     line-height: 2rem;
     margin-top: 3rem;
