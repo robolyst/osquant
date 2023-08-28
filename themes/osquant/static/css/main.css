@@ -428,10 +428,8 @@ Back matter
     margin-top: 5rem;
     font-size: 0.8rem;
     color: #747474;
-    padding-top: 3rem;
     padding-bottom: 3rem;
     overflow-wrap: anywhere;
-    overflow: hidden;
     background-color: var(--light-bg-color);
     border-top: 1px solid var(--light-border-color);
     border-bottom: 1px solid var(--light-border-color);
@@ -447,14 +445,21 @@ Back matter
 #backmatter h2 {
     font-size: 0.9rem;
     font-weight: 700;
-    margin-top: 10pt;
-    margin-bottom: 10pt;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+}
+
+#backmatter pre {
+    border: 1px solid var(--light-border-color);
+    padding: 1rem;
 }
 
 /* ------- Footnotes ------- */
 
 #page_content .footnotes hr {
     visibility: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 #page_content .footnotes li {

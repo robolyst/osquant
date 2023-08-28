@@ -1,0 +1,16 @@
+{{ $bibtex_authors := slice }}
+{{ $lastnames := slice }}
+
+{{ range .Params.authors }}
+    {{ $author := $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+    {{ $bibtex_authors = $bibtex_authors | append $author.Params.last_first }}
+    {{ $lastnames = $lastnames | append $author.Params.last_name }}
+{{ end }}
+
+<pre>@article&#123;{{ (index $lastnames 0) }}{{ .Date.Format "2006" }},
+    author = &#123;{{ delimit $bibtex_authors " and " }}&#125;,
+    title =  &#123;{{ .Title }}&#125;,
+    journal = {OS Quant},
+    year = &#123;{{ .Date.Format "2006" }}&#125;,
+    note = &#123;{{ .Site.Params.hostName }}{{ .Permalink | absURL }}&#125;,
+}</pre>

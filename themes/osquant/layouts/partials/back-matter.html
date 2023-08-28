@@ -1,14 +1,29 @@
 {{ $markdown_footnotes := delimit (findRE `(?s)<div class=\"footnotes\" role=\"doc-endnotes\">.*</div>` .Content) "" }}
+{{ $p := .Page }}
 
-{{ with $markdown_footnotes }} {{/* Only show the backmatter if there is content */}}
-    <div id="backmatter">
 
-        <h1>Footnotes</h1>
+<div id="backmatter">
 
-        {{ with $markdown_footnotes }}
-            <h2>References & Notes</h2>
-            {{ . | safeHTML }}
-        {{ end }}
+    <h1>Footnotes</h1>
 
-    </div>
-{{ end }}
+    {{ with .Params.acknowledgements }}
+        <h2>Acknowledgements</h2>
+        {{ . | $p.RenderString (dict "display" "block") }}
+    {{ end }}
+
+    {{ with $markdown_footnotes }}
+        <h2>References & Notes</h2>
+        {{ . | safeHTML }}
+    {{ end }}
+
+    <h2>Corrections</h2>
+    <p>If you see any mistakes or room for improvement, please reach out to me on Twitter <a href="http://www.twitter.com/dradrian">@DrAdrian</a>.</p>
+
+    <h2>Citation</h2>
+    <p>Please cite this work as:</p>
+    {{- partial "cite.html" . -}}
+
+    <p>In BibTeX please use:</p>
+    {{- partial "bibtex.html" . -}}
+
+</div>

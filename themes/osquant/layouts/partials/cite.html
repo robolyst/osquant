@@ -1,0 +1,7 @@
+{{ $authors := slice }}
+{{ range .Params.authors }}
+    {{ $author := $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+    {{ $authors = $authors | append $author.Params.last_name }}
+{{ end }}
+
+<pre>{{ delimit $authors "," }} ({{ .Date.Format "2006" }}), "{{ .Title }}", OS Quant.</pre>
