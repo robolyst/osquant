@@ -12,6 +12,7 @@ categories:
     - mathematics
     - finance
 notebook: ./notebook.js
+acknowledgements: "All graphs were made with [Observable](https://observablehq.com/). The article's hero image (thumbnail) was made with [Figma](http://figma.com)."
 ---
 
 # Fractional Brownian motion

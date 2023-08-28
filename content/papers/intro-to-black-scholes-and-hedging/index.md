@@ -13,6 +13,8 @@ authors:
     - Adrian Letchford
 categories:
     - mathematics
+
+acknowledgements: "All figures in this article were made with [Figma](http://figma.com)."
 ---
 
 I'm a little embarrassed to admit this, I was recently in a quant interview and the interviewer quickly realised that I didn't know the Black-Scholes formula! That was definitely a moment when imposter syndrome became reality. To fix the situation, I've written up an easy intro to the Black-Scholes model here.
