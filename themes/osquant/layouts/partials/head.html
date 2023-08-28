@@ -1,5 +1,3 @@
-{{ $css := "css/main.css" | absURL }}
-
 <head>
     <title>{{ .Title }}</title>
     <meta charset="utf-8">
@@ -19,7 +17,10 @@
     {{ if .Params.katex }}{{ partial "katex.html" . }}{{ end }}
     {{ if .Params.plotly }}{{ partial "plotly.html" . }}{{ end }}
 
-    <link type="text/css" rel="stylesheet" href="{{ $css }}">
+    {{ $options := dict "transpiler" "libsass" "targetPath" "css/main.css" }}
+    {{ with resources.Get "sass/main.scss" | toCSS $options | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+    {{ end }}
 
     <link rel="alternate" type="application/rss+xml" href="{{.Site.BaseURL }}/index.xml" title="{{ .Site.Title }}">
 
