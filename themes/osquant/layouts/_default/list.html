@@ -11,8 +11,6 @@
 
     <div class="container">
         {{ range $index, $element := .Pages.ByDate.Reverse }}
-            {{ .Scratch.Set "index" $index }}
-            {{ .Scratch.Set "location" "list_page" }}
             {{ partial "mini.html" . }}
         {{ end }}
     </div>

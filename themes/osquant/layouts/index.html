@@ -6,8 +6,6 @@
         {{ .Content }}
 
         {{ range $index, $element := (sort (where .Site.RegularPages "Section" "papers")) }}
-            {{ .Scratch.Set "index" $index }}
-            {{ .Scratch.Set "location" "index_page" }}
             {{ partial "mini.html" . }}
         {{ end }}
     </div>
