@@ -11,7 +11,6 @@ katex: false # Enable mathematics on the page
 plotly: false  # Enable plotly on the page
 authors:
     - Adrian Letchford
-draft: true
 categories:
     - finance
 ---
