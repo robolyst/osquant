@@ -4,7 +4,7 @@ summary: "
     I summarise key insights from a few papers studying the limit order book. You'l learn how to measure volume imblanace in the limit order book and how well it predicts price moves.
 "
 
-date: "2023-09-18"
+date: "2023-10-02"
 type: paper
 mathjax: true # Enable mathematics on the page
 katex: false # Enable mathematics on the page
