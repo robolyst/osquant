@@ -50,7 +50,7 @@ The authors found that these segments predicted future price moves. The followin
 
 # Order flow imbalance
 
-Volume imblance looks at the total amount of volume in the limit order book. A draw back is that some of this volume may come from orders that are old and contain less relavant information. We can instead look at the volume of recent orders. This idea is call **order flow imbalance**. You can do this by either tracking individual market and limit orders which requires level 3 data. Or, you can look at the changes in the limit order book.
+Volume imbalance looks at the total amount of volume in the limit order book. A draw back is that some of this volume may come from orders that are old and contain less relevant information. We can instead look at the volume of recent orders. This idea is call **order flow imbalance**. You can do this by either tracking individual market and limit orders which requires level 3 data. Or, you can look at the changes in the limit order book.
 
 Because level 3 data is expensive and usually only available to institutional traders, we'll focus on the changes in the limit order book.
 
@@ -110,13 +110,13 @@ The authors in [^Xu-2019] used a regression model to test if order flow imbalanc
 The orde flow imbalance value was used as the input to a regression model of future price moves. Six stock were used, [Amazon (AMZN)](https://finance.yahoo.com/quote/AMZN), [Tesla (TSLA)](https://finance.yahoo.com/quote/TSLA), [Netflix (NFLX)](https://finance.yahoo.com/quote/NFLX), [Oracle (ORCL)](https://finance.yahoo.com/quote/ORCL), [Cisco (CSCO)](https://finance.yahoo.com/quote/CSCO), and [Micron (MU)](https://finance.yahoo.com/quote/MU). The fitted intercept is given by \\(\alpha\\) and the fitted coefficient for the OFI input is \\(\beta\\). In all six cases, the significant was lower than 1% showing that OFI contains information on future price moves.
 {{</figure>}}
 
-The OFI value calculated above looks at the best bid and ask. The authors in [^Xu-2019] also calcuated values for top 5 best prices giving 5 inputs instead of just 1. They found that looking deeper into the order book adds new information on future price moves.
+The OFI value calculated above looks at the best bid and ask. The authors in [^Xu-2019] also calculated values for top 5 best prices giving 5 inputs instead of just 1. They found that looking deeper into the order book adds new information on future price moves.
 
 # Summary
 
 Here I've summarised the key insights from a few papers looking at order volume in a limit order book. The papers show that the order book contains information that is highly predictive of future price moves. But, these moves do not over-come the bid/ask spread.
 
-I've added links to the papers in the the reference section. Go check them out for more details.
+I've added links to the papers in the reference section. Go check them out for more details.
 
 
 <!-- An introduction to Limit Order Books -->
