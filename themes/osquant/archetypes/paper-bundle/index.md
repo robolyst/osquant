@@ -9,6 +9,7 @@ summary: "
 
 date: "{{ now.Format "2006-01-02" }}"
 type: paper
+mathjax: false # Enable mathematics on the page
 katex: false # Enable mathematics on the page
 plotly: false  # Enable plotly on the page
 authors:
@@ -18,6 +19,7 @@ categories:
     - mathematics
     - engineering
     - finance
+acknowledgements: "All figures in this article were made with [Figma](http://figma.com)."
 ---
 
 # My new paper
