@@ -41,3 +41,5 @@ mispriced
 SciPy
 [Vv]ega
 expiries
+autocovariance
+periodogram
