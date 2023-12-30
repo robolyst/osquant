@@ -1,14 +1,11 @@
 ---
-title: "Wiener–Khinchin theorem and Gaussian processes"
+title: "Wiener-Khinchin theorem and Gaussian processes"
 summary: "
 There's a magical little theorem that links a power spectral density to the autocovariance function. You can use this to quickly estimate Gaissian processes and model periodic time series.
 "
-
 date: "2023-11-11"
 type: paper
-mathjax: true # Enable mathematics on the page
-katex: false # Enable mathematics on the page
-plotly: false  # Enable plotly on the page
+mathjax: true
 authors:
     - Adrian Letchford
 categories:
@@ -17,7 +14,7 @@ categories:
 
 The [Wiener-Khinchin theorem](https://en.wikipedia.org/wiki/Wiener%E2%80%93Khinchin_theorem) provides a clever way of building Gaussian processes for regression. I'll show you this theorem in action with some Python code and how to use it to model a process.
 
- The Wiener-Khinchin theorem states that an [autocovariance](https://en.wikipedia.org/wiki/Autocovariance) function of a [weakly stationary process](https://en.wikipedia.org/wiki/Stationary_process#Weak_or_wide-sense_stationarity) is a function of the [power spectral density](https://en.wikipedia.org/wiki/Spectral_density) and vice versa. These two are called Fourier duals and can be written as[^Wilson-2013]:
+The Wiener-Khinchin theorem states that an [autocovariance](https://en.wikipedia.org/wiki/Autocovariance) function of a [weakly stationary process](https://en.wikipedia.org/wiki/Stationary_process#Weak_or_wide-sense_stationarity) is a function of the [power spectral density](https://en.wikipedia.org/wiki/Spectral_density) and vice versa. These two are called Fourier duals and can be written as[^Wilson-2013]:
 $$
 \begin{align}
 \kappa(h) &= \int S(\omega) e^{2 \pi i \omega h} d \omega \label{1}\tag{1} \\\
@@ -94,7 +91,7 @@ autocov = spectral_autocov(y)
 
 # Building a Gaussian process
 
-We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article]({{< ref "forecasting-currency-rates-with-fractional-brownian-motion" >}}#conditional-gaussian-distribution). Knocking this together looks like:
+We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article]({{{< ref "forecasting-currency-rates-with-fractional-brownian-motion" >}}}#conditional-gaussian-distribution). Knocking this together looks like:
 ```python
 from scipy.linalg import toeplitz
 
@@ -105,8 +102,8 @@ horizon = 100
 # covariance matrix plus a noise term
 cov = toeplitz(autocov) + np.eye(N) * 20
 
-# Make a forecast using a conditional
-# Gaussian process
+# Make a forecast using a conditional
+# Gaussian process
 AA = cov[:(N-horizon), :(N-horizon)]
 BA = cov[(N-horizon):, :(N-horizon)]
 forecast = BA @ np.linalg.inv(AA) @ y[horizon:]
