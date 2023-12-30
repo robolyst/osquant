@@ -1,0 +1,10 @@
+project:
+  type: hugo
+      
+format: 
+  hugo-md:
+    code-fold: false
+    fig-format: svg
+  
+execute: 
+  warning: false

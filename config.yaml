@@ -6,6 +6,7 @@ FootnoteReturnLinkContents: "↑"
 
 disableKinds: ["taxonomy", "section"]
 ignoreErrors: ["error-disable-taxonomy"]
+ignoreFiles: [ "\\.qmd$", "\\.py$" ]
 
 params:
   gtag: G-SSDJH3F7EZ
