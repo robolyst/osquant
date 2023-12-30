@@ -95,7 +95,7 @@ autocov = spectral_autocov(y)
 
 # Building a Gaussian process
 
-We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article]({{{< ref "forecasting-currency-rates-with-fractional-brownian-motion" >}}}#conditional-gaussian-distribution). Knocking this together looks like:
+We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article](/papers/forecasting-currency-rates-with-fractional-brownian-motion#conditional-gaussian-distribution). Knocking this together looks like:
 
 ``` python
 from scipy.linalg import toeplitz
