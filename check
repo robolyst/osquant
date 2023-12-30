@@ -1,0 +1,4 @@
+#!/bin/bash
+
+markdownlint content
+vale --minAlertLevel=error content/papers

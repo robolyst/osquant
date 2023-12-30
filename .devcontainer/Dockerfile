@@ -6,9 +6,15 @@ RUN npm install -g markdownlint-cli
 
 RUN pip3 install numpy scipy matplotlib jupyter
 
+# Install quarto
 RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-arm64.deb \
   && dpkg -i /tmp/quarto.deb \
   && rm /tmp/quarto.deb
+
+# Install vale
+RUN wget -q -O /tmp/vale.tar.gz https://github.com/errata-ai/vale/releases/download/v2.28.0/vale_2.28.0_Linux_64-bit.tar.gz \
+  && tar -xvzf /tmp/vale.tar.gz -C bin \
+  && rm /tmp/vale.tar.gz
 
 # Setup oh my zsh for dev
 RUN apt install -y git zsh
