@@ -21,11 +21,11 @@ $$
 S(\omega) &= \int \kappa(h) e^{-2 \pi i \omega h} d h \\\
 \end{align}
 $$
-Where \\(\kappa(h)\\) is an autocovariance function of a process at lag \\(h\\) and \\(S(\omega)\\) is the power spectral density of the same process at frequency \\(\omega\\). They are Fourier transforms of each other---hence the term Fourier duals.
+Where $\kappa(h)$ is an autocovariance function of a process at lag $h$ and $S(\omega)$ is the power spectral density of the same process at frequency $\omega$. They are Fourier transforms of each other---hence the term Fourier duals.
 
-The idea here is that if you want to model a process, you could estimate its power spectrum (\\(S\\)), calculate the autocovariance function using equation (\\(\ref{1}\\)) and construct a Gaussian process.
+The idea here is that if you want to model a process, you could estimate its power spectrum ($S$), calculate the autocovariance function using equation ($\ref{1}$) and construct a Gaussian process.
 
-The problem is that equation (\\(\ref{1}\\)) is in continuous time and we generally work with discretely sampled time series. Luckily, there is a method known as the [periodogram](https://en.wikipedia.org/wiki/Periodogram) which is a discrete estimate of the power spectral density. SciPy provides this estimate under `scipy.signal.periodogram`. Now, equation (\\(\ref{1}\\)) can be treated discretely as:
+The problem is that equation ($\ref{1}$) is in continuous time and we generally work with discretely sampled time series. Luckily, there is a method known as the [periodogram](https://en.wikipedia.org/wiki/Periodogram) which is a discrete estimate of the power spectral density. SciPy provides this estimate under `scipy.signal.periodogram`. Now, equation ($\ref{1}$) can be treated discretely as:
 
 $$
 \kappa(h) = \sum_{\omega} S(\omega) e^{2 \pi i \omega h} d \omega  \label{2}\tag{2}
@@ -61,10 +61,10 @@ from scipy.signal import periodogram
 frequency, power = periodogram(y)
 ```
 
-The array `power` is a noisy power spectrum with two spikes. One spike at \\(\frac{16}{N}\\) and the other at \\(\frac{30}{N}\\). It looks like:
+The array `power` is a noisy power spectrum with two spikes. One spike at $\frac{16}{N}$ and the other at $\frac{30}{N}$. It looks like:
 ![](periodogram.svg)
 
-We can create a function that uses `periodogram` and equation (\\(\ref{2}\\)) to give us the autocovariance at each \\(h\\) from \\(0\\) to \\(N\\):
+We can create a function that uses `periodogram` and equation ($\ref{2}$) to give us the autocovariance at each $h$ from $0$ to $N$:
 ```python
 import numpy as np
 from scipy.signal import periodogram
@@ -83,7 +83,7 @@ def spectral_autocov(y):
     return autocov
 ```
 
-Running the time series `y` through the `spectral_autocov` function gives us an array where the \\(h^{\text{th}}\\) element is the autocovariance at lag \\(h\\):
+Running the time series `y` through the `spectral_autocov` function gives us an array where the $h^{\text{th}}$ element is the autocovariance at lag $h$:
 ```python
 autocov = spectral_autocov(y)
 ```
