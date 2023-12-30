@@ -36,6 +36,7 @@ Let's try this out with some Python code.
 # Estimating the autocovariance function
 
 Generate a time series made up of two frequencies and some noise:
+
 ``` python
 from numpy import sin, pi, cumsum, linspace
 from numpy.random import seed, randn
@@ -55,6 +56,7 @@ Which looks like this:
 ![](series.svg)
 
 We can get the periodogram with:
+
 ``` python
 from scipy.signal import periodogram
 frequency, power = periodogram(y)
@@ -64,6 +66,7 @@ The array `power` is a noisy power spectrum with two spikes. One spike at $\frac
 ![](periodogram.svg)
 
 We can create a function that uses `periodogram` and equation ($\ref{2}$) to give us the autocovariance at each $h$ from $0$ to $N$:
+
 ``` python
 import numpy as np
 from scipy.signal import periodogram
@@ -83,14 +86,17 @@ def spectral_autocov(y):
 ```
 
 Running the time series `y` through the `spectral_autocov` function gives us an array where the $h^{\text{th}}$ element is the autocovariance at lag $h$:
+
 ``` python
 autocov = spectral_autocov(y)
 ```
+
 ![](autocov.svg)
 
 # Building a Gaussian process
 
 We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article]({{{< ref "forecasting-currency-rates-with-fractional-brownian-motion" >}}}#conditional-gaussian-distribution). Knocking this together looks like:
+
 ``` python
 from scipy.linalg import toeplitz
 
@@ -107,6 +113,7 @@ AA = cov[:(N-horizon), :(N-horizon)]
 BA = cov[(N-horizon):, :(N-horizon)]
 forecast = BA @ np.linalg.inv(AA) @ y[horizon:]
 ```
+
 Which looks like this:
 ![](result.svg)
 
