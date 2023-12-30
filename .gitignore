@@ -5,3 +5,5 @@
 *.lock
 .DS_Store
 .obsidian
+/.quarto/
+/_freeze
