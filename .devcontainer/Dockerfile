@@ -10,4 +10,7 @@ RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases
   && dpkg -i /tmp/quarto.deb \
   && rm /tmp/quarto.deb
 
-WORKDIR /app
+# Setup oh my zsh for dev
+RUN apt install -y git zsh
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+ENV SHELL /usr/bin/zsh

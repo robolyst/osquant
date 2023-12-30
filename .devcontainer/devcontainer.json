@@ -1,0 +1,14 @@
+{
+    "build": { "dockerfile": "Dockerfile" },
+    "forwardPorts": [1313],
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "donjayamanne.githistory",
+          "ms-python.python",
+          "quarto.quarto"
+        ]
+      }
+    }
+  }
+  

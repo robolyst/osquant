@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker build . --tag osquant
-docker run -it --rm --volume $(pwd):/app -p 1313:1313 osquant quarto preview --host 0.0.0.0 --port 1313 --no-browser
+docker build .devcontainer --tag osquant
+docker run -it --rm --volume $(pwd):/app -p 1313:1313 --workdir /app osquant quarto preview --host 0.0.0.0 --port 1313 --no-browser
