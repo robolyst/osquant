@@ -14,7 +14,7 @@ categories:
 
 The [Wiener-Khinchin theorem](https://en.wikipedia.org/wiki/Wiener%E2%80%93Khinchin_theorem) provides a clever way of building Gaussian processes for regression. I'll show you this theorem in action with some Python code and how to use it to model a process.
 
-The Wiener-Khinchin theorem states that an [autocovariance](https://en.wikipedia.org/wiki/Autocovariance) function of a [weakly stationary process](https://en.wikipedia.org/wiki/Stationary_process#Weak_or_wide-sense_stationarity) is a function of the [power spectral density](https://en.wikipedia.org/wiki/Spectral_density) and vice versa. These two are called Fourier duals and can be written as[^Wilson-2013]:
+The Wiener-Khinchin theorem states that an [autocovariance](https://en.wikipedia.org/wiki/Autocovariance) function of a [weakly stationary process](https://en.wikipedia.org/wiki/Stationary_process#Weak_or_wide-sense_stationarity) is a function of the [power spectral density](https://en.wikipedia.org/wiki/Spectral_density) and vice versa. These two are called Fourier duals and can be written as[^1]:
 $$
 \begin{align}
 \kappa(h) &= \int S(\omega) e^{2 \pi i \omega h} d \omega \label{1}\tag{1} \\\
@@ -115,8 +115,7 @@ Which looks like this:
 
 You can calculate the autocovariance function of a process from its power spectral density. Using this relationship, here we explored estimating the power spectral density of a noisy time series, calculating its autocovariance matrix and then making a prediction using a conditional Gaussian. 
 
-{{% citation
-    id="Wilson-2013"
+[^1]: {{< citation
     author="Andrew Gordon Wilson, Ryan Prescott Adams"
     title="Gaussian Process Kernels for Pattern Discovery and Extrapolation"
     publication="International Conference on Machine Learning (ICML)"
@@ -125,4 +124,4 @@ You can calculate the autocovariance function of a process from its power spectr
     volume="28"
     number="3"
     link="https://arxiv.org/abs/1302.4245"
-%}}
+>}}
