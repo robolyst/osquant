@@ -1,11 +1,9 @@
-{{ $key := .Get "id" | printf "[^%s]:" }}
-
+{{ $key := cond (not (.Get "id")) "" (.Get "id" | printf "[^%s]:") }}
 {{ $author := cond (not (.Get "author")) "" (.Get "author" | printf "%s:") }}
-{{ $title := cond (not (.Get "link")) (.Get "title" | printf "\"%s\"") (.Get "link" | printf "[\"%s\"](%s)" (.Get "title")) }}
-{{ $publication := cond (not (.Get "publication")) "" (.Get "publication" | printf "*%s*") }}
-{{ $volume := cond (not (.Get "volume")) "" (.Get "volume" | printf "**%s**") }}
+{{ $title := cond (not (.Get "link")) (.Get "title" | printf "\"%s\"") (.Get "title" | printf "<a href='%s'>\"%s\"</a>" (.Get "link")) }}
+{{ $publication := cond (not (.Get "publication")) "" (.Get "publication" | printf "<i>%s</i>") }}
+{{ $volume := cond (not (.Get "volume")) "" (.Get "volume" | printf "<b>%s</b>") }}
 {{ $number := cond (not (.Get "number")) "" (.Get "number" | printf "(%s)") }}
 {{ $pages := cond (not (.Get "pages")) "" (.Get "pages" | printf "pp. %s") }}
 {{ $year := cond (not (.Get "year")) "" (.Get "year" | printf "(%s)") }}
-
-{{ $key }} {{ $author }} {{ $title }} {{ $publication }} {{ $volume }}{{ $number }} {{ $pages }} {{ .Get "publisher" }} {{ .Get "address" }} {{ $year }}
+{{ $key }} {{ $author }} {{ $title | safeHTML }} {{ $publication | safeHTML }} {{ $volume | safeHTML }}{{ $number }} {{ $pages }} {{ .Get "publisher" }} {{ .Get "address" }} {{ $year }}
