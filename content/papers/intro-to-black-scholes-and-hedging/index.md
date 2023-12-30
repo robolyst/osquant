@@ -303,7 +303,7 @@ $$
 \Delta = \frac{\delta V}{\delta S}
 $$
 
-A neat interpretation of this is that delta \\( \Delta \\) tells you how many units of the stock you are exposed to. For example, if an option's delta is 1, then for every $1 change in the stock we would expect the option's value to change by $1. In other words, 1 option behaves just like 1 unit of the stock. If the delta was 0.5, then 1 option would behave like 0.5 units of stock.
+A neat interpretation of this is that delta \\( \Delta \\) tells you how many units of the stock you are exposed to. For example, if an option's delta is 1, then for every \\$1 change in the stock we would expect the option's value to change by \\$1. In other words, 1 option behaves just like 1 unit of the stock. If the delta was 0.5, then 1 option would behave like 0.5 units of stock.
 
 For a long call option, delta will be between 0.0 and 1.0. Delta will be zero if the option is far out of the money or one if deep in the money. This is the same for a short put positions. For both a long put and short call, delta is between 0.0 and -1.0.
 
@@ -327,7 +327,7 @@ $$
 $$
 Theta is almost always negative for a long option position. This is known as "time decay." The value of the option decreases over time. For a short option position, theta is positive.
 
-You can break down the value of an option into two parts, the intrinsic value and the time value. The intrinsic value of an option is the money you would make if you exercised the option immediately. For example, a call option whose strike is $10 below the current price has an intrinsic value of $10. The remaining value of the option is the time value--the value in being able to wait to exercise.
+You can break down the value of an option into two parts, the intrinsic value and the time value. The intrinsic value of an option is the money you would make if you exercised the option immediately. For example, a call option whose strike is \\$10 below the current price has an intrinsic value of \\$10. The remaining value of the option is the time value--the value in being able to wait to exercise.
 
 ## Rho
 Rho \\( \rho \\) measures the change in option value relative to the changes in the risk free interest rate:
