@@ -3,17 +3,10 @@
 </p>
 
 # Development
-### Development setup
 
-Install Hugo:
-```bash
-brew install hugo
+### Docker (preferred)
+From the repo's root directory, execute:
 ```
-Run the deveopment site
-```bash
-hugo server --buildDrafts -F
+./preview
 ```
-
-# Notes
-
-RSS feed is located at `/index.xml`
+which will build a Docker image and serve the site from <http://localhost:1313>.
