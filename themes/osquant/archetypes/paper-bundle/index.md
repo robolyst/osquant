@@ -9,12 +9,9 @@ summary: "
 
 date: "{{ now.Format "2006-01-02" }}"
 type: paper
-mathjax: false # Enable mathematics on the page
-katex: false # Enable mathematics on the page
-plotly: false  # Enable plotly on the page
+mathjax: false
 authors:
     - Adrian Letchford
-draft: true
 categories:
     - mathematics
     - engineering
