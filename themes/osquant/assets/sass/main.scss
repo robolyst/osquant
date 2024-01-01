@@ -299,6 +299,31 @@ Page (Single)
 #page_header {
     margin-top: 4rem;
     margin-bottom: 4rem;
+
+    .title {
+        font-size: 2em;
+        font-weight:700;
+        display: block;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .title-callout {
+        font-size: 3em;
+        font-weight:700;
+        display: block;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        line-height: 1.25em;
+    }
+
+    .blurb {
+        font-size: 1.25em;
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+    
 }
 
 #page_header .category, #page_header .category a {
@@ -308,21 +333,6 @@ Page (Single)
 
 #page_header .category a:hover {
     text-decoration: underline;
-}
-
-#page_header .title {
-    font-size: 2em;
-    font-weight:700;
-    display: block;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-#page_header .blurb {
-    font-size: 1.25em;
-    display: block;
-    padding: 0;
-    margin: 0;
 }
 
 #page_header .paper-meta {

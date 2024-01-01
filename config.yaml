@@ -34,20 +34,7 @@ taxonomies:
 
 menu:
   main:
-    - identifier: mathematics
-      name: Mathematics
-      url: /categories/mathematics
+    - identifier: about
+      name: About
+      url: /about
       weight: 1
-    - identifier: engineering
-      name: Engineering
-      url: /categories/engineering
-      weight: 2
-    - identifier: finance
-      name: Finance
-      url: /categories/finance
-      weight: 3
-
-  author_guide:
-    - identifier: visual
-      name: Visual Style Guide
-      url: /visual-style-guide/
