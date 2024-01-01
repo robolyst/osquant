@@ -144,7 +144,7 @@ The distribtion of the sum of \\(n\\) samples from a uniform distribution. The r
 
 # Returns are not Gaussian
 
-This is the first stylized fact is that returns are not Gaussian. It turns out, returns do not meet the assumptions of a Gaussian distribution.
+The first stylized fact is that returns are not Gaussian. It turns out, returns do not meet the assumptions of a Gaussian distribution.
 
 For this discussion, we are going to think in terms of logged prices. That is, when I say "return" I mean change in logged price:
 
@@ -154,7 +154,7 @@ $$
 
 This means we can think of returns as summing together rather than multiplying together.
 
-A daily return is the sum of 8 hourly returns (8 trading hours in a day). Since we know that a sum of \\(n = 8\\) values is approximately Gaussian, it makes sense that the daily returns ought to be Gaussian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
+A daily return is the sum of a fixed number of returns. As an example, we'll say that a day is made up of 8 trading hours. Since we know that a sum of \\(n = 8\\) values is approximately Gaussian, it makes sense that the daily returns ought to be Gaussian. To see why this isn't the case, we need to break down a day's return to its atomic level. Each hourly return is the sum of minutely returns which are the sum of per second returns. If we continue this logic, we get to the atomic level: ticks.
 
 Each day's return is a sum of tick returns. The key thing to note is that each day has a different number of ticks. Bringing this back to the Gaussian distribution, each day is the sum of a different number of ticks. The \\(n\\) is different on each day. The Gaussian distribution assumes that \\(n\\) is the same for each sample. Therefore, returns on any time scale do not meet the assumptions of a Gaussian distribution.
 
