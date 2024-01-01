@@ -2,6 +2,8 @@
     <img src='https://github.com/robolyst/osquant/blob/967c0501118ff39b8af4b241451dd6c47b665fb8/themes/osquant/static/feature.png' />
 </p>
 
+Source code for <http://osquant.com>
+
 # Development
 
 ### Docker (preferred)
