@@ -79,6 +79,7 @@ $$
 $$
 
 This is a linear combination of past prices. We can calculate the linear weights in Python with:
+
 ```python
 import numpy as np
 
@@ -96,6 +97,7 @@ Using the parameters `window = 30` and `H = 0.45`, the weights look like:
 <plot id="weights_plot"></plot>
 
 If we have a Pandas DataFrame of prices we can predict the next step ahead price with:
+
 ```python
 # prices = pandas.DataFrame of currency prices
 weights = fbm_weights(window=100, H=0.45)
@@ -105,6 +107,7 @@ predicted_price = prices.rolling(100).apply(lambda x: weights @ x)
 # Forecasting currency returns
 
 Taking the `predicted_price` DataFrame above, we can calculate the expected return for each currency with:
+
 ```python
 predicted_return = predicted_price / price - 1
 ```
@@ -112,24 +115,29 @@ predicted_return = predicted_price / price - 1
 I find that calculating mispricing yields a stronger signal than predicting returns. In this context, if we predict that a currency is expected to return 1% but it actually returns 2%, then we say that the currency is 1% mispriced and we expect it to move lower by 1%.
 
 We can calculate this mispricing with:
+
 ```python
 actual_returns = prices.pct_change()
 mispricing = predicted_return.shift(1) - actual_returns
 ```
+
 The `mispricing` DataFrame will contain positive values for currencies that we believe are undervalued and negative values for currencies we believe are overvalued.
 
 We can then normalise these mispricings so that currencies with a higher mispricing have a greater weight in our portfolio. We normalise so that absolute sum of the portfolio weights equals 1:
+
 ```python
 portfolio_weights = mispricing.divide(mispricing.abs().sum(1), axis=0)
 ```
 
 We can get an idea of the strength of this signal by looking at an equity curve without transaction costs:
+
 ```python
 portfolio_returns = (actual_returns * portfolio_weights.shift(1)).sum(1)
 capital = (1 + portfolio_returns).cumprod()
 ```
 
 As an example, I use a dataset (the `prices` DataFrame) of 30 minute prices of the following pairs:
+
 ```
 CAD_USD
 EUR_USD
@@ -147,6 +155,7 @@ DKK_USD
 CNH_USD
 HUF_USD
 ```
+
 which are most of the currencies on Oanda except for `HKD` which is pegged to the `USD` and some of the less traded currencies.
 
 Calculating `capital` on this dataset gives me:
@@ -211,8 +220,6 @@ For the curious, you can find a derivation of the Gaussian conditional distribut
     publisher="Springer"
     link="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"
 %}}
-
-
 
 {{% citation
     id="Garcin-2021"
