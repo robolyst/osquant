@@ -26,7 +26,7 @@ We'll play this game from January 1900 all the way until September 2020. This ti
 
 We'll assume that every month, we'll have $1 to invest in the market from our day job. This will be $1 in January 1900 and will be adjusted for inflation every month. We'll also be receiving an income from our investments in the form of dividends.
 
-<img src="images/income.svg" class="wide" />
+<img src="images/income.svg" class="wide" alt="Example of income." />
 
 Here are the investment strategies:
 
