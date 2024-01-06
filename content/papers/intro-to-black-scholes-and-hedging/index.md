@@ -103,7 +103,6 @@ The right hand side of equation (\\(\ref{2}\\)) says that the risk free returns 
 
 ![Black-Scholes equation](black-scholes.svg)
 
-
 # Solving the Black-Scholes equation
 
 Deriving the solution to the Black-Scholes equation (\\(\ref{2}\\)) above is fairly involved and out of the scope of this article. We'll skip the derivation and go straight to the solution.
@@ -120,6 +119,7 @@ d_2 &= d_1 - \sigma \sqrt{t}
 \end{align}
 $$
 where:
+
 - \\( C = \\) the theoretical value of a **European** style **call** option before expiration.
 - \\( S = \\) the spot price of a stock that **does not pay** dividends.
 - \\( E = \\) the exercise price.
@@ -271,6 +271,7 @@ d_2 &= d_1 - \sigma \sqrt{t}
 \end{align}
 $$
 where:
+
 - \\( C = \\) the theoretical value of a **European** style **call** option.
 - \\( S = \\) the price of a stock that **does pay** dividends.
 - \\( y = \\) the annual dividend yield.
@@ -330,6 +331,7 @@ Theta is almost always negative for a long option position. This is known as "ti
 You can break down the value of an option into two parts, the intrinsic value and the time value. The intrinsic value of an option is the money you would make if you exercised the option immediately. For example, a call option whose strike is \\$10 below the current price has an intrinsic value of \\$10. The remaining value of the option is the time value--the value in being able to wait to exercise.
 
 ## Rho
+
 Rho \\( \rho \\) measures the change in option value relative to the changes in the risk free interest rate:
 $$
 \rho = \frac{\delta V}{\delta r}
@@ -337,6 +339,7 @@ $$
 An option's value is least sensitive to the risk free rate making this a little used Greek.
 
 ## Gamma
+
 Gamma \\( \Gamma \\) measures the change in the delta with respect to the stock's price:
 $$
 \Gamma = \frac{\delta \Delta}{\delta S} = \frac{\delta^2 V}{\delta S^2}
@@ -348,7 +351,6 @@ For a long options position gamma is positive. This is true for both calls and p
 
 Most options have opposite sign theta and gamma. For example, a long call has negative theta and positive gamma. That is, a long call's value decreases over time and increases with volatility.
 
-
 ## Table of Greeks
 
 Here are the calculations for the Greeks for both calls and puts[^greeks]:
@@ -359,7 +361,6 @@ Here are the calculations for the Greeks for both calls and puts[^greeks]:
 | **Gamma** \\( \Gamma \\) <td colspan=2> \\( e^{-yt} \frac{ \mathcal{N}^{\prime}(d_1)}{S \sigma \sqrt{t}} \\) |
 | **Vega** \\( \mathcal{V} \\) <td colspan=2> \\( S e^{-yt} \mathcal{N}^{\prime}(d_1) \sqrt{t} \\) |
 | **Rho** \\( \rho \\) | \\( E t e^{-rt}\mathcal{N}(d_2) \\) | \\( -E t e^{-rt}\mathcal{N}(-d_2) \\) |
-
 
 |      | Theta \\( \Theta \\)     |
 | -----|--------------------------|
@@ -441,12 +442,9 @@ We learned before that an option's delta tells you how many units of the stock y
 
 The idea behind delta-hedging is to always maintain a total delta of 0. We can look at the deltas in our entire portfolio and sum them together. We want to maintain a total delta of 0. The delta of the stock is always 1. If the portfolio has a net delta above zero, we need to sell the stock. If the portfolio has a net delta below zero, we need to buy the stock. As you can imagine, doing this repeatedly incurs transaction costs and becomes expensive. It wouldn't be practical to constantly hedge your option positions, you have to periodically hedge. Either re-heding every fixed period or re-hedging when your delta becomes too large.
 
-
 # Summary
 
 This write up provides an introduction to the Black-Scholes model and how to use it to estimate implied volatility and hedge option positions. I have only covered the surface of this topic. I'd encourage you to read through the book "Option Volatility & Pricing" [^Natenberg2015] to dive deeper into options.
-
-
 
 [^ito]: Itô's lemma. If \\(X_t\\) is a stochastic process with infinitesimal variance \\(v(X_t)\\) and if \\( u(X_t, t) \\) is a function with enough derivatives then \\( u(X_t, t) \\) is another stochastic process that satisfies:
 $$
