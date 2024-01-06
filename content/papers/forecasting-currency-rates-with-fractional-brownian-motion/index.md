@@ -138,7 +138,7 @@ capital = (1 + portfolio_returns).cumprod()
 
 As an example, I use a dataset (the `prices` DataFrame) of 30 minute prices of the following pairs:
 
-```
+```plaintext
 CAD_USD
 EUR_USD
 JPY_USD
