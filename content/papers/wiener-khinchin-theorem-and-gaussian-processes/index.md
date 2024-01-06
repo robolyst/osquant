@@ -97,7 +97,7 @@ autocov = spectral_autocov(y)
 
 # Building a Gaussian process
 
-We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article](/papers/forecasting-currency-rates-with-fractional-brownian-motion#conditional-gaussian-distribution). Knocking this together looks like:
+We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article](../../../papers/forecasting-currency-rates-with-fractional-brownian-motion#conditional-gaussian-distribution). Knocking this together looks like:
 
 ``` python
 from scipy.linalg import toeplitz
@@ -124,13 +124,4 @@ Which looks like this:
 
 You can calculate the autocovariance function of a process from its power spectral density. Using this relationship, here we explored estimating the power spectral density of a noisy time series, calculating its autocovariance matrix and then making a prediction using a conditional Gaussian.
 
-[^1]: {{< citation
-    author="Andrew Gordon Wilson, Ryan Prescott Adams"
-    title="Gaussian Process Kernels for Pattern Discovery and Extrapolation"
-    publication="International Conference on Machine Learning (ICML)"
-    year="2013"
-    pages="1067-1075"
-    volume="28"
-    number="3"
-    link="https://arxiv.org/abs/1302.4245"
-    >}}
+[^1]: <span class="quarto-shortcode__-escaped" data-is-shortcode="1" data-value="{{&lt; citation author=&quot;Andrew Gordon Wilson, Ryan Prescott Adams&quot; title=&quot;Gaussian Process Kernels for Pattern Discovery and Extrapolation&quot; publication=&quot;International Conference on Machine Learning (ICML)&quot; year=&quot;2013&quot; pages=&quot;1067-1075&quot; volume=&quot;28&quot; number=&quot;3&quot; link=&quot;https://arxiv.org/abs/1302.4245&quot; &gt;}}"></span>
