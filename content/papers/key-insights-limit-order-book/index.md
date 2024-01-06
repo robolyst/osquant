@@ -19,7 +19,7 @@ This write up is my notes on a few papers looking at using order book data to mo
 
 # Volume imbalance
 
-The key idea when analysing the limit order book is to identify whether the market as a whole is leaning more towards buying or selling. This idea is call **volume imbalance**. 
+The key idea when analysing the limit order book is to identify whether the market as a whole is leaning more towards buying or selling. This idea is call **volume imbalance**.
 
 Volume imbalance at time \\(t\\) is defined as [^Cartea-2018] [^Lipton-2013] [^Cartea-2015]:
 $$
@@ -116,7 +116,6 @@ The OFI value calculated above looks at the best bid and ask. The authors in [^X
 Here I've summarised the key insights from a few papers looking at order volume in a limit order book. The papers show that the order book contains information that is highly predictive of future price moves. But, these moves do not over-come the bid/ask spread.
 
 I've added links to the papers in the reference section. Go check them out for more details.
-
 
 <!-- An introduction to Limit Order Books -->
 <!-- https://www.machow.ski/posts/2021-07-18-introduction-to-limit-order-books/#stop-order -->
