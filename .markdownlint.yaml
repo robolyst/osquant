@@ -21,6 +21,7 @@ MD033: # MD033/no-inline-html
     - bigfeature
     - cell
     - div
+    - td
 
 MD013: # MD013/line-length
   line_length: 100000000000000

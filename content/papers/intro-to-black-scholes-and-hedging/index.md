@@ -259,7 +259,7 @@ $$
 
 We can see that this equation is nearly identical to the Black-Scholes equation (\\(\ref{2}\\)) except that the risk free rate on the value of the stock has been offset by the dividend[^dividend-yield].
 
-## Call options
+## Call options with dividends
 
 The solution to the equation above gives us the model for the price of a call option:
 $$
@@ -281,7 +281,7 @@ where:
 - \\( r = \\) the annual risk free rate.
 - \\( \mathcal{N} = \\) the cumulative normal distribution function.
 
-## Put options
+## Put options with dividends
 
 If we take the put-call parity and plug in the price of a call option, we get:
 $$
