@@ -6,6 +6,7 @@ blurb: "We believe scientific publishing should be free, collaborative and itera
 ---
 
 # What we do
+
 Open Source Quant publishes scientific research.
 
 # How we do it
