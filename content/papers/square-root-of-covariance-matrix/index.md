@@ -96,32 +96,36 @@ Some useful facts to note:
 
 Here's an example using two assets. You can play with the variances, correlation and portfolio weights to see how the component standard deviations change.
 
-### Create the covariance matrix and square root
+Create the covariance matrix and square root:
 
-<div class="row align-items-center">
-    <div class="col-12 col-md-6">
-        <cell id="cov_matrix"></cell>
+<p>
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6">
+            <cell id="cov_matrix"></cell>
+        </div>
+        <div class="col-12 col-md-6">
+            <cell id="viewof_std1"></cell>
+            <cell id="viewof_std2"></cell>
+            <cell id="viewof_rho"></cell>
+        </div>
     </div>
-    <div class="col-12 col-md-6">
-        <cell id="viewof_std1"></cell>
-        <cell id="viewof_std2"></cell>
-        <cell id="viewof_rho"></cell>
-    </div>
-</div>
+</p>
 
-### Set the portfolio weights
+Set the portfolio weights:
 
-<div class="row align-items-center">
-    <div class="col-12 col-md-6">
-        <cell id="w_vector"></cell>
+<p>
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6">
+            <cell id="w_vector"></cell>
+        </div>
+        <div class="col-12 col-md-6">
+            <cell id="viewof_w1"></cell>
+            <cell id="viewof_w2"></cell>
+        </div>
     </div>
-    <div class="col-12 col-md-6">
-        <cell id="viewof_w1"></cell>
-        <cell id="viewof_w2"></cell>
-    </div>
-</div>
+</p>
 
-### Component and portfolio std
+Component and portfolio std:
 
 <div class="row">
     <div class="col-12 col-md-6">
