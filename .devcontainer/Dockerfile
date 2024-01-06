@@ -16,9 +16,13 @@ RUN apt install -y git zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 ENV SHELL /usr/bin/zsh
 
+# WORKS
+ENV QUARTO_VERSION=1.4.526
+
+# DOES NOT WORK
+# ENV QUARTO_VERSION=1.4.527
+
 # Install quarto
-RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.526/quarto-1.4.526-linux-arm64.deb \
-# RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.527/quarto-1.4.527-linux-arm64.deb \ NO
-# RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.536/quarto-1.4.536-linux-arm64.deb \ NO
+RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v$QUARTO_VERSION/quarto-$QUARTO_VERSION-linux-arm64.deb \
   && dpkg -i /tmp/quarto.deb \
   && rm /tmp/quarto.deb
