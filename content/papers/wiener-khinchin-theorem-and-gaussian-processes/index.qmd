@@ -166,7 +166,6 @@ plt.gcf().patch.set_visible(False)
 plt.gca().patch.set_visible(False)
 ```
 
-
 # Building a Gaussian process
 
 We can use this autocovariance function to construct a covariance matrix and make a prediction with a conditional Gaussian. I've talked about the maths of conditional Gaussians in [the appendix of a previous article](/papers/forecasting-currency-rates-with-fractional-brownian-motion#conditional-gaussian-distribution). Knocking this together looks like:
@@ -218,7 +217,7 @@ plt.gca().patch.set_visible(False)
 
 # Summary
 
-You can calculate the autocovariance function of a process from its power spectral density. Using this relationship, here we explored estimating the power spectral density of a noisy time series, calculating its autocovariance matrix and then making a prediction using a conditional Gaussian. 
+You can calculate the autocovariance function of a process from its power spectral density. Using this relationship, here we explored estimating the power spectral density of a noisy time series, calculating its autocovariance matrix and then making a prediction using a conditional Gaussian.
 
 [^1]: {{{< citation
     author="Andrew Gordon Wilson, Ryan Prescott Adams"
