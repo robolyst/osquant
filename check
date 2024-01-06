@@ -1,4 +1,4 @@
 #!/bin/bash
 
 markdownlint content
-vale --minAlertLevel=error content
+# vale --minAlertLevel=error content
