@@ -129,12 +129,12 @@ $$
 $$
 Note that because we are calculating the inverse of \\( \lambda \\) we cannot set it to 0; it must strictly be greater than 0.
 
-----
+-----
 **Algorithm 1** - Recursive linear regression with L2 regularisation
 
----
+-----
 
-*Initialise*
+Initialise:
 $$
 \begin{aligned}
 \boldsymbol{w}\_0 &= 0 \\\
@@ -142,7 +142,7 @@ $$
 \end{aligned}
 $$
 
-*Computation*
+Computation:
 
 For \\( i \geq 1 \\):
 $$
@@ -155,7 +155,7 @@ e_i &= y_i - \boldsymbol{x}\_i^T \boldsymbol{w}\_{i-1} \\\
 \end{aligned}
 $$
 
-----
+-----
 
 In Python, this looks like:
 
@@ -209,12 +209,12 @@ $$
 
 Following the same derivation as before gives us the following algorithm:
 
-----
+-----
 **Algorithm 2** - Exponentially weighted recursive linear regression with L2 regularisation
 
----
+-----
 
-*Initialise*
+Initialise:
 $$
 \begin{aligned}
 \boldsymbol{w}\_0 &= 0 \\\
@@ -222,7 +222,7 @@ $$
 \end{aligned}
 $$
 
-*Computation*
+Computation:
 
 For \\( i \geq 1 \\):
 $$
@@ -235,7 +235,7 @@ e_i &= y_i - \boldsymbol{x}\_i^T \boldsymbol{w}\_{i-1} \\\
 \end{aligned}
 $$
 
-----
+-----
 
 In Python, this looks like:
 
@@ -280,21 +280,21 @@ $$
 
 Which gives us the following algorithm:
 
-----
+-----
 **Algorithm 3** - Exponentially weighted recursive linear regression with L1 & L2 regularisation
 
----
-*Parameters*
+-----
+Parameters:
 $$
 \lambda \gt 0, \quad 0 \lt \beta \lt 1, \quad \gamma > 0, \quad \epsilon > 0
 $$
 
-*Initialise*
+Initialise:
 $$
 \boldsymbol{w}\_0 = 0, \quad \boldsymbol{P}\_0 = \lambda^{-1} \boldsymbol{I}
 $$
 
-*Computation*
+Computation:
 
 For \\( i \geq 1 \\):
 $$
@@ -308,7 +308,7 @@ e_i &= y_i - \boldsymbol{x}\_i^T \boldsymbol{w}\_{i-1} \\\
 \end{aligned}
 $$
 
-----
+-----
 
 Two new parameters have been introduced. \\( \gamma \\) is the L1 regularisation parameter. Set this to a positive non-zero value. \\( \epsilon \\) is a small positive value to prevent division by zero when weights are zero.
 
@@ -319,7 +319,14 @@ import numpy as np
 
 class ExpL1L2Regression:
     
-    def __init__(self, num_features: int, lam: float, halflife: float, gamma: float, epsilon: float):
+    def __init__(
+        self,
+        num_features: int,
+        lam: float,
+        halflife: float,
+        gamma: float,
+        epsilon: float,
+    ):
         self.n = num_features
         self.lam = lam
         self.gamma = gamma
@@ -343,7 +350,6 @@ class ExpL1L2Regression:
         )
 
         self.w = self.w + k.flatten() * e + extra
-
         
     def predict(self, x: np.ndarray) -> float:
         return self.w @ x
