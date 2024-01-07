@@ -4,7 +4,7 @@ summary: "
 Fractional Brownian motion is a stochastic process that can model mean reversion. Predicting future values turns out to be a simple linear model. This model has significant predictive power when applied to currencies.
 "
 type: paper
-katex: true
+mathjax: true
 date: "2023-08-09"
 authors:
     - Adrian Letchford
@@ -17,13 +17,13 @@ acknowledgements: "All graphs were made with [Observable](https://observablehq.c
 
 # Fractional Brownian motion
 
-Fractional Brownian motion is defined as a stochastic Gaussian process \\(X_t\\) that starts at zero \\( X_0 = 0 \\) has an expectation of zero \\( \mathbb{E}[X_t] = 0 \\) and has the following covariance[^Garcin-2021]:
+Fractional Brownian motion is defined as a stochastic Gaussian process $X_t$ that starts at zero $ X_0 = 0 $ has an expectation of zero $ \mathbb{E}[X_t] = 0 $ and has the following covariance[^Garcin-2021]:
 $$
 \mathbb{E}[X_t X_s] = \sigma^2 \frac{1}{2}(|t|^{2H} + |s|^{2H} - |t - s|^{2H}) \label{1}\tag{1}
 $$
-where \\( \sigma \\) is the volatility parameter and \\( H \in (0, 1) \\) is the Hurst exponent.
+where $ \sigma $ is the volatility parameter and $ H \in (0, 1) $ is the Hurst exponent.
 
-The Hurst parameter \\( H \\) controls the auto-correlation in the process. When \\(H = 0.5 \\) then you get regular Brownian motion --- where the increments are an uncorrelated Gaussian process. When \\(H \lt 0.5 \\) then you get a process that is more mean reverting and when \\( H \gt 0.5 \\) you get a process that exhibits sustained trends.
+The Hurst parameter $ H $ controls the auto-correlation in the process. When $H = 0.5 $ then you get regular Brownian motion --- where the increments are an uncorrelated Gaussian process. When $H \lt 0.5 $ then you get a process that is more mean reverting and when $ H \gt 0.5 $ you get a process that exhibits sustained trends.
 
 Sometimes the mathematics behind stochastic processes can seem a little mystifying. Here's an interactive example where you can play around with the Hurst exponent to see how the process changes.
 
@@ -33,7 +33,7 @@ Sometimes the mathematics behind stochastic processes can seem a little mystifyi
 
 The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the covariance matrix can be found in a previous article: {{< xref "square-root-of-covariance-matrix" >}}.
 
-Intuitively, from playing with the Hurst exponent in the chart above, we can see that when \\(H \gt 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0.5 \\) there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
+Intuitively, from playing with the Hurst exponent in the chart above, we can see that when $H \gt 0.5 $ there are positive auto-correlations and when  $H \lt 0.5 $ there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
 $$
 \mathbb{E}[(X_t - X_s)(X_v - X_u)] = \sigma^2 \frac{1}{2}(|u - t|^{2H} + |v - s|^{2H} - |v - t|^{2H} - |u - s|^{2H})
 $$
@@ -51,13 +51,13 @@ $$
 \mathbb{E}[(X_t - X\_{t - 1})(X\_{t + h} - X\_{t + h - 1})] = \sigma^2 \frac{1}{2}(|h - 1|^{2H} + |h + 1|^{2H} - 2|h|^{2H})
 $$
 
-We can see in the chart below that when \\(H \gt 0.5 \\) there are positive auto-correlations and when  \\(H \lt 0.5 \\) there are negative auto-correlations.
+We can see in the chart below that when $H \gt 0.5 $ there are positive auto-correlations and when  $H \lt 0.5 $ there are negative auto-correlations.
 
 <plot id="incremental_cov_plot"></plot>
 
 # Forecasting fractional Brownian motion
 
-Let \\( \boldsymbol{p}\_{t+1} \\) be a vector of logged currency prices where the last value is the price one step into the future:
+Let $ \boldsymbol{p}\_{t+1} $ be a vector of logged currency prices where the last value is the price one step into the future:
 $$
 \boldsymbol{p}\_{t+1} = \left[ \begin{matrix}
 \boldsymbol{p}_t \\\
@@ -65,7 +65,7 @@ p\_{t+1} \\\
 \end{matrix} \right ]
 $$
 
-Modelling \\( \boldsymbol{p}\_{t+1} \\) as a fractional Brownian motion means that \\( \mathbb{\boldsymbol{p}\_{t+1}} = 0 \\) and the covariance matrix follows equation (\\( \ref{1} \\)). The covariance matrix is partitioned as:
+Modelling $ \boldsymbol{p}\_{t+1} $ as a fractional Brownian motion means that $ \mathbb{E}[\boldsymbol{p}\_{t+1}] = 0 $ and the covariance matrix follows equation ($ \ref{1} $). The covariance matrix is partitioned as:
 $$
 \boldsymbol{\Sigma}\_{t+1} = \left[ \begin{matrix}
 \boldsymbol{\Sigma}_t & \boldsymbol{\Sigma}\_{t,t+1} \\\
@@ -73,7 +73,7 @@ $$
 \end{matrix} \right ]
 $$
 
-In the [appendix](#conditional-gaussian-distribution) I show how to calculate a conditional Gaussian distribution. We can calculated the expected value of \\(p\_{t+1} \\) conditioned on \\( \boldsymbol{p}_t\\) as:
+In the [appendix](#conditional-gaussian-distribution) I show how to calculate a conditional Gaussian distribution. We can calculated the expected value of $p\_{t+1} $ conditioned on $ \boldsymbol{p}_t$ as:
 $$
 \mathbb{E}[p\_{t+1} | \boldsymbol{p}_t] = \boldsymbol{\Sigma}\_{t,t+1}^T\boldsymbol{\Sigma}_t^{-1} \boldsymbol{p}_t
 $$
@@ -172,19 +172,19 @@ Here we've made a linear filter of past prices that predicts future returns deri
 
 ## Conditional Gaussian distribution
 
-Define \\( \boldsymbol{x} \\) to be a \\( d \\) dimensional Gaussian vector:
+Define $ \boldsymbol{x} $ to be a $ d $ dimensional Gaussian vector:
 $$
 \boldsymbol{x} \in \mathcal{R}^d \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})
 $$
 
-Partition \\( \boldsymbol{x} \\) into two disjoint sets \\( a \\) and \\( b \\):
+Partition $ \boldsymbol{x} $ into two disjoint sets $ a $ and $ b $:
 $$
 \boldsymbol{x} = \left[ \begin{matrix}
 \boldsymbol{x}_a \\\
 \boldsymbol{x}_b \\\
 \end{matrix} \right ]
 $$
-and also split the mean vector \\( \boldsymbol{\mu} \\) and covariance matrix \\( \boldsymbol{\Sigma} \\) into corresponding partitions:
+and also split the mean vector $ \boldsymbol{\mu} $ and covariance matrix $ \boldsymbol{\Sigma} $ into corresponding partitions:
 $$
 \boldsymbol{\mu} = \left[ \begin{matrix}
 \boldsymbol{\mu}_a \\\
@@ -196,9 +196,9 @@ $$
 \boldsymbol{\Sigma}\_{ba} & \boldsymbol{\Sigma}\_{bb} \\\
 \end{matrix} \right ]
 $$
-Note that because \\( \boldsymbol{\Sigma} \\) is symmetric that means that \\( \boldsymbol{\Sigma}\_{aa} \\) and \\( \boldsymbol{\Sigma}\_{bb} \\) are symmetric and that \\( \boldsymbol{\Sigma}\_{ab} = \boldsymbol{\Sigma}\_{ba}^T \\).
+Note that because $ \boldsymbol{\Sigma} $ is symmetric that means that $ \boldsymbol{\Sigma}\_{aa} $ and $ \boldsymbol{\Sigma}\_{bb} $ are symmetric and that $ \boldsymbol{\Sigma}\_{ab} = \boldsymbol{\Sigma}\_{ba}^T $.
 
-The distribution of \\( \boldsymbol{x}_a \\) conditional on \\( \boldsymbol{x}_b \\) is:
+The distribution of $ \boldsymbol{x}_a $ conditional on $ \boldsymbol{x}_b $ is:
 $$
 \boldsymbol{x}_a |  \boldsymbol{x}_b \sim \mathcal{N}(\boldsymbol{\mu}\_{a|b}, \boldsymbol{\Sigma}\_{a|b})
 $$
