@@ -219,7 +219,7 @@ plt.gca().patch.set_visible(False)
 
 You can calculate the autocovariance function of a process from its power spectral density. Using this relationship, here we explored estimating the power spectral density of a noisy time series, calculating its autocovariance matrix and then making a prediction using a conditional Gaussian.
 
-[^1]: {{{< citation
+[^1]: {{< citation
     author="Andrew Gordon Wilson, Ryan Prescott Adams"
     title="Gaussian Process Kernels for Pattern Discovery and Extrapolation"
     publication="International Conference on Machine Learning (ICML)"
@@ -228,4 +228,4 @@ You can calculate the autocovariance function of a process from its power spectr
     volume="28"
     number="3"
     link="https://arxiv.org/abs/1302.4245"
->}}}
+>}}
