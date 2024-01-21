@@ -35,35 +35,36 @@ viewof H = Inputs.range([0.1, 0.9], {label: tex`H`, step: 0.1, value: 0.5});
 
 ```{ojs}
 //| echo: false
-fbms_plot = {
+//| output: false
+//| include: false
+fbms = await FileAttachment("fbm.csv").csv({typed: true});
+```
 
-  let fbms = await FileAttachment("fbm.csv").csv({typed: true});
-
-  let fbms_plot = Plot.plot({
-      width: 700,
-      height: 300,
-      style: {
-        fontSize: "16px",
-        fontFamily: "Source Sans Pro, Helvetica, Arial",
-        backgroundColor: 'transparent',
-      },
-      y: {
-        label: '↑ Fractional Brownian motion',
-      },
-      x: {
-        grid: true,
-        nice: true,
-      },
-      marks: [
-        Plot.line(fbms, {x: "x", y: H.toString()}),
-        Plot.axisY([]),
-      ],
-      marginTop: 35,
-      marginLeft: 10,
-      marginBottom: 45,
-    });
-
-  return fbms_plot;
+```{ojs}
+//| echo: false
+fbms_plot = Plot.plot({
+    width: 700,
+    height: 300,
+    style: {
+    fontSize: "16px",
+    fontFamily: "Source Sans Pro, Helvetica, Arial",
+    backgroundColor: 'transparent',
+    },
+    y: {
+    label: '↑ Fractional Brownian motion',
+    },
+    x: {
+    grid: true,
+    nice: true,
+    },
+    marks: [
+    Plot.line(fbms, {x: "x", y: H.toString()}),
+    Plot.axisY([]),
+    ],
+    marginTop: 35,
+    marginLeft: 10,
+    marginBottom: 45,
+});
 }
 ```
 
