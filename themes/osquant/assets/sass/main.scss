@@ -364,6 +364,11 @@ Page (Single)
     margin-bottom: 2em;
 }
 
+#page_content [id^=ojs-cell-] {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
 #page_content img.wide {
     max-width: 1200px;
     margin-left: auto;

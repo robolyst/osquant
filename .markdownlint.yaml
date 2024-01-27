@@ -25,6 +25,8 @@ MD033: # MD033/no-inline-html
     - td
     - p
     - span
+    - script
+    - style
 
 MD013: # MD013/line-length
   line_length: 100000000000000

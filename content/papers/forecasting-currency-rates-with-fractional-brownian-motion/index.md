@@ -4,36 +4,45 @@ summary: "
 Fractional Brownian motion is a stochastic process that can model mean reversion. Predicting future values turns out to be a simple linear model. This model has significant predictive power when applied to currencies.
 "
 type: paper
-mathjax: true
+katex: true
 date: "2023-08-09"
 authors:
     - Adrian Letchford
 categories:
     - mathematics
     - finance
-notebook: ./notebook.js
 acknowledgements: "All graphs were made with [Observable](https://observablehq.com/). The article's hero image (thumbnail) was made with [Figma](http://figma.com)."
 ---
 
+<script type="module" src="index_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link  href="index_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.js"></script>
+<style>
+    #ojs-cell-2 {
+        display: none;
+    }
+</style>
+
 # Fractional Brownian motion
 
-Fractional Brownian motion is defined as a stochastic Gaussian process $X_t$ that starts at zero $ X_0 = 0 $ has an expectation of zero $ \mathbb{E}[X_t] = 0 $ and has the following covariance[^Garcin-2021]:
+Fractional Brownian motion is defined as a stochastic Gaussian process $X_t$ that starts at zero $X_0 = 0$ has an expectation of zero $\mathbb{E}[X_t] = 0$ and has the following covariance[^1]:
 $$
 \mathbb{E}[X_t X_s] = \sigma^2 \frac{1}{2}(|t|^{2H} + |s|^{2H} - |t - s|^{2H}) \label{1}\tag{1}
 $$
-where $ \sigma $ is the volatility parameter and $ H \in (0, 1) $ is the Hurst exponent.
+where $\sigma$ is the volatility parameter and $H \in (0, 1)$ is the Hurst exponent.
 
-The Hurst parameter $ H $ controls the auto-correlation in the process. When $H = 0.5 $ then you get regular Brownian motion --- where the increments are an uncorrelated Gaussian process. When $H \lt 0.5 $ then you get a process that is more mean reverting and when $ H \gt 0.5 $ you get a process that exhibits sustained trends.
+The Hurst parameter \$ H \$ controls the auto-correlation in the process. When $H = 0.5$ then you get regular Brownian motion --- where the increments are an uncorrelated Gaussian process. When $H \lt 0.5$ then you get a process that is more mean reverting and when $H \gt 0.5$ you get a process that exhibits sustained trends.
 
 Sometimes the mathematics behind stochastic processes can seem a little mystifying. Here's an interactive example where you can play around with the Hurst exponent to see how the process changes.
 
-<cell id="viewof_H"></cell>
-
-<plot id="fbms_plot"></plot>
+<div id="ojs-cell-1"></div>
+<div id="ojs-cell-2"></div>
+<div id="ojs-cell-3"></div>
 
 The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the covariance matrix can be found in a previous article: {{< xref "square-root-of-covariance-matrix" >}}.
 
-Intuitively, from playing with the Hurst exponent in the chart above, we can see that when $H \gt 0.5 $ there are positive auto-correlations and when  $H \lt 0.5 $ there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^Garcin-2021]:
+Intuitively, from playing with the Hurst exponent in the chart above, we can see that when $H \gt 0.5$ there are positive auto-correlations and when $H \lt 0.5$ there are negative auto-correlations. We can see this mathematically by reworking the covariance function into the covariance between increments[^2]:
 $$
 \mathbb{E}[(X_t - X_s)(X_v - X_u)] = \sigma^2 \frac{1}{2}(|u - t|^{2H} + |v - s|^{2H} - |v - t|^{2H} - |u - s|^{2H})
 $$
@@ -51,13 +60,13 @@ $$
 \mathbb{E}[(X_t - X\_{t - 1})(X\_{t + h} - X\_{t + h - 1})] = \sigma^2 \frac{1}{2}(|h - 1|^{2H} + |h + 1|^{2H} - 2|h|^{2H})
 $$
 
-We can see in the chart below that when $H \gt 0.5 $ there are positive auto-correlations and when  $H \lt 0.5 $ there are negative auto-correlations.
+We can see in the chart below that when $H \gt 0.5$ there are positive auto-correlations and when $H \lt 0.5$ there are negative auto-correlations.
 
-<plot id="incremental_cov_plot"></plot>
+<div id="ojs-cell-4"></div>
 
 # Forecasting fractional Brownian motion
 
-Let $ \boldsymbol{p}\_{t+1} $ be a vector of logged currency prices where the last value is the price one step into the future:
+Let $\boldsymbol{p}\_{t+1}$ be a vector of logged currency prices where the last value is the price one step into the future:
 $$
 \boldsymbol{p}\_{t+1} = \left[ \begin{matrix}
 \boldsymbol{p}_t \\\
@@ -65,7 +74,7 @@ p\_{t+1} \\\
 \end{matrix} \right ]
 $$
 
-Modelling $ \boldsymbol{p}\_{t+1} $ as a fractional Brownian motion means that $ \mathbb{E}[\boldsymbol{p}\_{t+1}] = 0 $ and the covariance matrix follows equation ($ \ref{1} $). The covariance matrix is partitioned as:
+Modelling $\boldsymbol{p}\_{t+1}$ as a fractional Brownian motion means that $\mathbb{E}[\boldsymbol{p}\_{t+1}] = 0$ and the covariance matrix follows equation $\ref{1}$. The covariance matrix is partitioned as:
 $$
 \boldsymbol{\Sigma}\_{t+1} = \left[ \begin{matrix}
 \boldsymbol{\Sigma}_t & \boldsymbol{\Sigma}\_{t,t+1} \\\
@@ -73,14 +82,14 @@ $$
 \end{matrix} \right ]
 $$
 
-In the [appendix](#conditional-gaussian-distribution) I show how to calculate a conditional Gaussian distribution. We can calculated the expected value of $p\_{t+1} $ conditioned on $ \boldsymbol{p}_t$ as:
+In the [appendix](#conditional-gaussian-distribution) I show how to calculate a conditional Gaussian distribution. We can calculated the expected value of $p\_{t+1}$ conditioned on $\boldsymbol{p}_t$ as:
 $$
 \mathbb{E}[p\_{t+1} | \boldsymbol{p}_t] = \boldsymbol{\Sigma}\_{t,t+1}^T\boldsymbol{\Sigma}_t^{-1} \boldsymbol{p}_t
 $$
 
 This is a linear combination of past prices. We can calculate the linear weights in Python with:
 
-```python
+``` python
 import numpy as np
 
 def fbm_weights(window, H):
@@ -94,11 +103,12 @@ def fbm_weights(window, H):
 ```
 
 Using the parameters `window = 30` and `H = 0.45`, the weights look like:
-<plot id="weights_plot"></plot>
+
+<div id="ojs-cell-5"></div>
 
 If we have a Pandas DataFrame of prices we can predict the next step ahead price with:
 
-```python
+``` python
 # prices = pandas.DataFrame of currency prices
 weights = fbm_weights(window=100, H=0.45)
 predicted_price = prices.rolling(100).apply(lambda x: weights @ x)
@@ -108,7 +118,7 @@ predicted_price = prices.rolling(100).apply(lambda x: weights @ x)
 
 Taking the `predicted_price` DataFrame above, we can calculate the expected return for each currency with:
 
-```python
+``` python
 predicted_return = predicted_price / price - 1
 ```
 
@@ -116,7 +126,7 @@ I find that calculating mispricing yields a stronger signal than predicting retu
 
 We can calculate this mispricing with:
 
-```python
+``` python
 actual_returns = prices.pct_change()
 mispricing = predicted_return.shift(1) - actual_returns
 ```
@@ -125,20 +135,20 @@ The `mispricing` DataFrame will contain positive values for currencies that we b
 
 We can then normalise these mispricings so that currencies with a higher mispricing have a greater weight in our portfolio. We normalise so that absolute sum of the portfolio weights equals 1:
 
-```python
+``` python
 portfolio_weights = mispricing.divide(mispricing.abs().sum(1), axis=0)
 ```
 
 We can get an idea of the strength of this signal by looking at an equity curve without transaction costs:
 
-```python
+``` python
 portfolio_returns = (actual_returns * portfolio_weights.shift(1)).sum(1)
 capital = (1 + portfolio_returns).cumprod()
 ```
 
 As an example, I use a dataset (the `prices` DataFrame) of 30 minute prices of the following pairs:
 
-```plaintext
+``` plaintext
 CAD_USD
 EUR_USD
 JPY_USD
@@ -160,7 +170,7 @@ which are most of the currencies on Oanda except for `HKD` which is pegged to th
 
 Calculating `capital` on this dataset gives me:
 
-<plot id="capital_plot"></plot>
+<div id="ojs-cell-6"></div>
 
 This is a fairly basic model, all we've done is derive a linear filter of past prices. Yet, there appears to be a fair amount of predictive power. The problem is that if I were to include transaction costs, all performance disappears. This predictive signal isn't strong enough to overcome transaction costs and is more suitable as a feature in a machine learning model.
 
@@ -172,19 +182,19 @@ Here we've made a linear filter of past prices that predicts future returns deri
 
 ## Conditional Gaussian distribution
 
-Define $ \boldsymbol{x} $ to be a $ d $ dimensional Gaussian vector:
+Define $\boldsymbol{x}$ to be a $d$ dimensional Gaussian vector:
 $$
 \boldsymbol{x} \in \mathcal{R}^d \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})
 $$
 
-Partition $ \boldsymbol{x} $ into two disjoint sets $ a $ and $ b $:
+Partition $\boldsymbol{x}$ into two disjoint sets $a$ and $b$:
 $$
-\boldsymbol{x} = \left[ \begin{matrix}
+\boldsymbol{x} = \left[\begin{matrix}
 \boldsymbol{x}_a \\\
 \boldsymbol{x}_b \\\
 \end{matrix} \right ]
 $$
-and also split the mean vector $ \boldsymbol{\mu} $ and covariance matrix $ \boldsymbol{\Sigma} $ into corresponding partitions:
+and also split the mean vector $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$ into corresponding partitions:
 $$
 \boldsymbol{\mu} = \left[ \begin{matrix}
 \boldsymbol{\mu}_a \\\
@@ -196,9 +206,9 @@ $$
 \boldsymbol{\Sigma}\_{ba} & \boldsymbol{\Sigma}\_{bb} \\\
 \end{matrix} \right ]
 $$
-Note that because $ \boldsymbol{\Sigma} $ is symmetric that means that $ \boldsymbol{\Sigma}\_{aa} $ and $ \boldsymbol{\Sigma}\_{bb} $ are symmetric and that $ \boldsymbol{\Sigma}\_{ab} = \boldsymbol{\Sigma}\_{ba}^T $.
+Note that because $\boldsymbol{\Sigma}$ is symmetric that means that $\boldsymbol{\Sigma}\_{aa}$ and $\boldsymbol{\Sigma}\_{bb}$ are symmetric and that $\boldsymbol{\Sigma}\_{ab} = \boldsymbol{\Sigma}\_{ba}^T$.
 
-The distribution of $ \boldsymbol{x}_a $ conditional on $ \boldsymbol{x}_b $ is:
+The distribution of $\boldsymbol{x}_a$ conditional on $\boldsymbol{x}_b$ is:
 $$
 \boldsymbol{x}_a |  \boldsymbol{x}_b \sim \mathcal{N}(\boldsymbol{\mu}\_{a|b}, \boldsymbol{\Sigma}\_{a|b})
 $$
@@ -210,22 +220,26 @@ $$
 \end{aligned}
 $$
 
-For the curious, you can find a derivation of the Gaussian conditional distribution in section 2.3 of [^Bishop-2006]. I found a [PDF online](https://www.seas.upenn.edu/~cis520/papers/Bishop_2.3.pdf) of this section.
+For the curious, you can find a derivation of the Gaussian conditional distribution in section 2.3 of [^3]. I found a [PDF online](https://www.seas.upenn.edu/~cis520/papers/Bishop_2.3.pdf) of this section.
 
-{{% citation
-    id="Bishop-2006"
-    author="Christopher M. Bishop"
-    title="Pattern Recognition and Machine Learning"
-    year="2006"
-    publisher="Springer"
-    link="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"
-%}}
+[^1]:
+    {{< citation author="Matthieu Garcin" title="Forecasting with fractional Brownian motion: a financial perspective" year="2021" publisher="HAL Open Science" link="https://hal.science/hal-03230167/document" >}}
 
-{{% citation
-    id="Garcin-2021"
-    author="Matthieu Garcin"
-    title="Forecasting with fractional Brownian motion: a financial perspective"
-    year="2021"
-    publisher="HAL Open Science"
-    link="https://hal.science/hal-03230167/document"
-%}}
+[^2]:
+    {{< citation author="Matthieu Garcin" title="Forecasting with fractional Brownian motion: a financial perspective" year="2021" publisher="HAL Open Science" link="https://hal.science/hal-03230167/document" >}}
+
+[^3]:
+    {{< citation author="Christopher M. Bishop" title="Pattern Recognition and Machine Learning" year="2006" publisher="Springer" link="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf" >}}
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBIID0gSW5wdXRzLnJhbmdlKFswLjEsIDAuOV0sIHtsYWJlbDogdGV4YEhgLCBzdGVwOiAwLjEsIHZhbHVlOiAwLjV9KTtcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImZibXMgPSBhd2FpdCBGaWxlQXR0YWNobWVudChcImZibS5jc3ZcIikuY3N2KHt0eXBlZDogdHJ1ZX0pO1xuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiZmJtc19wbG90ID0gUGxvdC5wbG90KHtcbiAgICB3aWR0aDogNzAwLFxuICAgIGhlaWdodDogMzAwLFxuICAgIHN0eWxlOiB7XG4gICAgZm9udFNpemU6IFwiMTZweFwiLFxuICAgIGZvbnRGYW1pbHk6IFwiU291cmNlIFNhbnMgUHJvLCBIZWx2ZXRpY2EsIEFyaWFsXCIsXG4gICAgYmFja2dyb3VuZENvbG9yOiAndHJhbnNwYXJlbnQnLFxuICAgIH0sXG4gICAgeToge1xuICAgIGxhYmVsOiAn4oaRIEZyYWN0aW9uYWwgQnJvd25pYW4gbW90aW9uJyxcbiAgICB9LFxuICAgIHg6IHtcbiAgICBncmlkOiB0cnVlLFxuICAgIG5pY2U6IHRydWUsXG4gICAgfSxcbiAgICBtYXJrczogW1xuICAgIFBsb3QubGluZShmYm1zLCB7eDogXCJ4XCIsIHk6IEgudG9TdHJpbmcoKX0pLFxuICAgIFBsb3QuYXhpc1koW10pLFxuICAgIF0sXG4gICAgbWFyZ2luVG9wOiAzNSxcbiAgICBtYXJnaW5MZWZ0OiAxMCxcbiAgICBtYXJnaW5Cb3R0b206IDQ1LFxufSk7XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJteV9wbG90ID0ge1xuXG4gIGZ1bmN0aW9uIGluY3JlbWVudGFsX2NvdihuLCBIKSB7XG4gICAgcmV0dXJuIG1hdGgucmFuZ2UoMSwgbisxKS50b0FycmF5KCkubWFwKChoKSA9PiB7XG4gICAgICByZXR1cm4ge1xuICAgICAgICB4OiBoLFxuICAgICAgICB5OiAoaCAtIDEpKiooMipIKSArIChoICsgMSkqKigyKkgpIC0gMiooaCkqKigyKkgpLFxuICAgICAgICBIOiBcIkggPSBcIiArIEgudG9TdHJpbmcoKSxcbiAgICAgIH1cbiAgICB9KVxuICB9O1xuXG4gIGxldCBjb3ZfZGF0YSA9IChcbiAgICBpbmNyZW1lbnRhbF9jb3YoMjAsIDAuNTUpXG4gICAgLmNvbmNhdChpbmNyZW1lbnRhbF9jb3YoMjAsIDAuNSkpXG4gICAgLmNvbmNhdChpbmNyZW1lbnRhbF9jb3YoMjAsIDAuNDUpKVxuICApO1xuXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgICAgd2lkdGg6IDcwMCxcbiAgICAgIGhlaWdodDogMzAwLFxuICAgICAgc3R5bGU6IHtcbiAgICAgICAgZm9udFNpemU6IFwiMTZweFwiLFxuICAgICAgICBmb250RmFtaWx5OiBcIlNvdXJjZSBTYW5zIFBybywgSGVsdmV0aWNhLCBBcmlhbFwiLFxuICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6ICd0cmFuc3BhcmVudCcsXG4gICAgICB9LFxuICAgICAgeToge1xuICAgICAgICBncmlkOiB0cnVlLFxuICAgICAgICBsYWJlbDogJ+KGkSBDb3ZhcmlhbmNlJyxcbiAgICAgICAgbmljZTogdHJ1ZSxcbiAgICAgIH0sXG4gICAgICB4OiB7XG4gICAgICAgIGdyaWQ6IHRydWUsXG4gICAgICAgIG5pY2U6IHRydWUsXG4gICAgICAgIGxhYmVsOiAn4oaSIGgnLFxuICAgICAgfSxcbiAgICAgIGNvbG9yOiB7XG4gICAgICAgIGxlZ2VuZDogdHJ1ZSxcbiAgICAgIH0sXG4gICAgICBtYXJrczogW1xuICAgICAgICBQbG90LmxpbmUoY292X2RhdGEsIHt4OiBcInhcIiwgeTogXCJ5XCIsIHN0cm9rZTogXCJIXCJ9KSxcbiAgICAgIF0sXG4gICAgICBtYXJnaW5Ub3A6IDM1LFxuICAgICAgbWFyZ2luTGVmdDogNTUsXG4gICAgICBtYXJnaW5Cb3R0b206IDQ1LFxuICB9KTtcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IndlaWdodHNfcGxvdCA9IHtcblxuICBsZXQgd2VpZ2h0cyA9IGF3YWl0IEZpbGVBdHRhY2htZW50KFwid2VpZ2h0cy5jc3ZcIikuY3N2KHt0eXBlZDogdHJ1ZX0pO1xuXG4gIGxldCB3ZWlnaHRzX3Bsb3QgPSBQbG90LnBsb3Qoe1xuICAgICAgd2lkdGg6IDcwMCxcbiAgICAgIGhlaWdodDogMzAwLFxuICAgICAgc3R5bGU6IHtcbiAgICAgICAgZm9udFNpemU6IFwiMTZweFwiLFxuICAgICAgICBmb250RmFtaWx5OiBcIlNvdXJjZSBTYW5zIFBybywgSGVsdmV0aWNhLCBBcmlhbFwiLFxuICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6ICd0cmFuc3BhcmVudCcsXG4gICAgICB9LFxuICAgICAgeToge1xuICAgICAgICBncmlkOiB0cnVlLFxuICAgICAgICBsYWJlbDogJ+KGkSBXZWlnaHQnLFxuICAgICAgICBuaWNlOiB0cnVlLFxuICAgICAgICB0eXBlOiBcImxvZ1wiLFxuICAgICAgICB0aWNrRm9ybWF0OiBcIi4yXCIsXG4gICAgICB9LFxuICAgICAgeDoge1xuICAgICAgICBncmlkOiB0cnVlLFxuICAgICAgICBuaWNlOiB0cnVlLFxuICAgICAgICBsYWJlbDogJ+KGkiB0JyxcbiAgICAgIH0sXG4gICAgICBtYXJrczogW1xuICAgICAgICBQbG90LmxpbmUod2VpZ2h0cywge3g6IFwidFwiLCB5OiBcIjAuNDVcIn0pLFxuICAgICAgXSxcbiAgICAgIG1hcmdpblRvcDogMzUsXG4gICAgICBtYXJnaW5MZWZ0OiA2MCxcbiAgICAgIG1hcmdpbkJvdHRvbTogNDUsXG4gICAgY2FwdGlvbjogYFRoZSB3ZWlnaHQgdmVjdG9yIGZvciBwcmVkaWN0aW5nIGEgZnJhY3Rpb25hbCBHYXVzc2lhbiBtb3Rpb24gXG4gICAgcHJvY2Vzcy4gSGVyZSwgd2luZG93PTMwIGFuZCB0aGUgSHVyc3QgZXhwb25lbnQgPSAwLjQ1LiBUaGUgbW9zdCBcbiAgICByZWNlbnQgcHJpY2VzIGhhdmUgdGhlIGhpZ2hlc3Qgd2VpZ2h0IHdoaWNoIGRlY2F5cyB0aGUgZnVydGhlciBiYWNrIHRoZVxuICAgIHByaWNlIGlzLmBcbiAgICB9KTtcbiAgXG4gIHJldHVybiB3ZWlnaHRzX3Bsb3Q7XG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJjYXBpdGFsX3Bsb3QgPSB7XG4gIGxldCBjYXBpdGFsID0gYXdhaXQgRmlsZUF0dGFjaG1lbnQoXCJjYXBpdGFsLmNzdlwiKS5jc3Yoe3R5cGVkOiB0cnVlfSk7XG5cbiAgbGV0IGNhcGl0YWxfcGxvdCA9IFBsb3QucGxvdCh7XG4gICAgd2lkdGg6IDcwMCxcbiAgICBoZWlnaHQ6IDMwMCxcbiAgICBzdHlsZToge1xuICAgICAgZm9udFNpemU6IFwiMTZweFwiLFxuICAgICAgZm9udEZhbWlseTogXCJTb3VyY2UgU2FucyBQcm8sIEhlbHZldGljYSwgQXJpYWxcIixcbiAgICAgIGJhY2tncm91bmRDb2xvcjogJ3RyYW5zcGFyZW50JyxcbiAgICB9LFxuICAgIHk6IHtcbiAgICAgIGdyaWQ6IHRydWUsXG4gICAgICBsYWJlbDogJ+KGkSBDYXBpdGFsJyxcbiAgICAgIG5pY2U6IHRydWUsXG4gICAgICB0aWNrRm9ybWF0OiBcIi4wJVwiLFxuICAgIH0sXG4gICAgeDoge1xuICAgICAgZ3JpZDogdHJ1ZSxcbiAgICAgIG5pY2U6IHRydWUsXG4gICAgfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5saW5lKGNhcGl0YWwsIHt4OiBcInRpbWVcIiwgeTogXCIwXCJ9KSxcbiAgICBdLFxuICAgIG1hcmdpblRvcDogMzUsXG4gICAgbWFyZ2luTGVmdDogNjAsXG4gICAgbWFyZ2luQm90dG9tOiA0NSxcbiAgY2FwdGlvbjogYEV4YW1wbGUgY2FwaXRhbCB0cmFkaW5nIHRoZSBtaXNwcmljaW5nIGlkZW50aWZpZWQgYnkgdGhlXG4gICAgZnJhY3Rpb25hbCBicm93bmlhbiBtb3Rpb24uIFRoaXMgaXMgd2l0aG91dCB0cmFuc2FjdGlvbiBjb3N0cy5gXG4gIH0pO1xuXG4gIHJldHVybiBjYXBpdGFsX3Bsb3Q7XG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ0gnKSJ9XX0=
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../..";
+window._ojs.paths.runtimeToRoot = "../../../../../..";
+window._ojs.paths.docToRoot = "../../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
