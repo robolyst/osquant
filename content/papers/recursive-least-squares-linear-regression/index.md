@@ -341,7 +341,6 @@ class ExpL1L2Regression:
         e = y - x @ self.w
 
         k = k.reshape(-1, 1)
-        self.P = self.P / self.beta - (k @ k.T) * r
 
         extra = (
             self.gamma * ((self.beta - 1) / self.beta)
@@ -350,6 +349,8 @@ class ExpL1L2Regression:
         )
 
         self.w = self.w + k.flatten() * e + extra
+
+        self.P = self.P / self.beta - (k @ k.T) * r
         
     def predict(self, x: np.ndarray) -> float:
         return self.w @ x
