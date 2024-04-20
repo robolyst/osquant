@@ -4,6 +4,9 @@ Global variables
 $light-bg-color: #F9F9F9;
 $light-border-color: #EAEAEA;
 $light-text-color: #747474;
+$text-color: rgb(33, 37, 41);
+
+$blue: #0077EE;
 
 // Media query breakpoints
 $phone: 600px; // Anything smaller than this is a phone.
@@ -18,6 +21,7 @@ Global styles
 html {
     height: 100%;
     font-size: 20px; /* rem units are based on this */
+    color: $text-color;
 
     @media (max-width: $tablet) {
         font-size: 16px;
@@ -39,13 +43,16 @@ Global elements
 ---------------------------------------------------------------------------- */
 
 a {
-    color: #374D9E;
+    color: $text-color;
     text-decoration: none;
-}
+    -webkit-transition: color 0.25s; /* For Safari 3.0 to 6.0 */
+    transition: color 0.25s; /* For modern browsers */
 
-a:hover {
-    color: #EB5757;
-    text-decoration: none;
+    &:hover {
+        color: $blue;
+        text-decoration: none;
+    }
+    
 }
 
 h1 {
@@ -115,6 +122,15 @@ div.highlight pre {
     background-color: $light-bg-color !important;
 }
 
+.pre-title, .pre-title a {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: $blue;
+    font-family: $sans;
+}
+
 /* ----------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------- */
@@ -165,8 +181,8 @@ Define the page size
 #mainmatter feature > *,
 #mainmatter bigfeature > * {
     max-width: 750px;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 0px;
+    padding-left: 0px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -252,10 +268,9 @@ Page mini
     padding-top: 3rem;
     padding-bottom: 3rem;
     color: $light-text-color;
-    border-bottom: 1px solid $light-border-color;
 
     display: grid;
-    grid-template-columns: 1fr 200px;
+    grid-template-columns: 0.333fr 0.6666fr;
     grid-column-gap: 2rem;
     
     font-family: $sans;
@@ -265,20 +280,9 @@ Page mini
         flex-direction: column-reverse;
     }
 
-    a {
-        color: #212529;
-        font-weight: 600;
-
-        &:hover {
-            color: $light-text-color;
-            text-decoration: underline;
-        }
-    }
-
     .title {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
-        color: black;
         font-family: $serif;
     }
 
@@ -292,13 +296,17 @@ Page mini
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
         font-weight: 400;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         color: $light-text-color;
 
         .space {
             padding-left: 4px;
             padding-right: 4px;
-        }
+        }  
+    }
+
+    .summary {
+        font-size: 0.85em;
     }
 }
 
@@ -334,11 +342,6 @@ Page (Single)
         margin: 0;
     }
     
-}
-
-#page_header .category, #page_header .category a {
-    font-weight: 600;
-    color: black;
 }
 
 #page_header .category a:hover {
@@ -507,8 +510,9 @@ footer {
     text-align: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    font-weight: 300;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-family: $sans;
+    color: $light-text-color;
 }
 
 
