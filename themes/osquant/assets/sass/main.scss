@@ -212,8 +212,11 @@ Define the page size
 Nav bar
 ---------------------------------------------------------------------------- */
 
-nav {
+nav, nav.navbar {
     font-family: $sans;
+    padding: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .navbar-brand {
@@ -221,19 +224,8 @@ nav {
     font-size: 1.2rem;
 }
 
-nav a, .navbar-nav-hidden a {
-    color: black;
-}
-
 nav a:hover, .navbar-nav-hidden a:hover {
-    color: black;
-    text-decoration: underline;
-}
-
-.navbar {
-    padding: 15px 0px 15px 0px;
-    background-color: $light-bg-color;
-    border-bottom: 1px solid $light-border-color;
+    color: $blue !important;
 }
 
 .navbar-nav {
@@ -277,7 +269,7 @@ Page mini
 
     @media (max-width: $phone) {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
 
     .title {
@@ -316,7 +308,7 @@ Page (Single)
 
 #page_header {
     margin-top: 4rem;
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
 
     .title {
         font-size: 2em;
