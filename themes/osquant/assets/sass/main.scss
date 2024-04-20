@@ -428,13 +428,13 @@ Back matter
 
 #backmatter {
     margin-top: 5rem;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: $light-text-color;
     padding-bottom: 3rem;
     overflow-wrap: anywhere;
     background-color: $light-bg-color;
-    border-top: 1px solid $light-border-color;
-    border-bottom: 1px solid $light-border-color;
+    // border-top: 1px solid $light-border-color;
+    // border-bottom: 1px solid $light-border-color;
     font-family: $sans;
 }
 
@@ -446,7 +446,7 @@ Back matter
 }
 
 #backmatter h2 {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     margin-top: 3rem;
     margin-bottom: 1rem;
