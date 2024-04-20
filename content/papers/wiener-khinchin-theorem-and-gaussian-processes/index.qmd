@@ -1,7 +1,7 @@
 ---
 title: "Wiener-Khinchin theorem and Gaussian processes"
 summary: "
-There's a magical little theorem that links a power spectral density to the autocovariance function. You can use this to quickly estimate Gaissian processes and model periodic time series.
+There's a magical little theorem that links a power spectral density to the autocovariance function. You can use this to quickly estimate a Gaussian process of a periodic time series.
 "
 date: "2023-11-11"
 type: paper

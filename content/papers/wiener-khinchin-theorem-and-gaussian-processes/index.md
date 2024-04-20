@@ -1,16 +1,15 @@
 ---
-title: "Wiener-Khinchin theorem and Gaussian processes"
-summary: "
-There's a magical little theorem that links a power spectral density to the autocovariance function. You can use this to quickly estimate Gaissian processes and model periodic time series.
-"
-date: "2023-11-11"
+title: Wiener-Khinchin theorem and Gaussian processes
+summary: ' There''s a magical little theorem that links a power spectral density to the autocovariance function. You can use this to quickly estimate a Gaussian process of a periodic time series. '
+date: '2023-11-11'
 type: paper
 mathjax: true
 authors:
-    - Adrian Letchford
+  - Adrian Letchford
 categories:
-    - mathematics
+  - mathematics
 ---
+
 
 The [Wiener-Khinchin theorem](https://en.wikipedia.org/wiki/Wiener%E2%80%93Khinchin_theorem) provides a clever way of building Gaussian processes for regression. I'll show you this theorem in action with some Python code and how to use it to model a process.
 
@@ -125,4 +124,4 @@ Which looks like this:
 You can calculate the autocovariance function of a process from its power spectral density. Using this relationship, here we explored estimating the power spectral density of a noisy time series, calculating its autocovariance matrix and then making a prediction using a conditional Gaussian.
 
 [^1]:
-    {{< citation author="Andrew Gordon Wilson, Ryan Prescott Adams" title="Gaussian Process Kernels for Pattern Discovery and Extrapolation" publication="International Conference on Machine Learning (ICML)" year="2013" pages="1067-1075" volume="28" number="3" link="https://arxiv.org/abs/1302.4245" >}}
+    {{< citation "Andrew Gordon Wilson, Ryan Prescott Adams" "Gaussian Process Kernels for Pattern Discovery and Extrapolation" "International Conference on Machine Learning (ICML)" "2013" "1067-1075" "28" "3" "https://arxiv.org/abs/1302.4245" >}}
