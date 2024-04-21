@@ -268,6 +268,10 @@ nav a:hover, .navbar-nav-hidden a:hover {
 
 .navbar-toggler {
     border: none;
+
+    &:focus {
+        box-shadow: none;
+    }
 }
 
 .navbar-nav-hidden {
@@ -282,6 +286,39 @@ nav a:hover, .navbar-nav-hidden a:hover {
 
 .navbar-nav-hidden ul li:not(:last-child) {
     margin-bottom: 5px;
+}
+
+#navbarSupportedContent {
+    background-color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    min-width: 50vw;
+    font-family: $sans;
+    font-size: 1.5em;
+    font-weight: 500;
+
+    a {
+        color: white;
+    }
+
+    li {
+        margin-left: 2rem;
+        margin-right: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    -webkit-transition: height 0.01s;
+    -moz-transition: height 0.01s;
+    -ms-transition: height 0.01s;
+    -o-transition: height 0.01s;
+    transition: height 0.01s;
+
+    background-color: #2e2e2e;
+    box-shadow: 0px 0px 20px black;
+
 }
 
 /* ----------------------------------------------------------------------------
