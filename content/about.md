@@ -1,7 +1,7 @@
 ---
-layout: about
+layout: generic
 title: About
-callout: Scientific research should<br>be open source.
+header: Scientific research should<br>be open source.
 blurb: "We believe scientific publishing should be free, collaborative and iterative---all things open source!"
 ---
 

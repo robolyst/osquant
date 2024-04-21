@@ -6,7 +6,8 @@
 
         <div id="page_header">
             <div class='container'>
-                <h1 class='title-callout'>{{ .Params.callout | safeHTML }}</h1>
+                <div class="pre-title">{{ .Title }}</div>
+                <h1 class='title-callout'>{{ .Params.header | safeHTML }}</h1>
                 <p class="blurb">{{ .Params.blurb | markdownify }}</p>
             </div>
         </div>
