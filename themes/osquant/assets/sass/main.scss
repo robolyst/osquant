@@ -129,6 +129,10 @@ div.highlight pre {
     letter-spacing: 0.12em;
     color: $blue;
     font-family: $sans;
+
+    a:hover {
+        color: $text-color;
+    }
 }
 
 /* ----------------------------------------------------------------------------
