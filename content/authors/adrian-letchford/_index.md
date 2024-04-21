@@ -5,10 +5,9 @@ last_name: Letchford
 full_name: Adrian Letchford
 last_first: Letchford, Adrian
 
-instagram: adrian_letchford
 twitter: dradrian
 github: robolyst
 linkedin: adrianletchford
 ---
 
-I've worked as a university researcher, data scientist, full stack engineer, data engineer, analytics engineer and quant developer. I started Open Source Quant to share the things that I learn while I manage my own money.
+I'm a quant dev at [Millennium](http://mlp.com). I've previously worked as a university researcher, data scientist, full stack engineer, data engineer, analytics engineer and head of data. I started Open Source Quant because, after my experience in academia, I wish to see a kinder scientific publishing industry.
