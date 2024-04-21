@@ -2,7 +2,7 @@
 layout: generic
 title: About
 header: Scientific research should<br>be open source.
-blurb: "We believe scientific publishing should be free, collaborative and iterative---all things open source!"
+description: "We believe scientific publishing should be free, collaborative and iterative---all things open source!"
 ---
 
 # Free

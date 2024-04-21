@@ -2,7 +2,7 @@
 layout: generic
 title: Contribute
 header: Publishing with us
-blurb: Share your knowledge with the world for free with Open Source Quant.
+description: Share your knowledge with the world for free with Open Source Quant.
 ---
 
 ## Why publish with us?

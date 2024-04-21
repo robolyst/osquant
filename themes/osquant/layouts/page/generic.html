@@ -8,7 +8,7 @@
             <div class='container'>
                 <div class="pre-title">{{ .Title }}</div>
                 <h1 class='title-callout'>{{ .Params.header | safeHTML }}</h1>
-                <p class="blurb">{{ .Params.blurb | markdownify }}</p>
+                <p class="blurb">{{ .Description | markdownify }}</p>
             </div>
         </div>
 
