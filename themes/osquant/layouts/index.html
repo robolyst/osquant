@@ -1,11 +1,48 @@
 {{ define "main" }}
 
-    {{- partial "nav.html" . -}}
+    {{ $papers := (sort (where .Site.RegularPages "Section" "papers")) }}
+
+    {{ $first_post := index ($papers) 0 }}
+
+    {{ $images := $first_post.Resources.ByType "image" }}
+    {{ $featured := $images.GetMatch "*feature*" }}
+
+    <div id="splash" class="image light">
+        <img src="{{ $featured.Permalink }}" />
+        <div class="splash-cover">
+            {{- partial "nav.html" . -}}
+        </div>
+    </div>
+
+    {{ with $first_post }}
+        <div class="container">
+            <div id="first-post">
+                <div class="pre-title">{{ partial "category-links.html" . }}</div>
+                <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
+                <div class="summary">{{ .Summary }}</div>
+                <div class="meta">
+                    {{ with (.GetTerms "authors") }}
+                        By
+                        {{ $links := apply . "partial" "author-link.html" "." }}
+                        {{ $clean := apply $links "chomp" "." }}
+                        {{ delimit $clean ", " " & " }}
+                    {{ end }}
+                    <span class="space">·</span>
+                    <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                    <span class="space">·</span>
+                    {{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
+                    {{ $minutes := math.Round (div $readTime 60) }}
+                    <span>{{ $minutes }} min read</span>
+                    {{ if .Params.draft }}<span class="tag">Draft</span>{{ end }}
+                </div>
+            </div>
+        </div>
+    {{ end }}
 
     <div class="container">
         {{ .Content }}
 
-        {{ range $index, $element := (sort (where .Site.RegularPages "Section" "papers")) }}
+        {{ range after 1 $papers }}
             {{ partial "mini.html" . }}
         {{ end }}
     </div>

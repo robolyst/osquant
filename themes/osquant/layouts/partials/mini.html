@@ -6,29 +6,26 @@
 
 <div class="mini">
     <div>
+        <a href="{{ .Permalink }}">{{ with $featured }}<img src="{{ $featured.Permalink }}" class="feature" />{{ end }}</a>
+    </div>
+    <div>
+        <div class="pre-title">
+            {{ partial "category-links.html" . }}
+        </div>
         <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
         <div class="meta">
             {{ with (.GetTerms "authors") }}
+                By
                 {{ $links := apply . "partial" "author-link.html" "." }}
                 {{ $clean := apply $links "chomp" "." }}
                 {{ delimit $clean ", " " & " }}
             {{ end }}
-
-            {{ if and .Params.authors (.GetTerms "categories") }}
-            <sep>in</sep>
-            {{ end }}
-
-            {{ partial "category-links.html" . }}
-        </div>
-        <div>{{ .Summary }}</div>
-        <div class="meta">
+            <span class="space">·</span>
             <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
             <span class="space">·</span>
             <span>{{ $minutes }} min read</span>
             {{ if .Params.draft }}<span class="tag">Draft</span>{{ end }}
         </div>
-    </div>
-    <div>
-        <a href="{{ .Permalink }}">{{ with $featured }}<img src="{{ $featured.Permalink }}" class="feature" />{{ end }}</a>
+        <div class="summary">{{ .Summary }}</div>
     </div>
 </div>

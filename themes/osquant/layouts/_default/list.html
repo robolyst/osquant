@@ -1,12 +1,17 @@
 {{ define "main" }}
 
-    {{- partial "nav.html" . -}}
+    <div id="splash">
 
-    <div id="page_header">
-        <div class='container'>
-            <h1 class='title'>{{ .Title | title }}</h1>
-            <p class="blurb">{{ .Summary }}</p>
+        {{- partial "nav.html" . -}}
+
+        <div id="page_header">
+            <div class='container'>
+                <div class="pre-title">Articles on</div>
+                <h1 class='title'>{{ .Title | title }}</h1>
+                <p class="blurb">{{ .Summary }}</p>
+            </div>
         </div>
+
     </div>
 
     <div class="container">
@@ -14,5 +19,6 @@
             {{ partial "mini.html" . }}
         {{ end }}
     </div>
+
 
 {{ end }}

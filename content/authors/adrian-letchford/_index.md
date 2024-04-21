@@ -2,6 +2,7 @@
 title: Adrian Letchford
 first_name: Adrian
 last_name: Letchford
+full_name: Adrian Letchford
 last_first: Letchford, Adrian
 
 instagram: adrian_letchford

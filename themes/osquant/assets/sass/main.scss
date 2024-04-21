@@ -4,17 +4,24 @@ Global variables
 $light-bg-color: #F9F9F9;
 $light-border-color: #EAEAEA;
 $light-text-color: #747474;
+$text-color: rgb(33, 37, 41);
+
+$blue: #0077EE;
 
 // Media query breakpoints
 $phone: 600px; // Anything smaller than this is a phone.
 $tablet: 1000px; // Anything smaller than this is a phone.
+
+$serif: source-serif-pro, serif;
+$sans: "Source Sans Pro", -apple-system, Helvetica, arial, sans-serif;
 
 /* ----------------------------------------------------------------------------
 Global styles
 ---------------------------------------------------------------------------- */
 html {
     height: 100%;
-    font-size: 18px; /* rem units are based on this */
+    font-size: 20px; /* rem units are based on this */
+    color: $text-color;
 
     @media (max-width: $tablet) {
         font-size: 16px;
@@ -27,7 +34,7 @@ html {
 
 body {
     background-color: #FDFDFD;
-    font-family: "Source Sans Pro", -apple-system, Helvetica, arial, sans-serif;
+    font-family: $serif;
     height: 100%;
 }
 
@@ -36,13 +43,16 @@ Global elements
 ---------------------------------------------------------------------------- */
 
 a {
-    color: #374D9E;
+    color: $text-color;
     text-decoration: none;
-}
+    -webkit-transition: color 0.25s; /* For Safari 3.0 to 6.0 */
+    transition: color 0.25s; /* For modern browsers */
 
-a:hover {
-    color: #EB5757;
-    text-decoration: none;
+    &:hover {
+        color: $blue;
+        text-decoration: none;
+    }
+    
 }
 
 h1 {
@@ -112,15 +122,54 @@ div.highlight pre {
     background-color: $light-bg-color !important;
 }
 
-/* ----------------------------------------------------------------------------
+.pre-title, .pre-title a {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: $blue;
+    font-family: $sans;
+}
 
+/* ----------------------------------------------------------------------------
+Splash
 ---------------------------------------------------------------------------- */
 
 #splash {
     background-color: $light-bg-color;
     padding: 0.01vh;
     margin-bottom: 3rem;
+    position: relative;
+
+    img {
+        width: 100%;
+    }
+
+
+    .splash-cover {
+        background: rgb(0,0,0);
+        background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+        min-height: 30%;
+        // height: 100px;
+        position: absolute;
+        width: 100%;
+        top: 0;
+    }
+
+    &.light {
+        .navbar a {
+            color: white;
+        }
+        nav.navbar .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1.0)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+       }
+    }
 }
+
+
+/* ----------------------------------------------------------------------------
+
+---------------------------------------------------------------------------- */
 
 #page_content {
     min-height: 100%;
@@ -162,8 +211,8 @@ Define the page size
 #mainmatter feature > *,
 #mainmatter bigfeature > * {
     max-width: 750px;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 0px;
+    padding-left: 0px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -193,24 +242,20 @@ Define the page size
 Nav bar
 ---------------------------------------------------------------------------- */
 
+nav, nav.navbar {
+    font-family: $sans;
+    padding: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .navbar-brand {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.2rem;
 }
 
-nav a, .navbar-nav-hidden a {
-    color: black;
-}
-
 nav a:hover, .navbar-nav-hidden a:hover {
-    color: black;
-    text-decoration: underline;
-}
-
-.navbar {
-    padding: 15px 0px 15px 0px;
-    background-color: $light-bg-color;
-    border-bottom: 1px solid $light-border-color;
+    color: $blue !important;
 }
 
 .navbar-nav {
@@ -223,6 +268,10 @@ nav a:hover, .navbar-nav-hidden a:hover {
 
 .navbar-toggler {
     border: none;
+
+    &:focus {
+        box-shadow: none;
+    }
 }
 
 .navbar-nav-hidden {
@@ -238,44 +287,56 @@ nav a:hover, .navbar-nav-hidden a:hover {
 .navbar-nav-hidden ul li:not(:last-child) {
     margin-bottom: 5px;
 }
-/* ----------------------------------------------------------------------------
-Page mini
----------------------------------------------------------------------------- */
-.mini {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-    color: $light-text-color;
-    border-bottom: 1px solid $light-border-color;
 
-    display: grid;
-    grid-template-columns: 1fr 200px;
-    grid-column-gap: 2rem;
-
-    @media (max-width: $phone) {
-        display: flex;
-        flex-direction: column-reverse;
-    }
+#navbarSupportedContent {
+    background-color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    min-width: 50vw;
+    font-family: $sans;
+    font-size: 1.5em;
+    font-weight: 500;
 
     a {
-        color: #212529;
-        font-weight: 600;
-
-        &:hover {
-            color: $light-text-color;
-            text-decoration: underline;
-        }
+        color: white;
     }
 
+    li {
+        margin-left: 2rem;
+        margin-right: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    -webkit-transition: height 0.01s;
+    -moz-transition: height 0.01s;
+    -ms-transition: height 0.01s;
+    -o-transition: height 0.01s;
+    transition: height 0.01s;
+
+    background-color: #2e2e2e;
+    box-shadow: 0px 0px 20px black;
+
+}
+
+/* ----------------------------------------------------------------------------
+First post
+---------------------------------------------------------------------------- */
+#first-post {
     .title {
-        font-size: 1.5rem;
+        font-size: 2.4rem;
+        line-height: 3rem;
         font-weight: 700;
-        color: black;
+        font-family: $serif;
+        display: block;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
     }
-
-    img.feature {
-        border-radius: 5px;
-        width: 100%;
-        margin-bottom: 1em;
+    .summary {
+        font-size: 1.1em;
+        color: $light-text-color;
     }
 
     .meta {
@@ -288,7 +349,58 @@ Page mini
         .space {
             padding-left: 4px;
             padding-right: 4px;
-        }
+        }  
+    }
+
+    margin-bottom: 6rem;
+}
+
+/* ----------------------------------------------------------------------------
+Page mini
+---------------------------------------------------------------------------- */
+.mini {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    color: $light-text-color;
+
+    display: grid;
+    grid-template-columns: 0.333fr 0.6666fr;
+    grid-column-gap: 2rem;
+    
+    font-family: $sans;
+
+    @media (max-width: $phone) {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        font-family: $serif;
+    }
+
+    img.feature {
+        border-radius: 5px;
+        width: 100%;
+        margin-bottom: 1em;
+    }
+
+    .meta {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 400;
+        font-size: 0.7rem;
+        color: $light-text-color;
+
+        .space {
+            padding-left: 4px;
+            padding-right: 4px;
+        }  
+    }
+
+    .summary {
+        font-size: 0.85em;
     }
 }
 
@@ -298,7 +410,7 @@ Page (Single)
 
 #page_header {
     margin-top: 4rem;
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
 
     .title {
         font-size: 2em;
@@ -324,11 +436,6 @@ Page (Single)
         margin: 0;
     }
     
-}
-
-#page_header .category, #page_header .category a {
-    font-weight: 600;
-    color: black;
 }
 
 #page_header .category a:hover {
@@ -423,13 +530,14 @@ Back matter
 
 #backmatter {
     margin-top: 5rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: $light-text-color;
     padding-bottom: 3rem;
     overflow-wrap: anywhere;
     background-color: $light-bg-color;
-    border-top: 1px solid $light-border-color;
-    border-bottom: 1px solid $light-border-color;
+    // border-top: 1px solid $light-border-color;
+    // border-bottom: 1px solid $light-border-color;
+    font-family: $sans;
 }
 
 #backmatter h1 {
@@ -440,7 +548,7 @@ Back matter
 }
 
 #backmatter h2 {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     margin-top: 3rem;
     margin-bottom: 1rem;
@@ -496,8 +604,9 @@ footer {
     text-align: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    font-weight: 300;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-family: $sans;
+    color: $light-text-color;
 }
 
 
@@ -687,6 +796,8 @@ Twitter callout
     line-height: 2rem;
     margin-top: 3rem;
     margin-bottom: 3rem;
+
+    font-family: $sans;
 }
 
 .callout .title {
