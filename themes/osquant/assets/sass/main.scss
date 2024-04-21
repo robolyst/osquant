@@ -132,14 +132,44 @@ div.highlight pre {
 }
 
 /* ----------------------------------------------------------------------------
-
+Splash
 ---------------------------------------------------------------------------- */
 
 #splash {
     background-color: $light-bg-color;
     padding: 0.01vh;
     margin-bottom: 3rem;
+    position: relative;
+
+    img {
+        width: 100%;
+    }
+
+
+    .splash-cover {
+        background: rgb(0,0,0);
+        background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+        min-height: 30%;
+        // height: 100px;
+        position: absolute;
+        width: 100%;
+        top: 0;
+    }
+
+    &.light {
+        .navbar a {
+            color: white;
+        }
+        nav.navbar .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1.0)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+       }
+    }
 }
+
+
+/* ----------------------------------------------------------------------------
+
+---------------------------------------------------------------------------- */
 
 #page_content {
     min-height: 100%;
@@ -220,7 +250,7 @@ nav, nav.navbar {
 }
 
 .navbar-brand {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.2rem;
 }
 
@@ -253,6 +283,41 @@ nav a:hover, .navbar-nav-hidden a:hover {
 .navbar-nav-hidden ul li:not(:last-child) {
     margin-bottom: 5px;
 }
+
+/* ----------------------------------------------------------------------------
+First post
+---------------------------------------------------------------------------- */
+#first-post {
+    .title {
+        font-size: 2.4rem;
+        line-height: 3rem;
+        font-weight: 700;
+        font-family: $serif;
+        display: block;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .summary {
+        font-size: 1.1em;
+        color: $light-text-color;
+    }
+
+    .meta {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 400;
+        font-size: 0.8rem;
+        color: $light-text-color;
+
+        .space {
+            padding-left: 4px;
+            padding-right: 4px;
+        }  
+    }
+
+    margin-bottom: 6rem;
+}
+
 /* ----------------------------------------------------------------------------
 Page mini
 ---------------------------------------------------------------------------- */
