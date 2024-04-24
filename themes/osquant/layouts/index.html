@@ -8,7 +8,15 @@
     {{ $featured := $images.GetMatch "*feature*" }}
 
     <div id="splash" class="image light">
-        <img src="{{ $featured.Permalink }}" />
+
+        {{- with $featured -}}
+            <img src="{{ $featured.Permalink }}" />
+        {{- else -}}
+            {{- with $.Site.Params.images }}
+                <img src="{{ index . 0 | absURL }}" />
+            {{ end -}}
+        {{- end -}}
+
         <div class="splash-cover">
             {{- partial "nav.html" . -}}
         </div>
