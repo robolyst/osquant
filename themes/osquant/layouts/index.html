@@ -18,6 +18,9 @@
         {{- end -}}
 
         <div class="splash-cover">
+            {{ with $first_post.Params.hover_color }}
+                <style>#splash.light .navbar a:hover {color: {{.}} !important;}</style>
+            {{ end }}
             {{- partial "nav.html" . -}}
         </div>
     </div>
