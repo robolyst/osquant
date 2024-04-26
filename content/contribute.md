@@ -37,10 +37,13 @@ We pubish the following types of articles:
 
 ## How to write an article
 
-1. Write your article in Markdown
-1. When you are ready to have your article reviewed, submit a PR with your article to [osquant](https://github.com/robolyst/osquant). You can see an example of an article [here](https://github.com/robolyst/osquant/tree/main/content/papers/why-returns-are-not-gaussian).
-1. Editors and other members of the comunity will provide feedback to help your article meet our standards.
-1. An editor will approve and merge your PR officially publishing your work.
+Articles on Open Source Quant are written in Markdown and the review process happens on Github.
+
+1. Have a look at an example of an article [here](https://github.com/robolyst/osquant/tree/main/content/papers/why-returns-are-not-gaussian).
+1. Write your article in Markdown following the same format as the example.
+1. When you are ready for review, submit a pull request with your article to [osquant](https://github.com/robolyst/osquant).
+1. Editors will provide feedback to help your article meet our standards.
+1. An editor will approve and merge your pull request officially publishing your work.
 
 ## Thank you
 
