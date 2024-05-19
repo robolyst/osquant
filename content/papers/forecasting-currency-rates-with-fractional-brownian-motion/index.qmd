@@ -16,12 +16,6 @@ acknowledgements: "All graphs were made with [Observable](https://observablehq.c
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.js"></script>
 
-<style>
-    #ojs-cell-2 {
-        display: none;
-    }
-</style>
-
 # Fractional Brownian motion
 
 Fractional Brownian motion is defined as a stochastic Gaussian process $X_t$ that starts at zero $X_0 = 0$ has an expectation of zero $\mathbb{E}[X_t] = 0$ and has the following covariance[^2]:
@@ -379,18 +373,19 @@ $$
 
 For the curious, you can find a derivation of the Gaussian conditional distribution in section 2.3 of [^1]. I found a [PDF online](https://www.seas.upenn.edu/~cis520/papers/Bishop_2.3.pdf) of this section.
 
-[^1]: {{< citation
+
+[^1]: {{{< citation
     author="Christopher M. Bishop"
     title="Pattern Recognition and Machine Learning"
     year="2006"
     publisher="Springer"
     link="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"
->}}
+>}}}
 
-[^2]: {{< citation
+[^2]: {{{< citation
     author="Matthieu Garcin"
     title="Forecasting with fractional Brownian motion: a financial perspective"
     year="2021"
     publisher="HAL Open Science"
     link="https://hal.science/hal-03230167/document"
->}}
+>}}}

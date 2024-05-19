@@ -1,28 +1,24 @@
 ---
-title: "Forecasting currency rates with fractional brownian motion"
-summary: "
-Fractional Brownian motion is a stochastic process that can model mean reversion. Predicting future values turns out to be a simple linear model. This model has significant predictive power when applied to currencies.
-"
+title: Forecasting currency rates with fractional brownian motion
+summary: ' Fractional Brownian motion is a stochastic process that can model mean reversion. Predicting future values turns out to be a simple linear model. This model has significant predictive power when applied to currencies. '
 type: paper
 katex: true
-date: "2023-08-09"
+date: '2023-08-09'
 authors:
-    - Adrian Letchford
+  - Adrian Letchford
 categories:
-    - mathematics
-    - finance
-acknowledgements: "All graphs were made with [Observable](https://observablehq.com/). The article's hero image (thumbnail) was made with [Figma](http://figma.com)."
+  - mathematics
+  - finance
+acknowledgements: >-
+  All graphs were made with [Observable](https://observablehq.com/). The
+  article's hero image (thumbnail) was made with [Figma](http://figma.com).
 ---
+
 
 <script type="module" src="index_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link  href="index_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.js"></script>
-<style>
-    #ojs-cell-2 {
-        display: none;
-    }
-</style>
 
 # Fractional Brownian motion
 
@@ -36,9 +32,21 @@ The Hurst parameter \$ H \$ controls the auto-correlation in the process. When $
 
 Sometimes the mathematics behind stochastic processes can seem a little mystifying. Here's an interactive example where you can play around with the Hurst exponent to see how the process changes.
 
+<div class="cell">
+<div class="cell-output cell-output-display">
 <div id="ojs-cell-1"></div>
+</div>
+</div>
+<div class="cell hidden">
+<div class="cell-output cell-output-display hidden">
 <div id="ojs-cell-2"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
 <div id="ojs-cell-3"></div>
+</div>
+</div>
 
 The processes in the plot above were generated based on the method of taking the square root of the covariance matrix. The method is described on the [Wikipedia page](https://en.wikipedia.org/wiki/Fractional_Brownian_motion#Method_1_of_simulation). The details for how to calculate the square root of the covariance matrix can be found in a previous article: {{< xref "square-root-of-covariance-matrix" >}}.
 
@@ -62,7 +70,11 @@ $$
 
 We can see in the chart below that when $H \gt 0.5$ there are positive auto-correlations and when $H \lt 0.5$ there are negative auto-correlations.
 
+<div class="cell">
+<div class="cell-output cell-output-display">
 <div id="ojs-cell-4"></div>
+</div>
+</div>
 
 # Forecasting fractional Brownian motion
 
@@ -104,7 +116,11 @@ def fbm_weights(window, H):
 
 Using the parameters `window = 30` and `H = 0.45`, the weights look like:
 
+<div class="cell">
+<div class="cell-output cell-output-display">
 <div id="ojs-cell-5"></div>
+</div>
+</div>
 
 If we have a Pandas DataFrame of prices we can predict the next step ahead price with:
 
@@ -170,7 +186,11 @@ which are most of the currencies on Oanda except for `HKD` which is pegged to th
 
 Calculating `capital` on this dataset gives me:
 
+<div class="cell">
+<div class="cell-output cell-output-display">
 <div id="ojs-cell-6"></div>
+</div>
+</div>
 
 This is a fairly basic model, all we've done is derive a linear filter of past prices. Yet, there appears to be a fair amount of predictive power. The problem is that if I were to include transaction costs, all performance disappears. This predictive signal isn't strong enough to overcome transaction costs and is more suitable as a feature in a machine learning model.
 
@@ -222,14 +242,11 @@ $$
 
 For the curious, you can find a derivation of the Gaussian conditional distribution in section 2.3 of [^3]. I found a [PDF online](https://www.seas.upenn.edu/~cis520/papers/Bishop_2.3.pdf) of this section.
 
-[^1]:
-    {{< citation author="Matthieu Garcin" title="Forecasting with fractional Brownian motion: a financial perspective" year="2021" publisher="HAL Open Science" link="https://hal.science/hal-03230167/document" >}}
+[^1]: {{< citation author=\"Matthieu Garcin\" title=\"Forecasting with fractional Brownian motion: a financial perspective\" year=\"2021\" publisher=\"HAL Open Science\" link=\"https://hal.science/hal-03230167/document\" >}}
 
-[^2]:
-    {{< citation author="Matthieu Garcin" title="Forecasting with fractional Brownian motion: a financial perspective" year="2021" publisher="HAL Open Science" link="https://hal.science/hal-03230167/document" >}}
+[^2]: {{< citation author=\"Matthieu Garcin\" title=\"Forecasting with fractional Brownian motion: a financial perspective\" year=\"2021\" publisher=\"HAL Open Science\" link=\"https://hal.science/hal-03230167/document\" >}}
 
-[^3]:
-    {{< citation author="Christopher M. Bishop" title="Pattern Recognition and Machine Learning" year="2006" publisher="Springer" link="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf" >}}
+[^3]: {{< citation author=\"Christopher M. Bishop\" title=\"Pattern Recognition and Machine Learning\" year=\"2006\" publisher=\"Springer\" link=\"https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf\" >}}
 
 
 <script type="ojs-module-contents">
