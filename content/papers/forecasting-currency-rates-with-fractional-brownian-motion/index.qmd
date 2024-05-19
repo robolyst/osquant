@@ -373,7 +373,6 @@ $$
 
 For the curious, you can find a derivation of the Gaussian conditional distribution in section 2.3 of [^1]. I found a [PDF online](https://www.seas.upenn.edu/~cis520/papers/Bishop_2.3.pdf) of this section.
 
-
 [^1]: {{{< citation
     author="Christopher M. Bishop"
     title="Pattern Recognition and Machine Learning"
