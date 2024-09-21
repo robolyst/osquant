@@ -44,7 +44,11 @@ $$
 \sigma^2 = E[(X - \mu)^2]
 $$
 
-If we had a sample of $n$ values of $X$ we could try to estimate the variace by replacing $\mu$ with the sample's mean and replacing the expectancy $E$ with the average value across the samples:
+If we had a sample of $n$ values of $X$ we could try to estimate the variace by replacing the expectancy $E[\cdot]$ with the average value across the samples:
+$$
+\frac{1}{n} \sum_i \left(X_i - \mu \right)^2
+$$
+and then replace $\mu$ with the sample's mean:
 $$
 \begin{aligned}
     \bar{X} &= \frac{1}{n}\sum_i X_i \\\
@@ -78,9 +82,126 @@ estimates.mean()
 ```
 gives us about 0.8! Our estimator is off by 0.2. This is bias.
 
+## Where does bias come from?
+
+Let's go back to the definition of variance and how we turned it into a sample estimate. To form our estimator, we swapped $\mu$ for the sample mean:
+$$
+\frac{1}{n} \sum_i \left(X_i - \mu \right)^2 \quad\Rightarrow\quad \frac{1}{n} \sum_i \left(X_i - \bar{X} \right)^2
+$$
+
+This is where the bias was introduced. The mean ($\bar{X}$) of a small sample will be closer to those samples than the population's mean ($\mu$).
+
+Figure 1. shows an example with 100 random dots. Five of these dots were selected randomly and their mean is shown with a black cross. The mean of these 5 samples is the closest point to these five samples. This means that the sample mean is closer than the population's mean. Therefore:
+$$
+\frac{1}{n} \sum_i \left(X_i - \bar{X} \right)^2 \quad\lt\quad \frac{1}{n} \sum_i \left(X_i - \mu \right)^2
+$$
+
+{{<figure src="images/example.svg" title="Figure 1: Illustration of bias." width="medium">}}
+This is a plot of 100 random dots where the average is (0, 0). Five dots have been selected randomly and highlighted. The mean of these 5 random dots is shown with the black cross.
+{{</figure>}}
+
+In fact, if you repeat the Python simulation above but replace the sample mean with 0 (the population mean):
+```python
+avg = 0
+```
+then the average of the sample variance will be 1:
+```python
+estimates.mean()
+```
+By knowing the population mean we can get an unbiased estimate of the variance from a set of samples. In practice, we do not know the population mean. Luckily, we can quantify bias and correct for it.
+
+
 ## Quantifying bias
 
-Work through the maths to show what the bias is and how to correct it
+So far, we have seen that $\hat{\sigma}^2$ is a biased estimate of the population variance. We discovered this by simulating many values for $\hat{\sigma}^2$ and taking the average. This simulation showed that:
+$$
+E[\hat{\sigma}^2] \ne \sigma^2
+$$
+
+We now want to switch from simulations and calculate exactly what the value of $E[\hat{\sigma}^2]$ is. We can do this by expanding it out. We start with:
+$$
+E[\hat{\sigma}^2] = E \left[ \frac{1}{n} \sum_i \left(X_i - \bar{X} \right)^2 \right]
+$$
+We can say that $\bar{X} = \mu - (\mu - \bar{X})$ which means we can expand out to:
+$$
+E[\hat{\sigma}^2] = E \left[ \frac{1}{n} \sum_i \left((X_i - \mu)- (\bar{X} - \mu) \right)^2 \right]
+$$
+with some algebra, we can expand out the power of two:
+$$
+\begin{aligned}
+E[\hat{\sigma}^2] &= E \left[ \frac{1}{n} \sum_i \left((X_i - \mu)^2 - 2(\bar{X} - \mu)(X_i - \mu) + (\bar{X} - \mu)^2\right) \right] \\\
+&= E \left[ \frac{1}{n} \sum_i (X_i - \mu)^2 - 2(\bar{X} - \mu) \frac{1}{n} \sum_i(X_i - \mu) +  \frac{1}{n} \sum_i(\bar{X} - \mu)^2 \right] \\\
+&= E \left[ \frac{1}{n} \sum_i (X_i - \mu)^2 - 2(\bar{X} - \mu) \frac{1}{n} \sum_i(X_i - \mu) +  (\bar{X} - \mu)^2 \right] \\\
+\end{aligned}
+$$
+
+Now, note that:
+$$
+\frac{1}{n} \sum_i(X_i - \mu) = \frac{1}{n} \sum_i X_i - \frac{1}{n} \sum_i \mu  = \frac{1}{n} \sum_i X_i - \mu = \bar{X} - \mu 
+$$
+which means that:
+$$
+\begin{aligned}
+E[\hat{\sigma}^2] &= E \left[ \frac{1}{n} \sum_i (X_i - \mu)^2 - 2(\bar{X} - \mu)^2 + (\bar{X} - \mu)^2 \right] \\\
+&= E \left[ \frac{1}{n} \sum_i (X_i - \mu)^2 - (\bar{X} - \mu)^2 \right] \\\
+&= E \left[ \frac{1}{n} \sum_i (X_i - \mu)^2 \right] - E \left[ (\bar{X} - \mu)^2 \right] \\\
+\end{aligned}
+$$
+
+The nice thing here is that:
+$$
+E \left[ \frac{1}{n} \sum_i (X_i - \mu)^2 \right] = \sigma^2
+$$
+which means:
+$$
+\begin{aligned}
+E[\hat{\sigma}^2] &= \sigma^2 - E \left[ (\bar{X} - \mu)^2 \right] \\\
+\end{aligned}
+$$
+
+The term $E \left[ (\bar{X} - \mu)^2 \right]$ is the variance of the sample mean. We know from [Bienaymé's identity
+](https://en.wikipedia.org/wiki/Variance#Sum_of_uncorrelated_variables) that this is equal to:
+$$
+E \left[ (\bar{X} - \mu)^2 \right] = \frac{1}{n}\sigma^2
+$$
+which gives us:
+$$
+\begin{aligned}
+E[\hat{\sigma}^2] &= \sigma^2 - \frac{1}{n}\sigma^2 = (1 - \frac{1}{n}) \sigma^2 \\\
+\end{aligned}
+$$
+
+Think back to  our Python simulation; the number of samples was $n=5$, the true variance was $\sigma^2 = 1$ and the estimated variance came to $\hat{\sigma}^2 = 0.8$. If we plug $n$ and $\sigma^2$ into the above we get the biased answer:
+$$
+E[\hat{\sigma}^2] = (1 - \frac{1}{n}) \sigma^2 = (1 - \frac{1}{5}) \times 1 = 0.8
+$$
+
+## Unbiased estimator
+
+Now that we know what the exact value of $E[\hat{\sigma}^2]$ we can figure out how to correct $\hat{\sigma}^2$ so that it is an unbiased estimator of $\sigma^2$.
+
+The correction term is:
+$$
+\frac{n}{n-1}
+$$
+
+We can see that this works by playing this through:
+$$
+\begin{aligned}
+E[\frac{n}{n-1} \hat{\sigma}^2] &= \frac{n}{n-1} E[\hat{\sigma}^2] \\\
+&= \frac{n}{n-1}(1 - \frac{1}{n}) \sigma^2 \\\
+&= \frac{n(1 - \frac{1}{n})}{n-1} \sigma^2 \\\
+&= \frac{n - 1}{n-1} \sigma^2 \\\
+&= \sigma^2 \\\
+\end{aligned}
+$$
+Therefore, an unbiased estimator of $\sigma^2$ from a set of samples is:
+$$
+\begin{aligned}
+\frac{n}{n-1} \hat{\sigma}^2 &= \frac{n}{n-1} \frac{1}{n} \sum_i \left(X_i - \bar{X} \right)^2 \\\
+&= \frac{1}{n-1} \sum_i \left(X_i - \bar{X} \right)^2 \\\
+\end{aligned}
+$$
 
 ## Replicating Pandas exponentially weighted variance
 
