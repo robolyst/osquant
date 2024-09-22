@@ -13,9 +13,7 @@ categories:
     - mathematics
 ---
 
-You are most likely familiar with the idea of calculating averages with an exponential weighting. The idea is that you have a higher weight to more recent information. This is quite an intuitive thing to do as all information is relevent, but recent information is more relevant.
-
-The weights for an exponentially weighted average look like:
+You are most likely familiar with the idea of calculating averages with an exponential weighting. The idea is that you have a higher weight to more recent information. The weights for an exponentially weighted average look like:
 $$
 w_t = (1 - \alpha)^t
 $$
@@ -29,7 +27,7 @@ You can easily calculate an exponentially weighted moving average in Pandas with
 df.ewm(alpha=0.1).mean()
 ```
 
-If you calculate the exponentially weighted average yourself you will find that it matches the result Pandas gives you. However, we're about to see that if we try doing this with the variance, we will get a very poor estimate. This is because of something called [estimation bias](https://en.wikipedia.org/wiki/Bias_of_an_estimator).
+If you calculate the exponentially weighted average yourself you will find that it matches the result Pandas gives you. However, we're about to see that if we try doing this with the variance, we will get a poor estimate. This is because of something called [estimation bias](https://en.wikipedia.org/wiki/Bias_of_an_estimator).
 
 # What is bias?
 
@@ -42,7 +40,7 @@ $$
 \sigma^2 = E[(X - \mu)^2]
 $$
 
-If we had a sample of $n$ values of $X$ we could try to estimate the variace by replacing the expectancy $E[\cdot]$ with the average value across the samples:
+If we had a sample of $n$ values of $X$ we could try to estimate the variance by replacing the expectancy $E[\cdot]$ with the average value across the samples:
 $$
 \frac{1}{n} \sum_i \left(X_i - \mu \right)^2
 $$
@@ -74,7 +72,7 @@ avg = simulations.mean(axis=1).reshape(-1, 1)
 estimates = ((simulations - avg)**2).sum(1) / n
 ```
 
-So now we have 10 million estimates of variance where the true variance is $1$. And what is our average estimate? Calculating the mean:
+We now have 10 million estimates of variance where the true variance is $1$. And what is our average estimate? Calculating the mean:
 ```python
 estimates.mean()
 ```
@@ -89,10 +87,11 @@ $$
 
 This is where the bias was introduced. The mean ($\bar{X}$) of a small sample will be closer to those samples than the population's mean ($\mu$).
 
-Figure 1. shows an example with 100 random dots. Five of these dots were selected randomly and their mean is shown with a black cross. The mean of these 5 samples is the closest point to these five samples. This means that the sample mean is closer than the population's mean. Therefore:
+Figure 1. shows an example with 100 random dots where the center/mean is 0. Five of these dots were selected randomly and their mean is shown with a black cross. The mean of these 5 samples is the closest point to these five samples. By definition, the sample mean is closer than the population's mean. Therefore:
 $$
 \frac{1}{n} \sum_i \left(X_i - \bar{X} \right)^2 \quad\lt\quad \frac{1}{n} \sum_i \left(X_i - \mu \right)^2
 $$
+Our estimator will underestimate the variance of $X$!
 
 {{<figure src="images/example.svg" title="Figure 1: Illustration of bias." width="medium">}}
 This is a plot of 100 random dots where the average is (0, 0). Five dots have been selected randomly and highlighted. The mean of these 5 random dots is shown with the black cross.
@@ -111,12 +110,12 @@ By knowing the population mean we can get an unbiased estimate of the variance f
 
 # Quantifying bias
 
-So far, we have seen that $\hat{\sigma}^2$ is a biased estimate of the population variance. We discovered this by simulating many values for $\hat{\sigma}^2$ and taking the average. This simulation showed that:
+Thus far, we have seen that $\hat{\sigma}^2$ is a biased estimate of the population variance. We discovered this by simulating many values for $\hat{\sigma}^2$ and taking the average. This simulation showed that:
 $$
 E[\hat{\sigma}^2] \ne \sigma^2
 $$
 
-We now want to switch from simulations and calculate exactly what the value of $E[\hat{\sigma}^2]$ is. We can do this by expanding it out. We start with:
+We now want to move away from simulations and calculate the exact value of $E[\hat{\sigma}^2]$. We can do this by expanding it out. We start with:
 $$
 E[\hat{\sigma}^2] = E \left[ \frac{1}{n} \sum_i \left(X_i - \bar{X} \right)^2 \right]
 $$
@@ -176,7 +175,7 @@ $$
 
 # Unbiased estimator
 
-Now that we know what the exact value of $E[\hat{\sigma}^2]$ we can figure out how to correct $\hat{\sigma}^2$ so that it is an unbiased estimator of $\sigma^2$.
+Now that we know the exact value of $E[\hat{\sigma}^2]$ we can figure out how to correct $\hat{\sigma}^2$ so that it is an unbiased estimator of $\sigma^2$.
 
 The correction term is:
 $$
@@ -214,7 +213,7 @@ $$
 \hat{\sigma}^2 = \frac{1}{\sum_i w_i} \sum_i w_i\left(X_i - \bar{X} \right)^2 
 $$
 
-Following the exact same expansion proceedure as before, we end up with:
+Following the exact same expansion procedure as before, we end up with:
 $$
 \begin{aligned}
 E[\hat{\sigma}^2] &= \sigma^2 - E \left[ (\bar{X} - \mu)^2 \right] \\\
@@ -297,6 +296,6 @@ for i in range(0, N):
 df['var_calc'] = varcalc
 ```
 
-which gives us a dataframe that looks like:
+which gives us a DataFrame that looks like:
 
 {{<figure src="images/dataframe.png" width="small">}}{{</figure>}}
