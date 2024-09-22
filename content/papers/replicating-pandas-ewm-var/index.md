@@ -203,14 +203,106 @@ $$
 \end{aligned}
 $$
 
+## Unbiased weighted estimator
+
+Now to expand the above to cover the case when the samples are weighted.
+
+The weighted sample mean is:
+$$
+\bar{X} = \frac{1}{\sum_i w_i} \sum_i w_i X_i
+$$
+and the weighted variance:
+$$
+\hat{\sigma}^2 = \frac{1}{\sum_i w_i} \sum_i w_i\left(X_i - \bar{X} \right)^2 
+$$
+
+Following the exact same expansion proceedure as before, we end up with:
+$$
+\begin{aligned}
+E[\hat{\sigma}^2] &= \sigma^2 - E \left[ (\bar{X} - \mu)^2 \right] \\\
+\end{aligned}
+$$
+
+The variance of the mean turns out to be:
+$$
+\begin{aligned}
+E \left[ (\bar{X} - \mu)^2 \right] &= \text{var}(\bar{X}) \\\
+&= \text{var}\left(\frac{1}{\sum w_i} \sum w_i X_i \right) \\\
+&= \frac{1}{(\sum w_i)^2} \sum \text{var} (w_i X_i) \\\
+&= \frac{1}{(\sum w_i)^2} \sum w_i^2 \text{var} (X_i) \\\
+&= \frac{\sum w_i^2}{(\sum w_i)^2} \sigma^2 \\\
+\end{aligned}
+$$
+
+This gives us:
+$$
+\begin{aligned}
+E[\hat{\sigma}^2] &= \sigma^2 - \frac{\sum w_i^2}{(\sum w_i)^2} \sigma^2 \\\
+&= \left(1 - \frac{\sum w_i^2}{(\sum w_i)^2} \right)\sigma^2 \\\
+\end{aligned}
+$$
+
+The bias correction term is then:
+$$
+b = \frac{(\sum w_i)^2}{(\sum w_i)^2 - \sum w_i^2}
+$$
+
+which means the unbiased weighted estimate of variance is:
+$$
+b \hat{\sigma}^2
+$$
+
+
 ## Replicating Pandas exponentially weighted variance
 
-Aliquam erat volutpat. Donec vel massa vitae nulla varius vestibulum quis scelerisque purus. Etiam magna lorem, faucibus non urna vel, dignissim pulvinar justo. Phasellus sollicitudin ex in tortor blandit tristique. Cras ornare dui eget lorem viverra ultricies. Aenean feugiat fringilla sapien, vitae tincidunt orci. Cras non est id nisl porttitor ultrices. Donec accumsan odio venenatis vulputate fermentum. Etiam maximus eu augue quis auctor.
+We now have all the tools we need to replicate the exponentially weighted variance from Pandas.
 
-Nulla varius erat a orci mollis, ut euismod magna efficitur. Sed a condimentum neque. Suspendisse vulputate, ante ut suscipit rutrum, libero velit eleifend est, non vestibulum odio nisi et libero. Nullam dignissim ultricies elit, et aliquet felis dictum sit amet. Donec mollis nisi sed leo tempus placerat. Nulla efficitur nisl erat, sagittis scelerisque orci congue sit amet. Integer tristique erat sit amet urna faucibus, vel efficitur elit ultricies. Nunc id vehicula felis. In lobortis vitae mauris nec pulvinar.
+```python
+import numpy as np
+import pandas as pd
 
-* Someone made an example here: https://stackoverflow.com/questions/40754262/pandas-ewm-std-calculation
-* https://en.wikipedia.org/wiki/Weighted_arithmetic_mean#Reliability_weights
+N = 1000
+
+# Create some fake data
+df = pd.DataFrame()
+df['data'] = np.random.randn(N)
+
+# Set a halflife for the EWM and convert
+# to alpha for the calculations.
+halflife = 10
+a = 1 - np.exp(-np.log(2)/halflife)  # alpha
+
+# This is the ewm from Pandas
+df['var_pandas'] = df.ewm(alpha=a).var()
+
+# Initialize variable
+varcalc = np.zeros(len(df))
+
+# Calculate exponential moving variance
+for i in range(0, N):
+
+    x = df['data'].iloc[0:i+1].values
+
+    # Weights
+    n = len(x)
+    w = (1-a)**np.arange(n-1, -1, -1) # This is reverse order to match Series order
+
+    # Calculate exponential moving average
+    ewma = np.sum(w * x) / np.sum(w)
+
+    # Calculate bias
+    bias = np.sum(w)**2 / (np.sum(w)**2 - np.sum(w**2))
+
+    # Calculate exponential moving variance with bias
+    varcalc[i] = bias * np.sum(w * (x - ewma)**2) / np.sum(w)
+
+df['var_calc'] = varcalc
+```
+
+which gives us a dataframe that looks like:
+
+{{<figure src="images/dataframe.png" width="small">}}{{</figure>}}
+
 
 # Exponentially weighted moving standard deviation
 
