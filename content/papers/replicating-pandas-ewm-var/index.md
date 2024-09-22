@@ -1,10 +1,7 @@
 ---
-title: "Replicating Pandas EWM variance and covariance"
+title: "Replicating Pandas exponentially weighted variance"
 summary: "
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-    ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-    a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-    pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+    Learn why calculating an exponentially weighted variance doesn't yield a correct estimation of variance.
 "
 
 date: "2024-09-17"
@@ -14,26 +11,27 @@ authors:
     - Adrian Letchford
 categories:
     - mathematics
-acknowledgements: "All figures in this article were made with [Figma](http://figma.com)."
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at varius turpis. Ut nec purus efficitur, dictum urna eget, molestie ante. Vestibulum sed scelerisque mi. Cras sed lorem ac ante rhoncus egestas quis sed augue. Fusce eget venenatis felis, lobortis blandit felis. Nunc feugiat eu neque ac fringilla. Curabitur in felis facilisis, dignissim enim eget, posuere massa. Aliquam gravida ut mi in aliquet. Fusce convallis at tortor sodales lobortis. Fusce sem enim, cursus quis purus rutrum, tincidunt accumsan est.
+You are most likely familiar with the idea of calculating averages with an exponential weighting. The idea is that you have a higher weight to more recent information. This is quite an intuitive thing to do as all information is relevent, but recent information is more relevant.
 
-# Exponentially weighted moving average
+The weights for an exponentially weighted average look like:
+$$
+w_t = (1 - \alpha)^t
+$$
+for $t \in [0, \dots, T]$. And the exponentially weighted average of a series $X_t$ looks like:
+$$
+\bar{X}_T = \frac{1}{\sum_t w_t} \sum_t w_t X_t
+$$
 
-This is easy, but we'll use this to create the structure of how we'll explore the harder stuff.
+You can easily calculate an exponentially weighted moving average in Pandas with:
+```python
+df.ewm(alpha=0.1).mean()
+```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at varius turpis. Ut nec purus efficitur, dictum urna eget, molestie ante. Vestibulum sed scelerisque mi. Cras sed lorem ac ante rhoncus egestas quis sed augue. Fusce eget venenatis felis, lobortis blandit felis. Nunc feugiat eu neque ac fringilla. Curabitur in felis facilisis, dignissim enim eget, posuere massa. Aliquam gravida ut mi in aliquet. Fusce convallis at tortor sodales lobortis. Fusce sem enim, cursus quis purus rutrum, tincidunt accumsan est. Sed egestas eleifend ligula, et scelerisque enim maximus sit amet. Fusce a purus a est tristique hendrerit. Donec scelerisque in dolor quis gravida. Pellentesque pretium nisi purus, sed feugiat ligula euismod a.
+If you calculate the exponentially weighted average yourself you will find that it matches the result Pandas gives you. However, we're about to see that if we try doing this with the variance, we will get a very poor estimate. This is because of something called [estimation bias](https://en.wikipedia.org/wiki/Bias_of_an_estimator).
 
-Mauris in iaculis risus. Nam auctor blandit velit. Nulla condimentum diam diam, vitae tincidunt velit bibendum id. Nullam aliquet eros ac tortor vestibulum, in blandit velit molestie. Maecenas varius luctus bibendum. Nulla facilisi. Pellentesque eleifend nibh laoreet nibh auctor, sed aliquam turpis sagittis. Donec ultrices, dui ut gravida bibendum, lacus odio hendrerit lacus, sit amet consequat arcu mi nec nisl. Sed laoreet nibh nisl, accumsan dignissim nisl consectetur porta.
-
-Donec a lectus non ipsum aliquet malesuada sit amet in nulla. Nulla vitae dictum erat. Nullam ut turpis et enim euismod porta. Donec ut ornare nisl. Integer efficitur neque vitae enim rutrum auctor. Morbi sed metus orci. Maecenas consectetur at velit ac consectetur. Ut tincidunt augue eget eros efficitur, vel lacinia orci porta. Morbi volutpat vulputate ullamcorper. Ut ornare at ante imperdiet fermentum.
-
-# Exponentially weighted moving variance
-
-For the exponentialy weighted moving average, we took the formula for the expected value, plugged in sample values and we got an estimate of the mean. We're about to see that if we try this with the variance, we will get a very poor estimate. This is because of something called [estimation bias](https://en.wikipedia.org/wiki/Bias_of_an_estimator).
-
-## What is bias?
+# What is bias?
 
 An estimator's bias is the difference between the estimator's expected value and the true value of the parameter being estimated--in this case the variance. A biased estimator is one where this difference is not zero and an unbiased estimator is one where this difference is zero.
 
@@ -82,7 +80,7 @@ estimates.mean()
 ```
 gives us about 0.8! Our estimator is off by 0.2. This is bias.
 
-## Where does bias come from?
+# Where does bias come from?
 
 Let's go back to the definition of variance and how we turned it into a sample estimate. To form our estimator, we swapped $\mu$ for the sample mean:
 $$
@@ -111,7 +109,7 @@ estimates.mean()
 By knowing the population mean we can get an unbiased estimate of the variance from a set of samples. In practice, we do not know the population mean. Luckily, we can quantify bias and correct for it.
 
 
-## Quantifying bias
+# Quantifying bias
 
 So far, we have seen that $\hat{\sigma}^2$ is a biased estimate of the population variance. We discovered this by simulating many values for $\hat{\sigma}^2$ and taking the average. This simulation showed that:
 $$
@@ -176,7 +174,7 @@ $$
 E[\hat{\sigma}^2] = (1 - \frac{1}{n}) \sigma^2 = (1 - \frac{1}{5}) \times 1 = 0.8
 $$
 
-## Unbiased estimator
+# Unbiased estimator
 
 Now that we know what the exact value of $E[\hat{\sigma}^2]$ we can figure out how to correct $\hat{\sigma}^2$ so that it is an unbiased estimator of $\sigma^2$.
 
@@ -203,7 +201,7 @@ $$
 \end{aligned}
 $$
 
-## Unbiased weighted estimator
+# Unbiased weighted estimator
 
 Now to expand the above to cover the case when the samples are weighted.
 
@@ -253,7 +251,7 @@ b \hat{\sigma}^2
 $$
 
 
-## Replicating Pandas exponentially weighted variance
+# Replicating Pandas exponentially weighted variance
 
 We now have all the tools we need to replicate the exponentially weighted variance from Pandas.
 
@@ -302,10 +300,3 @@ df['var_calc'] = varcalc
 which gives us a dataframe that looks like:
 
 {{<figure src="images/dataframe.png" width="small">}}{{</figure>}}
-
-
-# Exponentially weighted moving standard deviation
-
-# Exponentially weighted moving covariance
-
-# Summary
