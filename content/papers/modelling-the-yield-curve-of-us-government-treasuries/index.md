@@ -8,7 +8,6 @@ authors:
   - Adrian Letchford
 categories:
   - mathematics
-  - engineering
   - finance
 acknowledgements: 'All figures in this article were made with [Figma](http://figma.com).'
 ---
