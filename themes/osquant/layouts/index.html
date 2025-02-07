@@ -10,10 +10,10 @@
     <div id="splash" class="image light">
 
         {{- with $featured -}}
-            <img src="{{ $featured.Permalink }}" />
+            <img src="{{ $featured.Permalink }}" class="front_page" />
         {{- else -}}
             {{- with $.Site.Params.images }}
-                <img src="{{ index . 0 | absURL }}" />
+                <img src="{{ index . 0 | absURL }}" class="front_page" />
             {{ end -}}
         {{- end -}}
 
