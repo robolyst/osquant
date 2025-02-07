@@ -6,6 +6,7 @@
         "extensions": [
           "donjayamanne.githistory",
           "ms-python.python",
+          "ms-toolsai.jupyter",
           "quarto.quarto"
         ]
       }
