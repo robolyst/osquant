@@ -84,7 +84,7 @@ $$
 y_t(\tau)
 $$
 
-and we’ll write the forecast h steps ahead as:
+and we'll write the forecast h steps ahead as:
 
 $$
 \hat{y}_{t+h}(\tau)
@@ -92,13 +92,102 @@ $$
 
 # Factors
 
-- Yields can be explained with very few factors.
-    - Do a PCA
-    - Show the high explainability
-    - show the factor loadings
-    - The literature have given these factors names
+Have a close look at the chart showing the different yields over time. Notice how they're all very similar. They're not all exactly the same, but they generally follow the same path. We could say that all these different yields have some common factors--they are related somehow.
 
-# Modelling the factor loadings
+The idea behind factors is that some series $x$ can be written as a linear combination of some number of factors plus an error term:
+$$
+x_t = \beta_1 f_1 + \beta_2 f_2 + \dots + \beta_n f_n + e_t
+$$
+These factors become extremely useful when you use the same factors to model a multivariate series:
+$$
+\boldsymbol{x}_t = \boldsymbol{\beta}\boldsymbol{f}_t + \boldsymbol{e}_t
+$$
+
+The most common way of investigating factors when you have a multivariate time series is to use PCA. The idea behind PCA is to find a set of completely uncorrelated time series to act as factors and the corresponding factor loadings. PCA is a very old, roboust and well studied algorithm. If you want to learn about it I recommend you read [Principal Component Analysis](https://gregorygundersen.com/blog/2022/09/17/pca/) which is a fantastic overview.
+
+Running a PCA over the treasury yields confirms out intuition that there are common factors. We can plot the percentage of variance explained by the first n factors and we see that `98.33%` of the variance is explained by the first factor and `99.98%` of the variance is explained by the first 3 factors.
+
+```{python}
+#| echo: false
+from matplotlib.ticker import StrMethodFormatter
+import numpy as np
+
+df = rates.set_index(['date', 'tenor'])['value'].unstack().dropna()
+
+X = (df - df.mean()).values
+
+U, S, W = np.linalg.svd(X, full_matrices=False)
+
+eigen_values = S**2
+explained = eigen_values / eigen_values.sum()
+
+# plt.figure(figsize=(3, 2))
+plt.plot(explained.cumsum(), '.-')
+
+ax = plt.gca()
+ax.yaxis.set_major_formatter(StrMethodFormatter('{x:0.1%}'))
+ax.set_xticks(range(len(explained)))
+plt.title("Cumulative percent of variance\nexplained by components");
+```
+
+Using PCA, we've found 3 factors that explains just about 100% of 8 treasury yields. These three factors do have some intuition behind them. Take a look at the three factors:
+
+```{python}
+#| echo: false
+df = rates.set_index(['date', 'tenor'])['value'].unstack().dropna()
+X = (df - df.mean()).values
+_, _, W = np.linalg.svd(X, full_matrices=False)
+W = -W  # Flip so they're a little more intuitive
+factors = X @ W.T
+reconstructed = factors @ W
+
+fig = plt.figure(figsize=(9, 3))
+
+plt.plot(factors[:, 0], label='Factor 1')
+plt.plot(factors[:, 1], label='Factor 2')
+plt.plot(factors[:, 3], label='Factor 3')
+plt.legend()
+```
+
+The first factor looks like the long term interest rate from figure X. This makes sense. All the yields appear to mostly follow the long term rate (30 year yield) with larger deviations for shorter yields. These deviations must be captured in the other two factors--they explain short term deviations in yield.
+
+The real insight comes from looking at the factor loadings. Let's see the factor loadings plotted against the time to maturity:
+
+```{python}
+#| echo: false
+term = np.array([col for col in df.columns])
+
+plt.plot(term, W[0, :], '.-', label='Factor 1')
+plt.plot(term, W[1, :], '.-', label='Factor 2')
+plt.plot(term, -W[2, :], '.-', label='Factor 3')
+plt.legend()
+```
+
+The first factor loading is virtually unchanged across the terms. This means that the first factor contributes the same amount for each yield series. This makes sense as we've discovered that it represents the long term yield and explains over 98% of all the variance across all yields. We cal also see that the remaining two factors peak on the short terms and are small on the long term. So, we can safely conclude that the first factor represents the long term yield.
+
+The second factor loading peaks for the shortest yields and then declines. We can interpret this factor as the short term yield.
+
+The third factor loading peaks for more medium term yilds. We can interpret this factor as the medium term yield.
+
+The idea of a three factor yield model is fairly well covered in the literature. The long term, medium term and short term factors are sometimes referred to as level, slope and curvature.
+
+#### Drawback of PCA
+
+There are two drawbacks with PCA. The first is that you need clean timeseries to fit the PCA model to. For the yields that we are working on, there are gaps in the data. The most notable gap is that the 20 year yields start the early 60s but the 30 year yields do not start until the late 70s. And then, the 20 year yields stop for an extended period of time around 1990.
+
+```{python}
+#| echo: false
+df = rates.set_index(['date', 'tenor'])['value'].unstack()
+fig= plt.figure(figsize=(9, 10))
+df.plot(subplots=True, ax=plt.gca(), sharex=True, yticks=[]);
+plt.gcf().patch.set_visible(False)
+```
+
+The second drawback is that we will need to calculate the PCA factors and factor loadings in a rolling window style fashion. This means that from time point to time point, the entire history of the factors are changing and the future of the factors might not be statistically similar to their point in time estimate.
+
+The next section gets around PCA entirely.
+
+# Modelling factor loadings
 
 - Model the factor loadings
     - Explain why knowing factor loadings ahead of time is a good idea
