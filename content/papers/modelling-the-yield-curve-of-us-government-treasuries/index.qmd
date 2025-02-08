@@ -187,7 +187,65 @@ The second drawback is that we will need to calculate the PCA factors and factor
 
 The next section gets around PCA entirely.
 
-# Modelling factor loadings
+# Fundamental loadings
+
+The factor loadings shown in figure XX appear to be quite smooth with respect to the maturity term. This suggests that we could model the factors as a function of maturity. This means, we can know the factor loadings without knowing the factors.
+
+If we knew the factor loadings but didn't know the factors, we can easily solve equation XX with a least squares regression. We would do this regression cross-sectionally. That is, at each time $t$ we would take the known yields, the known factor loadings and regress the factors. This has the huge advantages that if there are any yields missing they are simply excluded from the regression and that the factor values at time $t$ do not depend on the historical values of the yields. This solves the two drawbacks of PCA.
+
+## Modelling the loadings
+
+The paper by Diebold and Li present the following functions for three yield factors `[^Diebold2003]`{=markdown}:
+
+$$
+\begin{aligned}
+  f_1(\tau) &= 1 \\\
+  f_2(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} \\\
+  f_3(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau} \\\
+\end{aligned}
+$$
+
+In their paper, they call this model the "Nelson-Siegel yield curve" as they base it on another paper. However, they do make some modifications of their own.
+
+These three functions look like this:
+```{python}
+#| echo: false
+lam = 0.0609
+
+def f2(t: float, lam: float = lam):
+    """t is maturity in months."""
+    return (1 - np.exp(-lam * t)) / (lam * t)
+
+
+def f3(t: float, lam: float = lam):
+    """t is maturity in months."""
+    return (1 - np.exp(-lam * t)) / (lam * t) - np.exp(-lam * t)
+
+
+t = np.array([1, 2, 3, 5, 7, 10, 20, 30]) * 12
+
+plt.plot(t, np.ones(len(t)), '.-', label="$f_1$")
+plt.plot(t, f2(t), '.-', label="$f_2$")
+plt.plot(t, f3(t), '.-', label="$f_3$")
+plt.xlabel("Months to maturity")
+plt.legend()
+```
+
+The parameter $\lambda$ control how quickly the curve decay to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diabold and Li's paper they note that $\lambda$ controls which maturity $f_3(\tau)$ reaches it's maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $f_3(\tau)$ at a maturity of about 30 months.
+
+
+
+$$
+y_t(\tau) = \beta_{1,t} + \beta_{2,t}\left(\frac{1 - e^{\lambda_t \tau}}{\lambda_t \tau}\right) + \beta_{3,t}\left(\frac{1 - e^{\lambda_t \tau}}{\lambda_t \tau} - e^{\lambda_t \tau}\right) + \epsilon_{t,\tau}
+$$
+
+
+We'll write the yield at time $t$ for a term of $\tau$ (in years) as:
+$$
+y_t(\tau)
+$$
+
+## Calculating factors
 
 - Model the factor loadings
     - Explain why knowing factor loadings ahead of time is a good idea
@@ -212,3 +270,13 @@ The next section gets around PCA entirely.
 - United States Equity (E3): https://www.alacra.com/alacra/help/barra_handbook_US.pdf
 - Barra Risk Model Handbook (I downloaded too): https://roycheng.cn/files/riskModels/barra_risk_model_handbook.pdf
 - **Forecasting the Term Structure of Government Bond Yields:** https://papers.ssrn.com/sol3/papers.cfm?abstract_id=461369
+
+
+{{% citation
+    id="Diebold2003"
+    author="Francis X. Diebold & Canlin Li"
+    title="Forecasting the Term Structure of Government Bond Yields"
+    publication="SSRN"
+    year="2003"
+    link="https://ssrn.com/abstract=461369"
+%}}
