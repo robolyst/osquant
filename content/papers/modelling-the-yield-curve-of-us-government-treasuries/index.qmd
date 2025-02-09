@@ -369,16 +369,6 @@ We now have a model $\boldsymbol{y}_t = \boldsymbol{\beta}_t\boldsymbol{f}_t + \
     - Produce the forecasts of each of the factors and show the r2 scores and correlation plots.
     - Make some fun interactive visuals to explore the model
 
-# References
-
-- **Characteristics of Factor Portfolios:** https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1601414
-- **Relationship between Ridge regression and PCA:** https://yuhuini.github.io/2018-12-01-relationship-between-ridge-regression-and-pca
-- Global equity model handbook: https://www.alacra.com/alacra/help/barra_handbook_gem.pdf
-- United States Equity (E3): https://www.alacra.com/alacra/help/barra_handbook_US.pdf
-- Barra Risk Model Handbook (I downloaded too): https://roycheng.cn/files/riskModels/barra_risk_model_handbook.pdf
-- **Forecasting the Term Structure of Government Bond Yields:** https://papers.ssrn.com/sol3/papers.cfm?abstract_id=461369
-
-
 {{% citation
     id="Diebold2003"
     author="Francis X. Diebold & Canlin Li"
