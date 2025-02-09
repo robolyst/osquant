@@ -96,41 +96,85 @@ If we knew the factor loadings but didn't know the factors, we can easily solve 
 
 ## Modelling the loadings
 
-The paper by Diebold and Li present the following functions for three yield factors [^Diebold2003]:
+The paper by Diebold and Li present what they call the Nelson-Siegel yield curve [^Diebold2003]:
+$$
+y_t(\tau) = f_{1,t} + f_{2,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau}\right) + f_{3,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau}\right)$$
+In their paper, they call this model the "Nelson-Siegel yield curve" as they base it on another paper. However, they do make some modifications of their own.
 
+The equation says that the yield $y$ of maturity $\tau$ at time $t$ is a function of three factors ($f_{1,t}$, $f_{2,t}$ and $f_{3,t}$) weighted by the following factor loadings:
 $$
 \begin{aligned}
-  f_1(\tau) &= 1 \\\
-  f_2(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} \\\
-  f_3(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau} \\\
+  \beta_1(\tau) &= 1 \\\
+  \beta_2(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} \\\
+  \beta_3(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau} \\\
 \end{aligned}
 $$
 
-In their paper, they call this model the "Nelson-Siegel yield curve" as they base it on another paper. However, they do make some modifications of their own.
-
-These three functions look like this:
+These three factor loadings look like this:
 
 ![](index_files/figure-markdown_strict/cell-8-output-1.svg)
 
-The parameter $\lambda$ control how quickly the curve decay to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diabold and Li's paper they note that $\lambda$ controls which maturity $f_3(\tau)$ reaches it's maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $f_3(\tau)$ at a maturity of about 30 months.
+The parameter $\lambda$ control how quickly the curve decays to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diabold and Li's paper they note that $\lambda$ controls which maturity $f_3(\tau)$ reaches its maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $f_3(\tau)$ at a maturity of about 30 months.
 
-$$
-y_t(\tau) = \beta_{1,t} + \beta_{2,t}\left(\frac{1 - e^{\lambda_t \tau}}{\lambda_t \tau}\right) + \beta_{3,t}\left(\frac{1 - e^{\lambda_t \tau}}{\lambda_t \tau} - e^{\lambda_t \tau}\right) + \epsilon_{t,\tau}
-$$
+Diebold and Li point out the following about this model [^Diebold2003]:
 
-We'll write the yield at time $t$ for a term of $\tau$ (in years) as:
+-   When the time to maturity $\tau = \infty$ then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
+
+-   The loading $\beta_2(\tau)$ starts at 1 for a maturty of 0 and decays to 0 as the maturity increaess. This factor ($f_{t,2}$) can been seen as a short-term factor.
+
+-   The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
+
+-   The short term factor can vew viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
+
+-   The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
+
+We can take this Nelson-Siegel yield curve and add on an error term at the end to turn it into a full factor model:
 $$
-y_t(\tau)
+y_t(\tau) = \beta_1(\tau)f_{1,t} + \beta_2(\tau)f_{2,t} + \beta_3(\tau)f_{3,t} + e_t(\tau)
 $$
 
 ## Calculating factors
 
--   Model the factor loadings
-    -   Explain why knowing factor loadings ahead of time is a good idea
-    -   Present a model of the factor loadings
-    -   Produce the factors
-    -   Visually show how well the factor model replicates the yields over time.
-    -   Visually show various different yield curves. Maybe make a slide over time so the user can see the real and fitted curve at any point in time.
+We can take this Nelson-Siegel yield curve, combine the different yields into a vector and add on an error term at the end to turn it into a full factor model:
+
+$$
+\left[
+    \begin{matrix}
+        y_t(\tau_1) \\\
+        y_t(\tau_2) \\\
+        \vdots \\\
+        y_t(\tau_n) \\\
+    \end{matrix}
+\right] = 
+\left[
+      \begin{matrix}
+        \beta_1(\tau_1) & \beta_1(\tau_1) & \beta_1(\tau_1) \\\
+        \beta_1(\tau_2) & \beta_1(\tau_2) & \beta_1(\tau_2) \\\
+        \vdots & \vdots & \vdots \\\
+        \beta_1(\tau_n) & \beta_1(\tau_n) & \beta_1(\tau_n) \\\
+    \end{matrix}
+ \right] \left[\begin{matrix}
+        f_{1,t} \\\
+        f_{2,t} \\\
+        f_{3,t} \\\
+    \end{matrix}\right] + \boldsymbol{e}_t
+$$
+
+$$
+\boldsymbol{y}_t = \boldsymbol{\beta}_t\boldsymbol{f}_t + \boldsymbol{e}_t
+$$
+
+At each time step $t$ we do a cross-sectional regression of $\boldsymbol{\beta}_t\boldsymbol{f}_t = \boldsymbol{y}_t$. Giving us a time series of three factors.
+
+![](index_files/figure-markdown_strict/cell-9-output-1.svg)
+
+The model appears to capture the general shape of the yield curve:
+
+![](index_files/figure-markdown_strict/cell-10-output-1.svg)
+
+There do appear to be persistent errors.
+
+![](index_files/figure-markdown_strict/cell-11-output-1.svg)
 
 # Modelling the factors
 
