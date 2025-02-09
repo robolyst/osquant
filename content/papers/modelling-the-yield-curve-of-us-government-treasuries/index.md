@@ -178,6 +178,8 @@ There do appear to be persistent errors.
 
 # Modelling the factors
 
+We now have a model $\boldsymbol{y}_t = \boldsymbol{\beta}_t\boldsymbol{f}_t + \boldsymbol{e}_t$ where we know the factor loadings $\boldsymbol{\beta}_t$ ahead of time and we know the factors $\boldsymbol{f}_t$ once time $t$ is known. We'd like to be able to predict the factors so that we can predict $\boldsymbol{y}_t$.
+
 -   Model the factors
     -   Show the statistical features of each of the factors
     -   Show the models that suitable given the statistical features
