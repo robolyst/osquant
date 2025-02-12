@@ -102,7 +102,9 @@ The $f$ variables are called the factors and the $\beta$ variables are called th
 
 These factors become extremely useful when you use the same factors to model a multivariate series:
 $$
-\boldsymbol{x}_t = \boldsymbol{\beta}\boldsymbol{f}_t + \boldsymbol{e}_t
+\begin{align}
+\boldsymbol{x}_t = \boldsymbol{\beta}\boldsymbol{f}_t + \boldsymbol{e}_t \label{1} \tag{1}
+\end{align}
 $$
 
 The most common way of investigating factors when you have a multivariate time series is to use [Principle Component Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) (PCA). The idea behind PCA is to find a set of completely uncorrelated time series to act as factors and the corresponding factor loadings. The factors found by PCA are called principle components, but we will continue to use the term factors. PCA is a very old, roboust and well studied algorithm. If you want to learn about it I recommend you read [Principal Component Analysis](https://gregorygundersen.com/blog/2022/09/17/pca/) which is a fantastic overview.
@@ -267,15 +269,46 @@ The next section gets around PCA entirely.
 
 # Fundamental loadings
 
-The factor loadings shown in figure XX appear to be quite smooth with respect to the maturity term. This suggests that we could model the factors as a function of maturity. This means, we can know the factor loadings without knowing the factors.
+The factor loadings shown in Figure 5 appear to be smooth with respect to maturity. This suggests that we could model the factor loadings as a function of maturity. Given such a function, we can rewrite equation $\eqref{1}$ as:
 
-If we knew the factor loadings but didn't know the factors, we can easily solve equation XX with a least squares regression. We would do this regression cross-sectionally. That is, at each time $t$ we would take the known yields, the known factor loadings and regress the factors. This has the huge advantages that if there are any yields missing they are simply excluded from the regression and that the factor values at time $t$ do not depend on the historical values of the yields. This solves the two drawbacks of PCA.
+$$
+\begin{aligned}
+\boldsymbol{y}_t &= \boldsymbol{\beta}\boldsymbol{f}_t + \boldsymbol{e}_t \\\
+\left[
+    \begin{matrix}
+        y_t(\tau_1) \\\
+        y_t(\tau_2) \\\
+        \vdots \\\
+        y_t(\tau_n) \\\
+    \end{matrix}
+\right] &= 
+\left[
+      \begin{matrix}
+        \beta_1(\tau_1) & \beta_2(\tau_1) & \beta_3(\tau_1) \\\
+        \beta_1(\tau_2) & \beta_2(\tau_2) & \beta_3(\tau_2) \\\
+        \vdots & \vdots & \vdots \\\
+        \beta_1(\tau_n) & \beta_2(\tau_n) & \beta_3(\tau_n) \\\
+    \end{matrix}
+ \right] \left[\begin{matrix}
+        f_{1,t} \\\
+        f_{2,t} \\\
+        f_{3,t} \\\
+    \end{matrix}\right] + \boldsymbol{e}_t \label{2} \tag{2}
+\end{aligned}
+$$
+
+Where $\tau$ is the time to maturity, $y_t(\tau_n)$ is the yield to maturity $\tau_n$ at time $t$, $\beta_i(\tau_n)$ is a function for the $i$<sup>th</sup> factor loading for maturity $\tau_n$, $f_{i,t}$ is the $i$<sup>th</sup> factor at time $t$ and $\boldsymbol{e}_t$ is a vector of the error terms.
+
+with a least squares regression.
+
+We would do this regression cross-sectionally. That is, at each time $t$ we would take the known yields, the known factor loadings and regress the factors. This has the huge advantages that if there are any yields missing they are simply excluded from the regression and that the factor values at time $t$ do not depend on the historical values of the yields. This solves the two drawbacks of PCA.
 
 ## Modelling the loadings
 
 The paper by Diebold and Li present what they call the Nelson-Siegel yield curve `[^Diebold2003]`{=markdown}: 
 $$
-y_t(\tau) = f_{1,t} + f_{2,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau}\right) + f_{3,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau}\right)$$
+y_t(\tau) = f_{1,t} + f_{2,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau}\right) + f_{3,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau}\right)
+$$
 In their paper, they call this model the "Nelson-Siegel yield curve" as they base it on another paper. However, they do make some modifications of their own.
 
 The equation says that the yield $y$ of maturity $\tau$ at time $t$ is a function of three factors ($f_{1,t}$, $f_{2,t}$ and $f_{3,t}$) weighted by the following factor loadings:
