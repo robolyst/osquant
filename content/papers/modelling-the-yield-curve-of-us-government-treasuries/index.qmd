@@ -318,7 +318,7 @@ y_t(\tau) = f_{1,t} + f_{2,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau}\rig
 $$
 In their paper, they call this model the "Nelson-Siegel yield curve" as they base it on another paper. However, they do make some modifications of their own.
 
-The equation says that the yield $y$ of maturity $\tau$ at time $t$ is a function of three factors ($f_{1,t}$, $f_{2,t}$ and $f_{3,t}$) weighted by the following factor loadings:
+The equation says that the yield $y$ of maturity $\tau$ (in months) at time $t$ is a function of three factors ($f_{1,t}$, $f_{2,t}$ and $f_{3,t}$) weighted by the following factor loadings:
 $$
 \begin{aligned}
   \beta_1(\tau) &= 1 \\\
@@ -330,6 +330,8 @@ $$
 These three factor loadings look like this:
 ```{python}
 #| echo: false
+#| fig-cap: "<b>Figure 7:</b> Factor loadings from the Nelson-Siegel yield curve. The parameter $\\lambda$ is set to $0.0609$ which maximises the third factor loading at 30 months."
+
 lam = 0.0609
 
 def f2(t: float, lam: float = lam):
@@ -342,35 +344,40 @@ def f3(t: float, lam: float = lam):
     return (1 - np.exp(-lam * t)) / (lam * t) - np.exp(-lam * t)
 
 
-t = np.array([1, 2, 3, 5, 7, 10, 20, 30]) * 12
+t = np.array([1/12, 3/12, 6/12, 1, 2, 3, 5, 7, 10, 20, 30]) * 12
 
-plt.plot(t, np.ones(len(t)), '.-', label="$f_1$")
-plt.plot(t, f2(t), '.-', label="$f_2$")
-plt.plot(t, f3(t), '.-', label="$f_3$")
-plt.xlabel("Months to maturity")
+plt.plot(SERIES, np.ones(len(t)), '.-', label="$\\beta_1(\\tau)$")
+plt.plot(SERIES, f2(t), '.-', label="$\\beta_2(\\tau)$")
+plt.plot(SERIES, f3(t), '.-', label="$\\beta_3(\\tau)$")
 plt.legend()
+
+ax = plt.gca()
+ax.grid(axis = "y", color='black', alpha=0.15, zorder=0, linestyle='--')
+ax.spines['bottom'].set_color(None)
+ax.spines['top'].set_color(None) 
+ax.spines['right'].set_color(None)
+ax.spines['left'].set_color(None)
+plt.xticks(rotation=45, ha='right', rotation_mode='anchor')
+
+ax.patch.set_visible(False)
+plt.gcf().patch.set_visible(False)
 ```
 
-The parameter $\lambda$ control how quickly the curve decays to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diabold and Li's paper they note that $\lambda$ controls which maturity $f_3(\tau)$ reaches its maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $f_3(\tau)$ at a maturity of about 30 months.
+The parameter $\lambda$ control how quickly the curve decays to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diabold and Li's paper they note that $\lambda$ controls which maturity $\beta_3(\tau)$ reaches its maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $\beta_3(\tau)$ at a maturity of about 30 months.
 
-Diebold and Li point out the following about this model `[^Diebold2003]`{=markdown}:
+A few facts on this model:
 
-* When the time to maturity $\tau = \infty$ then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
+When the time to maturity is maximised ($\tau = \infty$) then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
 
-* The loading $\beta_2(\tau)$ starts at 1 for a maturty of 0 and decays to 0 as the maturity increaess. This factor ($f_{t,2}$) can been seen as a short-term factor.
+The loading $\beta_2(\tau)$ starts at 1 for a maturty of 0 and decays to 0 as the maturity increaess. This factor ($f_{t,2}$) can been seen as a short-term factor.
 
-*  The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
+The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
 
-* The short term factor can vew viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
+The short term factor can be viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
 
-* The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
+The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
 
-We can take this Nelson-Siegel yield curve and add on an error term at the end to turn it into a full factor model:
-$$
-y_t(\tau) = \beta_1(\tau)f_{1,t} + \beta_2(\tau)f_{2,t} + \beta_3(\tau)f_{3,t} + e_t(\tau)
-$$
-
-## Calculating factors
+# Calculating factors
 
 We can take this Nelson-Siegel yield curve, combine the different yields into a vector and add on an error term at the end to turn it into a full factor model:
 
