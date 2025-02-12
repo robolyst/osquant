@@ -269,11 +269,14 @@ The next section gets around PCA entirely.
 
 # Fundamental loadings
 
-The factor loadings shown in Figure 5 appear to be smooth with respect to maturity. This suggests that we could model the factor loadings as a function of maturity. Given such a function, we can rewrite equation $\eqref{1}$ as:
+The factor loadings shown in Figure 5 appear smooth with respect to maturity. This suggests that we could model the factor loadings ($\beta$) as a function of maturity ($\tau$). Given such a function, we can rewrite equation $\eqref{1}$ as:
+$$
+\boldsymbol{y}_t = \boldsymbol{\beta}\boldsymbol{f}_t + \boldsymbol{e}_t
+$$
+
+expanding out the matrices:
 
 $$
-\begin{aligned}
-\boldsymbol{y}_t &= \boldsymbol{\beta}\boldsymbol{f}_t + \boldsymbol{e}_t \\\
 \left[
     \begin{matrix}
         y_t(\tau_1) \\\
@@ -281,7 +284,7 @@ $$
         \vdots \\\
         y_t(\tau_n) \\\
     \end{matrix}
-\right] &= 
+\right] = 
 \left[
       \begin{matrix}
         \beta_1(\tau_1) & \beta_2(\tau_1) & \beta_3(\tau_1) \\\
@@ -293,15 +296,19 @@ $$
         f_{1,t} \\\
         f_{2,t} \\\
         f_{3,t} \\\
-    \end{matrix}\right] + \boldsymbol{e}_t \label{2} \tag{2}
-\end{aligned}
+    \end{matrix}\right] + \left[\begin{matrix}
+        e_{1,t} \\\
+        e_{2,t} \\\
+        \vdots \\\
+        e_{n,t} \\\
+    \end{matrix}\right] \label{2} \tag{2}
 $$
 
 Where $\tau$ is the time to maturity, $y_t(\tau_n)$ is the yield to maturity $\tau_n$ at time $t$, $\beta_i(\tau_n)$ is a function for the $i$<sup>th</sup> factor loading for maturity $\tau_n$, $f_{i,t}$ is the $i$<sup>th</sup> factor at time $t$ and $\boldsymbol{e}_t$ is a vector of the error terms.
 
-with a least squares regression.
+We solve for $\boldsymbol{f}_t$ with a cross-sectional regression. That is, at each time $t$ we would take the yields $\boldsymbol{y}_t$, the factor loadings $\boldsymbol{\beta}$ and regress the factors $\boldsymbol{f}_t$.
 
-We would do this regression cross-sectionally. That is, at each time $t$ we would take the known yields, the known factor loadings and regress the factors. This has the huge advantages that if there are any yields missing they are simply excluded from the regression and that the factor values at time $t$ do not depend on the historical values of the yields. This solves the two drawbacks of PCA.
+This method has the advantages that (1) if there are any yields missing at time $t$ they are simply excluded from the regression and (2) that the factor values at time $t$ do not depend on the historical values of the yields. This solves the two drawbacks of PCA.
 
 ## Modelling the loadings
 
