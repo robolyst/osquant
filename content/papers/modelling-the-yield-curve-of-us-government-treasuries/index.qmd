@@ -150,7 +150,7 @@ ax.patch.set_visible(False)
 plt.gcf().patch.set_visible(False)
 ```
 
-Using PCA, we've found 3 factorss that explains just about 100% of 8 treasury yields. These three factors do have some intuition behind them. Take a look:
+Using PCA, we've found 3 factors that explains just about 100% of 8 treasury yields. These three factors do have some intuition behind them. Take a look:
 
 ```{python}
 #| echo: false

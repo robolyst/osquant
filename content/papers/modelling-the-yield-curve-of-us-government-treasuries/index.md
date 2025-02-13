@@ -61,7 +61,7 @@ Running a PCA over the treasury yields confirms our intuition that there are com
 <figcaption aria-hidden="true"><b>Figure 3:</b> The percentage of variance explained by the first n factors from a PCA decomposition. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. We can see that over 98% of the variance is explained by a single factor.</figcaption>
 </figure>
 
-Using PCA, we've found 3 factorss that explains just about 100% of 8 treasury yields. These three factors do have some intuition behind them. Take a look:
+Using PCA, we've found 3 factors that explains just about 100% of 8 treasury yields. These three factors do have some intuition behind them. Take a look:
 
 <figure>
 <img src="index_files/figure-markdown_strict/cell-6-output-1.svg" alt="Figure 4: The first three factors of the treasury yields. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. The 20 year yields have a gap in them (discussed later) and were filled in with the 30 year yields." />
