@@ -1,7 +1,7 @@
 ---
 title: Modelling the yield curve of US government treasuries
-summary: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui, a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus. '
-date: '2025-02-07'
+summary: ' I show you how to build a factor model of US treasury yields. The factor model captures fundamental features of the whole yield curve. '
+date: '2025-02-13'
 type: paper
 mathjax: true
 authors:
@@ -9,7 +9,7 @@ authors:
 categories:
   - mathematics
   - finance
-acknowledgements: All figures in this article were made with [Figma](http://figma.com).
+hover_color: '#FFFF00'
 ---
 
 
@@ -179,46 +179,23 @@ The instantaneous yield depends on both the long-term and short-term factors: $y
 
 # Calculating factors
 
-We can take this Nelson-Siegel yield curve, combine the different yields into a vector and add on an error term at the end to turn it into a full factor model:
+Now that we have functions for the factor loadings, we can take equation $\eqref{2}$ and at each time step $t$ do a cross-sectional regression of $\boldsymbol{\beta}\boldsymbol{f}_t = \boldsymbol{y}_t$. Giving us a time series of three factors.
 
-$$
-\left[
-    \begin{matrix}
-        y_t(\tau_1) \\\
-        y_t(\tau_2) \\\
-        \vdots \\\
-        y_t(\tau_n) \\\
-    \end{matrix}
-\right] = 
-\left[
-      \begin{matrix}
-        \beta_1(\tau_1) & \beta_1(\tau_1) & \beta_1(\tau_1) \\\
-        \beta_1(\tau_2) & \beta_1(\tau_2) & \beta_1(\tau_2) \\\
-        \vdots & \vdots & \vdots \\\
-        \beta_1(\tau_n) & \beta_1(\tau_n) & \beta_1(\tau_n) \\\
-    \end{matrix}
- \right] \left[\begin{matrix}
-        f_{1,t} \\\
-        f_{2,t} \\\
-        f_{3,t} \\\
-    \end{matrix}\right] + \boldsymbol{e}_t
-$$
+<figure>
+<img src="index_files/figure-markdown_strict/cell-10-output-1.svg" alt="Figure 8: The three factors found by a cross-sectional regression of the loadings onto the yields. The first factor captures the long term yield. The second factor captures the short term yield and the third captures medium term yields." />
+<figcaption aria-hidden="true"><b>Figure 8:</b> The three factors found by a cross-sectional regression of the loadings onto the yields. The first factor captures the long term yield. The second factor captures the short term yield and the third captures medium term yields.</figcaption>
+</figure>
 
-$$
-\boldsymbol{y}_t = \boldsymbol{\beta}_t\boldsymbol{f}_t + \boldsymbol{e}_t
-$$
+We can reproduce Figure 1 and add in the fitted yield curve. The model captures the general shape of the yield curve:
 
-At each time step $t$ we do a cross-sectional regression of $\boldsymbol{\beta}_t\boldsymbol{f}_t = \boldsymbol{y}_t$. Giving us a time series of three factors.
+<figure>
+<img src="index_files/figure-markdown_strict/cell-11-output-1.svg" alt="Figure 9: Three different points in time of the US Treasury yield curve with the fitted yield curve. The fitted curve captures the first convex curve and the second concave curve well. The odd shape in the third panel isn’t as good of a fit, but the general shape is captured." />
+<figcaption aria-hidden="true"><b>Figure 9:</b> Three different points in time of the US Treasury yield curve with the fitted yield curve. The fitted curve captures the first convex curve and the second concave curve well. The odd shape in the third panel isn’t as good of a fit, but the general shape is captured.</figcaption>
+</figure>
 
-![](index_files/figure-markdown_strict/cell-10-output-1.svg)
+# Conclusion
 
-The model appears to capture the general shape of the yield curve:
-
-![](index_files/figure-markdown_strict/cell-11-output-1.svg)
-
-There do appear to be persistent errors.
-
-![](index_files/figure-markdown_strict/cell-12-output-1.svg)
+We've seen that the US treasury yields across maturities contain common factors. A Principle Component Analysis (PCA) will show that 3 factors can explain nearly 100% of all the variance. We've created a model for the factor loadings so that these loadings are constant and known. Using these loadings, we can back out the three factors and get a pretty good model of yields.
 
 # Appendix
 
