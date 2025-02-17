@@ -213,7 +213,7 @@ The first factor loading is virtually unchanged across the terms. This means tha
 
 The second factor loading peaks for the shortest yields and then declines. We can interpret this factor as the short term yield.
 
-The third factor loading peaks for more medium term yilds. We can interpret this factor as the medium term yield.
+The third factor loading peaks for more medium term yields. We can interpret this factor as the medium term yield.
 
 #### Drawback of PCA
 
