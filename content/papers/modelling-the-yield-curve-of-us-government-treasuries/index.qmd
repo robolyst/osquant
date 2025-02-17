@@ -23,11 +23,11 @@ from matplotlib.ticker import StrMethodFormatter
 import numpy as np
 ```
 
-The interest rate is a key input to pricing various instruments. For example, the price of an option depends on the risk free rate. The return earned holding bonds depends on the bond yield. A good model of interest rates means you can better price these interest rate derived products and have a beter idea of risk.
+The interest rate is a key input to pricing various instruments. For example, the price of an option depends on the risk free rate. The return earned holding bonds depends on the bond yield. A good model of interest rates means you can better price these interest rate derived products and have a better idea of risk.
 
 The fiddly thing is that there is no one single interest rate. The yield that you can earn is dependent on how much time you are willing to wait. For example, you could put your money into a bank account for 1 day, you could buy a 3 month bond or even a 30 year bond. Each of these instruments will earn you a different yield.
 
-These different time horizons with different yields are referred to as the yield curve. And this yield curve is changing over time. We can easily observe this by fetching data for US treasury yields from FRED. See the appendix for the time series used in this article. Have a look at the following chart that shows three different dates with very different yield curves.
+These different time horizons with different yields are referred to as the yield curve. And this yield curve is changing over time. We can easily observe this by fetching data for US treasury yields from FRED. See the appendix for the time series used in this article. Have a look at the following chart that shows three different dates with different yield curves.
 
 ```{python}
 #| echo: false
@@ -104,7 +104,7 @@ $$
 \end{align}
 $$
 
-The most common way of investigating factors when you have a multivariate time series is to use [Principle Component Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) (PCA). The idea behind PCA is to find a set of completely uncorrelated time series to act as factors and the corresponding factor loadings. The factors found by PCA are called principle components, but we will continue to use the term factors. PCA is a very old, roboust and well studied algorithm. If you want to learn about it I recommend you read [Principal Component Analysis](https://gregorygundersen.com/blog/2022/09/17/pca/) which is a fantastic overview.
+The most common way of investigating factors when you have a multivariate time series is to use [Principle Component Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) (PCA). The idea behind PCA is to find a set of completely uncorrelated time series to act as factors and the corresponding factor loadings. The factors found by PCA are called principle components, but we will continue to use the term factors. PCA is an old, robust and well studied algorithm. If you want to learn about it I recommend you read [Principal Component Analysis](https://gregorygundersen.com/blog/2022/09/17/pca/) which is a fantastic overview.
 
 Running a PCA over the treasury yields confirms our intuition that there are common factors. I ran a PCA over the maturities 1 year or longer. The maturities shorter than a year have missing values. We can create a cumulative [scree plot](https://en.wikipedia.org/wiki/Scree_plot) showing the percentage of variance explained by the first n factors. We see that `98.33%` of the variance is explained by the first factor and `99.98%` of the variance is explained by the first 3 factors.
 
@@ -217,7 +217,7 @@ The third factor loading peaks for more medium term yields. We can interpret thi
 
 #### Drawback of PCA
 
-There are two drawbacks to using PCA in practice. The first is that PCA requires clean timeseries. For the yields that we are working on, there are gaps in the data. The most notable gap is that the 20 year yields start the early 60s but the 30 year yields do not start until the late 70s. And then, the 20 year yields stop for an extended period of time around 1990. The short term yields are missing enough samples that the PCA analysis performed above execluded them completely.
+PCA has two drawback when used in practice. The first is that PCA requires clean time-series. For the yields that we are working on, there are gaps in the data. The most notable gap is that the 20 year yields start the early 60s but the 30 year yields do not start until the late 70s. And then, the 20 year yields stop for an extended period of time around 1990. The short term yields are missing enough samples that the PCA analysis performed above excluded them completely.
 
 ```{python}
 #| echo: false
@@ -360,13 +360,13 @@ ax.patch.set_visible(False)
 plt.gcf().patch.set_visible(False)
 ```
 
-The parameter $\lambda$ control how quickly the curve decays to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diabold and Li's paper they note that $\lambda$ controls which maturity $\beta_3(\tau)$ reaches its maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $\beta_3(\tau)$ at a maturity of about 30 months.
+The parameter $\lambda$ control how quickly the curve decays to the right. When $\lambda$ is large the decay is fast providing a better fit for short term maturities. In the original Nelson-Siegel model, $\lambda$ varies with time. However, in Diebold and Li's paper they note that $\lambda$ controls which maturity $\beta_3(\tau)$ reaches its maximum value. They fix $\lambda = 0.0609$ which corresponds to maximising $\beta_3(\tau)$ at a maturity of about 30 months.
 
 A few facts on this model:
 
 When the time to maturity is maximised ($\tau = \infty$) then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
 
-The loading $\beta_2(\tau)$ starts at 1 for a maturty of 0 and decays to 0 as the maturity increaess. This factor ($f_{t,2}$) can been seen as a short-term factor.
+The loading $\beta_2(\tau)$ starts at 1 for a maturity of 0 and decays to 0 as the maturity increases. This factor ($f_{t,2}$) can been seen as a short-term factor.
 
 The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
 
