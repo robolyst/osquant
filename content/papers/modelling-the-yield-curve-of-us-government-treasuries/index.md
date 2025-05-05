@@ -20,14 +20,14 @@ The fiddly thing is that there is no one single interest rate. The yield that yo
 These different time horizons with different yields are referred to as the yield curve. And this yield curve is changing over time. We can easily observe this by fetching data for US treasury yields from FRED. See the appendix for the time series used in this article. Have a look at the following chart that shows three different dates with different yield curves.
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-3-output-1.svg" alt="Figure 1: Three different points in time of the US Treasury yield curve. The first panel shows a convex curve where short term yields are higher than long term yields. The second panel shows a concave curve where short term yields are lower than long term. The third panel shows an oddly shaped curve where medium term yields are the lowest." />
+<img src="index_files/figure-markdown_strict/cell-3-output-1.png" alt="Figure 1: Three different points in time of the US Treasury yield curve. The first panel shows a convex curve where short term yields are higher than long term yields. The second panel shows a concave curve where short term yields are lower than long term. The third panel shows an oddly shaped curve where medium term yields are the lowest." />
 <figcaption aria-hidden="true"><b>Figure 1:</b> Three different points in time of the US Treasury yield curve. The first panel shows a convex curve where short term yields are higher than long term yields. The second panel shows a concave curve where short term yields are lower than long term. The third panel shows an oddly shaped curve where medium term yields are the lowest.</figcaption>
 </figure>
 
 And over time, the yields have looked like this:
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-4-output-1.svg" alt="Figure 2: The US Treasury bond yields over time. All yields are downloaded from FRED, see the appendix for the exact datasets and links." />
+<img src="index_files/figure-markdown_strict/cell-4-output-1.png" alt="Figure 2: The US Treasury bond yields over time. All yields are downloaded from FRED, see the appendix for the exact datasets and links." />
 <figcaption aria-hidden="true"><b>Figure 2:</b> The US Treasury bond yields over time. All yields are downloaded from FRED, see the appendix for the exact datasets and links.</figcaption>
 </figure>
 
@@ -57,14 +57,14 @@ The most common way of investigating factors when you have a multivariate time s
 Running a PCA over the treasury yields confirms our intuition that there are common factors. I ran a PCA over the maturities 1 year or longer. The maturities shorter than a year have missing values. We can create a cumulative [scree plot](https://en.wikipedia.org/wiki/Scree_plot) showing the percentage of variance explained by the first n factors. We see that `98.33%` of the variance is explained by the first factor and `99.98%` of the variance is explained by the first 3 factors.
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-5-output-1.svg" alt="Figure 3: The percentage of variance explained by the first n factors from a PCA decomposition. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. We can see that over 98% of the variance is explained by a single factor." />
+<img src="index_files/figure-markdown_strict/cell-5-output-1.png" alt="Figure 3: The percentage of variance explained by the first n factors from a PCA decomposition. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. We can see that over 98% of the variance is explained by a single factor." />
 <figcaption aria-hidden="true"><b>Figure 3:</b> The percentage of variance explained by the first n factors from a PCA decomposition. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. We can see that over 98% of the variance is explained by a single factor.</figcaption>
 </figure>
 
 Using PCA, we've found 3 factors that explains just about 100% of 8 treasury yields. These three factors do have some intuition behind them. Take a look:
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-6-output-1.svg" alt="Figure 4: The first three factors of the treasury yields. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. The 20 year yields have a gap in them (discussed later) and were filled in with the 30 year yields." />
+<img src="index_files/figure-markdown_strict/cell-6-output-1.png" alt="Figure 4: The first three factors of the treasury yields. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. The 20 year yields have a gap in them (discussed later) and were filled in with the 30 year yields." />
 <figcaption aria-hidden="true"><b>Figure 4:</b> The first three factors of the treasury yields. The 1, 2, 3, 5, 7, 10, 20, and 30 year yields were used as inputs. The 20 year yields have a gap in them (discussed later) and were filled in with the 30 year yields.</figcaption>
 </figure>
 
@@ -73,7 +73,7 @@ The first factor looks like the long term yield from Figure 2. All the yields ap
 The real insight comes from looking at the factor loadings. Let's see the factor loadings plotted against the time to maturity:
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-7-output-1.svg" alt="Figure 5: The factor loadings for the first 3 factors from the PCA analysis." />
+<img src="index_files/figure-markdown_strict/cell-7-output-1.png" alt="Figure 5: The factor loadings for the first 3 factors from the PCA analysis." />
 <figcaption aria-hidden="true"><b>Figure 5:</b> The factor loadings for the first 3 factors from the PCA analysis.</figcaption>
 </figure>
 
@@ -88,7 +88,7 @@ The third factor loading peaks for more medium term yields. We can interpret thi
 PCA has two drawback when used in practice. The first is that PCA requires clean time-series. For the yields that we are working on, there are gaps in the data. The most notable gap is that the 20 year yields start the early 60s but the 30 year yields do not start until the late 70s. And then, the 20 year yields stop for an extended period of time around 1990. The short term yields are missing enough samples that the PCA analysis performed above excluded them completely.
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-8-output-1.svg" alt="Figure 6: Missing data in the yield time series. Only 5 of the yields have history going back to the 1960s. The 1 month yield doesn’t go back past the 2000’s. The 20 year yield has a huge gap around 1990." />
+<img src="index_files/figure-markdown_strict/cell-8-output-1.png" alt="Figure 6: Missing data in the yield time series. Only 5 of the yields have history going back to the 1960s. The 1 month yield doesn’t go back past the 2000’s. The 20 year yield has a huge gap around 1990." />
 <figcaption aria-hidden="true"><b>Figure 6:</b> Missing data in the yield time series. Only 5 of the yields have history going back to the 1960s. The 1 month yield doesn’t go back past the 2000’s. The 20 year yield has a huge gap around 1990.</figcaption>
 </figure>
 
@@ -159,7 +159,7 @@ $$
 These three factor loadings look like this:
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-9-output-1.svg" alt="Figure 7: Factor loadings from the Nelson-Siegel yield curve. The parameter \lambda is set to 0.0609 which maximises the third factor loading at 30 months." />
+<img src="index_files/figure-markdown_strict/cell-9-output-1.png" alt="Figure 7: Factor loadings from the Nelson-Siegel yield curve. The parameter \lambda is set to 0.0609 which maximises the third factor loading at 30 months." />
 <figcaption aria-hidden="true"><b>Figure 7:</b> Factor loadings from the Nelson-Siegel yield curve. The parameter <span class="math inline"><em>λ</em></span> is set to <span class="math inline">0.0609</span> which maximises the third factor loading at 30 months.</figcaption>
 </figure>
 
@@ -167,29 +167,29 @@ The parameter $\lambda$ control how quickly the curve decays to the right. When 
 
 A few facts on this model:
 
-When the time to maturity is maximised ($\tau = \infty$) then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
+1.  When the time to maturity is maximised ($\tau = \infty$) then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
 
-The loading $\beta_2(\tau)$ starts at 1 for a maturity of 0 and decays to 0 as the maturity increases. This factor ($f_{t,2}$) can been seen as a short-term factor.
+2.  The loading $\beta_2(\tau)$ starts at 1 for a maturity of 0 and decays to 0 as the maturity increases. This factor ($f_{t,2}$) can been seen as a short-term factor.
 
-The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
+3.  The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
 
-The short term factor can be viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
+4.  The short term factor can be viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
 
-The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
+5.  The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
 
 # Calculating factors
 
 Now that we have functions for the factor loadings, we can take equation $\eqref{2}$ and at each time step $t$ do a cross-sectional regression of $\boldsymbol{\beta}\boldsymbol{f}_t = \boldsymbol{y}_t$. Giving us a time series of three factors.
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-10-output-1.svg" alt="Figure 8: The three factors found by a cross-sectional regression of the loadings onto the yields. The first factor captures the long term yield. The second factor captures the short term yield and the third captures medium term yields." />
+<img src="index_files/figure-markdown_strict/cell-10-output-1.png" alt="Figure 8: The three factors found by a cross-sectional regression of the loadings onto the yields. The first factor captures the long term yield. The second factor captures the short term yield and the third captures medium term yields." />
 <figcaption aria-hidden="true"><b>Figure 8:</b> The three factors found by a cross-sectional regression of the loadings onto the yields. The first factor captures the long term yield. The second factor captures the short term yield and the third captures medium term yields.</figcaption>
 </figure>
 
 We can reproduce Figure 1 and add in the fitted yield curve. The model captures the general shape of the yield curve:
 
 <figure>
-<img src="index_files/figure-markdown_strict/cell-11-output-1.svg" alt="Figure 9: Three different points in time of the US Treasury yield curve with the fitted yield curve. The fitted curve captures the first convex curve and the second concave curve well. The odd shape in the third panel isn’t as good of a fit, but the general shape is captured." />
+<img src="index_files/figure-markdown_strict/cell-11-output-1.png" alt="Figure 9: Three different points in time of the US Treasury yield curve with the fitted yield curve. The fitted curve captures the first convex curve and the second concave curve well. The odd shape in the third panel isn’t as good of a fit, but the general shape is captured." />
 <figcaption aria-hidden="true"><b>Figure 9:</b> Three different points in time of the US Treasury yield curve with the fitted yield curve. The fitted curve captures the first convex curve and the second concave curve well. The odd shape in the third panel isn’t as good of a fit, but the general shape is captured.</figcaption>
 </figure>
 

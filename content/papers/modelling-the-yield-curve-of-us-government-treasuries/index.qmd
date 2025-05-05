@@ -364,15 +364,15 @@ The parameter $\lambda$ control how quickly the curve decays to the right. When 
 
 A few facts on this model:
 
-When the time to maturity is maximised ($\tau = \infty$) then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
+1. When the time to maturity is maximised ($\tau = \infty$) then $\beta_2(\infty) = 0$ and $\beta_3(\infty) = 0$ meaning that $y_t(\infty) = f_{1,t}$. This means that $f_{1,t}$ is the long-term factor which corresponds to what we noted in the PCA analysis.
 
-The loading $\beta_2(\tau)$ starts at 1 for a maturity of 0 and decays to 0 as the maturity increases. This factor ($f_{t,2}$) can been seen as a short-term factor.
+1. The loading $\beta_2(\tau)$ starts at 1 for a maturity of 0 and decays to 0 as the maturity increases. This factor ($f_{t,2}$) can been seen as a short-term factor.
 
-The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
+1. The loading $\beta_3(\tau)$ starts at 0 and ends at 0. Thus, $f_{t,3}$ is neither a short term nor long term factor. This is viewed as a medium-term factor.
 
-The short term factor can be viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
+1. The short term factor can be viewed as related to the yield curve slope; that is, the increase in yield from a short maturity to a long maturity. In fact, $y_t(\infty) - y_t(0) = -f_{t,2}$.
 
-The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
+1. The instantaneous yield depends on both the long-term and short-term factors: $y_t(0) = f_{t,1} + f_{t,2}$.
 
 # Calculating factors
 
