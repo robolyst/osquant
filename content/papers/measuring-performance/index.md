@@ -8,14 +8,14 @@ date: "2020-06-12"
 type: paper
 authors:
     - Adrian Letchford
-katex: true
+mathjax: true
 categories:
     - finance
 ---
 
 # How to think about performance
 
-A quick way of quantifying an investment's performance is to measure how much money it made. If you invested $100 and at the end of the year you have $108, you made $8. We express this as a percentage and call it the **return**.  In this example, you made an 8% return. Because we expressed this as a percentage, you can quickly figure out how much money you would have made if you invested $1,000. Eight percent of $1,000 is $80.
+A quick way of quantifying an investment's performance is to measure how much money it made. If you invested \\$100 and at the end of the year you have \\$108, you made \\$8. We express this as a percentage and call it the **return**.  In this example, you made an 8% return. Because we expressed this as a percentage, you can quickly figure out how much money you would have made if you invested \\$1,000. Eight percent of \\$1,000 is \\$80.
 
 When assessing two different investments, we can compare their returns. We could say the investment with the best return was the better investment over that time period. Let's have a look at an example.
 
@@ -92,7 +92,7 @@ The first problem is that the measure of return is an arithmetic average. An **a
 |--------|--------|
 | 50%    | -45%   |
 
-The average return (arithmetic average) is 50% + -45% divided by 2. which equals about a 3% average return. A positive return. But what happens if we play this through with actual dollars? Let's say we invest $1,000. After the first year we make 50% which means we have $1,500. In the second year, we lose 45% which leaves us with $825. That is less than the $1,000 we started with! That is definitely not a 3% return. That is a 17.5% loss!
+The average return (arithmetic average) is 50% + -45% divided by 2. which equals about a 3% average return. A positive return. But what happens if we play this through with actual dollars? Let's say we invest \\$1,000. After the first year we make 50% which means we have \\$1,500. In the second year, we lose 45% which leaves us with \\$825. That is less than the \\$1,000 we started with! That is definitely not a 3% return. That is a 17.5% loss!
 
 What happened here? Well, the arithmetic average assumes the returns are added together. It tries to find one number which, when added together 2 times, is the same as the sum of the two returns. The arithmetic average tries to find the \\(x\\) in:
 
@@ -104,7 +104,7 @@ Here's the catch. We know returns don't add, they multiply. We instead should us
 
 $$(1 + 50\\%) \times (1 - 45\\%) = (1 + x)^2 $$
 
-We have to add the ones because a 50% return on $1,000 doesn't leave us with $500, it leaves us with $1,500. That is \\(\\$1,000 \times (1 + 50\\%) = \\$1,500\\).
+We have to add the ones because a 50% return on \\$1,000 doesn't leave us with \\$500, it leaves us with \\$1,500. That is $\\$1,000 \times (1 + 50\\%) = \\$1,500$.
 
 We should not use the arithmetic average of returns because returns multiply, they do not add. Instead, we should use the geometric average of returns.
 
@@ -124,7 +124,7 @@ To understand drawdown, let's go back to our example of Investments A & B at the
 
 ![Drawdown is the difference from the last highest peak price](images/example_investments_decline.svg)
 
-There was a huge decline in value. Shortly after the start of 2011, the investment peaked at 18.2% then fell to a return of 10.8%. Let's go back to our example of investing $100. At the peak, that $100 would be worth $118.2 and at the bottom of the decline, it would be worth $110.8. That's a decline in value of 6.3%. We call this drawdown.
+There was a huge decline in value. Shortly after the start of 2011, the investment peaked at 18.2% then fell to a return of 10.8%. Let's go back to our example of investing \\$100. At the peak, that \\$100 would be worth $118.2 and at the bottom of the decline, it would be worth \\$110.8. That's a decline in value of 6.3%. We call this drawdown.
 
 **Drawdown** is the amount the investment has lost since its last high. We can actually chart the drawdown day by day for both of the investments.
 

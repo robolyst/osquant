@@ -5,7 +5,7 @@ The return of a bond ETF can be estimated from bond yields. The distribution of 
 "
 date: "2022-11-21"
 type: paper
-katex: true
+mathjax: true
 authors:
     - Adrian Letchford
 categories:
@@ -27,7 +27,7 @@ A bond is a cashflow producing instrument. Throughout the holding period, the bu
 
 ![Cashflow of a bond](images/cashflow.svg)
 
-The key thing to note with a bond's cashflow is that it is future cashflow. A promise of $100 in 1 years time is not worth $100 today. If the current interest rate is 5%, then you can lend out $95.24 today and receive back $100 in 1 year. You could say that $100 in a years time is worth $95.24 today if the interest rate is 5%.
+The key thing to note with a bond's cashflow is that it is future cashflow. A promise of \\$100 in 1 years time is not worth \\$100 today. If the current interest rate is 5%, then you can lend out \\$95.24 today and receive back \\$100 in 1 year. You could say that \\$100 in a years time is worth \\$95.24 today if the interest rate is 5%.
 
 This idea of using interest rates to value future cashflow is call the [present value approach](https://en.wikipedia.org/wiki/Bond_valuation#Present_value_approach) to valuing a bond. More succinctly, the value of a bond is:
 $$
@@ -65,7 +65,7 @@ $$
 $$
 Here, we are assuming that the bond's yield is equal to the market interest rate. The bond's yield at the time of purchase (yesterday) is \\(r_{t-1}\\).
 
-If we assume that the ETF is always buying bonds at par value (\\(C = r_{t-1}\\)) with a notional of $1 (\\(P_{t-1} = N = 1\\)) then the return on capital is:
+If we assume that the ETF is always buying bonds at par value ($C = r_{t-1}$) with a notional of \\$1 ($P_{t-1} = N = 1$) then the return on capital is:
 $$
 \begin{aligned}
 \text{capital}\_t &= \frac{P_{t}}{P_{t-1}} - 1 \\\
