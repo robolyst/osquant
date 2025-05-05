@@ -24,11 +24,11 @@ html {
     color: $text-color;
 
     @media (max-width: $tablet) {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     @media (max-width: $phone) {
-        font-size: 14px;
+        font-size: 16px;
     }
 }
 
@@ -409,6 +409,9 @@ Page mini
 
     .summary {
         font-size: 0.85em;
+        @media (max-width: $tablet) {
+            font-size: 1em;
+        }
     }
 }
 
