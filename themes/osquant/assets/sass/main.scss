@@ -150,7 +150,8 @@ Splash
     }
 
     img.front_page {
-        height: 45vw;
+        height: 50vw;
+        max-height: 66vh;
         object-fit: cover;
     }
 
