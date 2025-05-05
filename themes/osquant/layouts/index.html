@@ -9,20 +9,17 @@
 
     <div id="splash" class="image light">
 
-        {{- with $featured -}}
-            <img src="{{ $featured.Permalink }}" class="front_page" />
-        {{- else -}}
-            {{- with $.Site.Params.images }}
-                <img src="{{ index . 0 | absURL }}" class="front_page" />
-            {{ end -}}
-        {{- end -}}
-
         <div class="splash-cover">
             {{ with $first_post.Params.hover_color }}
                 <style>#splash.light .navbar a:hover {color: {{.}} !important;}</style>
             {{ end }}
             {{- partial "nav.html" . -}}
         </div>
+        
+        {{- with $featured -}}
+            <img src="{{ $featured.Permalink }}" class="front_page" />
+        {{- end -}}
+
     </div>
 
     {{ with $first_post }}
