@@ -17,7 +17,7 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 ENV SHELL /usr/bin/zsh
 
 # Install quarto
-ENV QUARTO_VERSION=1.6.40
+ENV QUARTO_VERSION=1.7.31
 RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v$QUARTO_VERSION/quarto-$QUARTO_VERSION-linux-arm64.deb \
   && dpkg -i /tmp/quarto.deb \
   && rm /tmp/quarto.deb

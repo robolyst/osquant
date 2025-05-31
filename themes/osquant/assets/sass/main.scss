@@ -111,6 +111,7 @@ blockquote {
     padding-left: 1.5rem;
 }
 
+// This is used for code blocks in the markdown.
 div.highlight pre {
     border: 1px solid #ebebeb;
     border-left: 3px solid #ebebeb;
@@ -120,6 +121,8 @@ div.highlight pre {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     background-color: $light-bg-color !important;
+    font-size: 0.8rem;
+    line-height: 1.2rem;
 }
 
 .pre-title, .pre-title a {
