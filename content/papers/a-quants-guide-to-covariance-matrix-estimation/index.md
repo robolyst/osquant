@@ -240,7 +240,7 @@ tickers = yf.Tickers('SPY TLT GLD GSG VNQ')
 prices = tickers.download(period='30y', interval='1d')
 returns = prices['Close'].pct_change().dropna()
 
-# We'll dump the results of each evalulation
+# We'll dump the results of each evaluation
 # into a list here.
 results: list[dict] = []
 
@@ -348,7 +348,7 @@ def ewm_cov(
 We'll conduct an experiment where we use the ETF returns from earlier, vary the half-lives for variance and correlation and measure both the variance of the MVP and the log-likelihood based metric. For the variance estimates, we'll use the same half-lives as before, for the correlation estimates, we'll use the half-lives `[10, 20, 60]`. The results are shown in the figure below.
 
 {{<figure src="longer_corr_halflife.svg" title="Decoupling variance and correlation." >}}
-The plots show the results of independently varying the half-life of the variance and correlation estimates. The left plot shows the varince of the MVP and the right shows the log-likelihood based metric. The x-axis for both plots is the half-life used for estimating variance. The dashed line uses the same half-life for estimating correlation. The remaining lines fix the half-life for the correlation estimates to 10, 20, or 60 days.
+The plots show the results of independently varying the half-life of the variance and correlation estimates. The left plot shows the variance of the MVP and the right shows the log-likelihood based metric. The x-axis for both plots is the half-life used for estimating variance. The dashed line uses the same half-life for estimating correlation. The remaining lines fix the half-life for the correlation estimates to 10, 20, or 60 days.
 {{</figure>}}
 
 The figure shows that as the half-life for correlation increases, the performance of the covariance estimates improves. Specifically, across the examined values, a longer half-life for correlation produces better estimates. Under both metrics, the best variance half-life is approximately `18` days, while the best correlation half-life is `60` days.
@@ -388,7 +388,7 @@ for var_hl, corr_hl in product(var_hls, corr_hls):
 
 # Shrinkage
 
-A seminal paper came out in 2003 that introduced the idea of *shrinkage* to estimating a covariance matrix[^Lodit2003]. The idea is that empirical covariance estimates are often noisy, and this noise can be reduced by blending the estimate with the identity matrix. In other words, we *shrink* the estimate toward the identity.
+A seminal paper came out in 2003 that introduced the idea of *shrinkage* to estimating a covariance matrix[^Ledoit2003]. The idea is that empirical covariance estimates are often noisy, and this noise can be reduced by blending the estimate with the identity matrix. In other words, we *shrink* the estimate toward the identity.
 
 Mathematically, we write:
 $$
@@ -447,7 +447,7 @@ def ewm_cov(
     return corrs
 ```
 
-We can run an experience as in the last two sections. We'll fix the variance half-life to 18 days, and the correlation half-life to 60 days. These are our optimal values from the previous section. We'll vary the shrinkage parameter between 0.0 and 0.2. We could go up to 1.0 but the curve bottoms out long before 1. The results are in the figure below.
+We can run an experiment as in the last two sections. We'll fix the variance half-life to 18 days, and the correlation half-life to 60 days. These are our optimal values from the previous section. We'll vary the shrinkage parameter between 0.0 and 0.2. We could go up to 1.0 but the curve bottoms out long before 1. The results are in the figure below.
 
 The figure shows that the estimates improve as shrinkage increases from 0.
 
@@ -471,7 +471,7 @@ Together, these ideas offer a more principled approach to covariance estimation.
 %}}
 
 {{% citation
-    id="Lodit2003"
+    id="Ledoit2003"
     author="Olivier Ledoit and Michael Wolf"
     title="Honey, I Shrunk the Sample Covariance Matrix"
     publication="UPF Economics and Business Working Paper No. 691"
