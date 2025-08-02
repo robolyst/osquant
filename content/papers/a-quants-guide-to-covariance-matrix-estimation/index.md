@@ -1,7 +1,7 @@
 ---
 title: "A Quant's Guide to Covariance Matrix Estimation"
 summary: "
-    Tired of noisy, unreliable covariance estimates? We break down three ideas that make a real difference: evaluate estimators on their own merits, decouple variance and correlation, and shrink your way to cleaner, more robust matrices.
+    In this article, we explore three techniques to improve covariance matrix estimation: evaluating estimates independently of backtests, decoupling variance and correlation, and applying shrinkage for more robust outputs.
 "
 
 date: "2025-07-20"
@@ -36,9 +36,11 @@ We want to keep this bit simple and concise, we're really just making sure we're
 
 The most straightforward way to evaluate covariance matrix estimates is through full backtesting. Simply run your complete investment strategy with different covariance estimators and compare the resulting performance metrics.
 
-However, this approach has significant drawbacks. Backtesting is computationally expensive and time-consuming, making it impractical for rapid iteration and research. More importantly, mixing covariance estimation research with portfolio construction introduces confounding factors that can lead to overfitting. When performance improves, you don't know whether the gains come from better covariance estimates or inadvertent optimization of other portfolio components.
+However, this approach has significant drawbacks. Backtesting is computationally expensive and time-consuming, making it impractical for rapid iteration and research. More importantly, mixing covariance estimation research with portfolio construction can lead to overfitting. When performance improves, you don't know whether the gains come from better covariance estimates or inadvertent optimization of other portfolio components.
 
-To address these issues, we need isolated evaluation methods that test covariance estimators independently of the full investment process. The fiddly thing is that there is no "best" covariance matrix, we can pick a general purpose metric or something that targets our particular need.  [REFERENCE] So and so covers a whole bunch of different ways of measuring covariance matrices. Here, we're going to cover two approaches; minimum-variance portfolios and the log-likelihood.
+To address these issues, we need isolated evaluation methods that test covariance estimators independently of the full investment process.
+
+The fiddly thing is that there is no "best" covariance matrix, we can pick a general purpose metric or something that targets our particular need. In his book, [Gappy](https://x.com/__paleologo) covers a whole bunch of different ways of measuring covariance matrices[^Paleologo2025]. Here, we're going to cover two approaches; minimum-variance portfolios and the log-likelihood.
 
 ## Minimum-variance portfolios
 
@@ -48,10 +50,18 @@ The minimum variance portfolio is given by:
 $$
 \begin{aligned}
 \underset{\boldsymbol{w}\_{t-1}}{\text{min}} &\quad \boldsymbol{w}^T_{t-1}\hat{\boldsymbol{\Sigma}}_{t-1}\boldsymbol{w}\_{t-1} \\\
-\text{s.t.} &\quad \boldsymbol{w}^T\_{t-1}\boldsymbol{w}\_{t-1} = 1
+\text{s.t.} &\quad \boldsymbol{1}^T\boldsymbol{w}\_{t-1} = 1
 \end{aligned}
 $$
-The solution is given by the eigen-vector corresponding to the smallest eigen-value of $\hat{\boldsymbol{\Sigma}}$ [^Ghojogh2023]. We'll call this portfolio the minimum-variance portfolio. Here is some Python code to calculate it:
+Where $\boldsymbol{w}\_{t-1}$ are the portfolio weights at time $t-1$, $\hat{\boldsymbol{\Sigma}}\_{t-1}$ is the covariance matrix of asset returns at time $t-1$ and $\boldsymbol{1}$ is a vector of ones. The constraint ensures that the weights sum to one.
+
+The solution is:
+$$
+\boldsymbol{w}\_{t-1} = \frac{\hat{\boldsymbol{\Sigma}}\_{t-1}^{-1}\boldsymbol{1}}{\boldsymbol{1}^T\hat{\boldsymbol{\Sigma}}\_{t-1}^{-1}\boldsymbol{1}}
+$$
+We can intuitively understand this by imagining that the assets are not correlated so that the covariance matrix $\hat{\boldsymbol{\Sigma}}$ is a diagonal matrix of just the variances. Then you can see that the portfolio weights are proportional to the inverse of the variances. This means that assets with lower variance will receive larger weights in the portfolio.
+
+Here is some Python code to calculate it:
 ```python
 import numpy as np
 import pandas as pd
@@ -61,19 +71,25 @@ def mvp(cov: pd.DataFrame) -> pd.Series:
     Returns the minimum-variance portfolio weights
     from a covariance matrix.
 
-    Args:
-        cov: Covariance matrix of asset returns.
+    Parameters
+    ----------
+        cov : DataFrame
+            Covariance matrix of asset returns over
+            time.
     """
     try:
-        _, vecs = np.linalg.eigh(cov)
-        w = vecs[:, 0]
+        icov = np.linalg.pinv(cov.values)
+        ones = np.ones(cov.shape[0])
+        w = icov @ ones / (ones @ icov @ ones)
+
     except np.linalg.LinAlgError:
         w = np.full(cov.shape[0], np.nan)
     
     return pd.Series(w, index=cov.columns)
+
 ```
 
-The portfolio's return at time $t$ is then:
+Once we have the portfolio weights, we can calculate the portfolio returns. The returns of each asset at time $t$ are given by $\boldsymbol{r}_t$, which is a vector of returns for each asset. The portfolio's return at time $t$ is then:
 $$
 p_t = \boldsymbol{w}^T\_{t-1}\boldsymbol{r}_t
 $$
@@ -81,6 +97,35 @@ And the variance of the portfolio returns is:
 $$
 \text{var}(p_1, p_2, \dots, p_T)
 $$
+When comparing different covariance estimators, we can calculate the variance of the portfolio returns for each estimator and select the one that produces the lowest variance. The code for this metric is:
+```python
+def mvp_metric(
+    covs: pd.DataFrame,
+    returns: pd.DataFrame,
+) -> float:
+    """
+    Returns the variance of the minimum-variance
+    portfolio.
+
+    Parameters
+    ----------
+
+    cov : DataFrame
+        Covariance matrices of asset returns over
+        time. The covariance at time t should be
+        the covariance matrix we can use to act on
+        returns at time t. Expected to have a column
+        or index called 'Date' that contains the date
+        of the covariance matrix.
+
+    returns : DataFrame
+        Asset returns over time.
+    """
+    portfolios = covs.groupby('Date').apply(mvp)
+    preturns = (portfolios * returns).sum(1, skipna=False)
+    var = np.var(preturns)
+    return var
+```
 
 
 
@@ -157,6 +202,12 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
 
 # Shrinkage
 
+Paper on shrinkage [^Lodit2003]. The idea is to pull our noisy empirical estimates toward a structured target. This reduces estimation error and improves the robustness of our covariance matrix.
+
+{{<figure src="shrinkage.svg" title="Variance and correlation behave differently." >}}
+Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
+{{</figure>}}
+
 # Conclusion
 
 
@@ -167,4 +218,25 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
     publication="arXiv"
     year="2023"
     link="https://arxiv.org/abs/1903.11240"
+%}}
+
+
+{{% citation
+    id="Lodit2003"
+    author="Olivier Ledoit and Michael Wolf"
+    title="Honey, I Shrunk the Sample Covariance Matrix"
+    publication="UPF Economics and Business Working Paper No. 691"
+    year="2003"
+    link="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=433840"
+%}}
+
+
+
+{{% citation
+    id="Paleologo2025"
+    author="Giuseppe A. Paleologo"
+    title="The Elements of Quantitative Finance"
+    publication="Wiley"
+    year="2025"
+    link="https://www.wiley.com/en-us/The+Elements+of+Quantitative+Investing-p-9781394265466"
 %}}
