@@ -290,13 +290,11 @@ Now, the reason we want to estimate variance and correlation seperately is that 
 The top plot shows the variance of SPY and the middle plot shows the variance of TLT. The bottom plot shows the correlation between SPY and TLT. Notice how the variance of both SPY and TLT exhibit spikes, while the correlation between the two ETFs is much more stable.
 {{</figure>}}
 
-Variance lies on the range $[0, \infty)$ and exhibits dramatic spikes followed by a decay back to a mean. Correlation, on the other hand, is bounded between -1 and 1 and tends to be more stable over time.
+Variance lies on the range $[0, \infty)$ and exhibits dramatic spikes followed by a decay back to a mean. Correlation, on the other hand, is bounded between -1 and 1 and tends to be more stable over time, mostly fluctuating around a slowly changing mean.
 
-Ideally, we would want to capture these spikes in variance. If we estimate variance with an EWM, we would want to use a short half-life so as not to average out these spikes. The figure also shows that correlation is much more stable, mostly fluctuating around a slowly changing mean. This suggests we can use a longer half-life to capture this slowly changing mean.
+Ideally, a model should capture the sharp spikes in variance without losing the broader trend in correlation. A short half-life in the EWM helps preserve sudden jumps in variance by avoiding excessive smoothing. Meanwhile, a longer half-life is better suited to capturing the slow-moving changes in correlation over time.
 
-We can use the metrics from the previous section to test this idea of decoupling the variance and correlation estimates. We'll use the same ETFs as before, but this time we'll calculate the variance and correlation separately using different half-lives.
-
-The following code calculates the EWM covariance matrix by estimating variance and correlation independently:
+We can estimate variance and correlation independently using a short half-life for variance and a long half-life for correlation. The following code implements this approach:
 ```python
 def ewm_cov(
     returns: pd.DataFrame,
@@ -337,12 +335,10 @@ def ewm_cov(
 We'll conduct an experiment where we use the ETF returns from earlier, vary the half-lives for variance and correlation and measure both the variance of the MVP and the log-likelihood based metric. For the variance estimates, we'll use the same half-lives as before, for the correlation estimates, we'll use the half-lives `[10, 20, 60]`. The results are shown in the figure below.
 
 {{<figure src="longer_corr_halflife.svg" title="Decoupling variance and correlation." >}}
-Both plots show the results of evaluating covariance estimates using two metrics: the variance of the minimum-variance portfolio (MVP) on the left, and a log-likelihood based metric on the right. The x-axis for both plots is the half-life used for estimating variance. The dashed line uses the same half-life for both variance and correlation. The remaining lines fix the half-life for the correlation estimates to one of 10, 20, or 60 days.
+The plots show the results of independently varying the half-life of the variance and correlation estimates. The left plot shows the varince of the MVP and the right shows the log-likelihood based metric. The x-axis for both plots is the half-life used for estimating variance. The dashed line uses the same half-life for estimating correlation. The remaining lines fix the half-life for the correlation estimates to 10, 20, or 60 days.
 {{</figure>}}
 
-The figure shows that as the half-life for correlation increases, the performance of the covariance estimates improves. Specifically, under the MVP metric, the best variance half-life is approximately `18` days, while the best correlation half-life is `60` days. The log-likelihood metric shows a similar trend, with the best variance half-life also approximately `18` days and the best correlation half-life at `60` days.
-
-The figure also shows the results when the half-life for correlation is set to the same value as the variance half-life (the dashed line). This produces worse estimates than when the correlation half-life is longer than the variance half-life.
+The figure shows that as the half-life for correlation increases, the performance of the covariance estimates improves. Specifically, across the examined values, a longer half-life for correlation produces better estimates. Under both metrics, the best variance half-life is approximately `18` days, while the best correlation half-life is `60` days.
 
 This example demonstrates the intuition that we should estimate correlation with a longer half-life than variance.
 
