@@ -323,15 +323,26 @@ def ewm_cov(
         Minimum number of periods to consider for the
         calculation of the covariance.
     """
-    vars = returns.ewm(halflife=var_hl, min_periods=min_periods).var()
-    corrs = returns.ewm(halflife=corr_hl, min_periods=min_periods).corr()
+    variances = (
+        returns
+        .ewm(halflife=var_hl, min_periods=min_periods)
+        .var()
+    )
+
+    correlations = (
+        returns
+        .ewm(halflife=corr_hl, min_periods=min_periods)
+        .corr()
+    )
 
     for date in returns.index:
-        std = np.sqrt(vars.loc[date])
+        std = np.sqrt(variances.loc[date])
         v = np.outer(std, std)
-        corrs.loc[date] = corrs.loc[date].values * v
+        corr = correlations.loc[date].values
 
-    return corrs
+        correlations.loc[date] = corr * v
+
+    return correlations
 ```
 
 We'll conduct an experiment where we use the ETF returns from earlier, vary the half-lives for variance and correlation and measure both the variance of the MVP and the log-likelihood based metric. For the variance estimates, we'll use the same half-lives as before, for the correlation estimates, we'll use the half-lives `[10, 20, 60]`. The results are shown in the figure below.
