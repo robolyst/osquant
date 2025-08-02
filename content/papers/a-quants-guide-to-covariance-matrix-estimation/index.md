@@ -58,6 +58,7 @@ $$
 We can gain some intuition by imagining that the assets are uncorrelated. This means the covariance matrix $\hat{\boldsymbol{\Omega}}$ is a diagonal matrix of the variances. Then you can see that the portfolio weights are proportional to the inverse of the variances. This means that assets with lower variance will receive larger weights in the portfolio. Thereby dragging the portfolio variance down.
 
 Here is some Python code to calculate it:
+
 ```python
 import numpy as np
 import pandas as pd
@@ -97,6 +98,7 @@ $$
 When comparing different estimators, we can calculate the variance of the portfolio returns for each estimator and select the one that produces the lowest variance.
 
 The code for this metric is:
+
 ```python
 def mvp_metric(
     covs: pd.DataFrame,
@@ -126,8 +128,6 @@ def mvp_metric(
     return var
 ```
 
-
-
 ## Log-likelihood
 
 Assume returns follow a multivariate Gaussian distribution. Under that assumption, we can use the likelihood function to evaluate how well each estimated covariance matrix explains the observed returns.
@@ -149,6 +149,7 @@ $$
 We want the sum of these for all $t$ to be as large as possible.
 
 We can simplify the log-likelihood function:
+
 1. For our purposes, we can assume that $\boldsymbol{\mu}\_{t-1} = 0$.
 1. As we are optimising over the same set of $n$ assets, the term $n \log(2\pi)$ has no impact on our results. We can drop it.
 1. Multiplying by $-\frac{1}{2}$ only has the effect of flipping the sign, we can drop this too.
@@ -160,6 +161,7 @@ $$
 When comparing different covariance estimators, we can calculate this metric for each estimator and select the one that produces the smallest value.
 
 The code for this metric is:
+
 ```python
 def ll_metric(
     covs: pd.DataFrame,
@@ -272,7 +274,6 @@ for halflife in halflives:
 
 Now that we have a way of measuring covariance estimates independently of backtests, we can explore how to improve the estimates. The first key idea is to decouple estimating variance and correlation.
 
-
 Note that the [correlation](https://en.wikipedia.org/wiki/Correlation) between two variables is:
 $$
 \text{corr}(X, Y) = \frac{\sigma^2_{X,Y}}{\sigma_X \cdot \sigma_Y}
@@ -294,6 +295,7 @@ Variance lies on the range $[0, \infty)$ and exhibits dramatic spikes followed b
 Ideally, a model should capture the sharp spikes in variance without losing the broader trend in correlation. A short half-life in the EWM helps preserve sudden jumps in variance by avoiding excessive smoothing. Meanwhile, a longer half-life is better suited to capturing the slow-moving changes in correlation over time.
 
 We can estimate variance and correlation independently using a short half-life for variance and a long half-life for correlation. The following code implements this approach:
+
 ```python
 def ewm_cov(
     returns: pd.DataFrame,
@@ -342,6 +344,7 @@ The figure shows that as the half-life for correlation increases, the performanc
 This example demonstrates the intuition that we should estimate correlation with a longer half-life than variance.
 
 The code to replicate this example is:
+
 ```python
 from itertools import product
 
@@ -371,7 +374,6 @@ for var_hl, corr_hl in product(var_hls, corr_hls):
     })
 ```
 
-
 # Shrinkage
 
 A seminal paper came out in 2003 that introduced the idea of *shrinkage* to estimating a covariance matrix[^Lodit2003]. The idea is that empirical covariance estimates are often noisy, and this noise can be reduced by blending the estimate with the identity matrix.  In other words, we *shrink* the estimate toward the identity.
@@ -383,6 +385,7 @@ $$
 Where $\hat{\boldsymbol{\Omega}}\_{t-1}^{\text{shrunk}}$ is the shrunk correlation matrix, $\hat{\boldsymbol{\Omega}}\_{t-1}$ is the estimated correlation matrix, $\boldsymbol{I}$ is the identity matrix, and $0 \le \lambda \le 1$ is the shrinkage parameter that controls how much we blend the estimate with the identity matrix. When $\lambda = 0$, then no shrinkage is applied.
 
 We can update our `ewm_cov` function to include shrinkage:
+
 ```python
 def ewm_cov(
     returns: pd.DataFrame,
@@ -446,8 +449,6 @@ In this article, we explored three practical ideas for improving covariance matr
 
 Together, these ideas offer a more principled approach to covariance estimation.
 
-
-
 {{% citation
     id="Ghojogh2023"
     author="Benyamin Ghojogh, Fakhri Karray and Mark Crowley"
@@ -457,7 +458,6 @@ Together, these ideas offer a more principled approach to covariance estimation.
     link="https://arxiv.org/abs/1903.11240"
 %}}
 
-
 {{% citation
     id="Lodit2003"
     author="Olivier Ledoit and Michael Wolf"
@@ -466,8 +466,6 @@ Together, these ideas offer a more principled approach to covariance estimation.
     year="2003"
     link="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=433840"
 %}}
-
-
 
 {{% citation
     id="Paleologo2025"
