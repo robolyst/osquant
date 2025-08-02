@@ -25,12 +25,7 @@ I use an EWM when I need something simple to get started, but there are a few th
 
 1. **Shrinkage** - By pulling our noisy empirical estimates toward a structured target, shrinkage methods offer a systematic way to reduce estimation error.
 
-# The basics
-
-Cover the general model for estimating variance GARCH. Show how it collapses to an EWM. Point out other models in the literature, but say that we're going to stick wtih EWMs for this article.
-
-We want to keep this bit simple and concise, we're really just making sure we're covering all bases.
-
+This article won't cover the various methods of covariance matrix estimation, such as EWM estimates, GARCH or other methods. We'll focus on the above three ideas to improve the estimates we get from these methods and we'll use EWM estimates as the example.
 
 # Measurement
 
@@ -164,7 +159,8 @@ When comparing different covariance estimators, we can calculate this metric for
 
 The code for this metric is:
 ```python
-def ll_metric(    covs: pd.DataFrame,
+def ll_metric(
+    covs: pd.DataFrame,
     returns: pd.DataFrame
 ) -> float:
     """
