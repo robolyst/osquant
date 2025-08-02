@@ -44,9 +44,9 @@ The fiddly thing is that there is no "best" covariance matrix, we can pick a gen
 
 ## Minimum-variance portfolios
 
-The idea here is that we usually want a covariance matrix to minimise the variance of our portfolio. So, we can construct the minimum variance portfolios using different covariance estimators and measure their realized variance. The estimator producing the lowest variance portfolio is considered the better option.
+The idea here is that we usually want a covariance matrix to minimise the variance of our portfolio. So, we can construct the minimum-variance portfolio (MVP) using different covariance estimators and measure their realized variance. The estimator producing the lowest variance portfolio is considered the better option.
 
-The minimum variance portfolio is given by:
+The MVP is given by:
 $$
 \begin{aligned}
 \underset{\boldsymbol{w}\_{t-1}}{\text{min}} &\quad \boldsymbol{w}^T_{t-1}\hat{\boldsymbol{\Omega}}_{t-1}\boldsymbol{w}\_{t-1} \\\
@@ -164,8 +164,7 @@ When comparing different covariance estimators, we can calculate this metric for
 
 The code for this metric is:
 ```python
-def ll_metric(
-    covs: pd.DataFrame,
+def ll_metric(    covs: pd.DataFrame,
     returns: pd.DataFrame
 ) -> float:
     """
@@ -207,13 +206,69 @@ def ll_metric(
 
 ## Example
 
-Make an example for fitting the half-life to a regular EWM.
+We'll now walk through an example of how to use these metrics to compare different covariance estimators. Specifically, we'll vary the half-life parameter of an exponentially weighted moving (EWM) covariance matrix and evaluate the results across a small set of ETFs.
 
+Each ETF represents a distinct asset class:
 
-{{<figure src="mvp_vs_ll.svg" title="Mean-variance portfolios vs log-likelihood" >}}
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
+- SPY -- U.S. equities (S&P 500)
+
+- TLT -- Long-term U.S. Treasury bonds
+
+- GLD -- Gold
+
+- GSG -- Broad commodities
+
+- VNQ -- U.S. real estate investment trusts (REITs)
+
+For each half-life value, we'll compute the EWM covariance matrix over time and assess the estimates using two evaluation metrics: the variance of the MVP, and the  log-likelihood based metric.
+
+The results are shown in the figure below:
+
+{{<figure src="mvp_vs_ll.svg" title="Example evaluation" >}}
+of EWM covariance matrices using two metrics on ETF returns (data from Yahoo Finance). In both plots, the x-axis shows the half-life used in the exponentially weighted estimate. The left plot reports the variance of the minimum-variance portfolio (MVP), which decreases as the half-life increases, reaching a minimum around 33 days. The right plot shows a log-likelihood-based metric, which also improves (i.e. decreases) with longer half-lives, reaching its lowest point near 24 days.
 {{</figure>}}
 
+Both metrics demonstrate that the covariance estimates improve as the half-life increases from 5, but they suggest different optimal half-lives. The MVP metric suggests a half-life of around 33 days, while the log-likelihood metric suggests a half-life of around 24 days. Neither of these metrics is inherently better than the other; they simply measure different aspects of the covariance matrix's performance. Despite targeting different properties of the covariance matrix, both evaluation metrics agree that short half-lives (e.g. 5-10 days) underperform, and that there is a sweet spot between 20 and 35 days.
+
+The code to replicate this example is:
+
+```python
+import yfinance as yf
+
+tickers = yf.Tickers('SPY TLT GLD GSG VNQ')
+prices = tickers.download(period='30y', interval='1d')
+returns = prices['Close'].pct_change().dropna()
+
+# We'll dump the results of each evalulation
+# into a list here.
+results: list[dict] = []
+
+# I notice that the resulting curve is neater
+# if the x-axis is logged. So we'll use a logspace
+# to generate the half-lives. 
+halflives = np.logspace(
+    start=np.log10(5),  # 5-day half-life
+    stop=np.log10(100), # 100-day half-life
+    num=20,  # 20 data points
+)
+
+for halflife in halflives:
+
+    # Shift the returns by one day so that
+    # the covariance matrix for time t-1 aligns
+    # with the returns at time t.
+    covs = (
+        returns.shift(1)
+        .ewm(halflife=halflife, min_periods=200)
+        .cov()
+    )
+
+    results.append({
+        'halflife': halflife,
+        'pvar': mvp_metric(covs, returns),
+        'll': ll_metric(covs, returns),
+    })
+```
 
 # Splitting
 
