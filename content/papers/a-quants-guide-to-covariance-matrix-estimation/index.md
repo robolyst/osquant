@@ -49,17 +49,17 @@ The idea here is that we usually want a covariance matrix to minimise the varian
 The minimum variance portfolio is given by:
 $$
 \begin{aligned}
-\underset{\boldsymbol{w}\_{t-1}}{\text{min}} &\quad \boldsymbol{w}^T_{t-1}\hat{\boldsymbol{\Sigma}}_{t-1}\boldsymbol{w}\_{t-1} \\\
+\underset{\boldsymbol{w}\_{t-1}}{\text{min}} &\quad \boldsymbol{w}^T_{t-1}\hat{\boldsymbol{\Omega}}_{t-1}\boldsymbol{w}\_{t-1} \\\
 \text{s.t.} &\quad \boldsymbol{1}^T\boldsymbol{w}\_{t-1} = 1
 \end{aligned}
 $$
-Where $\boldsymbol{w}\_{t-1}$ are the portfolio weights at time $t-1$, $\hat{\boldsymbol{\Sigma}}\_{t-1}$ is the covariance matrix of asset returns at time $t-1$ and $\boldsymbol{1}$ is a vector of ones. The constraint ensures that the weights sum to one.
+Where $\boldsymbol{w}\_{t-1}$ are the portfolio weights calculated at time $t-1$, $\hat{\boldsymbol{\Omega}}\_{t-1}$ is the covariance matrix of asset returns at time $t-1$ and $\boldsymbol{1}$ is a vector of ones. The constraint ensures that the weights sum to one.
 
 The solution is:
 $$
-\boldsymbol{w}\_{t-1} = \frac{\hat{\boldsymbol{\Sigma}}\_{t-1}^{-1}\boldsymbol{1}}{\boldsymbol{1}^T\hat{\boldsymbol{\Sigma}}\_{t-1}^{-1}\boldsymbol{1}}
+\boldsymbol{w}\_{t-1} = \frac{\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}\boldsymbol{1}}{\boldsymbol{1}^T\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}\boldsymbol{1}}
 $$
-We can intuitively understand this by imagining that the assets are not correlated so that the covariance matrix $\hat{\boldsymbol{\Sigma}}$ is a diagonal matrix of just the variances. Then you can see that the portfolio weights are proportional to the inverse of the variances. This means that assets with lower variance will receive larger weights in the portfolio.
+We can intuitively understand this by imagining that the assets are not correlated so that the covariance matrix $\hat{\boldsymbol{\Omega}}$ is a diagonal matrix of just the variances. Then you can see that the portfolio weights are proportional to the inverse of the variances. This means that assets with lower variance will receive larger weights in the portfolio.
 
 Here is some Python code to calculate it:
 ```python
@@ -97,7 +97,9 @@ And the variance of the portfolio returns is:
 $$
 \text{var}(p_1, p_2, \dots, p_T)
 $$
-When comparing different covariance estimators, we can calculate the variance of the portfolio returns for each estimator and select the one that produces the lowest variance. The code for this metric is:
+When comparing different covariance estimators, we can calculate the variance of the portfolio returns for each estimator and select the one that produces the lowest variance.
+
+The code for this metric is:
 ```python
 def mvp_metric(
     covs: pd.DataFrame,
@@ -131,25 +133,77 @@ def mvp_metric(
 
 ## Log-likelihood
 
-Assuming returns follow a multivariate Gaussian distribution, we can evaluate how well each estimated covariance matrix explains observed returns using the log-likelihood function. For a vector of returns $\boldsymbol{r}_t$ and estimated covariance matrix $\hat{\boldsymbol{\Sigma}}\_{t-1}$, the log-likelihood is:
+Assuming returns follow a multivariate Gaussian distribution, we can evaluate how well each estimated covariance matrix explains observed returns using the likelihood function.
+
+The likelihood that a vector of returns $\boldsymbol{r}_t$ was generated from a Gaussian process with mean $\boldsymbol{\mu}\_{t-1}$ and covariance matrix $\hat{\boldsymbol{\Omega}}\_{t-1}$ is given by the [probability density function](https://en.wikipedia.org/wiki/Multivariate_normal_distribution):
 $$
-\log L(\boldsymbol{r}_t) = -\frac{1}{2} \left[ \log(|\hat{\boldsymbol{\Sigma}}\_{t-1}|) + (\boldsymbol{r}_t - \boldsymbol{\mu})^T\hat{\boldsymbol{\Sigma}}\_{t-1}^{-1}(\boldsymbol{r}_t - \boldsymbol{\mu}) + n \log(2\pi) \right]
+\text{P}(\boldsymbol{r}_t | \boldsymbol{\mu}\_{t-1}, \hat{\boldsymbol{\Omega}}\_{t-1}) = \frac{1}{(2\pi)^{n/2}|\hat{\boldsymbol{\Omega}}\_{t-1}|^{1/2}} \exp\left(-\frac{1}{2}(\boldsymbol{r}_t - \boldsymbol{\mu}\_{t-1})^T\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}(\boldsymbol{r}_t - \boldsymbol{\mu}\_{t-1})\right)
 $$
-We want the sum of these for all $t$ to be as large as possible. We can simplify this:
-1. For our purposes, we can assume that $\boldsymbol{\mu} = 0$.
-1. As we are optimising over the same set of $n$ returns, the term $n \log(2\pi)$ has no impact on our results.
+We read this as: the likelihood of observing the returns $\boldsymbol{r}_t$ given the mean $\boldsymbol{\mu}\_{t-1}$ and covariance matrix $\hat{\boldsymbol{\Omega}}\_{t-1}$.
+
+We could iterate over all $t$ and multiply the likelihoods together to estimate the fit of our estimates:
+$$
+\prod_{t} \ \text{P}(\boldsymbol{r}\_t | \boldsymbol{\mu}\_{t-1}, \hat{\boldsymbol{\Omega}}\_{t-1})
+$$
+However, this can lead to numerical problems in practice. Instead, we convert the product into a sum by taking the logarithm of $\text{P}(\boldsymbol{r}_t | \boldsymbol{\mu}\_{t-1}, \hat{\boldsymbol{\Omega}}\_{t-1})$. This is known as the log-likelihood:
+$$
+\log L(\boldsymbol{r}_t) = -\frac{1}{2} \left[ \log(|\hat{\boldsymbol{\Omega}}\_{t-1}|) + (\boldsymbol{r}_t - \boldsymbol{\mu}\_{t-1})^T\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}(\boldsymbol{r}_t - \boldsymbol{\mu}\_{t-1}) + n \log(2\pi) \right]
+$$
+We want the sum of these for all $t$ to be as large as possible.
+
+We can simplify the log-likelihood function:
+1. For our purposes, we can assume that $\boldsymbol{\mu}\_{t-1} = 0$.
+1. As we are optimising over the same set of $n$ returns, the term $n \log(2\pi)$ has no impact on our results. We can drop it.
 1. Multiplying by $-\frac{1}{2}$ only has the effect of flipping the sign, we can drop this too.
 
 The final metric is:
 $$
-\Sigma_t^T \left( \log(|\hat{\boldsymbol{\Sigma}}\_{t-1}|) + \boldsymbol{r}_t^T\hat{\boldsymbol{\Sigma}}\_{t-1}^{-1}\boldsymbol{r}_t \right)
+\sum_t \left( \log(|\hat{\boldsymbol{\Omega}}\_{t-1}|) + \boldsymbol{r}_t^T\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}\boldsymbol{r}_t \right)
 $$
+When comparing different covariance estimators, we can calculate this metric for each estimator and select the one that produces the smallest value.
 
-#### Similarity to the Mahalanobis distance
+The code for this metric is:
+```python
+def ll_metric(
+    covs: pd.DataFrame,
+    returns: pd.DataFrame
+) -> float:
+    """
+    Returns a log-likelihood based metric of the
+    fitness of the covariance matrices.
 
-Blah blah blah
+    Parameters
+    ----------
 
-The determinant of the covariance matrix is a measure of the spread of the distribution. By including it, we are penalizing wider distributions. A wider distribution equals a lower distance and a thinner distribution equals larger distances. The inclusion of the determinant protects against simply estimating a wider distribution to decrease the distance.
+    cov : DataFrame
+        Covariance matrices of asset returns over
+        time. The covariance at time t should be
+        the covariance matrix we can use to act on
+        returns at time t. Expected to have a column
+        or index called 'Date' that contains the date
+        of the covariance matrix.
+
+    returns : DataFrame
+        Asset returns over time.
+    """
+
+    ll = np.full(len(returns), np.nan)
+
+    for i, date in enumerate(returns.index):
+
+        r = returns.loc[date]
+        cov = covs.loc[date].loc[r.index, r.index]
+
+        if cov.isnull().any().any():
+            continue
+
+        det = np.linalg.det(cov)
+        icov = np.linalg.inv(cov)
+
+        ll[i] = np.log(det) + r @ icov @ r.T
+
+    return np.nanmean(ll)
+```
 
 ## Example
 
