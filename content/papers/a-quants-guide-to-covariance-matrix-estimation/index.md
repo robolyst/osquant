@@ -268,12 +268,30 @@ for halflife in halflives:
 
 # Splitting
 
+Now that we have a way of measuring covariance estimates independently of backtests, we can explore how to improve the estimates themselves. The first key idea is to decouple estimating variance and correlation.
+
+
+Note that the [correlation](https://en.wikipedia.org/wiki/Correlation) between two variables is:
+$$
+\text{corr}(X, Y) = \frac{\sigma^2_{X,Y}}{\sigma_X \cdot \sigma_Y}
+$$
+Where $\sigma^2_{X,Y}$ is the covariance between $X$ and $Y$, $\sigma_X$ is the standard deviation of $X$, and $\sigma_Y$ is the standard deviation of $Y$. We can flip this around to get the covariance in terms of the correlation:
+$$
+\sigma^2_{X,Y} = \text{corr}(X, Y) \cdot \sigma_X \cdot \sigma_Y
+$$
+Which means, if we have estimated the variance (standard deviation squared) of each variable, we only need to estimate the correlation between the two variables to get their covariance.
+
+Now, the reason we want to estimate variance and correlation seperately is that they behave differently over time. Variance lies on the range $[0, \infty)$ and exhibits dramatic spikes followed by a decay back to a mean. Correlation, on the other hand, is bounded between -1 and 1 and tends to be more stable over time. See the figure below for an example of the variance and correlation of SPY and TLT over time.
+
 {{<figure src="variance_vs-correlation.svg" title="Variance and correlation behave differently." >}}
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
+The top plot shows the variance of SPY and the middle plot shows the variance of TLT. The bottom plot shows the correlation between SPY and TLT. Notice how the variance of both SPY and TLT exhibit spikes and decay back to a mean over time, while the correlation between teh two ETFs is much more stable.
 {{</figure>}}
 
+You can see from the figure that the spikes in variance happen quike quickly. Ideally, we would want to capture these spikes in variance. If we estimate variance with an EWM, we would want to use a short half-life so as not to average out these spikes. The figure also shows that correlation is much more stable, mostly fluctuating around a slowly changing mean. This suggests we can use a longer half-life to capture this slowly changing mean.
 
-Code to calculate variance and correlation independently:
+We can use the metrics from the previous section to test this idea of decoupling the variance and correlation estimates. We'll use the same ETFs as before, but this time we'll calculate the variance and correlation separately using different half-lives.
+
+The following code calculates the EWM covariance matrix by estimating variance and correlation independently:
 ```python
 def ewm_cov(
     returns: pd.DataFrame,
@@ -282,13 +300,23 @@ def ewm_cov(
     min_periods: int,
 ) -> pd.DataFrame:
     """
-    Calculate the exponentially weighted covariance matrix.
+    Returns the exponentially weighted covariance matrix.
 
-    Args:
-        returns: DataFrame of asset returns.
-        var_hl: Half-life of the variance.
-        corr_hl: Half-life of the correlation.
-        min_periods: Minimum number of periods to consider.
+    Parameters
+    ----------
+
+    returns: DataFrame
+        Asset returns over time.
+    
+    var_hl: float
+        Half-life of the variance.
+
+    corr_hl: float
+        Half-life of the correlation.
+
+    min_periods: int
+        Minimum number of periods to consider for the
+        calculation of the covariance.
     """
     vars = returns.ewm(halflife=var_hl, min_periods=min_periods).var()
     corrs = returns.ewm(halflife=corr_hl, min_periods=min_periods).corr()
@@ -301,9 +329,48 @@ def ewm_cov(
     return corrs
 ```
 
-{{<figure src="longer_corr_halflife.svg" title="Better performance when correlation halflife is longer." >}}
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
+We'll conduct an experiment where we use the ETF returns from earlier, vary the half-lives for variance and correlation and measure both the variance of the MVP and the log-likelihood based metric. For the variance estimates, we'll use the same half-lives as before, for the correlation estimates, we'll use the half-lives `[10, 20, 60]`. The results are shown in the figure below.
+
+{{<figure src="longer_corr_halflife.svg" title="Decoupling variance and correlation." >}}
+Both plots show the results of evaluating covariance estimates using two metrics: the variance of the minimum-variance portfolio (MVP) on the left, and a log-likelihood based metric on the right. The x-axis for both plots is the half-life used for estimating variance. The dashed line uses the same half-life for both variance and correlation. The remaining lines fix the half-life for the correlation estimates to one of 10, 20, or 60 days.
 {{</figure>}}
+
+The figure shows that as the half-life for correlation increases, the performance of the covariance estimates improves. Specifically, under the MVP metric, the best variance half-life is approximately `18` days, while the best correlation half-life is `60` days. The log-likelihood metric shows a similar trend, with the best variance half-life also approximately `18` days and the best correlation half-life at `60` days.
+
+The figure also shows the results when the half-life for correlation is set to the same value as the variance half-life (the dashed line). This produces worse estimates than when the correlation half-life is longer than the variance half-life.
+
+This example demonstrates the intuition that we should estimate correlation with a longer half-life than variance.
+
+The code to replicate this example is:
+```python
+from itertools import product
+
+results: list[dict] = []
+
+var_hls = np.logspace(
+    start=np.log10(5),
+    stop=np.log10(100),
+    num=20,
+)
+corr_hls = [10, 20, 60]
+
+for var_hl, corr_hl in product(var_hls, corr_hls):
+
+    covs = ewm_cov(
+        returns=returns.shift(1),
+        var_hl=var_hl,
+        corr_hl=corr_hl,
+        min_periods=200,
+    )
+
+    results.append({
+        'var_hl': var_hl,
+        'corr_hl': corr_hl,
+        'pvar': mvp_metric(covs, returns),
+        'll': ll_metric(covs, returns),
+    })
+```
+
 
 # Shrinkage
 
