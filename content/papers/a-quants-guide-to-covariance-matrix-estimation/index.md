@@ -40,7 +40,7 @@ Here, we're going to cover two approaches; minimum-variance portfolios and the l
 
 ## Minimum-variance portfolios
 
-The idea here is that we usually want a covariance matrix to minimise the variance of our portfolio. So, we can construct the minimum-variance portfolio (MVP) using different covariance estimators and measure their realized variance. The estimator producing the portfolio with the lowest variance is considered the better option.
+The idea here is that we usually want a covariance matrix to minimise the variance of our portfolio. We can construct the minimum-variance portfolio (MVP) using different covariance estimators and compare their realized variance. The estimator producing the portfolio with the lowest variance is considered the better option.
 
 The MVP is given by:
 $$
@@ -228,7 +228,7 @@ The plots show the results of evaluating the EWM covariance estimates on ETF ret
 
 Both metrics demonstrate that the covariance estimates improve as the half-life increases from 5, but they suggest different optimal half-lives. The MVP metric suggests a half-life of around 33 days, while the log-likelihood metric suggests a half-life of around 24 days.
 
-Neither of these metrics is inherently better than the other; they simply measure different aspects of the covariance matrix's performance. Despite targeting different properties of the covariance matrix, both metrics agree that short half-lives (e.g. 5-10 days) underperform, and that there is a sweet spot between 20 and 35 days.
+Neither of these metrics is inherently better than the other; they simply measure different aspects of the covariance matrix's performance. Despite targeting different properties of the covariance matrix, both metrics agree that short half-lives (5-10 days) underperform, and that there is a sweet spot between 20 and 35 days.
 
 The code to replicate this example is:
 
@@ -284,7 +284,7 @@ $$
 $$
 Which means, if we have estimated the variance (standard deviation squared) of each variable, we only need to estimate the correlation between the two variables to get their covariance.
 
-Now, the reason we want to estimate variance and correlation seperately is that they behave differently over time. See the figure below for an example of the variance and correlation of SPY and TLT over time.
+Now, the reason we want to estimate variance and correlation separately is that they behave differently over time. See the figure below for an example of the variance and correlation of SPY and TLT over time.
 
 {{<figure src="variance_vs-correlation.svg" title="Variance and correlation behave differently." >}}
 The top plot shows the variance of SPY and the middle plot shows the variance of TLT. The bottom plot shows the correlation between SPY and TLT. Notice how the variance of both SPY and TLT exhibit spikes, while the correlation between the two ETFs is much more stable.
@@ -376,7 +376,7 @@ for var_hl, corr_hl in product(var_hls, corr_hls):
 
 # Shrinkage
 
-A seminal paper came out in 2003 that introduced the idea of *shrinkage* to estimating a covariance matrix[^Lodit2003]. The idea is that empirical covariance estimates are often noisy, and this noise can be reduced by blending the estimate with the identity matrix.  In other words, we *shrink* the estimate toward the identity.
+A seminal paper came out in 2003 that introduced the idea of *shrinkage* to estimating a covariance matrix[^Lodit2003]. The idea is that empirical covariance estimates are often noisy, and this noise can be reduced by blending the estimate with the identity matrix. In other words, we *shrink* the estimate toward the identity.
 
 Mathematically, we write:
 $$
