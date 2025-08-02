@@ -53,7 +53,7 @@ y = (
 
 Which looks like this:
 
-![](index_files/figure-markdown_strict/cell-3-output-1.svg)
+![](index_files/figure-markdown_strict/cell-3-output-1.png)
 
 We can get the periodogram with:
 
@@ -64,7 +64,7 @@ frequency, power = periodogram(y)
 
 The array `power` is a noisy power spectrum with two spikes. One spike at $\frac{16}{N}$ and the other at $\frac{30}{N}$. It looks like:
 
-![](index_files/figure-markdown_strict/cell-5-output-1.svg)
+![](index_files/figure-markdown_strict/cell-5-output-1.png)
 
 We can create a function that uses `periodogram` and equation ($\ref{2}$) to give us the autocovariance at each $h$ from $0$ to $N$:
 
@@ -92,7 +92,7 @@ Running the time series `y` through the `spectral_autocov` function gives us an 
 autocov = spectral_autocov(y)
 ```
 
-![](index_files/figure-markdown_strict/cell-8-output-1.svg)
+![](index_files/figure-markdown_strict/cell-8-output-1.png)
 
 # Building a Gaussian process
 
@@ -117,7 +117,7 @@ forecast = BA @ np.linalg.inv(AA) @ y[horizon:]
 
 Which looks like this:
 
-![](index_files/figure-markdown_strict/cell-10-output-1.svg)
+![](index_files/figure-markdown_strict/cell-10-output-1.png)
 
 # Summary
 

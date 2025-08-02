@@ -43,3 +43,5 @@ SciPy
 expiries
 autocovariance
 periodogram
+overfitting
+underperform
