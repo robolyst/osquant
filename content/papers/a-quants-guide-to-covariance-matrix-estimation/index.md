@@ -4,7 +4,7 @@ summary: "
     In this article, we explore three techniques to improve covariance matrix estimation: evaluating estimates independently of backtests, decoupling variance and correlation, and applying shrinkage for more robust outputs.
 "
 
-date: "2025-07-20"
+date: "2025-08-02"
 type: paper
 mathjax: true
 authors:
@@ -12,6 +12,7 @@ authors:
 categories:
     - mathematics
     - finance
+hover_color: "#FF9F7F"
 ---
 
 Estimating a covariance matrix from historical prices is a core task in quantitative finance. The go-to solution is an exponentially weighted moving (EWM) estimate of the covariance matrix. It's a simple, fast, and widely available method.
