@@ -12,7 +12,6 @@ authors:
 categories:
     - mathematics
     - finance
-acknowledgements: "All figures in this article were made with [Figma](http://figma.com)."
 ---
 
 Estimating a covariance matrix from historical prices is a core task in quantitative finance. The go-to solution is an exponentially weighted moving (EWM) estimate of the covariance matrix. It's a simple, fast, and widely available method.
@@ -375,13 +374,13 @@ for var_hl, corr_hl in product(var_hls, corr_hls):
 
 # Shrinkage
 
-A seminal paper came out in 2003 that introduced the idea of "shrinkage" to estimating covariance matrices[^Lodit2003]. It describes a method to improve covariance matrix estimates by pulling them toward a structured target. The idea is that empirical covariance estimates are often noisy, and you can average between the estimated correlation matrix and the identity matrix (shrinkage) to reduce this noise.
+A seminal paper came out in 2003 that introduced the idea of *shrinkage* to estimating a covariance matrix[^Lodit2003]. The idea is that empirical covariance estimates are often noisy, and this noise can be reduced by blending the estimate with the identity matrix.  In other words, we *shrink* the estimate toward the identity.
 
 Mathematically, we write:
 $$
 \hat{\boldsymbol{\Omega}}\_{t-1}^{\text{shrunk}} = (1 - \lambda) \hat{\boldsymbol{\Omega}}\_{t-1} + \lambda\boldsymbol{I}
 $$
-Where $\hat{\boldsymbol{\Omega}}\_{t-1}^{\text{shrunk}}$ is the shrunk correlation matrix, $\hat{\boldsymbol{\Omega}}\_{t-1}$ is the estimated correlation matrix, $\boldsymbol{I}$ is the identity matrix, and $0 \le \lambda \le 1$ is a shrinkage parameter that controls how much we pull the estimate toward the identity matrix. When $\lambda = 0$, then no shrinkage is applied.
+Where $\hat{\boldsymbol{\Omega}}\_{t-1}^{\text{shrunk}}$ is the shrunk correlation matrix, $\hat{\boldsymbol{\Omega}}\_{t-1}$ is the estimated correlation matrix, $\boldsymbol{I}$ is the identity matrix, and $0 \le \lambda \le 1$ is the shrinkage parameter that controls how much we blend the estimate with the identity matrix. When $\lambda = 0$, then no shrinkage is applied.
 
 We can update our `ewm_cov` function to include shrinkage:
 ```python
@@ -435,11 +434,11 @@ def ewm_cov(
 
 We can run an experience as in the last two sections. We'll fix the variance half-life to 18 days, and the correlation half-life to 60 days. These are our optimal values from the previous section. We'll vary the shrinkage parameter between 0.0 and 0.2. We could go up to 1.0 but the curve bottoms out long before 1. The results are in the figure below.
 
+The figure shows that the estimates improve as shrinkage increases from 0.
+
 {{<figure src="shrinkage.svg" title="Shrinkage." >}}
 The variance half-life is fixed at 18 days and the correlation half-life is fixed at 60 days. The x-axis shows the shrinkage parameter. Both metrics show that some shrinkage improves the covariance estimates.
 {{</figure>}}
-
-The figure shows that the covariance estimates improve as shrinkage increases from 0. The MVP metric suggests an optimal shrinkage of around `0.0474` while the log-likelihood metric suggests around `0.0632`.
 
 # Conclusion
 
