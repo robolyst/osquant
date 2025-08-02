@@ -374,13 +374,78 @@ for var_hl, corr_hl in product(var_hls, corr_hls):
 
 # Shrinkage
 
-Paper on shrinkage [^Lodit2003]. The idea is to pull our noisy empirical estimates toward a structured target. This reduces estimation error and improves the robustness of our covariance matrix.
+A seminal paper came out in 2003 that introduced the idea of "shrinkage" to estimating covariance matrices[^Lodit2003]. It describes a method to improve covariance matrix estimates by pulling them toward a structured target. The idea is that empirical covariance estimates are often noisy, and you can average between the estimated correlation matrix and the identity matrix (shrinkage) to reduce this noise.
 
-{{<figure src="shrinkage.svg" title="Variance and correlation behave differently." >}}
-Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis iaculis finibus. Donec purus leo, aliquam at malesuada sit amet, elementum vitae quam. Quisque mi justo, euismod ac leo nec, elementum eleifend purus. Etiam ut ornare velit.
+Mathematically, we write:
+$$
+\hat{\boldsymbol{\Omega}}\_{t-1}^{\text{shrunk}} = (1 - \lambda) \hat{\boldsymbol{\Omega}}\_{t-1} + \lambda\boldsymbol{I}
+$$
+Where $\hat{\boldsymbol{\Omega}}\_{t-1}^{\text{shrunk}}$ is the shrunk correlation matrix, $\hat{\boldsymbol{\Omega}}\_{t-1}$ is the estimated correlation matrix, $\boldsymbol{I}$ is the identity matrix, and $0 \le \lambda \le 1$ is a shrinkage parameter that controls how much we pull the estimate toward the identity matrix. When $\lambda = 0$, then no shrinkage is applied.
+
+We can update our `ewm_cov` function to include shrinkage:
+```python
+def ewm_cov(
+    returns: pd.DataFrame,
+    var_hl: float,
+    corr_hl: float,
+    min_periods: int,
+    shrinkage: float = 0.0,
+) -> pd.DataFrame:
+    """
+    Returns the exponentially weighted covariance matrix.
+
+    Parameters
+    ----------
+
+    returns: DataFrame
+        Asset returns over time.
+    
+    var_hl: float
+        Half-life of the variance.
+
+    corr_hl: float
+        Half-life of the correlation.
+
+    min_periods: int
+        Minimum number of periods to consider for the
+        calculation of the covariance.
+
+    shrinkage: float, default=0.0
+        Shrinkage factor to apply to the correlation
+        matrix. A value of 0.0 means no shrinkage,
+        while a value of 1.0 means complete shrinkage
+        to the identity matrix.
+    """
+    vars = returns.ewm(halflife=var_hl, min_periods=min_periods).var()
+    corrs = returns.ewm(halflife=corr_hl, min_periods=min_periods).corr()
+
+    for date in returns.index:
+        std = np.sqrt(vars.loc[date])
+        v = np.outer(std, std)
+        corr = corrs.loc[date].values
+
+        # Shrinkage
+        corr = (1 - shrinkage) * corr + shrinkage * np.eye(len(corr))
+
+        corrs.loc[date] = corr * v
+
+    return corrs
+```
+
+We can run an experience as in the last two sections. We'll fix the variance half-life to 18 days, and the correlation half-life to 60 days. These are our optimal values from the previous section. We'll vary the shrinkage parameter between 0.0 and 0.2. We could go up to 1.0 but the curve bottoms out long before 1. The results are in the figure below.
+
+{{<figure src="shrinkage.svg" title="Shrinkage." >}}
+The variance half-life is fixed at 18 days and the correlation half-life is fixed at 60 days. The x-axis shows the shrinkage parameter. Both metrics show that some shrinkage improves the covariance estimates.
 {{</figure>}}
 
+The figure shows that the covariance estimates improve as shrinkage increases from 0. The MVP metric suggests an optimal shrinkage of around `0.0474` while the log-likelihood metric suggests around `0.0632`.
+
 # Conclusion
+
+In this article, we explored three practical ideas for improving covariance matrix estimation. First, we showed how to evaluate estimates without relying on backtests. Second, we saw that variance and correlation behave differently over time and are best modeled separately. Third, we learned about shrinkage, a simple but powerful way to reduce estimation error by blending empirical estimates with a structured target.
+
+Together, these ideas offer a more principled approach to covariance estimation.
+
 
 
 {{% citation
