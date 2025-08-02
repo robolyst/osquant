@@ -21,25 +21,27 @@ I use an EWM when I need something simple to get started, but there are a few th
 
 1. **Measurement** - Instead of relying solely on backtest performance to evaluate covariance estimates, we can define objective metrics to assess their statistical fitness in isolation.
 
-1. **Separating variance and correlation estimation** - Variance and correlation behave differently over time and should be modeled independently.
+1. **Decoupling variance and correlation** - Variance and correlation behave differently over time and should be modeled independently.
 
-1. **Shrinkage** - By pulling our noisy empirical estimates toward a structured target, shrinkage methods offer a systematic way to reduce estimation error.
+1. **Shrinkage** - Pulling our noisy empirical estimates toward a structured target offers a systematic way to reduce estimation error.
 
-This article won't cover the various methods of covariance matrix estimation, such as EWM estimates, GARCH or other methods. We'll focus on the above three ideas to improve the estimates we get from these methods and we'll use EWM estimates as the example.
+This article won't cover the various methods of covariance matrix estimation, such as EWM, GARCH or other methods. We'll focus on the above three ideas to improve the estimates we get from these methods and we'll use EWM estimates as the example.
 
 # Measurement
 
-The most straightforward way to evaluate covariance matrix estimates is through full backtesting. Simply run your complete investment strategy with different covariance estimators and compare the resulting performance metrics.
+The most straightforward way to evaluate covariance matrix estimates is by backtesting. Simply run your complete investment strategy with different covariance estimators and compare the results.
 
-However, this approach has significant drawbacks. Backtesting is computationally expensive and time-consuming, making it impractical for rapid iteration and research. More importantly, mixing covariance estimation research with portfolio construction can lead to overfitting. When performance improves, you don't know whether the gains come from better covariance estimates or inadvertent optimization of other portfolio components.
+However, this approach has some drawbacks. Backtesting can be time-consuming, making it impractical for rapid iteration and research. More importantly, mixing covariance estimation research with portfolio construction can lead to overfitting. When performance improves, you don't know whether the gains come from better covariance estimates or inadvertent optimization of other portfolio components.
 
 To address these issues, we need isolated evaluation methods that test covariance estimators independently of the full investment process.
 
-The fiddly thing is that there is no "best" covariance matrix, we can pick a general purpose metric or something that targets our particular need. In his book, [Gappy](https://x.com/__paleologo) covers a whole bunch of different ways of measuring covariance matrices[^Paleologo2025]. Here, we're going to cover two approaches; minimum-variance portfolios and the log-likelihood.
+The fiddly thing is that there is no "best" covariance matrix. We have to pick a general purpose metric, or, something that targets our particular need. In his book, [Gappy](https://x.com/__paleologo) goes into depth on different ways of measuring covariance matrices[^Paleologo2025].
+
+Here, we're going to cover two approaches; minimum-variance portfolios and the log-likelihood.
 
 ## Minimum-variance portfolios
 
-The idea here is that we usually want a covariance matrix to minimise the variance of our portfolio. So, we can construct the minimum-variance portfolio (MVP) using different covariance estimators and measure their realized variance. The estimator producing the lowest variance portfolio is considered the better option.
+The idea here is that we usually want a covariance matrix to minimise the variance of our portfolio. So, we can construct the minimum-variance portfolio (MVP) using different covariance estimators and measure their realized variance. The estimator producing the portfolio with the lowest variance is considered the better option.
 
 The MVP is given by:
 $$
@@ -54,7 +56,7 @@ The solution is:
 $$
 \boldsymbol{w}\_{t-1} = \frac{\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}\boldsymbol{1}}{\boldsymbol{1}^T\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}\boldsymbol{1}}
 $$
-We can intuitively understand this by imagining that the assets are not correlated so that the covariance matrix $\hat{\boldsymbol{\Omega}}$ is a diagonal matrix of just the variances. Then you can see that the portfolio weights are proportional to the inverse of the variances. This means that assets with lower variance will receive larger weights in the portfolio.
+We can gain some intuition by imagining that the assets are uncorrelated. This means the covariance matrix $\hat{\boldsymbol{\Omega}}$ is a diagonal matrix of the variances. Then you can see that the portfolio weights are proportional to the inverse of the variances. This means that assets with lower variance will receive larger weights in the portfolio. Thereby dragging the portfolio variance down.
 
 Here is some Python code to calculate it:
 ```python
@@ -68,9 +70,10 @@ def mvp(cov: pd.DataFrame) -> pd.Series:
 
     Parameters
     ----------
-        cov : DataFrame
-            Covariance matrix of asset returns over
-            time.
+
+    cov : DataFrame
+        Covariance matrix of asset returns over
+        time.
     """
     try:
         icov = np.linalg.pinv(cov.values)
@@ -84,7 +87,7 @@ def mvp(cov: pd.DataFrame) -> pd.Series:
 
 ```
 
-Once we have the portfolio weights, we can calculate the portfolio returns. The returns of each asset at time $t$ are given by $\boldsymbol{r}_t$, which is a vector of returns for each asset. The portfolio's return at time $t$ is then:
+Once we have the portfolio weights, we can calculate the portfolio returns. Let's say that the vector of asset returns at time $t$ is $\boldsymbol{r}_t$. The portfolio's return at time $t$ is then:
 $$
 p_t = \boldsymbol{w}^T\_{t-1}\boldsymbol{r}_t
 $$
@@ -92,7 +95,7 @@ And the variance of the portfolio returns is:
 $$
 \text{var}(p_1, p_2, \dots, p_T)
 $$
-When comparing different covariance estimators, we can calculate the variance of the portfolio returns for each estimator and select the one that produces the lowest variance.
+When comparing different estimators, we can calculate the variance of the portfolio returns for each estimator and select the one that produces the lowest variance.
 
 The code for this metric is:
 ```python
@@ -109,11 +112,11 @@ def mvp_metric(
 
     cov : DataFrame
         Covariance matrices of asset returns over
-        time. The covariance at time t should be
-        the covariance matrix we can use to act on
-        returns at time t. Expected to have a column
-        or index called 'Date' that contains the date
-        of the covariance matrix.
+        time. The matrix at time t should be the
+        matrix we can use to act on returns at
+        time t. Expected to have a column or index
+        called 'Date' that contains the date of
+        the matrix.
 
     returns : DataFrame
         Asset returns over time.
@@ -128,13 +131,13 @@ def mvp_metric(
 
 ## Log-likelihood
 
-Assuming returns follow a multivariate Gaussian distribution, we can evaluate how well each estimated covariance matrix explains observed returns using the likelihood function.
+Assume returns follow a multivariate Gaussian distribution. Under that assumption, we can use the likelihood function to evaluate how well each estimated covariance matrix explains the observed returns.
 
-The likelihood that a vector of returns $\boldsymbol{r}_t$ was generated from a Gaussian process with mean $\boldsymbol{\mu}\_{t-1}$ and covariance matrix $\hat{\boldsymbol{\Omega}}\_{t-1}$ is given by the [probability density function](https://en.wikipedia.org/wiki/Multivariate_normal_distribution):
+The likelihood that a vector of returns $\boldsymbol{r}_t$ is observed from a distribution with mean $\boldsymbol{\mu}\_{t-1}$ and covariance $\hat{\boldsymbol{\Omega}}\_{t-1}$ is given by the [probability density function](https://en.wikipedia.org/wiki/Multivariate_normal_distribution):
 $$
 \text{P}(\boldsymbol{r}_t | \boldsymbol{\mu}\_{t-1}, \hat{\boldsymbol{\Omega}}\_{t-1}) = \frac{1}{(2\pi)^{n/2}|\hat{\boldsymbol{\Omega}}\_{t-1}|^{1/2}} \exp\left(-\frac{1}{2}(\boldsymbol{r}_t - \boldsymbol{\mu}\_{t-1})^T\hat{\boldsymbol{\Omega}}\_{t-1}^{-1}(\boldsymbol{r}_t - \boldsymbol{\mu}\_{t-1})\right)
 $$
-We read this as: the likelihood of observing the returns $\boldsymbol{r}_t$ given the mean $\boldsymbol{\mu}\_{t-1}$ and covariance matrix $\hat{\boldsymbol{\Omega}}\_{t-1}$.
+Where $n$ is the number of assets.
 
 We could iterate over all $t$ and multiply the likelihoods together to estimate the fit of our estimates:
 $$
@@ -148,7 +151,7 @@ We want the sum of these for all $t$ to be as large as possible.
 
 We can simplify the log-likelihood function:
 1. For our purposes, we can assume that $\boldsymbol{\mu}\_{t-1} = 0$.
-1. As we are optimising over the same set of $n$ returns, the term $n \log(2\pi)$ has no impact on our results. We can drop it.
+1. As we are optimising over the same set of $n$ assets, the term $n \log(2\pi)$ has no impact on our results. We can drop it.
 1. Multiplying by $-\frac{1}{2}$ only has the effect of flipping the sign, we can drop this too.
 
 The final metric is:
@@ -172,11 +175,11 @@ def ll_metric(
 
     cov : DataFrame
         Covariance matrices of asset returns over
-        time. The covariance at time t should be
-        the covariance matrix we can use to act on
-        returns at time t. Expected to have a column
-        or index called 'Date' that contains the date
-        of the covariance matrix.
+        time. The matrix at time t should be the
+        matrix we can use to act on returns at
+        time t. Expected to have a column or index
+        called 'Date' that contains the date of
+        the matrix.
 
     returns : DataFrame
         Asset returns over time.
@@ -202,7 +205,7 @@ def ll_metric(
 
 ## Example
 
-We'll now walk through an example of how to use these metrics to compare different covariance estimators. Specifically, we'll vary the half-life parameter of an exponentially weighted moving (EWM) covariance matrix and evaluate the results across a small set of ETFs.
+Let's walk through an example of how to use these metrics to compare different covariance estimators. We'll vary the half-life parameter of an EWM covariance matrix and evaluate the results across a small set of ETFs.
 
 Each ETF represents a distinct asset class:
 
@@ -216,15 +219,15 @@ Each ETF represents a distinct asset class:
 
 - VNQ -- U.S. real estate investment trusts (REITs)
 
-For each half-life value, we'll compute the EWM covariance matrix over time and assess the estimates using two evaluation metrics: the variance of the MVP, and the  log-likelihood based metric.
-
 The results are shown in the figure below:
 
-{{<figure src="mvp_vs_ll.svg" title="Example evaluation" >}}
-of EWM covariance matrices using two metrics on ETF returns (data from Yahoo Finance). In both plots, the x-axis shows the half-life used in the exponentially weighted estimate. The left plot reports the variance of the minimum-variance portfolio (MVP), which decreases as the half-life increases, reaching a minimum around 33 days. The right plot shows a log-likelihood-based metric, which also improves (i.e. decreases) with longer half-lives, reaching its lowest point near 24 days.
+{{<figure src="mvp_vs_ll.svg" title="Example of evaluation metrics." >}}
+The plots show the results of evaluating the EWM covariance estimates on ETF returns as the half-life is varied. The left plot reports the variance of the minimum-variance portfolio (MVP). The right plot shows the log-likelihood-based metric.
 {{</figure>}}
 
-Both metrics demonstrate that the covariance estimates improve as the half-life increases from 5, but they suggest different optimal half-lives. The MVP metric suggests a half-life of around 33 days, while the log-likelihood metric suggests a half-life of around 24 days. Neither of these metrics is inherently better than the other; they simply measure different aspects of the covariance matrix's performance. Despite targeting different properties of the covariance matrix, both evaluation metrics agree that short half-lives (e.g. 5-10 days) underperform, and that there is a sweet spot between 20 and 35 days.
+Both metrics demonstrate that the covariance estimates improve as the half-life increases from 5, but they suggest different optimal half-lives. The MVP metric suggests a half-life of around 33 days, while the log-likelihood metric suggests a half-life of around 24 days.
+
+Neither of these metrics is inherently better than the other; they simply measure different aspects of the covariance matrix's performance. Despite targeting different properties of the covariance matrix, both metrics agree that short half-lives (e.g. 5-10 days) underperform, and that there is a sweet spot between 20 and 35 days.
 
 The code to replicate this example is:
 
@@ -266,9 +269,9 @@ for halflife in halflives:
     })
 ```
 
-# Splitting
+# Decoupling
 
-Now that we have a way of measuring covariance estimates independently of backtests, we can explore how to improve the estimates themselves. The first key idea is to decouple estimating variance and correlation.
+Now that we have a way of measuring covariance estimates independently of backtests, we can explore how to improve the estimates. The first key idea is to decouple estimating variance and correlation.
 
 
 Note that the [correlation](https://en.wikipedia.org/wiki/Correlation) between two variables is:
@@ -281,13 +284,15 @@ $$
 $$
 Which means, if we have estimated the variance (standard deviation squared) of each variable, we only need to estimate the correlation between the two variables to get their covariance.
 
-Now, the reason we want to estimate variance and correlation seperately is that they behave differently over time. Variance lies on the range $[0, \infty)$ and exhibits dramatic spikes followed by a decay back to a mean. Correlation, on the other hand, is bounded between -1 and 1 and tends to be more stable over time. See the figure below for an example of the variance and correlation of SPY and TLT over time.
+Now, the reason we want to estimate variance and correlation seperately is that they behave differently over time. See the figure below for an example of the variance and correlation of SPY and TLT over time.
 
 {{<figure src="variance_vs-correlation.svg" title="Variance and correlation behave differently." >}}
-The top plot shows the variance of SPY and the middle plot shows the variance of TLT. The bottom plot shows the correlation between SPY and TLT. Notice how the variance of both SPY and TLT exhibit spikes and decay back to a mean over time, while the correlation between teh two ETFs is much more stable.
+The top plot shows the variance of SPY and the middle plot shows the variance of TLT. The bottom plot shows the correlation between SPY and TLT. Notice how the variance of both SPY and TLT exhibit spikes, while the correlation between the two ETFs is much more stable.
 {{</figure>}}
 
-You can see from the figure that the spikes in variance happen quike quickly. Ideally, we would want to capture these spikes in variance. If we estimate variance with an EWM, we would want to use a short half-life so as not to average out these spikes. The figure also shows that correlation is much more stable, mostly fluctuating around a slowly changing mean. This suggests we can use a longer half-life to capture this slowly changing mean.
+Variance lies on the range $[0, \infty)$ and exhibits dramatic spikes followed by a decay back to a mean. Correlation, on the other hand, is bounded between -1 and 1 and tends to be more stable over time.
+
+Ideally, we would want to capture these spikes in variance. If we estimate variance with an EWM, we would want to use a short half-life so as not to average out these spikes. The figure also shows that correlation is much more stable, mostly fluctuating around a slowly changing mean. This suggests we can use a longer half-life to capture this slowly changing mean.
 
 We can use the metrics from the previous section to test this idea of decoupling the variance and correlation estimates. We'll use the same ETFs as before, but this time we'll calculate the variance and correlation separately using different half-lives.
 
