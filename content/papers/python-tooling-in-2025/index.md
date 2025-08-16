@@ -11,7 +11,6 @@ authors:
     - Adrian Letchford
 categories:
     - engineering
-acknowledgements: "All figures in this article were made with [Figma](http://figma.com)."
 ---
 
 <todo>Replace "skeleton repository" with the link</todo>
@@ -84,7 +83,6 @@ No manual activation needed!
 The top alternative is [poetry](https://python-poetry.org/) which remains a strong, integrated solution (dependency management + build/publish), with a familiar UX and mature ecosystem.
 
 I prefer uv for a modern quant project because it's significantly faster. For teams running frequent CI and spinning up many ephemeral envs, the speed and lockfile model are tangible wins. 
-
 
 ## Code linting & formatting
 
