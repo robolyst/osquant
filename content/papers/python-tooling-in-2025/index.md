@@ -18,15 +18,15 @@ Today, Python's ecosystem has an abundance of tooling designed to support every 
 
 This article presents a modern, opinionated toolchain for Python development in quantitative research and development. The focus is on **code quality**, ensuring that your codebase is clean, tested, typed, and consistent.
 
-Each tool has been selected for its performance, reliability, and integration with the broader Python and data science ecosystem. At the end of the article, I've included a skeleton config that puts everything together into a coherent project structure---ready to use, or adapt to your own trading or research needs.
+Each tool is fast, reliable, and integrates with the broader Python and data science ecosystem. At the end of the article, I've included a skeleton config that puts everything together into a coherent project structure---ready to use, or adapt to your own trading or research needs.
 
-Whether you're starting fresh or refining an existing workflow, this guide should provide a solid foundation for modern, professional-grade Python development in quant environments.
+Whether you are starting fresh or refining an existing workflow, this guide should provide a solid foundation for modern, professional-grade Python development in quant environments.
 
 <sectionbreak></sectionbreak>
 
 Four pillars underpin a high-quality Python codebase: **package management**, **code linting & formatting**, **static typing**, and **testing**. Each has a crowded ecosystem of tools, but the modern ones worth adopting share two traits: speed and integration with `pyproject.toml`.
 
-Speed matters because modern development often means running checks and builds many times a day. A tool that executes in seconds instead of minutes directly shortens feedback loops, encourages frequent use, and keeps you in the flow.
+Speed matters because modern development often means running checks and builds multiple times a day. A tool that executes in seconds instead of minutes directly shortens feedback loops, encourages frequent use, and keeps you in the flow.
 
 The `pyproject.toml` file was introduced by [PEP 518](https://peps.python.org/pep-0518/) (and later [PEP 517](https://peps.python.org/pep-0517/))[^1] to give Python projects a single, tool-agnostic place to declare build requirements and configuration. In the past, settings were scattered across `setup.cfg`, `tox.ini`, and assorted dotfiles. But now modern tools have converged on `pyproject.toml` as the canonical source of truth. In practice, it's the front door to your project's tooling: one file that defines how the project is built, tested, linted, and run.
 
@@ -42,7 +42,7 @@ The modern approach is to keep a manifest of your top-level dependencies and aut
 
 ## uv
 
-In 2025, [uv](https://docs.astral.sh/uv/) is the fastest, most complete option for day-to-day Python dependency management. It handles project creation, dependency resolution, a cross-platform lockfile, virtualenvs, tool running, and even Python runtime installation---while staying compatible with `pyproject.toml`. It's built for speed (think millisecond-level operations, written in Rust) and reproducibility, which matters when you're iterating on models and shipping to CI frequently.
+In 2025, [uv](https://docs.astral.sh/uv/) is the fastest option for day-to-day Python dependency management. It handles project creation, dependency resolution, a cross-platform lockfile, virtualenvs, tool running, and even Python runtime installation---while staying compatible with `pyproject.toml`. It's built for speed (think millisecond-level operations, written in Rust) and reproducibility, which matters when you're iterating on models and shipping to CI frequently.
 
 Core workflow:
 
