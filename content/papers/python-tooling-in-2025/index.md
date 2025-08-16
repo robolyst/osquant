@@ -11,7 +11,7 @@ authors:
     - Adrian Letchford
 categories:
     - engineering
-hover_color: "#73dda6"
+hover_color: "#c6dd73ff"
 ---
 
 Today, Python's ecosystem offers an abundance of tooling to support every aspect of the development workflow. From dependency management to static analysis, from linting to environment setup, there are more options than ever.
