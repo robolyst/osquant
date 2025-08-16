@@ -57,6 +57,15 @@ You can add todo notes to your drafts using the `todo` tag.
 
 <todo>Add chart showing a sine wave.</todo>
 
+# Section breaks
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sodales libero sed lobortis dignissim. Aenean tempor lorem eget varius maximus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean mauris risus, vulputate ut diam molestie, consequat porta dui. Nulla sit amet justo ac eros aliquam fringilla et nec leo. Nullam ut orci sit amet elit imperdiet laoreet. Cras orci libero, eleifend non purus non, scelerisque fringilla nunc. Fusce tempor, enim non euismod ullamcorper, leo lectus tincidunt tortor, vel ornare ex lorem feugiat odio. Curabitur eu finibus nisi. Morbi vel ante ligula.
+
+<sectionbreak></sectionbreak>
+
+Suspendisse ac dictum orci, a efficitur justo. Quisque semper lacinia nisl at convallis. Quisque tellus lectus, rutrum eget cursus eget, tincidunt iaculis purus. Pellentesque sollicitudin nibh malesuada lacinia maximus. Mauris mollis ullamcorper mattis. Suspendisse hendrerit augue quis odio blandit convallis. Ut auctor neque diam, vel sollicitudin sapien scelerisque scelerisque. Fusce mauris odio, viverra a sem interdum, vestibulum volutpat arcu. Mauris vehicula fermentum augue, quis ultrices elit commodo in. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi. In hac habitasse platea dictumst. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec a velit iaculis, ornare nulla sit amet, consequat orci. Curabitur non metus dui.
+
+
 # Maths
 
 ## Inline maths

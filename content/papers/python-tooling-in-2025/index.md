@@ -1,7 +1,7 @@
 ---
 title: "Python Tooling in 2025"
 summary: "
-    A 2025 guide to the best Python tools for quants--from fast package managers and powerful linters to devcontainers and task runners. Includes example configs and a ready-to-use project template.
+    A 2025 guide to the best Python tools for quants---from fast package managers and powerful linters to type checkers and test runners. Includes example configs.
 "
 
 date: "2025-08-14"
@@ -13,20 +13,15 @@ categories:
     - engineering
 ---
 
-<todo>Replace "skeleton repository" with the link</todo>
+Today, Python's ecosystem has an abundance of tooling designed to support every aspect of the development workflow. From dependency management to static analysis, from linting to environment setup, there are more options than ever!
 
-Today, Python's ecosystem has abundance of tooling designed to support every aspect of the development workflow. From dependency management to static analysis, from linting to environment setup, there are more options than ever!
+This article presents a modern, opinionated toolchain for Python development in quantitative research and development. The focus is on **code quality**, ensuring that your codebase is clean, tested, typed, and consistent.
 
-This article presents a modern, opinionated toolchain for Python development in quantitative research and development. The focus is:
-
-1. **Code quality** - ensuring that your codebase is clean, tested, typed, and consistent.
-2. **Developer productivity** - improving the day-to-day development experience with better workflows and automation.
-
-Each tool has been selected for its performance, reliability, and integration with the broader Python and data science ecosystem. To accompany the article, I've published a [skeleton repository](https://www.notion.so/Article-ideas-ab575e137dff46f9a63d73d42a47b769?pvs=21) that puts everything together into a coherent project structure--ready to use, or adapt to your own trading or research needs.
+Each tool has been selected for its performance, reliability, and integration with the broader Python and data science ecosystem. At the end of the article, I've included a skeleton config that puts everything together into a coherent project structure--ready to use, or adapt to your own trading or research needs.
 
 Whether you're starting fresh or refining an existing workflow, this guide should provide a solid foundation for modern, professional-grade Python development in quant environments.
 
-# Code Quality
+<sectionbreak></sectionbreak>
 
 Four pillars underpin a high-quality Python codebase: **package management**, **code linting & formatting**, **static typing**, and **testing**. Each has a crowded ecosystem of tools, but the modern ones worth adopting share two traits: speed and integration with `pyproject.toml`.
 
@@ -36,32 +31,32 @@ The `pyproject.toml` file was introduced by [PEP 518](https://peps.python.org/pe
 
 Let's examine each of the four pillars in turn and see how to implement them effectively in a modern Python stack.
 
-## Package management
+# Package management
 
-Package management controls how your project declares, resolves, installs, and reproduces dependencies. Done well, it shrinks "works on my machine" risk and keeps CI/CD, development, and research sandboxes aligned.
+Package management controls how your project declares, resolves, installs, and reproduces dependencies. Done well, it reduces "works on my machine" risk and keeps CI/CD, development, and research sandboxes aligned.
 
 Historically, the de-facto approach with `pip` was a plain `requirements.txt`---a flat list of packages to install. It usually pins only your top-level dependencies (e.g., `numpy`, `pandas`), leaving [transitive versions](https://en.wikipedia.org/wiki/Transitive_dependency) to float. Rebuilding the environment days or weeks later can resolve a different dependency tree, causing surprise breakages and hard-to-trace drift across machines, CI, or research environments. Fine for quick scripts; brittle for anything that needs reproducibility.
 
 The modern approach is to keep a manifest of your top-level dependencies and automatically generate a **lock file** that pins the *entire* dependency tree (including transitive packages). You commit the lock file and rebuild from it. Installs are now completely deterministic. Upgrades or new packages become deliberate: adjust the manifest, regenerate the lock, and review the diff. Dependency drift is eliminated.
 
-### UV
+## UV
 
 In 2025, [uv](https://docs.astral.sh/uv/) is the fastest, most complete option for day-to-day Python dependency management. It handles project creation, dependency resolution, a cross-platform lockfile, virtualenvs, tool running, and even Python runtime installation---while staying compatible with pyproject.toml. It's built for speed (think milliseconds-level operations, written in Rust) and reproducibility, which matters when you're iterating on models and shipping to CI frequently.
 
 Core workflow:
 
-#### Install
+### Install
 ```bash
 pip install uv
 ```
-From this point on, only use `uv`, not `pip`.
+From this point on, only use `uv`, not `pip`. For other installation options, check out the ["Installing uv"](https://docs.astral.sh/uv/getting-started/installation/) guide.
 
-#### Create a new project
+### Create a new project
 ```bash
 uv init myproject
 ```
 This adds a `pyproject.toml` file.
-#### Add dependencies
+### Add dependencies
 ```bash
 cd myproject
 uv add pandas numpy scipy 
@@ -69,77 +64,81 @@ uv add --dev pytest ruff   # dependency groups for clean separation
 ```
 This adds the dependencies to `pyproject.toml` and updates the lock file.
 
-#### Create/sync the environment to the lockfile
-<todo>Make sure the reader knows how to sync just the main deps or the dev deps.</todo>
+### Create/sync the environment to the lockfile
 ```bash
 uv sync
 ```
-This will automatically create a `.venv` for you.
+This will automatically fully a [virtual environment](https://docs.python.org/3/library/venv.html) for you in  `.venv`.
 
-#### Run commands inside the managed venv
+### Execute inside the managed venv
 ```bash
-uv run pytest -q
 uv run python scripts/backtest.py
 ```
 No manual activation needed!
 
 
-### Alternatives (and why I prefer uv)
+## Alternatives (and why I prefer uv)
 
 The top alternative is [poetry](https://python-poetry.org/) which remains a strong, integrated solution (dependency management + build/publish), with a familiar UX and mature ecosystem.
 
 I prefer uv for a modern quant project because it's significantly faster. For teams running frequent CI and spinning up many ephemeral envs, the speed and lockfile model are tangible wins. 
 
-## Code linting & formatting
+# Code linting & formatting
 
 You write code; you read code. Some is clean and easy to scan. Other code---sometimes your own---resists a first pass. Unused imports, awkward line breaks, dead code, vague names, and stray typos create confusion, hide bugs, and fuel [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality). Linting & formatting tools keep your codebase in a consistent style, catch small mistakes early, and frees you to think about models, not minutiae.
 
-**Linting** statically analyzes your code for defects and style issues: unused imports, shadowed variables, dead code, unsafe patterns, complexity, naming conventions, and more. For example, using multiple `isinstance` calls for the same object is uncessary and verbose. This is caught using a rule called [duplicate-isinstance-call](https://docs.astral.sh/ruff/rules/duplicate-isinstance-call/):
+**Linting** statically analyzes your code for defects and style issues: unused imports, shadowed variables, dead code, unsafe patterns, complexity, naming conventions, and more.
+
+For example, using multiple `isinstance` calls for the same object is uncessary and verbose. This is caught using a rule called [duplicate-isinstance-call](https://docs.astral.sh/ruff/rules/duplicate-isinstance-call/):
 
 {{<figure src="lint-example.png" width="medium" >}} {{</figure>}}
 
 **Formatting** is complementary: it rewrites code to a consistent style (spacing, quotes, import order, line wraps) so devs don't argue about it and diffs stay clean.
 
-### Ruff
+## Ruff
 
-Use [Ruff](https://docs.astral.sh/ruff/) for both linting and formatting. It's fast (written in Rust), batteries-included (replaces flake8 + isort and can replace Black), and reads all config from pyproject.toml. Most of all, it will lint and format your notebooks!
+Use [Ruff](https://docs.astral.sh/ruff/) for both linting and formatting. It's fast (written in Rust), batteries-included (replaces flake8 + isort and can replace Black), and reads all config from `pyproject.toml`. Most of all, it will lint and format your notebooks!
 
 Core workflow:
 
-#### Install
+### Install
 
 With `uv` (recommended), add `ruff` as a dev dependency:
 ```bash
 uv add --dev ruff
 ```
 
-#### Check
+### Check
 Check you code with:
 ```bash
 uv run ruff check .
 ```
 
-#### Fix
+### Fix
 Automatically fix many of the linting and formatting errors with:
 ```bash
 uv run ruff check . --fix    # lint + auto-fix
 uv run ruff format .         # code formatter
 ```
 
-### Config
+## Config
 
-The team behind `ruff`, Astral, provide [configuration docs](https://docs.astral.sh/ruff/configuration/) and [rule docs](https://docs.astral.sh/ruff/rules/). But to get you started, here is a sensible `pyproject.toml` config for a quant codebase:
+The team behind Ruff, [Astral](https://astral.sh/), provide [configuration docs](https://docs.astral.sh/ruff/configuration/) and [rule docs](https://docs.astral.sh/ruff/rules/). But to get you started, here is a sensible `pyproject.toml` config for a quant codebase:
 
 
 ```toml
 [tool.ruff]
 line-length = 100
 
-# If you hit false positives in quick-and-dirty experiment folders, exclude these here.
-exclude = [".venv"]
+# If you hit false positives in quick-and-dirty
+# experiment folders, exclude these here.
+exclude = [
+    ".venv",
+]
 
 [tool.ruff.lint]
-# Full list of rules here: https://docs.astral.sh/ruff/rules/
+# Full list of rules here:
+# https://docs.astral.sh/ruff/rules/
 select = [
     # Core rules
     "E",     # pycodestyle errors
@@ -156,7 +155,7 @@ select = [
 ]
 ```
 
-## Static typing
+# Static typing
 
 Static type checking analyzes your code without running it to ensure values match expectations. In Python, those expectations are written as type annotations in function signatures and variables; the checker reads these (and infers the rest) to catch mismatches--e.g., a function expecting a `pd.Series` won't silently receive a `pd.DataFrame`.
 
@@ -177,24 +176,24 @@ def load_csv(path: Path | str) -> pd.DataFrame: ...
 load_csv(123)  # ❌ flagged: int is not Path | str
 ```
 
-### Pyright
+## Pyright
 
 Use [Pyright](https://github.com/microsoft/pyright) as your static type checker: it's fast, mature, and powers VS Code's Pylance, so editor feedback is excellent. It also plays well with pandas-stubs and numpy.typing, which improves day-to-day ergonomics in quant code. 
 
 Core workflow:
 
-#### Install
+### Install
 ```bash
 uv add --dev pyright pandas-stubs
 ```
 Add pandas-stubs (already shown); it materially improves Pandas ergonomics.
 
-#### Check for typing errors
+### Check for typing errors
 ```bash
 uv run pyright
 ```
 
-### Config
+## Config
 Pyright is configurable in the `pyproject.toml` file. Full [documentation here](https://microsoft.github.io/pyright/#/configuration). To get you started, here is a config suitable for a quant project:
 
 ```toml
@@ -208,28 +207,28 @@ reportUnusedImport = "error"
 reportMissingTypeStubs = true
 ```
 
-### Alternatives
+## Alternatives
 
-[Pyrefly](https://pyrefly.org/) --- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with Pandas-heavy code; you may find yourself fighting the checker (e.g., `res = res.loc[idx, :]` often narrows to `Series | Unknown`).
+[Pyrefly](https://pyrefly.org/) --- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with Pandas-heavy code; you may find yourself fighting the checker (e.g., `df = df.loc[idx, :]` narrows to `(Series | Unknown)` and fails).
 
 [Astral ty](https://docs.astral.sh/ty/) --- a new Rust type checker from the Ruff/uv team. It's in [preview/alpha](https://github.com/astral-sh/ty/releases) today; promising performance, but not production-ready yet. Worth tracking and trying.
 
 
-## Testing
+# Testing
 
 Automated tests are executable specifications: every run confirms the code still behaves as intended. Without them, every edit becomes a time-consuming, error-prone recheck. In quant teams, skipping tests turns every change into a manual audit; a fast test suite collapses that loop from hours to seconds and lets you make changes and ship with confidence.
 
-### Pytest
+## Pytest
 pytest is the de-facto test runner for Python. It's simple, fast, and extensible.
 
 Core workflow:
 
-#### Install
+### Install
 ```bash
 uv add --dev pytest
 ```
 
-#### Write a test
+### Write a test
 ```python
 # tests/test_sharpe.py
 import numpy as np
@@ -250,12 +249,12 @@ Some best practices here:
 * Put test code under a top level folder `tests/`.
 * Name test files `test_*.py` and test functions `test_*`.
 
-#### Run tests
+### Run tests
 ```bash
 uv run pytest tests/
 ```
 
-### Config
+## Config
 
 Pytest requires very little configuration. I like to put this into my `pyproject.toml` to make it explict where the tests are and so that I only have to run `uv run pytest`:
 
@@ -264,9 +263,15 @@ Pytest requires very little configuration. I like to put this into my `pyproject
 testpaths = ["tests"]
 ```
 
-# Productivity
-
 # Example config
+
+To bootstrap a new project or modernize an existing one:
+
+1. Add the configuration below to a pyproject.toml at the repository root.
+1. Install **uv** (`pip install uv`) or ensure it's available.
+1. Create the environment with `uv sync`.
+
+`uv sync` resolves and installs dependencies from your project manifest/lockfile and typically completes in seconds on a fresh project.
 
 ```toml
 # ================================================

@@ -856,3 +856,16 @@ Twitter callout
 #page_content .callout a.twitter-follow:hover {
     background-color: #428AD2;
 }
+
+
+sectionbreak:empty:before {
+  content: "~ + ÷ + ~";
+}
+
+sectionbreak {
+    display: block;
+    color: rgb(221, 221, 221);
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
