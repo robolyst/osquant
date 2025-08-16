@@ -14,11 +14,11 @@ categories:
 hover_color: "#73dda6"
 ---
 
-Today, Python's ecosystem has an abundance of tooling designed to support every aspect of the development workflow. From dependency management to static analysis, from linting to environment setup, there are more options than ever!
+Today, Python's ecosystem offers an abundance of tooling to support every aspect of the development workflow. From dependency management to static analysis, from linting to environment setup, there are more options than ever.
 
-This article presents a modern, opinionated toolchain for Python development in quantitative research and development. The focus is on **code quality**, ensuring that your codebase is clean, tested, typed, and consistent.
+This article presents a modern, opinionated toolchain for Python development in quantitative research and development. The focus is **code quality**, ensuring that your codebase is clean, tested, typed, and consistent.
 
-Each tool is fast, reliable, and integrates with the broader Python and data science ecosystem. At the end of the article, I've included a skeleton config that puts everything together into a coherent project structure---ready to use, or adapt to your own trading or research needs.
+Each tool is fast, reliable, and well-integrated with the broader Python and data science ecosystem. At the end of the article, I've included a skeleton config that puts everything together into a coherent project structure---ready to use or adapt to your own trading or research needs.
 
 Whether you are starting fresh or refining an existing workflow, this guide should provide a solid foundation for modern, professional-grade Python development in quant environments.
 
@@ -82,7 +82,7 @@ No manual activation needed!
 
 The top alternative is [poetry](https://python-poetry.org/) which remains a strong, integrated solution (dependency management + build/publish), with a familiar UX and mature ecosystem.
 
-I prefer uv for a modern quant project because it's significantly faster. For teams running frequent CI and spinning up many ephemeral envs, the speed and lockfile model are tangible wins. 
+I prefer uv for a modern quant project because it's significantly faster. For teams running frequent CI and spinning up many ephemeral environments, the speed and lockfile model are tangible wins. 
 
 # Code linting & formatting
 
@@ -210,9 +210,10 @@ reportMissingTypeStubs = true
 
 ## Alternatives
 
-[Pyrefly](https://pyrefly.org/) -- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with Pandas-heavy code; you may find yourself fighting the checker (e.g., `df = df.loc[idx, :]` narrows to `(Series | Unknown)` and fails).
 
-[Astral ty](https://docs.astral.sh/ty/) -- a new Rust type checker from the Ruff/uv team. It's in [preview/alpha](https://github.com/astral-sh/ty/releases) today; promising performance, but not production-ready yet. Worth tracking and trying.
+[Pyrefly](https://pyrefly.org/) --- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with pandas-heavy code; you may find yourself fighting the checker (e.g., `df = df.loc[idx, :]` narrows to `(Series | Unknown)` and fails).
+
+[Astral ty](https://docs.astral.sh/ty/) --- a new Rust type checker from the Ruff/uv team. It's in [preview/alpha](https://github.com/astral-sh/ty/releases) today; promising performance, but not production-ready yet. Worth tracking and trying.
 
 
 # Testing
@@ -357,12 +358,12 @@ testpaths = ["tests"]
 
 A modern, reliable Python codebase for quant work rests on four pillars: **package management** with `uv`, **linting & formatting** with `ruff`, **static type checking** with `pyright`, and **testing** with `pytest`. Together they deliver reproducible environments, cleaner diffs, earlier bug detection, and safer refactors---so research code promotes to production with fewer surprises.
 
-What to do next:
+What to do next
 
 * Start from the example config, run `uv sync`, and keep the lockfile committed.
 * Enable `ruff` and `pyright` in your editor; run them and `pytest` in CI on every PR.
 * Grow tests alongside features.
-* Review lockfile diffs and lint/type failures like any other change---these are quality signals, not noise.
+* Review lockfile diffs and lint/type failures like any other change---they are quality signals, not noise.
 
 Adopt this baseline, and you get a fast feedback loop and a codebase that stays readable, testable, and reproducible as it scales.
 
