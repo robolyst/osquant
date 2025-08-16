@@ -354,4 +354,15 @@ testpaths = ["tests"]
 
 # Summary
 
+A modern, reliable Python codebase for quant work rests on four pillars: **package management** with `uv`, **linting & formatting** with `ruff`, **static type checking** with `pyright`, and **testing** with `pytest`. Together they deliver reproducible environments, cleaner diffs, earlier bug detection, and safer refactors—so research code promotes to production with fewer surprises.
+
+What to do next:
+
+* Start from the example config, run `uv sync`, and keep the lockfile committed.
+* Enable `ruff` and `pyright` in your editor; run them and `pytest` in CI on every PR.
+* Grow tests alongside features.
+* Review lockfile diffs and lint/type failures like any other change---these are quality signals, not noise.
+
+Adopt this baseline, and you get a fast feedback loop and a codebase that stays readable, testable, and reproducible as it scales.
+
 [^1]: Even though PEP 517 has a smaller number than PEP 518, PEP 517 does indeed referece PEP 518 as the source of the `pyproject.toml` file. It says "Here we define a new style of source tree based around the pyproject.toml file defined in PEP 518..." You can check the documents' post history for their latest publication date.
