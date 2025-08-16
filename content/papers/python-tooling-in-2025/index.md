@@ -46,9 +46,15 @@ The modern approach is to keep a manifest of your top-level dependencies and aut
 
 ### UV
 
-In 2025, [uv](https://docs.astral.sh/uv/) is the fastest, most complete option for day-to-day Python dependency management. It handles project creation, dependency resolution, a cross-platform lockfile, virtualenvs, tool running, and even Python runtime installation---while staying compatible with pyproject.toml. It's built for speed (think milliseconds-level operations) and reproducibility, which matters when you're iterating on models and shipping to CI frequently.
+In 2025, [uv](https://docs.astral.sh/uv/) is the fastest, most complete option for day-to-day Python dependency management. It handles project creation, dependency resolution, a cross-platform lockfile, virtualenvs, tool running, and even Python runtime installation---while staying compatible with pyproject.toml. It's built for speed (think milliseconds-level operations, written in Rust) and reproducibility, which matters when you're iterating on models and shipping to CI frequently.
 
 Core workflow:
+
+#### Install
+```bash
+pip install uv
+```
+From this point on, only use `uv`, not `pip`.
 
 #### Create a new project
 ```bash
@@ -85,6 +91,70 @@ The top alternative is [poetry](https://python-poetry.org/) which remains a stro
 I prefer uv for a modern quant project because it's significantly faster. For teams running frequent CI and spinning up many ephemeral envs, the speed and lockfile model are tangible wins. 
 
 ## Code linting & formatting
+
+You write code; you read code. Some is clean and easy to scan. Other code---sometimes your own---resists a first pass. Unused imports, awkward line breaks, dead code, vague names, and stray typos create confusion, hide bugs, and fuel [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality). Linting & formatting tools keep your codebase in a consistent style, catch small mistakes early, and frees you to think about models, not minutiae.
+
+**Linting** statically analyzes your code for defects and style issues: unused imports, shadowed variables, dead code, unsafe patterns, complexity, naming conventions, and more. For example, using multiple `isinstance` calls for the same object is uncessary and verbose. This is caught using a rule called [duplicate-isinstance-call](https://docs.astral.sh/ruff/rules/duplicate-isinstance-call/):
+
+{{<figure src="lint-example.png" width="medium" >}} {{</figure>}}
+
+**Formatting** is complementary: it rewrites code to a consistent style (spacing, quotes, import order, line wraps) so devs don't argue about it and diffs stay clean.
+
+### Ruff
+
+Use [Ruff](https://docs.astral.sh/ruff/) for both linting and formatting. It's fast (written in Rust), batteries-included (replaces flake8 + isort and can replace Black), and reads all config from pyproject.toml. Most of all, it will lint and format your notebooks! For most teams, Ruff becomes the single tool you run on save, in CI, and before commits.
+
+Core workflow:
+
+#### Install
+
+With `uv` (recommended), add `ruff` as a dev dependency:
+```bash
+uv add --dev ruff
+```
+
+#### Check
+Check you code with:
+```bash
+uv run ruff check .
+```
+
+#### Fix
+Automatically fix many of the linting and formatting errors with:
+```bash
+uv run ruff check . --fix    # lint + auto-fix
+uv run ruff format .         # code formatter
+```
+
+### Config
+
+The team behind `ruff`, Astral, provide [configuration docs](https://docs.astral.sh/ruff/configuration/) and [rule docs](https://docs.astral.sh/ruff/rules/). But to get you started, here is a sensible `pyproject.toml` config for a quant codebase:
+
+
+```toml
+[tool.ruff]
+line-length = 100
+
+# If you hit false positives in quick-and-dirty experiment folders, exclude these here.
+exclude = [".venv"]
+
+[tool.ruff.lint]
+# Full list of rules here: https://docs.astral.sh/ruff/rules/
+select = [
+    # Core rules
+    "E",     # pycodestyle errors
+    "F",     # Pyflakes
+    "UP",    # pyupgrade
+    "I",     # isort
+    
+    # Quality and style
+    "B",     # flake8-bugbear
+    "Q",     # flake8-quotes
+    "SIM",   # flake8-simplify
+    "FLY",   # flynt
+    "PERF",  # Perflint
+]
+```
 
 ## Static typing
 
