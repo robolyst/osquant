@@ -217,6 +217,53 @@ reportMissingTypeStubs = true
 
 ## Testing
 
+Automated tests are executable specifications: every run confirms the code still behaves as intended. Without them, every edit becomes a time-consuming, error-prone recheck. In quant teams, skipping tests turns every change into a manual audit; a fast test suite collapses that loop from hours to seconds and lets you make changes and ship with confidence.
+
+### Pytest
+pytest is the de-facto test runner for Python. It's simple, fast, and extensible.
+
+Core workflow:
+
+#### Install
+```bash
+uv add --dev pytest
+```
+
+#### Write a test
+```python
+# tests/test_sharpe.py
+import numpy as np
+import pandas as pd
+
+from src.metrics import sharpe  # your code
+
+def test_sharpe_zero_on_zero_returns():
+    r = pd.Series(np.zeros(10))
+    assert sharpe(r) == 0.0
+
+def test_sharpe_handles_nans():
+    r = pd.Series([0.01, np.nan, 0.02, -0.01]).fillna(0)
+    assert np.isfinite(sharpe(r))
+```
+
+Some best practices here:
+* Put test code under a top level folder `tests/`.
+* Name test files `test_*.py` and test functions `test_*`.
+
+#### Run tests
+```bash
+uv run pytest tests/
+```
+
+### Config
+
+Pytest requires very little configuration. I like to put this into my `pyproject.toml` to make it explict where the tests are and so that I only have to run `uv run pytest`:
+
+```toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+```
+
 # Productivity
 
 # Skeleton repo
