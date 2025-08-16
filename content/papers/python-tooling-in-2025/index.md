@@ -102,7 +102,7 @@ You write code; you read code. Some is clean and easy to scan. Other code---some
 
 ### Ruff
 
-Use [Ruff](https://docs.astral.sh/ruff/) for both linting and formatting. It's fast (written in Rust), batteries-included (replaces flake8 + isort and can replace Black), and reads all config from pyproject.toml. Most of all, it will lint and format your notebooks! For most teams, Ruff becomes the single tool you run on save, in CI, and before commits.
+Use [Ruff](https://docs.astral.sh/ruff/) for both linting and formatting. It's fast (written in Rust), batteries-included (replaces flake8 + isort and can replace Black), and reads all config from pyproject.toml. Most of all, it will lint and format your notebooks!
 
 Core workflow:
 
@@ -179,7 +179,7 @@ load_csv(123)  # ❌ flagged: int is not Path | str
 
 ### Pyright
 
-Use [Pyright](https://github.com/microsoft/pyright) as your primary checker: it's fast, mature, and powers VS Code's Pylance, so editor feedback is excellent. It also plays well with pandas-stubs and numpy.typing, which improves day-to-day ergonomics in quant code. 
+Use [Pyright](https://github.com/microsoft/pyright) as your static type checker: it's fast, mature, and powers VS Code's Pylance, so editor feedback is excellent. It also plays well with pandas-stubs and numpy.typing, which improves day-to-day ergonomics in quant code. 
 
 Core workflow:
 
@@ -210,9 +210,9 @@ reportMissingTypeStubs = true
 
 ### Alternatives
 
-[**Pyrefly**](https://pyrefly.org/) --- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with Pandas-heavy code; you may find yourself fighting the checker (e.g., `res = res.loc[idx, :]` often narrows to `Series | Unknown`).
+[Pyrefly](https://pyrefly.org/) --- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with Pandas-heavy code; you may find yourself fighting the checker (e.g., `res = res.loc[idx, :]` often narrows to `Series | Unknown`).
 
-[**Astral ty**](https://docs.astral.sh/ty/) --- a new Rust type checker from the Ruff/uv team. It's in [preview/alpha](https://github.com/astral-sh/ty/releases) today; promising performance, but not production-ready yet. Worth tracking and trying.
+[Astral ty](https://docs.astral.sh/ty/) --- a new Rust type checker from the Ruff/uv team. It's in [preview/alpha](https://github.com/astral-sh/ty/releases) today; promising performance, but not production-ready yet. Worth tracking and trying.
 
 
 ## Testing
