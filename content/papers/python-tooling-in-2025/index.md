@@ -266,7 +266,86 @@ testpaths = ["tests"]
 
 # Productivity
 
-# Skeleton repo
+# Example config
+
+```toml
+# ================================================
+# Project Configuration
+# ================================================
+
+[project]
+name = "My Project"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.3.2",
+    "pandas>=2.3.1",
+]
+
+# ================================================
+# Development Dependencies
+# ================================================
+
+[dependency-groups]
+dev = [
+    "pandas-stubs>=2.3.0.250703",
+    "pyright>=1.1.403",
+    "pytest>=8.4.1",
+    "ruff>=0.12.9",
+]
+
+# ================================================
+# Linting and Formatting
+# ================================================
+
+[tool.ruff]
+line-length = 100
+
+# If you hit false positives in quick-and-dirty
+# experiment folders, exclude these here.
+exclude = [
+    ".venv",
+]
+
+[tool.ruff.lint]
+# Full list of rules here:
+# https://docs.astral.sh/ruff/rules/
+select = [
+    # Core rules
+    "E",     # pycodestyle errors
+    "F",     # Pyflakes
+    "UP",    # pyupgrade
+    "I",     # isort
+    
+    # Quality and style
+    "B",     # flake8-bugbear
+    "Q",     # flake8-quotes
+    "SIM",   # flake8-simplify
+    "FLY",   # flynt
+    "PERF",  # Perflint
+]
+
+# ================================================
+# Static Type Checking
+# ================================================
+
+[tool.pyright]
+# Turn useful diagnostics up early
+reportUnknownVariableType = true
+reportUnknownMemberType = true
+reportUnknownArgumentType = true
+reportOptionalSubscript = true
+reportUnusedImport = "error"
+reportMissingTypeStubs = true
+
+# ================================================
+# Testing
+# ================================================
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+```
 
 # Summary
 
