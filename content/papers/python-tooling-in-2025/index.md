@@ -158,6 +158,63 @@ select = [
 
 ## Static typing
 
+Static type checking analyzes your code without running it to ensure values match expectations. In Python, those expectations are written as type annotations in function signatures and variables; the checker reads these (and infers the rest) to catch mismatches--e.g., a function expecting a `pd.Series` won't silently receive a `pd.DataFrame`.
+
+Those same annotations double as executable documentation: they make refactors safer and surface edge cases in data pipelines. On large research codebases, the result is fewer "works in a notebook, breaks in production" failures.
+
+Some quick examples of typing errors:
+```python
+# 1) Series vs DataFrame mixup
+def zscore(x: pd.Series) -> pd.Series: ...
+zscore(df)  # ❌ flagged: DataFrame where Series expected
+
+# 2) Optional values used as definite
+def sharpe(ret: pd.Series | None) -> float:
+    return ret.mean() / ret.std()   # ❌ flagged: 'ret' could be None
+
+# 3) Wrong argument types
+def load_csv(path: Path | str) -> pd.DataFrame: ...
+load_csv(123)  # ❌ flagged: int is not Path | str
+```
+
+### Pyright
+
+Use [Pyright](https://github.com/microsoft/pyright) as your primary checker: it's fast, mature, and powers VS Code's Pylance, so editor feedback is excellent. It also plays well with pandas-stubs and numpy.typing, which improves day-to-day ergonomics in quant code. 
+
+Core workflow:
+
+#### Install
+```bash
+uv add --dev pyright pandas-stubs
+```
+Add pandas-stubs (already shown); it materially improves Pandas ergonomics.
+
+#### Check for typing errors
+```bash
+uv run pyright
+```
+
+### Config
+Pyright is configurable in the `pyproject.toml` file. Full [documentation here](https://microsoft.github.io/pyright/#/configuration). To get you started, here is a config suitable for a quant project:
+
+```toml
+[tool.pyright]
+# Turn useful diagnostics up early
+reportUnknownVariableType = true
+reportUnknownMemberType = true
+reportUnknownArgumentType = true
+reportOptionalSubscript = true
+reportUnusedImport = "error"
+reportMissingTypeStubs = true
+```
+
+### Alternatives
+
+[**Pyrefly**](https://pyrefly.org/) --- very fast and has nice migration tooling (it can auto-insert ignores so you can enable it and fix issues incrementally). In practice, it still struggles with Pandas-heavy code; you may find yourself fighting the checker (e.g., `res = res.loc[idx, :]` often narrows to `Series | Unknown`).
+
+[**Astral ty**](https://docs.astral.sh/ty/) --- a new Rust type checker from the Ruff/uv team. It's in [preview/alpha](https://github.com/astral-sh/ty/releases) today; promising performance, but not production-ready yet. Worth tracking and trying.
+
+
 ## Testing
 
 # Productivity
