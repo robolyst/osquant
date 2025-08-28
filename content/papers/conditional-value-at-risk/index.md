@@ -94,7 +94,7 @@ returns = prices["Close"].pct_change().dropna()
 And then use an exponentially weighted estimate of volatility to determine the portfolio weights at each time step:
 ```python
 weights =  1 / returns.ewm(halflife=21, min_periods=21).std()
-weights = weights.divide(weights.sum(1), axis=0)
+weights = weights.divide(weights.sum(1), axis=0).dropna()
 ```
 
 The equity curve (barring costs and other frictions) looks like this:
@@ -104,19 +104,96 @@ portfolio_returns = (returns * weights.shift(1)).sum(1)
 ```
 ![portfolio returns](portfolio_returns.svg)
 
+We can estimate VaR and CVaR using the historical prices as descrived above:
+```python
+import pandas as pd
 
+a = 0.95
 
+var = pd.Series(index=weights.index)
+cvar = pd.Series(index=weights.index)
 
+for date, w in weights.iterrows():
+    history = returns.loc[:date]
+    history_returns = (history * w).sum(1)
+    
+    threshold = history_returns.quantile(1 - a)
 
+    var.loc[date] = threshold
+    cvar.loc[date] = history_returns[history_returns <= threshold].mean()
+```
 
+The VaR and CVaR over time looks like:
+![](var_and_cvar.svg)
 
+The main point to take away from this graph is that the CVaR is always worse than the VaR. From an average loss perspective, CVaR captures the tail risk whereas VaR completely ignores it.
 
+# Procyclical risk estimates
 
+We now want to do a sanity check to see if our estimates are reasonable. We can do this by bucketing the VaR into 10 evenly sized buckets. Bucket 1 has the 10% worst estimaties while bucket 10 has the 10% best estimates. Then, for each bucket we'll calculate the 5% quantile of returns. The VaR figure is the 5% quantile of returns, so we expect to see a roughly linearly increasing relationship. That is, the lower buckets should have lower quantiles than higher buckets.
 
-1. Run an example on an equally risk weighted portfolio
-2. Graph showing the conditional value at risk over time.
-3. Is there a relationship between the CVaR and future returns? (not important, but interesting if true)
-    1. Ideally we’d see that the CVaR is somewhat accurate. That is, the worst % of losses match the average predicted by CVaR.
+We can use the following code to do this:
+```python
+import numpy as np
+
+df = pd.concat([var, cvar, portfolio_returns.shift(-1)], axis=1).dropna()
+df.columns = ['var', 'cvar', 'portfolio_returns']
+
+buckets = np.ceil(df['var'].rank(pct=True) * 10)
+df.groupby(buckets)['portfolio_returns'].quantile(0.05).plot()
+```
+
+And we get the resulting graph:
+
+![](var_quantiles.svg)
+
+Which is roughly the opposite of what we want to see! The worst VaR estimates have the highest 5% quantile of returns. With the exception of the 10th bucket (noisy data), the 5% quantile of returns decreases as the VaR estimate says it should increase!
+
+This tells us that the VaR estimates are not very good. Bad, actually.
+
+What is happening is that when the market is volatile, the historical returns have more extreme values, and when it is calm, the historical returns have less extreme values. This means that the risk metrics increase their estimates DURING (as opposed to before) a volatile market, and decrease their estimates during a calm market. This has the net affect of estimating high risk as the market is moving into a calm period and estimating low risk as the market is moving into a volatile period.
+
+<todo>Add a chart with an example of this behaviour. Similar to the one in [^Murphy2014] on page 6. </todo>
+ 
+This behaviour is called [*procyclical*](https://en.wikipedia.org/wiki/Procyclical_and_countercyclical_variables)[^Murphy2014].
+ 
+If we were to use these estimates in a portfolio optimisation, we would lower our risk when we should be increasing it and vice versa. We'd make the portfolio worse, not better.
+
+To fix this, we can normalise the historical returns by their volatility[^Perez2015]. This will remove the procyclical behaviour. We then re-scale the VaR and CVaR estimates by the current volatility to get them back into the rights units.
+
+```python
+import pandas as pd
+
+a = 0.95
+
+long_vols = returns.ewm(halflife=252).std()
+short_vols = returns.ewm(halflife=21 * 3).std()
+
+scaled = returns / long_vols
+
+var = pd.Series(index=weights.index)
+cvar = pd.Series(index=weights.index)
+
+for date, w in weights.iterrows():
+    history = scaled.loc[:date]
+    vol = short_vols.loc[date]
+
+    history_returns = (history * w * vol).sum(1)
+
+    threshold = history_returns.quantile(1 - a)
+
+    var.loc[date] = threshold
+    cvar.loc[date] = history_returns[history_returns <= threshold].mean()
+```
+
+These improved eastimates look like this:
+
+![](var_and_cvar_adjusted.svg)
+
+And re-running the bucketing test gives us:
+
+![](var_quantiles_adjusted.svg)
+
 
 # Portfolio optimisation
 
@@ -203,6 +280,24 @@ $$
     publication="Financial Engineering News"
     number="14"
     link="https://uryasev.ams.stonybrook.edu/wp-content/uploads/2011/11/FinNews.pdf"
+%}}
+
+{{% citation
+    id="Perez2015"
+    author="Pedro Gurrola-Perez and David Murphy"
+    title="Filtered historical simulation Value-at-Risk models and their competitors. Working Paper No. 525."
+    year="2015"
+    publication="Bank of England"
+    link="https://www.bankofengland.co.uk/-/media/boe/files/working-paper/2015/filtered-historical-simulation-value-at-risk-models-and-their-competitors.pdf"
+%}}
+
+{{% citation
+    id="Murphy2014"
+    author="David Murphy, Michalis Vasios and Nick Vause"
+    title="An investigation into the procyclicality of risk-based initial margin models. Financial Stability Paper No. 29."
+    year="2014"
+    publication="Bank of England"
+    link="https://www.bankofengland.co.uk/-/media/boe/files/financial-stability-paper/2014/an-investigation-into-the-procyclicality-of-risk-based-initial-margin-models.pdf"
 %}}
 
 [^coherent]: An ideal risk metric is said to be [coherent](https://en.wikipedia.org/wiki/Coherent_risk_measure) if it satifies a list of properties. See the Wikipedia page for more details.
