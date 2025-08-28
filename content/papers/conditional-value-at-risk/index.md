@@ -197,12 +197,123 @@ And re-running the bucketing test gives us:
 
 # Portfolio optimisation
 
-Original paper [^Rockafellar1999].
+The CVaR is not a convex function we can use in a portfolio optimisation. At least, in it's current form presented above, it is not. Rockafellar and Uryasev show that we can reformulate the CVaR as a convex problem[^Rockafellar1999].
 
-1. Derivation - we want to learn the optimisation concepts and techniques
-    1. how do slack variables work, substitutions, etc….
-2. Optimisation problem with CVaR constraint
-3. Example
+The derivation is clever and makes use of two tricks. Understanding it will teach you some key concepts in optimisation. We're going to work through the derivation here and show the final optimisation problem at the end.
+
+## Derivation
+
+The derivaiton involes rewriting the CVaR into a form that is easier to work with. Then, applying the two tricks to get it into a convex form that can be plugged into a portfolio optimisation.
+
+### Rewriting the CVaR
+
+Let's say that we have $N$ scenarios of returns denoted by $l_i$. We will write the VaR at level $\alpha$ as $\text{VaR}_{\alpha}(l)$. The CVaR is then:
+$$
+\text{CVaR}\_{\alpha}(l) = E[l \ | \ l \geq \text{VaR}\_{\alpha}(l)]
+$$
+We need to do-away with the expectation by replacing it with a sample average. We know that $\text{VaR}\_{\alpha}(l)$ is exactly the $\alpha$<sup>th</sup> sample quantile. That means there are exactly $(1 - \alpha) N$ scenarios in the tail. So, we can write:
+$$
+\text{CVaR}\_{\alpha}(l) = \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N l_i \cdot \\{ l_i \geq \text{VaR}\_{\alpha}(l) \\}
+$$
+Where $\\{ \cdot \\}$ is the indicator function, which is 1 if the condition is true and 0 otherwise.
+
+We can replace the indicator function with a max function as follows:
+$$
+l_i \cdot \\{ l_i \geq \text{VaR}\_{\alpha}(l) \\} = \max(l_i - \text{VaR}\_{\alpha}(l), 0) + \text{VaR}\_{\alpha}(l)
+$$
+We'll use a simpler notation for the max between a variable and 0:
+$$
+l_i \cdot \\{ l_i \geq \text{VaR}\_{\alpha}(l) \\} = |l_i - \text{VaR}\_{\alpha}(l)|_+ + \text{VaR}\_{\alpha}(l)
+$$
+Putting this into the CVaR equation gives us:
+$$
+\text{CVaR}\_{\alpha}(l) = \text{VaR}\_{\alpha}(l) + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N |l_i - \text{VaR}\_{\alpha}(l)|\_+
+$$
+This gives us a form we can now work with to get it into a convex form.
+
+### Trick 1: VaR as an optimisation
+
+We're going to replace the value for VaR with an unknown variable $\tau$ to give us:
+$$
+F(\tau) = \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N |l_i - \tau|\_+
+$$
+
+Something remarkable happens here. If we minimise $F(\tau)$ with respect to $\tau$, the value of $\tau$ that minimises $F(\tau)$ is exactly $\text{VaR}\_{\alpha}(l)$. That is:
+$$
+\text{VaR}\_{\alpha}(l) = \underset{\tau}{\text{argmin}} \ F(\tau)
+$$
+To me, this is quite astonishing. Before we demonstrate this with mathematics, let's see a practical example. We'll use the negative of the SPY returns for the loss values $l_i$, and plot $F(\tau)$ for a range of $\tau$ values at the $\alpha = 95\%$ level. See figure [XXXXXXXXX] for the result. The $\tau$ that minimises $F(\tau)$ is exactly the 95% VaR of the losses.
+
+![](trick1.svg)
+
+We can see why this is true by following the usual procedure of finding the minimum of a function. We take the derivative and set it to zero. First, the derivative of $F(\tau)$ with respect to $\tau$ is:
+$$
+\frac{d}{d\tau}F(\tau) = 1 - \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N \\{ l_i \geq \tau \\}
+$$
+Note that the indicator function is always either 0 or 1. That means this function is *monotonic* which means there is one and only one point where the derivative is zero minimising the function. Setting the derivative to zero and rearranging we get:
+$$
+\frac{1}{N}\sum\_{i=1}^N \\{ l_i \geq \tau \\} = 1 - \alpha
+$$
+The left hand side is the fraction of losses greater than $\tau$ and the right hand side is also the fraction of losses greater than the VaR at level $\alpha$. Therefore, the $\tau$ that minimises $F(\tau)$ is exactly the $\text{VaR}\_{\alpha}(l)$.
+
+This allows us to rewrite the CVaR as a minimisation problem:
+$$
+\text{CVaR}\_{\alpha}(l) = \min\_{\tau} \  \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N |l_i - \tau|\_+
+$$
+
+This minimisation is a convex problem (as shown by the derivative). However, we still have the max function to deal with.
+
+### Trick 2: max function as a linear problem
+
+To handle the max function, we're going to replace each $|l_i - \tau|\_+$ with a [slack variable](https://en.wikipedia.org/wiki/Slack_variable) $u_i$ with constraints:
+$$
+\begin{align}
+u_i &\geq l_i - \tau \\\
+u_i & \geq 0
+\end{align}
+$$
+The first constraint says that $u_i$ must be greater than the excess loss $l_i - \tau$ which could be negative. The second constraint says that $u_i$ must be at least 0 (not negative). Together, these two constraints mean that:
+$$
+u_i \geq |l_i - \tau|\_+
+$$
+And if we minimise $u_i$ along with $\tau$, the optimal solution will find the smallest $u_i$ that satisfies these constraints. Which means, in the solution:
+$$
+u_i = |l_i - \tau|\_+
+$$
+
+Putting this all together, we can write the CVaR as:
+$$
+\text{CVaR}\_{\alpha}(l) = \min\_{\tau, u_i} \ \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N u_i
+$$
+Subject to:
+$$
+\begin{align}
+u_i &\geq l_i - \tau \\\
+u_i &\geq 0 \\\
+\end{align}
+$$ 
+
+## Optimisation problem
+
+Now, we can build out a portfolio optimisation problem. We will treat risk metrics as a constraint in the optimisation. That is, we will find the portfolio with the highest return subject to a risk constraint.
+
+* Let $\boldsymbol{w}$ be the portfolio weights we are trying to find.
+* Let $\boldsymbol{\mu}$ be the expected asset returns.
+* Let $\boldsymbol{r}_i$ be the asset returns in scenario $i$ for $i = 1, \ldots, N$.
+* Let $\boldsymbol{w}^\top \boldsymbol{r}_i$ be the portfolio return under scenario $i$.
+* Let the loss in scenario $i$ be $l_i = -\boldsymbol{w}^\top \boldsymbol{r}_i$ (positive means you lost money).
+
+$$
+\begin{align}
+\underset{\boldsymbol{w}}{\text{maximise}} \quad& \boldsymbol{w}^\top \boldsymbol{\mu} \\\
+\text{s.t.} \quad
+& \boldsymbol{w} \geq 0 \quad \text{Long only} \\\
+& \boldsymbol{w}^\top \boldsymbol{1} = 1\quad \text{Fully invested} \\\
+& \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N u_i \leq \kappa  \quad \text{Risk limit} \\\
+& u_i \geq -\boldsymbol{w}^\top \boldsymbol{r}_i - \tau \\\
+& u_i \geq 0
+\end{align}
+$$
 
 # Comparison with mean-variance optimisation
 
