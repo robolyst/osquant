@@ -335,9 +335,11 @@ Something remarkable happens here. If we minimise $F(\tau)$ with respect to $\ta
 $$
 \text{VaR}\_{\alpha}(l) = \underset{\tau}{\text{argmin}} \ F(\tau)
 $$
-To me, this is quite astonishing. Before we demonstrate this with mathematics, let's see a practical example. We'll use the negative of the SPY returns for the loss values $l_i$, and plot $F(\tau)$ for a range of $\tau$ values at the $\alpha = 95\%$ level. See figure [XXXXXXXXX] for the result. The $\tau$ that minimises $F(\tau)$ is exactly the 95% VaR of the losses.
+To me, this is quite astonishing. Before we demonstrate this with mathematics, let's see a practical example. We'll use the negative of the SPY returns for the loss values $l_i$, and plot $F(\tau)$ for a range of $\tau$ values at the $\alpha = 95\%$ level. See the following figure for the result. The $\tau$ that minimises $F(\tau)$ is exactly the 95% VaR of the losses.
 
-![](trick1.svg)
+{{<figure src="trick1.svg" title="Minimising F">}}
+Here we show the value for $F(\tau)$ for a range of $\tau$ values on SPY returns. The minimum value is at the 95% VaR of the losses (the negative of SPY returns).
+{{</figure>}}
 
 We can see why this is true by following the usual procedure of finding the minimum of a function. We take the derivative and set it to zero. First, the derivative of $F(\tau)$ with respect to $\tau$ is:
 $$
