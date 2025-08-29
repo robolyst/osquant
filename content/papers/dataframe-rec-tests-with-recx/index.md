@@ -155,4 +155,8 @@ pip install recx
 
 Then skim the ["Getting Started"](https://recx.readthedocs.io/en/latest/getting-started/) and ["Usage"](https://recx.readthedocs.io/en/latest/usage/) pages for patterns like regex selection, skipping columns, and writing custom checks. The repo README notes the project is early/experimental, so expect API polish over time.
 
+- **Github:** [https://github.com/robolyst/recx](https://github.com/robolyst/recx)
+- **Docs:** [https://recx.readthedocs.io](https://recx.readthedocs.io)
+- **PyPI:** [https://pypi.org/project/recx/](https://pypi.org/project/recx/)
+
 Contributions and feedback are welcome! 
