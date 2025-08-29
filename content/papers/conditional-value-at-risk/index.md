@@ -516,11 +516,15 @@ def optimise(
 
 # Example
 
+We're going to run through a simple example of using this optimiser to manage risk in a portfolio. We'll look at how the portfolio performs with different CVaR limits.
+
 We can use the same ETFs as before and we'll do the following:
 
-* The expected returns $\boldsymbol{\mu}$ will be the exponentially weighted historical return with a half-life of 63 days (about 3 months).
-* We'll fix the CVaR level to  $\alpha = 0.95\%$.
-* We'll look at three different limits $\kappa \in [1.0, 0.05, 0.025]$. We include the 1.0 limit to show that the optimiser works as expected when the risk limit has no effect.
+- **Expected return** - The expected returns will be the exponentially weighted historical return with a half-life of 63 days (about 3 months).
+- **Covariance** - The expected covariance will be the exponentially weighted historical covariance with a half-life of 63 days (about 3 months).
+- **Max volatility** - We'll set the maximum portfolio volatility to 10% annualised.
+- **Risk level** - We'll fix the CVaR level to  $\alpha = 0.95\\%$.
+- **Risk limit** - We'll look at three different limits $\kappa \in [1.0, 0.05, 0.025]$. We include the 1.0 limit to show the portfolio without an active CVaR constraint.
 
 We'll use the following code to find the weights over time:
 ```python
@@ -532,9 +536,14 @@ The resulting equity curves and CVaR estimates are in the following figure.
 ![](optimisation_example.svg)
 
 
-# Summary and next steps
+# Summary
 
-Blah blah blah
+CVaR is a diversification-friendly, convex risk measure that addresses the shortcomings of VaR. CVaR tells you how bad your losses could be on the worst days.
+
+In this article we saw how to estimate CVaR from historical returns, how to stabilise it by volatility-normalising, and how to sanity-check it by bucketing values. We saw how to get CVaR into a convex form suitable for linear programming and we built a portfolio optimiser and tested it out on a portfolio of ETFs.
+
+The article contains code snippets throughout so you can reproduce the results and build your own CVaR-based portfolio optimiser.
+
 
 # Appendix: VaR is not subadditive
 
