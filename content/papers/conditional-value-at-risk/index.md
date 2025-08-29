@@ -141,78 +141,151 @@ Using the same portfolio as the previous figure, we estimate the 1-day 95% VaR a
 
 The main point to take away from this graph is that the CVaR is always worse than the VaR. From an average loss perspective, CVaR captures the tail risk whereas VaR completely ignores it.
 
-# Procyclical risk estimates
+# Procyclical estimates
 
-We now want to do a sanity check to see if our estimates are reasonable. The easiest way is to see if the VaR estimate (which is the 5% quantile of returns) correlates with the actual 5% quantile of future portfolio returns.
+We now want to do a sanity check to see if our estimates are reasonable. For the VaR estimate (which is the 5% quantile of returns), we want to see if it correlates with the actual 5% quantile of future portfolio returns. For the CVaR estimate (which is the average of the worst 5% of returns), we want to see if it correlates with the actual average of the worst 5% of future portfolio returns.
 
-We can do this by bucketing the VaR into 10 evenly sized buckets. Bucket 1 has the 10% worst estimaties while bucket 10 has the 10% best estimates. Then, for each bucket, we calculate the 5% quantile of returns. We expect to see a roughly linearly increasing relationship. That is, the lower buckets should have lower quantiles than higher buckets.
+**VaR check** &nbsp; First, bucket the VaR estimates into 10 evenly sized buckets. Bucket 1 has the 10% worst estimaties while bucket 10 has the 10% best estimates. Then, for each bucket, we calculate the **5% quantile of future returns**. We expect to see a roughly linearly increasing relationship.
 
-We can use the following code to do this:
+**CVaR check** &nbsp; First, bucket the CVaR estimates into 10 evenly sized buckets. Bucket 1 has the 10% worst estimaties while bucket 10 has the 10% best estimates. Then, for each bucket, we calculate the **average of the worst 5% of future returns.** We expect to see a roughly linearly increasing relationship.
+
+Here is the code:
 ```python
 import numpy as np
 
 # We want future returns, so shift back by 1.
-df = pd.concat([var, portfolio_returns.shift(-1)], axis=1)
-df.columns = ['var', 'portfolio_returns']
+df = pd.concat([var, cvar, portfolio_returns.shift(-1)], axis=1)
+df.columns = ['var', 'cvar', 'portfolio_returns']
 
+# Calcualte sanity check for VaR
 buckets = np.ceil(df['var'].rank(pct=True) * 10)
 y = df.groupby(buckets)['portfolio_returns'].quantile(0.05)
 x = df.groupby(buckets)['var'].mean()
+
+# Calcualte sanity check for CVaR
+buckets = np.ceil(df['cvar'].rank(pct=True) * 10)
+y = df.groupby(buckets)['portfolio_returns'].apply(
+    lambda x: x[x <= x.quantile(0.05)].mean()
+)
+x = df.groupby(buckets)['cvar'].mean()
 ```
 
 And we get the resulting graph:
 
-{{<figure src="var_quantiles.svg" title="Sanity check risk estimates">}}
-The Var(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We expect to see a roughly linear increasing relationship. However, we see the opposite.
+{{<figure src="simple_sanity_check.svg" title="Sanity check risk estimates">}}
+(left) The Var(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We do not see a roughly linear increasing relationship. (right) The CVaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the average of the worst 5% of future portfolio returns is calculated. We do not see a roughly linear increasing relationship.
 {{</figure>}}
 
+Which is roughly the opposite of what we want to see! The worst VaR estimates have the highest 5% quantile of returns. With the exception of the 10th bucket (noisy data), the 5% quantile of returns decreases as the VaR estimate says it should increase. Simiarly, we do not see the expected increasing relationship for the CVaR estimates.
 
-Which is roughly the opposite of what we want to see! The worst VaR estimates have the highest 5% quantile of returns. With the exception of the 10th bucket (noisy data), the 5% quantile of returns decreases as the VaR estimate says it should increase!
-
-This tells us that the VaR estimates are not very good. Bad, actually.
+This tells us that the CVaR estimates are not very good. Bad, actually.
 
 What is happening is that when the market is volatile, the historical returns have more extreme values, and when it is calm, the historical returns have less extreme values. This means that the risk metrics increase their estimates DURING (as opposed to before) a volatile market, and decrease their estimates during a calm market. This has the effect of estimating high risk as the market is moving into a calm period and estimating low risk as the market is moving into a volatile period.
 
-<todo>Add a chart with an example of this behaviour. Similar to the one in [^Murphy2014] on page 6. </todo>
+{{<figure src="procyclical.svg" title="Example of procyclical behaviour">}}
+The SPY during the 2025 Trump tarrif chaos. The left axis shows the SPY prices drop and bounce back. The right axis shows the CVaR(95) estimated with the previous two years of historical prices. The CVaR did not initially increase as the market became volatile and dropped. Once the market calmed and prices started to recover, the estimated risk remained high.
+{{</figure>}}
  
 This behaviour is called [*procyclical*](https://en.wikipedia.org/wiki/Procyclical_and_countercyclical_variables)[^Murphy2014].
  
 If we were to use these estimates in a portfolio optimisation, we would lower our risk when we should be increasing it and vice versa. We'd make the portfolio worse, not better.
 
-To fix this, we can normalise the historical returns by their volatility[^Perez2015]. This will remove the procyclical behaviour. We then re-scale the VaR and CVaR estimates by the current volatility to get them back into the rights units.
+To fix this, we can normalise the historical returns by their volatility[^Perez2015]. This will remove the procyclical behaviour. We then re-scale the VaR and CVaR estimates by the current volatility to get them back into the rights units. We use a long half-life to de-volatilise the estimates, and a short half-life to re-volatilise them to current conditions.
+
+We can use the following function to calculate the volatility adjusted VaR and CVaR estimates:
 
 ```python
-import pandas as pd
+def risk_from_weights(
+    weights: pd.DataFrame,
+    returns: pd.DataFrame,
+    risk_level: float = 0.95,
+    long_vols_half_life: float = 252,
+    short_vols_half_life: float = 21 * 3,
+    min_periods: int = 252,
+) -> tuple[pd.Series, pd.Series]:
+    """
+    Compute the Value at Risk (VaR) and Conditional
+    Value at Risk (CVaR) for a given set of portfolio
+    weights and historical returns.
 
-a = 0.95
+    Parameters
+    ----------
 
-long_vols = returns.ewm(halflife=252).std()
-short_vols = returns.ewm(halflife=21 * 3).std()
+    weights : pd.DataFrame
+        DataFrame of portfolio weights. Rows
+        are time periods and columns are assets.
 
-scaled = returns / long_vols
+    returns : pd.DataFrame
+        DataFrame of historical asset returns.
+        Same shape as `weights`.
 
-var = pd.Series(index=weights.index)
-cvar = pd.Series(index=weights.index)
+    risk_level : float
+        The VaR and CVaR risk level. E.g., 0.95
+        for 95% CVaR.
 
-for date, w in weights.iterrows():
-    history = scaled.loc[:date]
-    vol = short_vols.loc[date]
+    long_vols_half_life : float
+        Half-life for the long-term volatility
+        estimate (in days).
 
-    history_returns = (history * w * vol).sum(1)
+    short_vols_half_life : float
+        Half-life for the short-term volatility
+        estimate (in days).
 
-    threshold = history_returns.quantile(1 - a)
+    min_periods : int
+        Minimum number of periods required to
+        compute risk measures.
 
-    var.loc[date] = threshold
-    cvar.loc[date] = history_returns[history_returns <= threshold].mean()
+    Returns
+    -------
+    VaR : pd.Series
+        A Series containing the VaR values, with the same
+        index as the input returns DataFrame.
+
+    CVaR : pd.Series
+        A Series containing the CVaR values, with the same
+        index as the input returns DataFrame.
+    """
+
+    long_vols = returns.ewm(halflife=long_vols_half_life).std()
+    short_vols = returns.ewm(halflife=short_vols_half_life).std()
+
+    scaled = returns / long_vols
+    var = pd.Series(index=returns.index)
+    cvar = pd.Series(index=returns.index)
+
+    for date, w in tqdm(weights.iterrows(), total=len(weights)):
+
+        # Create the scenarios from the normalised
+        # historical prices.
+        history = scaled.loc[:date].dropna()
+        vol = short_vols.loc[date]
+        scenarios = history * vol
+
+        if len(scenarios) < min_periods:
+            continue
+
+        w = weights.loc[date]
+
+        losses = scenarios @ w  # Negative is a loss
+        var[date] = losses.quantile(1 - risk_level)
+        cvar[date] = losses[losses <= var[date]].mean()
+
+    return var, cvar
 ```
 
 These improved eastimates look like this:
 
-![](var_and_cvar_adjusted.svg)
+{{<figure src="var_and_cvar_adjusted.svg" title="Volatility adjusted metrics">}}
+Using the same risk parity portfolio as before, we estimate the 1-day 95% VaR and CVaR using volatility adjusted historical returns as scenarios.
+{{</figure>}}
 
-And re-running the bucketing test gives us:
+And re-running the sanity check gives us much better results
 
-![](var_quantiles_adjusted.svg)
+{{<figure src="sanity_check.svg" title="Sanity check adjusted risk estimates">}}
+(left) The volatility adjusted Var(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We see a roughly linear increasing relationship. (right) The volatility adjusted CVaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the average of the worst 5% of future portfolio returns is calculated. We see a roughly linear increasing relationship.
+{{</figure>}}
+
+Which is much closer to what we want to see. As the estimate for both VaR and CVaR get worse, the actual returns also get worse. In the worst 10% of samples, the returns are not as similarly worse. For our purposes, this will work ok. Refining the risk models any further is outside of the scope of this article.
 
 
 # Portfolio optimisation
