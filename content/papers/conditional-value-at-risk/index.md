@@ -315,7 +315,7 @@ $$
 \end{align}
 $$
 
-# Comparison with mean-variance optimisation
+# Combine with mean-variance optimisation
 
 1. Compare with mean–variance: composition differences, realised tail risk, turnover.
 
