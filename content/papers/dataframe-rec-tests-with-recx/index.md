@@ -4,7 +4,7 @@ summary: "
     Keep research and production outputs aligned with rec tests. This article explains the concept and introduces a tiny Python library for clean, tolerance-aware tests.
 "
 
-date: "2025-08-26"
+date: "2025-08-29"
 type: paper
 mathjax: false
 authors:
@@ -20,9 +20,9 @@ Code changes. Data changes. Outputs change. Somewhere between the first analysis
 
 # What is a rec test?
 
-A rec test compares a baseline (known-good) DataFrame to a candidate (new run) and checks that they align on keys (same dates/IDs after alignment), and agree on values (within rules/tolerances you care about).
+A rec test compares a baseline (known-good) DataFrame to a candidate (new run) and checks that they align on keys (same dates or IDs), and agree on values (within tolerances you care about).
 
-For example, you fetch daily prices from a broker/vendor and build features for trading. On day 1 you get:
+For example, you fetch daily prices from a broker and build features for trading. On day 1 you get:
 
 | date       | price |
 |------------|-------|
@@ -51,7 +51,7 @@ That tiny 0.5 drift on 2024-01-04 doesn't stay tiny: it rolls into features, cha
 
 Where the drift comes from:
 
-* **Source data moves.** Vendors backfill/correct, adjust rounding, roll FX, rename IDs, or apply corporate actions differently.
+* **Source data moves.** Vendors backfill/correct, adjust rounding, rename IDs, or apply corporate actions differently.
 
 * **Your code moves.** Refactors, feature flags, updating defaults, dtype/precision changes, library upgrades, window alignment, timezone handling, random seeds.
 
@@ -88,11 +88,14 @@ A simple example:
 import pandas as pd
 from recx import Rec, EqualCheck, AbsTolCheck
 
+# Create a baseline DataFrame
 baseline = pd.DataFrame({
     "price": [100.00, 200.00, 300.00],
     "status": ["active", "inactive", "active"]
 })
 
+# This candidate has a small price change in
+# the last record. All the statuses match.
 candidate = pd.DataFrame({
     "price": [100.00, 200.00, 301.00],
     "status": ["active", "inactive", "active"]
@@ -110,7 +113,35 @@ result = rec.run(baseline, candidate)
 result.summary()
 ```
 
-The `Rec` object maps columns to checks, runs them, and gives you a readable summary plus programmatic results (`passed()`, `failures()`, `raise_for_failures()`). 
+The summary output:
+```text
+───────────────────────────────────────────────────────────────────────
+                    DataFrame Reconciliation Summary                   
+───────────────────────────────────────────────────────────────────────
+Baseline: rows=3 cols=2
+Candidate: rows=3 cols=2
+
+1 check(s) FAILED ❌
+missing_indices_check ...................................... PASSED ꪜ
+extra_indices_check ........................................ PASSED ꪜ
+Column 'price' with AbsTolCheck(tol=0.01) ... [1/3 (33.33%)] FAILED ❌
+Column 'status' with EqualCheck ............................ PASSED ꪜ
+
+Failing rows:
+
+Column 'price':
+ │   
+ │   Showing up to 10 rows
+ │   
+ │      baseline  candidate  abs_error
+ │   2     300.0      301.0        1.0
+ │   
+```
+
+The `Rec` object maps columns to checks, runs them, and returns a `RecResult` object that gives you a readable summary plus programmatic results:
+*  `passed()` - True if all the checks passed
+* `failures()` - A list of all the failures
+* `raise_for_failures()` - Will raise an exception if there are any failures
 
 Use `recx` when you are rebuilding datasets in your pipeline and want to ensure they stay consistent over time.
 
@@ -122,6 +153,6 @@ Install with:
 pip install recx
 ```
 
-Then skim the ["Getting Started"](https://recx.readthedocs.io/en/latest/getting-started/) and ["Usage"](https://recx.readthedocs.io/en/latest/usage/) pages for patterns like regex selection, skipping columns, and writing custom checks. The repo README notes the project is early/experimental, so expect small API polish over time.
+Then skim the ["Getting Started"](https://recx.readthedocs.io/en/latest/getting-started/) and ["Usage"](https://recx.readthedocs.io/en/latest/usage/) pages for patterns like regex selection, skipping columns, and writing custom checks. The repo README notes the project is early/experimental, so expect API polish over time.
 
 Contributions and feedback are welcome! 
