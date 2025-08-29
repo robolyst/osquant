@@ -14,8 +14,6 @@ categories:
     - finance
 ---
 
-# Intro
-
 Value at Risk (VaR) is the industry's common language for portfolio risk. But, it's a cutoff, it completely ignores tail risk. VaR tells you how often losses breach a threshold, not how bad those losses get.
 
 Conditional Value at Risk (CVaR), focuses on that tail. It measures the average of your worst days.
@@ -293,17 +291,19 @@ $$
 
 ## Optimisation problem
 
-Now, we can build out a portfolio optimisation problem. We will treat risk metrics as a constraint in the optimisation. That is, we will find the portfolio with the highest return subject to a risk constraint.
+Now, we can build out a portfolio optimisation problem. The objective is to maximise expected returns subject to a portfolio variance constraint and a CVaR constraint. Additionall, we'll have long only weights and no leverage.
 
 **Paramters and variables**
 
-* Let $\boldsymbol{w}$ be the portfolio weights we are trying to find.
-* Let $\boldsymbol{\mu}$ be the expected asset returns.
-* Let $\boldsymbol{r}_i$ be the asset returns in scenario $i$ for $i = 1, \ldots, N$.
-* Let $\boldsymbol{w}^\top \boldsymbol{r}_i$ be the portfolio return under scenario $i$.
-* Let the loss in scenario $i$ be $l_i = -\boldsymbol{w}^\top \boldsymbol{r}_i$ (positive means you lost money).
-* Let $\alpha$ be the CVaR level (e.g. 0.95 for 95% CVaR).
-* Let $\kappa$ be the maximum allowed CVaR (risk limit). This will be in percentage terms (e.g. 0.1 for 10% average loss).
+* $\boldsymbol{w}$ - the portfolio weights we are trying to find.
+* $\boldsymbol{\mu}$ - the expected asset returns.
+* $\boldsymbol{\Sigma}$ - the asset return covariance matrix.
+* $\boldsymbol{r}_i$ - the asset returns in scenario $i$ for $i = 1, \ldots, N$.
+* $\boldsymbol{w}^\top \boldsymbol{r}_i$ - the portfolio return under scenario $i$.
+* $l_i = -\boldsymbol{w}^\top \boldsymbol{r}_i$ - the loss in scenario $i$ (positive means you lost money).
+* $\alpha$ - the CVaR level (e.g. 0.95 for 95% CVaR).
+* $\kappa$ - the maximum allowed CVaR (risk limit). This will be in percentage terms (e.g. 0.1 for 10% average loss).
+* $\sigma$ - the maximum allowed portfolio standard deviation (risk limit).
 
 **Problem**
 
@@ -313,7 +313,8 @@ $$
 \text{s.t.} \quad
 & \boldsymbol{w} \geq 0 & \textit{Long only} \\\
 & \boldsymbol{w}^\top \boldsymbol{1} \leq 1 & \textit{No leverage} \\\
-& \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N u_i \leq \kappa & \textit{Risk limit} \\\
+& \boldsymbol{w}^\top \boldsymbol{\Sigma} \boldsymbol{w} \leq \sigma^2 & \textit{Variance limit} \\\
+& \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N u_i \leq \kappa & \textit{CVaR limit} \\\
 & u_i \geq -\boldsymbol{w}^\top \boldsymbol{r}_i - \tau \\\
 & u_i \geq 0
 \end{align}
@@ -326,13 +327,16 @@ import cvxpy as cp
 
 def optimise(
     expected_returns: np.ndarray,
+    expected_cov: np.ndarray,
     scenarios: np.ndarray,
-    alpha: float,
-    kappa: float,
-) -> pd.ndarray:
+    risk_level: float,
+    max_avg_risk: float,
+    max_vol: float,
+) -> np.ndarray:
     """
     Solves a portfolio optimisation problem with a
-    Conditional Value-at-Risk (CVaR) risk constraint.
+    portfolio variance and Conditional Value-at-Risk
+    (CVaR) risk constraint.
 
     Given expected asset returns, scenario returns, a
     CVaR confidence level, and a risk limit, this
@@ -343,19 +347,27 @@ def optimise(
     Parameters
     ----------
     expected_returns : np.ndarray
-        Array of expected returns for each asset.
-        shape: [M], where M is number of assets.
+        Array of expected returns for each asset
+        (shape: [M], where M is number of assets).
+
+    expected_cov : np.ndarray
+        Array of expected covariances for each asset
+        (shape: [M, M], where M is number of assets).
 
     scenarios : np.ndarray
-        Array of scenario returns.
-        shape: [N, M], where N is number of scenarios.
+        Array of scenario returns
+        (shape: [N, M], where N is number of
+        scenarios).
 
-    alpha : float
-        Confidence level for CVaR. Give 0.95
-        for 95% CVaR.
+    risk_level : float
+        Confidence level for CVaR (e.g., 0.95 for
+        95% CVaR).
 
-    kappa : float
+    max_avg_risk : float
         Maximum allowed CVaR (risk limit).
+        
+    max_vol : float
+        Maximum allowed portfolio standard deviation.
 
     Returns
     -------
@@ -376,7 +388,7 @@ def optimise(
     u = cp.Variable(N, nonneg=True)
 
     # CVaR expression
-    cvar = tau + (1/((1-alpha)*N)) * cp.sum(u)
+    cvar = tau + (1/((1-risk_level)*N)) * cp.sum(u)
 
     # Objective: maximise expected return
     objective = cp.Maximize(expected_returns @ w)
@@ -385,9 +397,14 @@ def optimise(
     # greater or equal to 0 is handled by
     # the nonneg=True argument above.
     constraints = [
-        w >= 0,                     # long-only
-        cp.sum(w) <= 1,             # No leverage
-        cvar <= kappa,              # risk limit
+        # long-only
+        w >= 0,
+        # No leverage
+        cp.sum(w) <= 1,
+        # volatility constraint
+        w @ expected_cov @ w <= max_vol**2,
+        # risk limit
+        cvar <= max_avg_risk,
         u >= -(scenarios @ w) - tau,
     ]
 
@@ -398,7 +415,7 @@ def optimise(
     return w.value
 ```
 
-## Example
+# Example
 
 We can use the same ETFs as before and we'll do the following:
 
@@ -415,9 +432,6 @@ The resulting equity curves and CVaR estimates are in the following figure.
 
 ![](optimisation_example.svg)
 
-# Combine with mean-variance optimisation
-
-1. Compare with mean--variance: composition differences, realised tail risk, turnover.
 
 # Summary and next steps
 
