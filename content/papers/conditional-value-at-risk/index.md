@@ -33,7 +33,7 @@ Value at Risk (VaR) is a measure of the amount of money you could lose on a regu
 
 If the frequency of regular days is 95%, and we expect to lose at most \\$1m, we say "95% of the time you expect to lose less than \\$1m". But, about 1 day in 20 you could lose \\$1m or more. You may see this written as something like "1-day 95% VaR of \\$1m".
 
-<todo>Insert graph showing loss distribution and VaR point</todo>
+{{<figure src="var_description.svg" width="medium" >}}{{</figure>}}
 
 VaR has some fairly serious shortcomings; tail blindness, failure to be subadditive and awkwardness for optimisation.
 
@@ -49,22 +49,21 @@ The Conditional Value at Risk (CVaR) addresses these issues.
 
 *Conditional Value at Risk (CVaR) is also known as Expected Shortfall, Mean Excess Loss, Mean Shortfall or Tail VaR [^Uryasev2000].*
 
-Rather than telling you the minimum loss you can expect to see on bad days, CVaR tells you the *average loss* you can expect to see on those bad days. This gives you a much better idea of the tail risk in your portfolio.
+Rather than telling you the maximum loss you can expect to see on regular days, CVaR tells you the *average loss* you can expect to see on the worst days. This gives you a much better idea of the tail risk in your portfolio.
 
-<todo>Insert graph showing loss distribution, VaR point and CVaR area</todo>
+{{<figure src="cvar_description.svg" width="medium" >}}{{</figure>}}
 
 This change from minimum loss (VaR) to average loss (CVaR) addresses the tail blindness problem. A breach of the VaR threshold will, on average, be equal to the CVaR figure. Also, the metric is subadditive making it inline with our intuition that diversification should reduce risk. And, while on first pass the CVaR is not convex, it can be reformulated as a convex problem that can be incoprorated into a portfolio optimisation[^Rockafellar1999] as we will see later.
 
 ## Estimation
 
-To estimate $\text{CVaR}(\alpha)$, we are going to use historical returns. Let's say we have a vector of portfolio weights $\boldsymbol{w}$ and vectors of asset returns $\boldsymbol{r}_t$ where each $t$ is a different time period over some historical window. We can estimate the CVaR at the $1 - \alpha$ confidence level as follows:
+To estimate $\text{CVaR}(\alpha)$, we use a large set of scenarios of possible return vectors. This is a way of representing the distribution of returns without a parametric model. For simplicity, we'll use all historical returns as the scenarios.
+
+Let's say we have a vector of portfolio weights $\boldsymbol{w}$ and vectors of asset returns $\boldsymbol{r}_t$ where each $t$ is a different time period over some historical window. These $\boldsymbol{r}_t$s are our scenarios. We estimate the CVaR at the $\alpha$ level as follows:
+
 1. Calculate the portfolio returns $R_t = \boldsymbol{w}^\top \boldsymbol{r}_t$ for each time $t$.
-2. Collect the worst $\alpha$ fraction of the returns.
-3. Calculate the average of these worst returns.
-
-This is the simplest method to estimate CVaR, known as historical simulation. More sophisticated methods exist, such as fitting a coupula to the returns or using Monte Carlo simulation. But, for the sake of this article, we will stick with historical simulation.
-
-<todo>Add some references for the various methods here</todo>
+2. Collect the worst $1 - \alpha$ fraction of the returns. This is the VaR.
+3. Calculate the average of these worst returns. This is the CVaR.
 
 ## Example
 
@@ -89,38 +88,56 @@ returns = prices["Close"].pct_change().dropna()
 
 And then use an exponentially weighted estimate of volatility to determine the portfolio weights at each time step:
 ```python
-weights =  1 / returns.ewm(halflife=21, min_periods=21).std()
-weights = weights.divide(weights.sum(1), axis=0).dropna()
-```
+vols = returns.ewm(halflife=21, min_periods=252).std()
 
-The equity curve (barring costs and other frictions) looks like this:
+# Larger vol should have smaller weight.
+# We invert the volatility
+inv_vols =  1 / vols
+
+weights = inv_vols.divide(inv_vols.sum(1), axis=0).dropna()
+```
+We've used a halflife of 21 days (about a month) to estimate the volatility. The minimum period of 252 days (about a year) ensures that we have a good estimate of the volatility before we start calculating weights.
+
+The weights on a date (each row in the `weights` DataFrame) are the weights known at the end of that day as they need that day's returns to estimate volatility. This means that today's weights are used to trade tomorrow. We need to remember to shift by one when applying to returns.
+
+The equity curve (barring costs and other frictions) can be calculated with the following code and is shown in the figure below:
+
 ```python
 portfolio_returns = (returns * weights.shift(1)).sum(1)
-(1 + portfolio_returns).cumprod().plot()
+portfolio_equity = (1 + portfolio_returns).cumprod()
 ```
-![portfolio returns](portfolio_returns.svg)
+
+{{<figure src="portfolio_returns.svg" title="Risk parity portfolio">}}
+A portfolio of SPY, TLT, GLD, GSG and VNQ with risk parity weights. The 21-day exponentially weighted volatility is used to determine the weights. The portfolio is rebalanced daily.
+{{</figure>}}
 
 We can estimate VaR and CVaR using the historical prices as descrived above:
 ```python
 import pandas as pd
 
-a = 0.95
+risk_level = 0.95
 
 var = pd.Series(index=weights.index)
 cvar = pd.Series(index=weights.index)
 
 for date, w in weights.iterrows():
-    history = returns.loc[:date]
-    history_returns = (history * w).sum(1)
-    
-    threshold = history_returns.quantile(1 - a)
+
+    # We use all the known history as the scenarios
+    scenarios = returns.loc[:date]
+    scenario_returns = (scenarios * w).sum(1)
+
+    threshold = scenario_returns.quantile(1 - risk_level)
+    worst_returns = scenario_returns[scenario_returns <= threshold]
 
     var.loc[date] = threshold
-    cvar.loc[date] = history_returns[history_returns <= threshold].mean()
+    cvar.loc[date] = worst_returns.mean()
 ```
 
-The VaR and CVaR over time looks like:
-![](var_and_cvar.svg)
+The VaR and CVaR over time look like:
+
+{{<figure src="var_and_cvar.svg" title="VaR vs CVaR">}}
+Using the same portfolio as the previous figure, we estimate the 1-day 95% VaR and CVaR using all historical returns as scenarios. The CVaR is always worse than the VaR.
+{{</figure>}}
 
 The main point to take away from this graph is that the CVaR is always worse than the VaR. From an average loss perspective, CVaR captures the tail risk whereas VaR completely ignores it.
 
