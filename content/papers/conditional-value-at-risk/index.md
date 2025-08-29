@@ -143,28 +143,35 @@ The main point to take away from this graph is that the CVaR is always worse tha
 
 # Procyclical risk estimates
 
-We now want to do a sanity check to see if our estimates are reasonable. We can do this by bucketing the VaR into 10 evenly sized buckets. Bucket 1 has the 10% worst estimaties while bucket 10 has the 10% best estimates. Then, for each bucket we'll calculate the 5% quantile of returns. The VaR figure is the 5% quantile of returns, so we expect to see a roughly linearly increasing relationship. That is, the lower buckets should have lower quantiles than higher buckets.
+We now want to do a sanity check to see if our estimates are reasonable. The easiest way is to see if the VaR estimate (which is the 5% quantile of returns) correlates with the actual 5% quantile of future portfolio returns.
+
+We can do this by bucketing the VaR into 10 evenly sized buckets. Bucket 1 has the 10% worst estimaties while bucket 10 has the 10% best estimates. Then, for each bucket, we calculate the 5% quantile of returns. We expect to see a roughly linearly increasing relationship. That is, the lower buckets should have lower quantiles than higher buckets.
 
 We can use the following code to do this:
 ```python
 import numpy as np
 
-df = pd.concat([var, cvar, portfolio_returns.shift(-1)], axis=1).dropna()
-df.columns = ['var', 'cvar', 'portfolio_returns']
+# We want future returns, so shift back by 1.
+df = pd.concat([var, portfolio_returns.shift(-1)], axis=1)
+df.columns = ['var', 'portfolio_returns']
 
 buckets = np.ceil(df['var'].rank(pct=True) * 10)
-df.groupby(buckets)['portfolio_returns'].quantile(0.05).plot()
+y = df.groupby(buckets)['portfolio_returns'].quantile(0.05)
+x = df.groupby(buckets)['var'].mean()
 ```
 
 And we get the resulting graph:
 
-![](var_quantiles.svg)
+{{<figure src="var_quantiles.svg" title="Sanity check risk estimates">}}
+The Var(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We expect to see a roughly linear increasing relationship. However, we see the opposite.
+{{</figure>}}
+
 
 Which is roughly the opposite of what we want to see! The worst VaR estimates have the highest 5% quantile of returns. With the exception of the 10th bucket (noisy data), the 5% quantile of returns decreases as the VaR estimate says it should increase!
 
 This tells us that the VaR estimates are not very good. Bad, actually.
 
-What is happening is that when the market is volatile, the historical returns have more extreme values, and when it is calm, the historical returns have less extreme values. This means that the risk metrics increase their estimates DURING (as opposed to before) a volatile market, and decrease their estimates during a calm market. This has the net affect of estimating high risk as the market is moving into a calm period and estimating low risk as the market is moving into a volatile period.
+What is happening is that when the market is volatile, the historical returns have more extreme values, and when it is calm, the historical returns have less extreme values. This means that the risk metrics increase their estimates DURING (as opposed to before) a volatile market, and decrease their estimates during a calm market. This has the effect of estimating high risk as the market is moving into a calm period and estimating low risk as the market is moving into a volatile period.
 
 <todo>Add a chart with an example of this behaviour. Similar to the one in [^Murphy2014] on page 6. </todo>
  
