@@ -1,13 +1,10 @@
 ---
 title: "Conditional Value at Risk"
 summary: "
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-    ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-    a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-    pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+    A practical crash course on conditional value at risk. Why it beats value at risk, how to estimate it from real data, and how to optimise portfolios with it. Complete with working code.
 "
 
-date: "2025-08-27"
+date: "2025-08-29"
 type: paper
 mathjax: true
 authors:
@@ -297,27 +294,129 @@ $$
 
 Now, we can build out a portfolio optimisation problem. We will treat risk metrics as a constraint in the optimisation. That is, we will find the portfolio with the highest return subject to a risk constraint.
 
+**Paramters and variables**
+
 * Let $\boldsymbol{w}$ be the portfolio weights we are trying to find.
 * Let $\boldsymbol{\mu}$ be the expected asset returns.
 * Let $\boldsymbol{r}_i$ be the asset returns in scenario $i$ for $i = 1, \ldots, N$.
 * Let $\boldsymbol{w}^\top \boldsymbol{r}_i$ be the portfolio return under scenario $i$.
 * Let the loss in scenario $i$ be $l_i = -\boldsymbol{w}^\top \boldsymbol{r}_i$ (positive means you lost money).
+* Let $\alpha$ be the CVaR level (e.g. 0.95 for 95% CVaR).
+* Let $\kappa$ be the maximum allowed CVaR (risk limit). This will be in percentage terms (e.g. 0.1 for 10% average loss).
+
+**Problem**
 
 $$
 \begin{align}
 \underset{\boldsymbol{w}}{\text{maximise}} \quad& \boldsymbol{w}^\top \boldsymbol{\mu} \\\
 \text{s.t.} \quad
-& \boldsymbol{w} \geq 0 \quad \text{Long only} \\\
-& \boldsymbol{w}^\top \boldsymbol{1} = 1\quad \text{Fully invested} \\\
-& \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N u_i \leq \kappa  \quad \text{Risk limit} \\\
+& \boldsymbol{w} \geq 0 & \textit{Long only} \\\
+& \boldsymbol{w}^\top \boldsymbol{1} \leq 1 & \textit{No leverage} \\\
+& \tau + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N u_i \leq \kappa & \textit{Risk limit} \\\
 & u_i \geq -\boldsymbol{w}^\top \boldsymbol{r}_i - \tau \\\
 & u_i \geq 0
 \end{align}
 $$
 
+We can wrap this up in a Python function using [cvxpy](https://www.cvxpy.org/en/stable/) as follows:
+```python
+import numpy as np
+import cvxpy as cp
+
+def optimise(
+    expected_returns: np.ndarray,
+    scenarios: np.ndarray,
+    alpha: float,
+    kappa: float,
+) -> pd.ndarray:
+    """
+    Solves a portfolio optimisation problem with a
+    Conditional Value-at-Risk (CVaR) risk constraint.
+
+    Given expected asset returns, scenario returns, a
+    CVaR confidence level, and a risk limit, this
+    function finds the optimal long-only portfolio
+    weights that maximise expected return subject to
+    a CVaR constraint and no leverage.
+
+    Parameters
+    ----------
+    expected_returns : np.ndarray
+        Array of expected returns for each asset.
+        shape: [M], where M is number of assets.
+
+    scenarios : np.ndarray
+        Array of scenario returns.
+        shape: [N, M], where N is number of scenarios.
+
+    alpha : float
+        Confidence level for CVaR. Give 0.95
+        for 95% CVaR.
+
+    kappa : float
+        Maximum allowed CVaR (risk limit).
+
+    Returns
+    -------
+    np.ndarray
+        Optimal portfolio weights (shape: [M]) that
+        maximise expected return under the constraints.
+    """
+
+    # Number of scenarios, number of assets
+    N, M = scenarios.shape
+
+    # These are the weights we want to find
+    w  = cp.Variable(M)
+
+    # These are the auxiliary variables for CVaR
+    # using the Rockafellar-Uryasev formulation.
+    tau = cp.Variable()
+    u = cp.Variable(N, nonneg=True)
+
+    # CVaR expression
+    cvar = tau + (1/((1-alpha)*N)) * cp.sum(u)
+
+    # Objective: maximise expected return
+    objective = cp.Maximize(expected_returns @ w)
+
+    # Constraints - the constraint for `u` to be
+    # greater or equal to 0 is handled by
+    # the nonneg=True argument above.
+    constraints = [
+        w >= 0,                     # long-only
+        cp.sum(w) <= 1,             # No leverage
+        cvar <= kappa,              # risk limit
+        u >= -(scenarios @ w) - tau,
+    ]
+
+    prob = cp.Problem(objective, constraints)
+    
+    prob.solve(solver=cp.CLARABEL)
+
+    return w.value
+```
+
+## Example
+
+We can use the same ETFs as before and we'll do the following:
+
+* The expected returns $\boldsymbol{\mu}$ will be the exponentially weighted historical return with a half-life of 63 days (about 3 months).
+* We'll fix the CVaR level to  $\alpha = 0.95\%$.
+* We'll look at three different limits $\kappa \in [1.0, 0.05, 0.025]$. We include the 1.0 limit to show that the optimiser works as expected when the risk limit has no effect.
+
+We'll use the following code to find the weights over time:
+```python
+# Code here
+```
+
+The resulting equity curves and CVaR estimates are in the following figure.
+
+![](optimisation_example.svg)
+
 # Combine with mean-variance optimisation
 
-1. Compare with mean–variance: composition differences, realised tail risk, turnover.
+1. Compare with mean--variance: composition differences, realised tail risk, turnover.
 
 # Summary and next steps
 
