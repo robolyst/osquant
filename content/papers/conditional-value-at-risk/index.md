@@ -12,6 +12,7 @@ authors:
 categories:
     - mathematics
     - finance
+hover_color: "#FF9696"
 ---
 
 Value at Risk (VaR) is the industry's common language for portfolio risk. But, it's a cutoff, it completely ignores tail risk. VaR tells you how often losses breach a threshold, not how bad those losses get.
@@ -531,10 +532,14 @@ We'll use the following code to find the weights over time:
 # Code here
 ```
 
-The resulting equity curves and CVaR estimates are in the following figure.
+The resulting equity curves and CVaR estimates are in the following figure:
 
-![](optimisation_example.svg)
+{{<figure src="optimisation_example.svg" title="Optimisation example">}}
+A portfolio of SPY, TLT, GLD, GSG and VNQ with weights optimised with the `optimise` code. The CVaR constraint is added as an extra constraint and the risk limit is varied between 1.0 (no limit), 0.05 (5% average loss) and 0.025 (2.5% average loss). The portfolio is rebalanced daily. You can see that the constraint is effectively limiting the estimated CVaR.
 
+{{</figure>}}
+
+Looking at the figure above, the optimiser has reduced the estimated CVaR with very little impact on the equity curve. This suggests that the CVaR constraint is effective at reducing tail risk without significantly impacting returns. Assuming, of course, that the scenarios are a good representation of future returns.
 
 # Summary
 
