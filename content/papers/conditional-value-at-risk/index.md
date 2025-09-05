@@ -20,7 +20,7 @@ Value at Risk (VaR) is the industry's go-to for portfolio risk. But, it's a cuto
 In this article we'll recap VaR, build intuition for CVaR, estimate it from historical returns, and use it as a constraint in a portfolio optimiser. Yyou'll get reusable Python to compute and plot CVaR and plug it straight into your workflow. By the end, you'll know what CVaR means, how to measure it sensibly, and how to put it to work in real portfolio decisions.
 
 
-# Conditional Value at Risk
+# Measuring Risk
 
 One of the most commonly used risk metrics is [Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR). It is not without it's problems. The analysis on the famous collapse of [Long Term Capital Management](https://en.wikipedia.org/wiki/Long-Term_Capital_Management) in the 1990s finds the use of VaR as the main culprit behind the collapse [^Jorion1999].
 
@@ -28,15 +28,17 @@ One of the most commonly used risk metrics is [Value at Risk](https://en.wikiped
 
 ## Value at Risk
 
-Value at Risk (VaR) is a measure of the amount of money you could lose on a regular day. Given a time horizon (such as 1 day) and regular day frequency (such as 95% of the time), VaR tells you the maximum loss you can expect to see on those regular days.
+Value at Risk (VaR) is a measure of the maximum amount of money you could lose on a regular day. Given a time horizon (such as 1 day) and regular day frequency (such as 95% of the time), VaR tells you the maximum loss you can expect to see on those regular days.
 
 If the frequency of regular days is 95%, and we expect to lose at most \\$1m, we say "95% of the time you expect to lose less than \\$1m". But, about 1 day in 20 you could lose \\$1m or more. You may see this written as something like "1-day 95% VaR of \\$1m".
+
+A better interpretation of VaR is that it is the *minimum* amount you will lose on your worst days.
 
 {{<figure src="var_description.svg" width="medium" >}}{{</figure>}}
 
 VaR has some fairly serious shortcomings; tail blindness, failure to be subadditive and awkwardness for optimisation.
 
-**Tail blindness** &nbsp;&nbsp; The critical thing to understand about VaR is that it does not tell you how much you could lose on bad days. It only tells you the maximum loss you can expect to see on regular days. It ignores the losses entirely you're past the threshold. A breach of this threshold will *always* be worse than the VaR figure. It could be a little worse, or it could be catastrophically worse.
+**Tail blindness** &nbsp;&nbsp; The critical thing to understand about VaR is that it does not tell you how much you could lose on bad days. It only tells you the maximum loss you can expect to see on regular days. It ignores the losses entirely once you're past the threshold. A breach of this threshold will *always* be worse than the VaR figure. It could be a little worse, or it could be catastrophically worse.
 
 **Fails subadditivity** &nbsp;&nbsp;  We want diversification to reduce risk. If we combine two portfolios, the risk of the combined portfolio should be no greater than the sum of the risks of the individual portfolios. This is known as [subadditivity](https://en.wikipedia.org/wiki/Subadditivity) and is a desirable property for a risk metric [^coherent]. VaR does not satisfy this property. See the [appendix](#appendix-var-is-not-subadditive) for an example.
 
