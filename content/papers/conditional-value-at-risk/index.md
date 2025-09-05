@@ -22,14 +22,14 @@ In this article we recap VaR, build intuition for CVaR, estimate it from histori
 
 # Measuring risk
 
-VaR answers a frequency question: what is the ***minimum loss*** during the worst X% of outcomes? While CVaR answers a severity question: what is the ***average loss*** during the the worst X% of outcomes? We'll estimate both from the same historical sample, starting with VaR to set the baseline, then show how CVaR fills the shortcomings before turning to code and a worked example.
+VaR answers a frequency question: what is the ***minimum loss*** during the worst X% of outcomes? While CVaR answers a severity question: what is the ***average loss*** during the worst X% of outcomes? We'll estimate both from the same historical sample, starting with VaR to set the baseline, then show how CVaR fills the shortcomings before turning to code and a worked example.
 
 
 ## Value at risk
 
 Value at Risk (VaR) is a measure of the maximum amount of money you could lose on a regular day. Given a time horizon (e.g. 1 day) and a regular-day frequency (e.g. 95%), VaR tells you the maximum loss you can expect on those regular days.
 
-If 95% of days are "regular" and we expect to lose at most \$1m, we say "95% of the time you lose less than \$1m". About 1 day in 20 you could lose \$1m or more. You might see this written as "1-day 95% VaR of \$1m".
+If 95% of days are "regular" and we expect to lose at most \$1m, we say "95% of the time you lose less than \$1m." About 1 day in 20 you could lose \$1m or more. You might see this written as "1-day 95% VaR of \$1m."
 
 A better interpretation of VaR is that it is the *minimum* loss you will see on your worst days.
 
@@ -53,7 +53,7 @@ Rather than telling you the maximum loss you can expect on regular days, CVaR te
 
 {{<figure src="cvar_description.svg" width="medium" >}}{{</figure>}}
 
-This change from minimum loss (VaR) to average loss (CVaR) addresses the tail blindness problem. A breach of the VaR threshold will, on average, be equal to the CVaR figure. Also, the metric is subadditive making it inline with our intuition that diversification should reduce risk. And, while on first pass the CVaR is not convex, it can be reformulated as a convex problem that can be incoprorated into a portfolio optimisation[^Rockafellar1999] as we will see later.
+This change from minimum loss (VaR) to average loss (CVaR) addresses the tail blindness problem. A breach of the VaR threshold will, on average, be equal to the CVaR figure. Also, the metric is subadditive making it inline with our intuition that diversification should reduce risk. And, while on first pass the CVaR is not convex, it can be reformulated as a convex problem that can be incorporated into a portfolio optimisation[^Rockafellar1999] as we will see later.
 
 ## Estimation
 
@@ -626,7 +626,7 @@ A portfolio of SPY, TLT, GLD, GSG and VNQ with weights optimised with the `optim
 
 {{</figure>}}
 
-Looking at the figure above, the optimiser has reduced estimated CVaR with very little impact on the equity curve. This suggests that the CVaR constraint is effective at reducing tail risk without significantly impacting returns. Assuming, of course, that the scenarios are a good representation of future returns.
+Looking at the figure above, the optimiser has reduced estimated CVaR with little impact on the equity curve. This suggests that the CVaR constraint is effective at reducing tail risk without significantly impacting returns. Assuming, of course, that the scenarios are a good representation of future returns.
 
 # Summary
 
