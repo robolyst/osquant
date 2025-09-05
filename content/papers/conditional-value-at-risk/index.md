@@ -15,7 +15,7 @@ categories:
 hover_color: "#FF9696"
 ---
 
-[Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR) is the industry's go-to portfolio risk metric. But, it's a cutoff, completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad losses are when you do. [Conditional Value at Risk](https://en.wikipedia.org/wiki/Expected_shortfall)  (CVaR) looks at that damage. It measures the average of your worst days.
+[Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR) is the industry's go-to portfolio risk metric. But, it's a cutoff completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad losses are when you do. [Conditional Value at Risk](https://en.wikipedia.org/wiki/Expected_shortfall)  (CVaR) looks at that damage. It measures the average of your worst days.
 
 In this article we recap VaR, build intuition for CVaR, estimate it from historical returns, and use it as a constraint in a portfolio optimiser. You get reusable Python to compute and plot CVaR and plug it into your workflow. By the end you'll know what CVaR means, how to measure it sensibly, and how to use it in real portfolio decisions.
 
