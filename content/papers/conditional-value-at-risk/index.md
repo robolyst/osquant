@@ -15,16 +15,15 @@ categories:
 hover_color: "#FF9696"
 ---
 
-Value at Risk (VaR) is the industry's go-to for portfolio risk. But, it's a cutoff, completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad the damage is when you do. Conditional Value at Risk (CVaR) looks at that damage. It measures the average of your worst days.
+[Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR) is the industry's go-to for portfolio risk. But, it's a cutoff, completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad the damage is when you do. [Conditional Value at Risk](https://en.wikipedia.org/wiki/Expected_shortfall)  (CVaR) looks at that damage. It measures the average of your worst days.
 
 In this article we'll recap VaR, build intuition for CVaR, estimate it from historical returns, and use it as a constraint in a portfolio optimiser. Yyou'll get reusable Python to compute and plot CVaR and plug it straight into your workflow. By the end, you'll know what CVaR means, how to measure it sensibly, and how to put it to work in real portfolio decisions.
 
 
 # Measuring Risk
 
-One of the most commonly used risk metrics is [Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR). It is not without it's problems. The analysis on the famous collapse of [Long Term Capital Management](https://en.wikipedia.org/wiki/Long-Term_Capital_Management) in the 1990s finds the use of VaR as the main culprit behind the collapse [^Jorion1999].
+VaR answers a frequency question: what is the ***minimum loss*** during the worst X% of outcomes? While CVaR answers a severity question: what is the ***average loss*** during the the worst X% of outcomes? We'll estimate both from the same historical sample, starting with VaR to set the baseline, then show how CVaR fills the shortcomings before turning to code and a worked example.
 
-[Conditional Value at Risk](https://en.wikipedia.org/wiki/Expected_shortfall) (CVaR), is a more informative risk measure that addresses some of the shortcomings of VaR. We'll start off by covering VaR and then work our way up to CVaR.
 
 ## Value at Risk
 
@@ -58,13 +57,15 @@ This change from minimum loss (VaR) to average loss (CVaR) addresses the tail bl
 
 ## Estimation
 
-To estimate $\text{CVaR}(\alpha)$, we use a large set of scenarios of possible return vectors. This is a way of representing the distribution of returns without a parametric model. For simplicity, we'll use all historical returns as the scenarios.
+We'll use the symbol $\alpha$ to denote the risk level. Carrying on from the examples above, we'll use $\alpha = 0.95$ to denote a 95% VaR or CVaR.
 
-Let's say we have a vector of portfolio weights $\boldsymbol{w}$ and vectors of asset returns $\boldsymbol{r}_t$ where each $t$ is a different time period over some historical window. These $\boldsymbol{r}_t$s are our scenarios. We estimate the CVaR at the $\alpha$ level as follows:
+To estimate $\text{VaR}(\alpha)$ and $\text{CVaR}(\alpha)$, we use a set of scenarios of possible return vectors. This is a way of representing the distribution of returns without a parametric model. For simplicity, we'll use all historical returns as the scenarios.
+
+Let's say we have a vector of portfolio weights $\boldsymbol{w}$ and vectors of asset returns $\boldsymbol{r}_t$ where each $t$ is a different time period over some historical window. These $\boldsymbol{r}_t$s are our scenarios. We estimate the risk metrics at the $\alpha$ level as follows:
 
 1. Calculate the portfolio returns $R_t = \boldsymbol{w}^\top \boldsymbol{r}_t$ for each time $t$.
-2. Collect the worst $1 - \alpha$ fraction of the returns. This is the VaR.
-3. Calculate the average of these worst returns. This is the CVaR.
+1. Calculate the $(1 - \alpha)$ quantile of the returns. This is the VaR.
+3. Calculate the average of the worst returns (returns equal to or less than VaR). This is the CVaR.
 
 ## Example
 
@@ -97,9 +98,9 @@ inv_vols =  1 / vols
 
 weights = inv_vols.divide(inv_vols.sum(1), axis=0).dropna()
 ```
-We've used a halflife of 21 days (about a month) to estimate the volatility. The minimum period of 252 days (about a year) ensures that we have a good estimate of the volatility before we start calculating weights.
+We've used a halflife of 21 days (about a month) to estimate volatility. The minimum period of 252 days (about a year) ensures that we have a good estimate of the volatility before we start calculating weights.
 
-The weights on a date (each row in the `weights` DataFrame) are the weights known at the end of that day as they need that day's returns to estimate volatility. This means that today's weights are used to trade tomorrow. We need to remember to shift by one when applying to returns.
+The weights on a date (each row in the `weights` DataFrame) are the weights known at the end of that day as they need that day's returns to estimate volatility. This means that today's weights are used to trade tomorrow's return. We need to remember to shift by one when multiplying with returns.
 
 The equity curve (barring costs and other frictions) can be calculated with the following code and is shown in the figure below:
 
@@ -109,7 +110,7 @@ portfolio_equity = (1 + portfolio_returns).cumprod()
 ```
 
 {{<figure src="portfolio_returns.svg" title="Risk parity portfolio">}}
-A portfolio of SPY, TLT, GLD, GSG and VNQ with risk parity weights. The 21-day exponentially weighted volatility is used to determine the weights. The portfolio is rebalanced daily.
+A portfolio of SPY, TLT, GLD, GSG and VNQ with risk parity weights. The 21-day exponentially weighted volatility is used to determine the weights. The portfolio is rebalanced daily. Costs and other frictions are not taken into account.
 {{</figure>}}
 
 We can estimate VaR and CVaR using the historical prices as descrived above:
@@ -181,14 +182,14 @@ Which is roughly the opposite of what we want to see! The worst VaR estimates ha
 
 This tells us that the CVaR estimates are not very good. Bad, actually.
 
-What is happening is that when the market is volatile, the historical returns have more extreme values, and when it is calm, the historical returns have less extreme values. This means that the risk metrics increase their estimates DURING (as opposed to before) a volatile market, and decrease their estimates during a calm market. This has the effect of estimating high risk as the market is moving into a calm period and estimating low risk as the market is moving into a volatile period.
+What is happening? When the market is volatile, the historical returns have more extreme values. When the market is calm, the historical returns have less extreme values. This means that the risk metrics increase their estimates DURING (as opposed to before) a volatile market, and decrease their estimates during a calm market. This has the effect of estimating high risk as the market is moving into a calm period and estimating low risk as the market is moving into a volatile period.
+
+This behaviour is called [*procyclical*](https://en.wikipedia.org/wiki/Procyclical_and_countercyclical_variables)[^Murphy2014]. See the figure below for an example.
 
 {{<figure src="procyclical.svg" title="Example of procyclical behaviour">}}
 The SPY during the 2025 Trump tarrif chaos. The left axis shows the SPY prices drop and bounce back. The right axis shows the CVaR(95) estimated with the previous two years of historical prices. The CVaR did not initially increase as the market became volatile and dropped. Once the market calmed and prices started to recover, the estimated risk remained high.
 {{</figure>}}
- 
-This behaviour is called [*procyclical*](https://en.wikipedia.org/wiki/Procyclical_and_countercyclical_variables)[^Murphy2014].
- 
+
 If we were to use these estimates in a portfolio optimisation, we would lower our risk when we should be increasing it and vice versa. We'd make the portfolio worse, not better.
 
 To fix this, we can normalise the historical returns by their volatility[^Perez2015]. This will remove the procyclical behaviour. We then re-scale the VaR and CVaR estimates by the current volatility to get them back into the rights units. We use a long half-life to de-volatilise the estimates, and a short half-life to re-volatilise them to current conditions.
@@ -291,7 +292,7 @@ Which is much closer to what we want to see. As the estimate for both VaR and CV
 
 # Portfolio optimisation
 
-The CVaR is not a convex function we can use in a portfolio optimisation. At least, in it's current form presented above, it is not. Rockafellar and Uryasev show that we can reformulate the CVaR as a convex problem[^Rockafellar1999].
+The CVaR is not a convex function we can use in a portfolio optimisation. At least, in it's current form presented above, it is not. Rockafellar and Uryasev showed that we can reformulate the CVaR as a convex problem[^Rockafellar1999].
 
 The derivation is clever and makes use of two tricks. Understanding it will teach you some key concepts in optimisation. We're going to work through the derivation here and show the final optimisation problem at the end.
 
@@ -301,7 +302,9 @@ The derivaiton involes rewriting the CVaR into a form that is easier to work wit
 
 ### Rewriting the CVaR
 
-Let's say that we have $N$ scenarios of returns denoted by $l_i$. We will write the VaR at level $\alpha$ as $\text{VaR}_{\alpha}(l)$. The CVaR is then:
+Let's say that we have $N$ scenarios of returns denoted by $r_i$ and we define the loss for scenario $i$ as $l_i = -r_i$. In this derivation, a loss is positive, profit is negative.
+
+We will write the VaR at level $\alpha$ as $\text{VaR}_{\alpha}(l)$. The CVaR is then:
 $$
 \text{CVaR}\_{\alpha}(l) = E[l \ | \ l \geq \text{VaR}\_{\alpha}(l)]
 $$
@@ -313,17 +316,13 @@ Where $\\{ \cdot \\}$ is the indicator function, which is 1 if the condition is 
 
 We can replace the indicator function with a max function as follows:
 $$
-l_i \cdot \\{ l_i \geq \text{VaR}\_{\alpha}(l) \\} = \max(l_i - \text{VaR}\_{\alpha}(l), 0) + \text{VaR}\_{\alpha}(l)
+\text{CVaR}\_{\alpha}(l) = \text{VaR}\_{\alpha}(l) + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N \max(l_i - \text{VaR}\_{\alpha}(l), 0)
 $$
 We'll use a simpler notation for the max between a variable and 0:
 $$
-l_i \cdot \\{ l_i \geq \text{VaR}\_{\alpha}(l) \\} = |l_i - \text{VaR}\_{\alpha}(l)|_+ + \text{VaR}\_{\alpha}(l)
-$$
-Putting this into the CVaR equation gives us:
-$$
 \text{CVaR}\_{\alpha}(l) = \text{VaR}\_{\alpha}(l) + \frac{1}{(1 - \alpha) N} \sum\_{i=1}^N |l_i - \text{VaR}\_{\alpha}(l)|\_+
 $$
-This gives us a form we can now work with to get it into a convex form.
+This gives us a form we can now work with to make it convex. For this well need two tricks.
 
 ### Trick 1: VaR as an optimisation
 
@@ -387,11 +386,13 @@ $$
 u_i &\geq l_i - \tau \\\
 u_i &\geq 0 \\\
 \end{align}
-$$ 
+$$
+
+This is a convex problem and a linear program.
 
 ## Optimisation problem
 
-Now, we can build out a portfolio optimisation problem. The objective is to maximise expected returns subject to a portfolio variance constraint and a CVaR constraint. Additionall, we'll have long only weights and no leverage.
+Now, we can build out a portfolio optimisation problem. The objective is to maximise expected returns subject to a portfolio variance constraint and a CVaR constraint. Additionally, we'll have long only weights and no leverage.
 
 **Paramters and variables**
 
@@ -535,7 +536,7 @@ We'll use the following code to find the weights over time:
 The resulting equity curves and CVaR estimates are in the following figure:
 
 {{<figure src="optimisation_example.svg" title="Optimisation example">}}
-A portfolio of SPY, TLT, GLD, GSG and VNQ with weights optimised with the `optimise` code. The CVaR constraint is added as an extra constraint and the risk limit is varied between 1.0 (no limit), 0.05 (5% average loss) and 0.025 (2.5% average loss). The portfolio is rebalanced daily. You can see that the constraint is effectively limiting the estimated CVaR.
+A portfolio of SPY, TLT, GLD, GSG and VNQ with weights optimised with the `optimise` code. The CVaR constraint is added as an extra constraint and the risk limit is varied between 1.0 (no limit), 0.05 (5% average loss) and 0.025 (2.5% average loss). The portfolio is rebalanced daily. You can see that the constraint is limiting the estimated CVaR.
 
 {{</figure>}}
 
@@ -565,8 +566,8 @@ Single loan:
 
 | Loss | Probability |
 |------|------------:|
-| 0    | 90%         |
-| 1    | 10%         |
+| \$0  | 90%         |
+| \$1  | 10%         |
 
 The 90% VaR of a single loan is \\$0, since 90% of the time the loss will be no more than \\$0. That gives us:
 $$
@@ -580,9 +581,9 @@ Combined portfolio (two loans):
 
 | Loss | Probability                        |
 |------|-----------------------------------:|
-| 0    | $0.9 \times 0.9 = 81\\%$           |
-| 1    | $0.9 \times 0.1 \times 2 = 18\\%$  |
-| 2    | $0.1 \times 0.1 = 1\\%$            |
+| \$0  | $0.9 \times 0.9 = 81\\%$           |
+| \$1  | $0.9 \times 0.1 \times 2 = 18\\%$  |
+| \$2  | $0.1 \times 0.1 = 1\\%$            |
 
 The cumulative probability at \\$0 is 81% (< 90%), and at \\$1 it's 99% (> 90%). Therefore, the 90% VaR of a single loan is \\$1, since 90% of the time the loss will be no more than \\$1. That gives us:
 $$
