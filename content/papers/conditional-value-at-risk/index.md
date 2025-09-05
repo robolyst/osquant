@@ -22,7 +22,7 @@ In this article we recap VaR, build intuition for CVaR, estimate it from histori
 
 # Measuring risk
 
-VaR answers a frequency question: what is the ***minimum loss*** during the worst X% of outcomes? While CVaR answers a severity question: what is the ***average loss*** during the worst X% of outcomes? We'll estimate both from the same historical sample, starting with VaR to set the baseline, then show how CVaR fills the shortcomings before turning to code and a worked example.
+VaR answers a frequency question: what is the ***minimum loss*** during the worst X% of outcomes? While CVaR answers a severity question: what is the ***average loss*** during the worst X% of outcomes? We'll discuss VaR's shortcomings and show how CVaR fills them before turning to code and an example.
 
 
 ## Value at risk
