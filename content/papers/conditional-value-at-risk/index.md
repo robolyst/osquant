@@ -53,7 +53,7 @@ Rather than telling you the maximum loss you can expect on regular days, CVaR te
 
 {{<figure src="cvar_description.svg" width="medium" >}}{{</figure>}}
 
-This change from minimum loss (VaR) to average loss (CVaR) addresses the tail blindness problem. A breach of the VaR threshold will, on average, be equal to the CVaR figure. Also, the metric is subadditive making it inline with our intuition that diversification should reduce risk. And, while on first pass the CVaR is not convex, it can be reformulated as a convex problem that can be incorporated into a portfolio optimisation[^Rockafellar1999] as we will see later.
+This change from minimum loss (VaR) to average loss (CVaR) addresses the tail blindness problem. A breach of the VaR threshold will, on average, be equal to the CVaR figure. Also, the metric is subadditive making it in line with our intuition that diversification should reduce risk. And, while on first pass the CVaR is not convex, it can be reformulated as a convex problem that can be incorporated into a portfolio optimisation[^Rockafellar1999] as we will see later.
 
 ## Estimation
 
@@ -65,7 +65,7 @@ Let's say we have a vector of portfolio weights $\boldsymbol{w}$ and vectors of 
 
 1. Calculate the portfolio returns $R_t = \boldsymbol{w}^\top \boldsymbol{r}_t$ for each time $t$.
 1. Calculate the $(1 - \alpha)$ quantile of the returns. This is the VaR.
-3. Calculate the average of the worst returns (returns equal to or less than VaR). This is the CVaR.
+1. Calculate the average of the worst returns (returns equal to or less than VaR). This is the CVaR.
 
 ## Example
 
@@ -94,7 +94,7 @@ vols = returns.ewm(halflife=21, min_periods=252).std()
 
 # Larger vol should have smaller weight.
 # We invert the volatility
-inv_vols =  1 / vols
+inv_vols = 1 / vols
 
 weights = inv_vols.divide(inv_vols.sum(1), axis=0).dropna()
 ```
@@ -159,12 +159,12 @@ import numpy as np
 df = pd.concat([var, cvar, portfolio_returns.shift(-1)], axis=1)
 df.columns = ['var', 'cvar', 'portfolio_returns']
 
-# Calcualte sanity check for VaR
+# Calculate sanity check for VaR
 buckets = np.ceil(df['var'].rank(pct=True) * 10)
 y = df.groupby(buckets)['portfolio_returns'].quantile(0.05)
 x = df.groupby(buckets)['var'].mean()
 
-# Calcualte sanity check for CVaR
+# Calculate sanity check for CVaR
 buckets = np.ceil(df['cvar'].rank(pct=True) * 10)
 y = df.groupby(buckets)['portfolio_returns'].apply(
     lambda x: x[x <= x.quantile(0.05)].mean()
@@ -175,7 +175,7 @@ x = df.groupby(buckets)['cvar'].mean()
 And we get the resulting graph:
 
 {{<figure src="simple_sanity_check.svg" title="Sanity check risk estimates">}}
-(left) The Var(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We do not see a roughly linear increasing relationship. (right) The CVaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the average of the worst 5% of future portfolio returns is calculated. We do not see a roughly linear increasing relationship.
+(left) The VaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We do not see a roughly linear increasing relationship. (right) The CVaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the average of the worst 5% of future portfolio returns is calculated. We do not see a roughly linear increasing relationship.
 {{</figure>}}
 
 Which is roughly the opposite of what we want! The worst VaR estimates have the highest 5% quantile. Except for the 10th bucket (noise), the 5% quantile decreases where it should increase. Similarly, we do not see the expected increasing relationship for CVaR.
@@ -187,7 +187,7 @@ What is happening? When the market is volatile, the historical returns have more
 This behaviour is called [*procyclical*](https://en.wikipedia.org/wiki/Procyclical_and_countercyclical_variables)[^Murphy2014].
 
 {{<figure src="procyclical.svg" title="Example of procyclical behaviour">}}
-SPY during the 2025 US tarrif episode. The left axis shows the SPY price drop and rebound. The right axis shows the CVaR(95) estimated with the previous two years of history. CVaR did not get worse as the market became volatile and dropped. Once the market calmed and prices started to recover, the estimated risk remained elevated.
+SPY during the 2025 US tariff episode. The left axis shows the SPY price drop and rebound. The right axis shows the CVaR(95) estimated with the previous two years of history. CVaR did not get worse as the market became volatile and dropped. Once the market calmed and prices started to recover, the estimated risk remained elevated.
 {{</figure>}}
 
 If we were to use these estimates in a portfolio optimisation, we would lower our risk when we should be increasing it and vice versa. We'd make the portfolio worse, not better.
@@ -284,15 +284,15 @@ Using the same risk parity portfolio as before, we estimate the 1-day 95% VaR an
 Re-running the sanity check gives us much better results:
 
 {{<figure src="sanity_check.svg" title="Sanity check adjusted risk estimates">}}
-(left) The volatility adjusted Var(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We see a roughly linear increasing relationship. (right) The volatility adjusted CVaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the average of the worst 5% of future portfolio returns is calculated. We see a roughly linear increasing relationship.
+(left) The volatility adjusted VaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the 5% quantile of future portfolio returns is calculated. We see a roughly linear increasing relationship. (right) The volatility adjusted CVaR(95%) estimates are bucketed into 10 evenly sized buckets. For each bucket, the average of the worst 5% of future portfolio returns is calculated. We see a roughly linear increasing relationship.
 {{</figure>}}
 
-Which is much closer to what we want to see. As the estimate for both VaR and CVaR get worse, the actual returns also get worse. In the worst 10% of samples, the returns are not as similarly worse. For our purposes, this will work ok. Refining the risk models any further is outside of the scope of this article.
+Which is much closer to what we want to see. As the estimates for both VaR and CVaR get worse, the actual returns also get worse. In the worst 10% of samples, the returns are not as similarly worse. For our purposes, this will work ok. Refining the risk models any further is outside of the scope of this article.
 
 
 # Portfolio optimisation
 
-The CVaR is not a convex function we can use in a portfolio optimisation. At least, in it's current form presented above, it is not. Rockafellar and Uryasev showed that we can reformulate the CVaR as a convex problem[^Rockafellar1999].
+The CVaR is not a convex function we can use in a portfolio optimisation. At least, in its current form presented above, it is not. Rockafellar and Uryasev showed that we can reformulate the CVaR as a convex problem[^Rockafellar1999].
 
 The derivation is clever and makes use of two tricks. Understanding it will teach you some key concepts in optimisation. We're going to work through the derivation here and show the final optimisation problem at the end.
 
