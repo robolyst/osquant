@@ -17,7 +17,7 @@ hover_color: "#FF9696"
 
 [Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR) is the industry's go-to for portfolio risk. But, it's a cutoff, completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad the damage is when you do. [Conditional Value at Risk](https://en.wikipedia.org/wiki/Expected_shortfall)  (CVaR) looks at that damage. It measures the average of your worst days.
 
-In this article we'll recap VaR, build intuition for CVaR, estimate it from historical returns, and use it as a constraint in a portfolio optimiser. Yyou'll get reusable Python to compute and plot CVaR and plug it straight into your workflow. By the end, you'll know what CVaR means, how to measure it sensibly, and how to put it to work in real portfolio decisions.
+In this article we'll recap VaR, build intuition for CVaR, estimate it from historical returns, and use it as a constraint in a portfolio optimiser. You'll get reusable Python to compute and plot CVaR and plug it straight into your workflow. By the end, you'll know what CVaR means, how to measure it sensibly, and how to put it to work in real portfolio decisions.
 
 
 # Measuring Risk
@@ -645,7 +645,7 @@ $$
 $$
 which is to say that the risk of the combined portfolio is no greater than the sum of the risks of the individual portfolios.
 
-To demonstrate that VaR is not subadditive, we will consider two **independent** loans $X_1$ and $X_2$ such that each loan loses **\\$1** with a probability of of **10%**, and **\\$0** otherwise. The two loans are independent. We'll look at the 90% VaR of each loan individually and then combined.
+To demonstrate that VaR is not subadditive, we will consider two **independent** loans $X_1$ and $X_2$ such that each loan loses **\\$1** with a probability of **10%**, and **\\$0** otherwise. The two loans are independent. We'll look at the 90% VaR of each loan individually and then combined.
 
 Single loan:
 
@@ -725,4 +725,4 @@ $$
     link="https://www.bankofengland.co.uk/-/media/boe/files/financial-stability-paper/2014/an-investigation-into-the-procyclicality-of-risk-based-initial-margin-models.pdf"
 %}}
 
-[^coherent]: An ideal risk metric is said to be [coherent](https://en.wikipedia.org/wiki/Coherent_risk_measure) if it satifies a list of properties. See the Wikipedia page for more details.
+[^coherent]: An ideal risk metric is said to be [coherent](https://en.wikipedia.org/wiki/Coherent_risk_measure) if it satisfies a list of properties. See the Wikipedia page for more details.
