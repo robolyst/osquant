@@ -4,7 +4,7 @@ summary: "
     A practical crash course on conditional value at risk. Why it beats value at risk, how to estimate it from real data, and how to optimise portfolios with it. Complete with working code.
 "
 
-date: "2025-08-29"
+date: "2025-09-05"
 type: paper
 mathjax: true
 authors:
@@ -15,11 +15,9 @@ categories:
 hover_color: "#FF9696"
 ---
 
-Value at Risk (VaR) is the industry's common language for portfolio risk. But, it's a cutoff, it completely ignores tail risk. VaR tells you how often losses breach a threshold, not how bad those losses get.
+Value at Risk (VaR) is the industry's go-to for portfolio risk. But, it's a cutoff, completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad the damage is when you do. Conditional Value at Risk (CVaR) looks at that damage. It measures the average of your worst days.
 
-Conditional Value at Risk (CVaR), focuses on that tail. It measures the average of your worst days.
-
-In this article we'll quickly recap VaR, build intuition for CVaR, estimate it from historical returns, and then use it as a constraint in a portfolio optimiser. Along the way you'll get reusable Python so you can compute CVaR, plot it, and drop it straight into your own workflow. By the end, you'll know what CVaR means, how to measure it sensibly, and how to use it to make portfolio decisions.
+In this article we'll recap VaR, build intuition for CVaR, estimate it from historical returns, and use it as a constraint in a portfolio optimiser. Yyou'll get reusable Python to compute and plot CVaR and plug it straight into your workflow. By the end, you'll know what CVaR means, how to measure it sensibly, and how to put it to work in real portfolio decisions.
 
 
 # Conditional Value at Risk
