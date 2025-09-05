@@ -530,7 +530,93 @@ We can use the same ETFs as before and we'll do the following:
 
 We'll use the following code to find the weights over time:
 ```python
-# Code here
+def rolling_weights(
+    returns: pd.DataFrame,
+    expected_returns_half_life: float = 252 * 3,
+    expected_covs_half_life: float = 252 * 3,
+    risk_level: float = 0.95,
+    max_avg_risk: float = 0.01,
+    long_vols_half_life: float = 252,
+    short_vols_half_life: float = 21 * 3,
+    min_periods: int = 252,
+    max_vol: float = 0.005,
+) -> pd.DataFrame:
+    """
+    Finds the optimal portfolio weights over time in
+    a rolling fashion.
+
+    Parameters
+    ----------
+    returns : pd.DataFrame
+        DataFrame of historical asset returns.
+        Rows are time periods and columns are assets.
+    
+    expected_returns_half_life : float
+        Half-life for the expected returns
+        estimate (in days).
+    
+    expected_covs_half_life : float
+        Half-life for the expected covariances
+        estimate (in days).
+
+    risk_level : float
+        The CVaR risk level. E.g., 0.95 for 95%
+        CVaR.
+    
+    max_avg_risk : float
+        The maximum average risk (CVaR) allowed
+        in the portfolio.
+    
+    long_vols_half_life : float
+        Half-life for the long-term volatility
+        estimate (in days).
+        
+    short_vols_half_life : float
+        Half-life for the short-term volatility
+        estimate (in days).
+    
+    min_periods : int
+        Minimum number of periods required to
+        compute risk measures.
+    
+    max_vol : float
+        The maximum portfolio volatility allowed.    
+    """
+    
+    expected_returns = returns.ewm(halflife=expected_returns_half_life).mean()
+    expected_covs = returns.ewm(halflife=expected_covs_half_life).cov()
+
+    long_vols = returns.ewm(halflife=long_vols_half_life).std()
+    short_vols = returns.ewm(halflife=short_vols_half_life).std()
+
+    scaled = returns / long_vols
+
+    weights = pd.DataFrame(index=returns.index, columns=returns.columns)
+
+    for date, w in tqdm(returns.iterrows(), total=len(returns)):
+
+        # Create the scenarios from the normalised
+        # historical prices.
+        history = scaled.loc[:date].dropna()
+        vol = short_vols.loc[date]
+        scenarios = history * vol
+
+        eret = expected_returns.loc[date]
+        ecov = expected_covs.loc[date]
+
+        if len(scenarios) < min_periods:
+            continue
+
+        weights.loc[date] = optimise(
+            expected_returns=eret.values,
+            expected_cov=ecov.values,
+            scenarios=scenarios.values,
+            risk_level=risk_level,
+            max_avg_risk=max_avg_risk,
+            max_vol=max_vol,
+        )
+
+    return weights
 ```
 
 The resulting equity curves and CVaR estimates are in the following figure:
