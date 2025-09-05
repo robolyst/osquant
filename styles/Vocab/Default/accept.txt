@@ -47,3 +47,9 @@ overfitting
 underperform
 toolchain
 config
+subadditivity
+subadditive
+cvxpy
+[pP]rocyclical
+quantile
+REITs
