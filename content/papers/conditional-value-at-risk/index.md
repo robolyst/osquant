@@ -29,7 +29,7 @@ VaR answers a frequency question: what is the ***minimum loss*** during the wors
 
 Value at Risk (VaR) is a measure of the maximum amount of money you could lose on a regular day. Given a time horizon (e.g. 1 day) and a regular-day frequency (e.g. 95%), VaR tells you the maximum loss you can expect on those regular days.
 
-If 95% of days are "regular" and we expect to lose at most \$1m, we say "95% of the time you lose less than \$1m." About 1 day in 20 you could lose \$1m or more. You might see this written as "1-day 95% VaR of \$1m."
+If 95% of days are "regular" and we expect to lose at most \\$1m, we say "95% of the time you lose less than \\$1m." About 1 day in 20 you could lose \\$1m or more. You might see this written as "1-day 95% VaR of \\$1m."
 
 A better interpretation of VaR is that it is the *minimum* loss you will see on your worst days.
 
