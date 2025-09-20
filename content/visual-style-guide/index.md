@@ -52,7 +52,7 @@ Curabitur pulvinar magna sit amet mattis semper. Nulla interdum nunc quis turpis
 
 # Todo
 
-You can add todo notes to your drafts using the `todo` tag.
+You can add todo notes to your drafts using the `<todo></todo>` tag.
 
 <todo>Add chart showing a sine wave.</todo>
 
