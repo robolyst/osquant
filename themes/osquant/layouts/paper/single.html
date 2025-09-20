@@ -34,28 +34,7 @@
         {{- partial "back-matter.html" . -}}
     </div>
 
-    {{ with .Params.notebook }}
-        <script type="module">
-            import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-            import define from "{{ . }}";
-            new Runtime().module(define, name => {
-                if (name === undefined) return;
-                let clean = name.replace(' ', '_');
-                var elements = document.querySelectorAll(`cell#${clean}, plot#${clean}`);
-                if (elements.length > 0) return new Inspector(elements[0]);
-            });
-        </script>
-    {{ end }}
-
-    {{ if .Page.Store.Get "hasMermaid" }}
-        <script type="module">
-            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
-            mermaid.initialize({
-                startOnLoad: true,
-                securityLevel: 'loose',
-                theme: 'base',
-            });
-        </script>
-    {{ end }}
+    {{- partial "setup-notebook.html" . -}}
+    {{- partial "setup-mermaid.html" . -}}
 
 {{ end }}

@@ -1,0 +1,12 @@
+{{ with .Params.notebook }}
+    <script type="module">
+        import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+        import define from "{{ . }}";
+        new Runtime().module(define, name => {
+            if (name === undefined) return;
+            let clean = name.replace(' ', '_');
+            var elements = document.querySelectorAll(`cell#${clean}, plot#${clean}`);
+            if (elements.length > 0) return new Inspector(elements[0]);
+        });
+    </script>
+{{ end }}
