@@ -1,0 +1,39 @@
+<div class="container share">
+
+    <div class="row align-items-start text-center">
+
+        <div class="col-6">
+            <!-- The first author only -->
+            {{ with index .Params.authors 0 }}
+
+                <!-- Turn the author's text name into their page object -->
+                {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+
+                    <!-- If the author has a Twitter handle, display the call to action -->
+                    {{ if isset .Params "twitter" }}
+
+                        <div class="title">Follow {{ .Params.first_name }} on X</div>
+                        <a href="https://twitter.com/{{ .Params.twitter }}" class="twitter-follow">Follow</a>
+                    {{ end }}
+
+                {{ end }}
+            {{ end }}
+
+
+        </div>
+
+        <div class="col-6">
+            <div class="title">Share this article</div>
+            <div class="icons">
+                <a href="https://twitter.com/share?url={{ .Permalink | urlquery }}&text={{ .Title | urlquery }}&via={{ .Site.Params.site_twitter_handler }}"><img src="/img/x-blue.svg" /></a>
+                <a href="http://www.facebook.com/sharer.php?u={{ .Permalink | urlquery }}"><img src="/img/facebook-blue.svg" /></a>
+                <a href="https://getpocket.com/save?url={{ .Permalink | urlquery }}&title={{ .Title | urlquery }}"><img src="/img/pocket-blue.svg" /></a>
+                <a href="https://www.reddit.com/submit?url={{ .Permalink | urlquery }}&title={{ .Title | urlquery }}"><img src="/img/reddit-blue.svg" /></a>
+                <a href="https://news.ycombinator.com/submitlink?u={{ .Permalink | urlquery }}&t={{ .Title | urlquery }}"><img src="/img/ycombinator-blue.svg" /></a>
+                <a href="https://bsky.app/intent/compose?text={{ .Permalink | urlquery }}"><img src="/img/bluesky-blue.svg" /></a>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,5 +1,5 @@
 <meta name="twitter:card" content="summary_large_image" /> 
-<meta name="twitter:site" content="{{.Site.Params.site_twitter_handler}}" /> 
+<meta name="twitter:site" content="@{{.Site.Params.site_twitter_handler}}" /> 
 
 {{ range .Params.authors }}
     {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}

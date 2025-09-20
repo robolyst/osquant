@@ -11,7 +11,7 @@ ignoreFiles: [ "\\.qmd$", "\\.py$" ]
 params:
   gtag: G-SSDJH3F7EZ
   description: A site where quants write about mathematics, engineering and finance.
-  site_twitter_handler: '@DrAdrian'
+  site_twitter_handler: 'DrAdrian'
   images:
     - feature.png
 
