@@ -123,6 +123,32 @@ In python you can use [matplotlib](https://matplotlib.org/) to create charts. If
 
 If you want to go for that handwritten notebook style, we use [Excalidraw](https://excalidraw.com/) to create these with a consistent style.
 
+# Feature blocks
+
+You can create feature blocks using the `<feature></feature>` HTML element:
+
+<feature>
+
+## Some cool feature
+
+This is content inside a feature block. The background is a diffferent colour and is full width.
+
+Use these to highlight important content or important small sections.
+
+</feature>
+
+If you want more space inside the feature block, you can use the `<bigfeature></bigfeature>` HTML element:
+
+<bigfeature>
+
+## A bit more space
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sodales libero sed lobortis dignissim. Aenean tempor lorem eget varius maximus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean mauris risus, vulputate ut diam molestie, consequat porta dui. Nulla sit amet justo ac eros aliquam fringilla et nec leo. Nullam ut orci sit amet elit imperdiet laoreet. Cras orci libero, eleifend non purus non, scelerisque fringilla nunc. Fusce tempor, enim non euismod ullamcorper, leo lectus tincidunt tortor, vel ornare ex lorem feugiat odio. Curabitur eu finibus nisi. Morbi vel ante ligula.
+
+</bigfeature>
+
+Try not to use these too often.
+
 # Footnotes & references
 
 Donec auctor lacus est, sit amet dapibus erat porta ac. Proin facilisis, dui quis lacinia convallis, eros nunc rhoncus orci, at tempor enim magna nec enim. Nulla facilisi [^Cavallo2012]. Etiam ut ex dignissim, porttitor augue ac, congue ex. Ut sit amet tellus gravida, venenatis nisl et, luctus eros. Nam massa lacus, ornare ac pulvinar eget, consequat vitae nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit [^2]. Integer ut ornare tellus.
