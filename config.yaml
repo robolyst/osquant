@@ -76,6 +76,13 @@ menu:
       url: /categories/finance/
       weight: 3
 
+  footer_software:
+    - identifier: recx
+      name: recx
+      url: https://github.com/robolyst/recx
+      weight: 1
+
+
   footer_dev:
     - identifier: style-guide
       name: Style Guide

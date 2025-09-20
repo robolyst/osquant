@@ -13,7 +13,17 @@
             </div>
             <div class="right">
 
-                <div class="row align-items-start justify-content-start">
+                <div class="row align-items-start justify-content-between">
+                    <div class="col-6">
+                        <div class="title">Software</div>
+                        <ul>
+                            {{ range .Site.Menus.footer_software }}
+                                <li>
+                                    <a href="{{ .URL }}">{{ .Name }}</a>
+                                </li>
+                            {{ end }}
+                        </ul>
+                    </div>
                     <div class="col-6">
                         <div class="title">Categories</div>
                         <ul>
