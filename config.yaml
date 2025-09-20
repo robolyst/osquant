@@ -32,7 +32,13 @@ taxonomies:
   author: authors
   category: categories
 
+security:
+  funcs:
+    getenv:
+      - ^HUGO_
+
 menu:
+  # The main menu in the top navigation bar
   main:
     - identifier: mathematics
       name: Mathematics
@@ -54,3 +60,24 @@ menu:
     #   name: Contribute
     #   url: /contribute
     #   weight: 5
+  
+  # Footer menus
+  footer_categories:
+    - identifier: mathematics
+      name: Mathematics
+      url: /categories/mathematics/
+      weight: 1
+    - identifier: engineering
+      name: Engineering
+      url: /categories/engineering/
+      weight: 2
+    - identifier: finance
+      name: Finance
+      url: /categories/finance/
+      weight: 3
+
+  footer_dev:
+    - identifier: style-guide
+      name: Style Guide
+      url: /visual-style-guide/
+      weight: 1

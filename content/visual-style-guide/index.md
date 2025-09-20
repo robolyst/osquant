@@ -14,7 +14,6 @@ authors:
     - Adrian Letchford
 categories:
     - Guide
-draft: true
 ---
 
 # Text styles

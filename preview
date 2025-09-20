@@ -8,5 +8,6 @@ docker run -it --rm \
     --volume $(pwd):/app \
     -p 1313:1313 \
     --workdir /app \
+    --env HUGO_SHOW_DEV=true \
     osquant \
     quarto preview --host 0.0.0.0 --port 1313 --no-browser
