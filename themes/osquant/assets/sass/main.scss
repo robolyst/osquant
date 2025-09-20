@@ -632,12 +632,70 @@ Footer
 ---------------------------------------------------------------------------- */
 
 footer {
-    text-align: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    font-size: 0.75rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     font-family: $sans;
-    color: $light-text-color;
+    background-color: white;
+
+    .columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    @media (max-width: $phone) {
+        .columns {
+            display: block;
+        }
+    }
+
+    .left {
+        margin-bottom: 2rem;
+    }
+
+    .logo {
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    .slogan {
+        font-size: 0.9rem;
+        margin-top: 0.2rem;
+    }
+
+    .socials {
+        margin-top: 0.5rem;
+
+        img {
+            max-width: 20px;
+        }
+    }
+
+    .title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        margin-right: 2rem;
+    }
+
+    ul {
+        padding-left: 0;
+        list-style: none;
+        font-size: 0.85rem;
+
+        li {
+            margin-top: 0.5rem;
+            a {
+                color: $light-text-color;
+            }
+        }
+    }
+
+    .copyright {
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        color: $light-text-color;
+    }
 }
 
 

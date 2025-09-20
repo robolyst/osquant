@@ -1,5 +1,49 @@
+{{ $show_author := or (getenv "HUGO_SHOW_DEV") false }}
+
 <footer>
     <div class='container'>
-        &copy; Copyright {{ dateFormat "2006" now }} Open Source Quant
+
+        <div class="columns">
+            <div class="left">
+                <div class="logo">Open Source Quant</div>
+                <div class="slogan">Clear. Rigorous. Beautiful.</div>
+                <div class="socials">
+                    {{ with .Site.Params.site_twitter_handler }}<a href="https://twitter.com/{{ . }}"><img src="/img/x-grey.svg" /></a>{{ end }}
+                </div>
+            </div>
+            <div class="right">
+
+                <div class="row align-items-start justify-content-start">
+                    <div class="col-6">
+                        <div class="title">Categories</div>
+                        <ul>
+                            {{ range .Site.Menus.footer_categories }}
+                                <li>
+                                    <a href="{{ .URL }}">{{ .Name }}</a>
+                                </li>
+                            {{ end }}
+                        </ul>
+                    </div>
+                    {{ if $show_author }}
+                        <div class="col-6">
+                            <div class="title">Dev</div>
+                            <ul>
+                                {{ range .Site.Menus.footer_dev }}
+                                    <li>
+                                        <a href="{{ .URL }}">{{ .Name }}</a>
+                                    </li>
+                                {{ end }}
+                            </ul>
+                        </div>
+                    {{ end }}
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="copyright">
+            &copy; Copyright {{ dateFormat "2006" now }} Open Source Quant
+        </div>
     </div>
 </footer>
