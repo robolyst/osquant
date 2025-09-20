@@ -1,5 +1,4 @@
 ---
-layout: generic
 title: Contribute
 header: Publishing with us
 description: Share your knowledge with the world for free with Open Source Quant.

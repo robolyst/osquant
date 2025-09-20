@@ -1,5 +1,4 @@
 ---
-layout: generic
 title: About
 header: Scientific research should be open source.
 description: "Scientific publishing should be free, collaborative, and iterative---everything open source stands for."

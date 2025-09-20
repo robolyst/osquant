@@ -1,0 +1,61 @@
+{{ define "main" }}
+
+    {{ $images := $.Resources.ByType "image" }}
+    {{ $featured := $images.GetMatch "*feature*" }}
+
+    <div id="splash">
+
+        {{- partial "nav.html" . -}}
+
+        <div id="page_header">
+            <div class='container'>
+                <span class="pre-title">{{ partial "category-links.html" . }}</span>
+                <h1 class='title'>{{ .Title }}</h1>
+                <p class="blurb">{{ .Summary }}</p>
+                {{ partial "paper_meta.html" . }}
+            </div>
+        </div>
+
+        <div id="hero">
+            <div class="container">
+                {{ with $featured }}<img src="{{ $featured.Permalink }}" />{{ end }}
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="page_content">
+        <div id="mainmatter">
+            {{- partial "twitter-call-to-action.html" . -}}
+            {{- partial "no_footnotes_content.html" . -}}
+            {{- partial "twitter-call-to-action.html" . -}}
+        </div>
+        {{- partial "back-matter.html" . -}}
+    </div>
+
+    {{ with .Params.notebook }}
+        <script type="module">
+            import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+            import define from "{{ . }}";
+            new Runtime().module(define, name => {
+                if (name === undefined) return;
+                let clean = name.replace(' ', '_');
+                var elements = document.querySelectorAll(`cell#${clean}, plot#${clean}`);
+                if (elements.length > 0) return new Inspector(elements[0]);
+            });
+        </script>
+    {{ end }}
+
+    {{ if .Page.Store.Get "hasMermaid" }}
+        <script type="module">
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+            mermaid.initialize({
+                startOnLoad: true,
+                securityLevel: 'loose',
+                theme: 'base',
+            });
+        </script>
+    {{ end }}
+
+{{ end }}
