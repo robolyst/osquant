@@ -11,6 +11,8 @@ authors:
     - Adrian Letchford
 categories:
     - mathematics
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/replicating-pandas-ewm-var
 ---
 
 You are most likely familiar with the idea of calculating averages with an exponential weighting. The idea is that you have a higher weight to more recent information. The weights for an exponentially weighted average look like:
