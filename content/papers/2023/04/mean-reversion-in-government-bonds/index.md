@@ -134,7 +134,7 @@ $$
 \sigma_s &= \sqrt{2 \theta_s \text{var}[s(t)]} \\\
 \end{aligned}
 $$
-If the same half-life is used for all parameters, then this becomes a single parameter model. For a reasonable estimate of what the half-life should be, you can use the method from a previous paper [Estimating the half-life of a time series]({{< ref "/papers/estimating_the_halflife_of_a_time_series" >}}).
+If the same half-life is used for all parameters, then this becomes a single parameter model. For a reasonable estimate of what the half-life should be, you can use the method from a previous paper [Estimating the half-life of a time series]({{< ref "estimating_the_halflife_of_a_time_series" >}}).
 
 You can see the estimated values for the four parameters here:
 
@@ -144,7 +144,7 @@ You can see the estimated values for the four parameters here:
 
 We now have a model of the long bond yields and a model of the short bond yields. The next step is to create a model of future ETF returns so that we can trade.
 
-I'm going to refer to a previous article [Calculating the mean and variance of bond returns]({{< ref "/papers/calculating-the-mean-and-variance-of-bond-returns" >}}). There I derived the second order Taylor expansion of bond ETF returns as a function of yield and estimated their mean and variance.
+I'm going to refer to a previous article [Calculating the mean and variance of bond returns]({{< ref "calculating-the-mean-and-variance-of-bond-returns" >}}). There I derived the second order Taylor expansion of bond ETF returns as a function of yield and estimated their mean and variance.
 
 The mean is:
 $$

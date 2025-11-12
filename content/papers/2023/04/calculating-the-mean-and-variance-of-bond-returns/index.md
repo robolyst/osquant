@@ -155,7 +155,7 @@ $$
 
 The mean and variance above require we know the first 4 raw moments of the yield: \\(E[r_t]\\), \\(E[r_t^2]\\), \\(E[r_t^3]\\) and \\(E[r_t^4]\\). Common models of interest rates assume a Gaussian distribution (for example [Vasicek model](https://en.wikipedia.org/wiki/Vasicek_model)) or a Log--normal distribution (for example [Black--Karasinski model](https://en.wikipedia.org/wiki/Black%E2%80%93Karasinski_model)).
 
-The table gives the [Gaussian moments]({{< ref "/papers/moments-of-the-guassian-distribution" >}}) :
+The table gives the [Gaussian moments]({{< ref "moments-of-the-guassian-distribution" >}}) :
 
 | Moment          | Gaussian                                 |
 |:----------------|:-----------------------------------------|
