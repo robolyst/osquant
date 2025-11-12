@@ -13,6 +13,8 @@ categories:
     - mathematics
     - finance
 hover_color: "#FFFF00"
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/modelling-the-yield-curve-of-us-government-treasuries
 ---
 
 ```{python}
