@@ -11,6 +11,8 @@ authors:
 mathjax: true
 categories:
     - finance
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/measuring-performance
 ---
 
 # How to think about performance

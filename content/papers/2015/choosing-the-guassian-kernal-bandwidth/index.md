@@ -11,6 +11,8 @@ authors:
 katex: true
 categories:
     - mathematics
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/choosing-the-guassian-kernal-bandwidth
 ---
 
 *This was a paper I wrote with the intention of publication. I quit academia during the publication process for greener pastures. I've published it here myself to save me $2,000 in publisher fees and you in subscription fees.*

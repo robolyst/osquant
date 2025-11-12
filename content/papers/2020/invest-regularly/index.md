@@ -10,6 +10,8 @@ type: paper
 mathjax: true
 categories:
     - finance
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/invest-regularly
 ---
 
 The ups and downs of markets can seem exciting in some moments and scary in others. The alternative to investing regularly is to hold off purchasing more investments during these scary times until you believe the market has reached a bottom. You then purchase at a cheap price and watch your investment increase in value. To pull this off, you will need to have perfect market timing.
