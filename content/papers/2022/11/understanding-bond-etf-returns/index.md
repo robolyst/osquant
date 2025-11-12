@@ -11,6 +11,8 @@ authors:
 categories:
     - mathematics
     - finance
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/understanding-bond-etf-returns
 ---
 
 A simple model of a bond ETF is that every day, the fund buys a bond on the open market, holds it for a day collecting interest and then sells the bond at the end of the day. The fund's return for the day is the interest earned and any capital made or lost on the price of the bond.

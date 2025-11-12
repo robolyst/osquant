@@ -10,6 +10,8 @@ authors:
     - Adrian Letchford
 categories:
   - engineering
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/dockerising-interactive-brokers-client-portal-api
 ---
 
 # Quick Start

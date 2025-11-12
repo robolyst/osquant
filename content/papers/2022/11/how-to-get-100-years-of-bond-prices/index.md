@@ -11,6 +11,8 @@ authors:
     - Adrian Letchford
 categories:
     - finance
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/how-to-get-100-years-of-bond-prices
 ---
 
 Backtesting a macro portfolio of ETFs can seem impossible because there isn’t much price history. You need enough price history to include a large sample of tumultuous markets. ETF prices provided by your broker will not go back far enough to cover a wide range of market events.
