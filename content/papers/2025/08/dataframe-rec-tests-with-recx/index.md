@@ -11,6 +11,8 @@ authors:
 categories:
     - engineering
 hover_color: "#5dcabfff"
+# This article was written before the site organised articles under YEAR/MONTH/slug
+url: /papers/dataframe-rec-tests-with-recx/
 ---
 
 Code changes. Data changes. Outputs change. Somewhere between the first analysis and an odd position in production, little mismatches creep in: a misstated value, off-by-one date ranges, rounding shifts, subtle drift in calculations, missing IDs. The most reliable way to catch them is to compare a new DataFrame to a previously validated one--a reconciliation, or **rec**, test.
