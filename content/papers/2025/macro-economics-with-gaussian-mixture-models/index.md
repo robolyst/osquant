@@ -134,7 +134,15 @@ $$
 
 Thus, the expected portfolio return across all states is:
 $$
-E[r_t] = \sum_k^K \pi_k E_k[r_t] =  \boldsymbol{w}^\top \left(\sum_k^K \pi_k \boldsymbol{\mu}_k\right)
+E[r_t] = \mu = \sum_k^K \pi_k E_k[r_t] = \sum_k^K \pi_k \boldsymbol{w}^\top\boldsymbol{\mu}_k
+$$
+We can collect that last sum on the right hand side into a single mean vector:
+$$
+\boldsymbol{\mu} = \sum_k^K \pi_k \boldsymbol{\mu}_k
+$$
+such that the expected portfolio return is:
+$$
+E[r_t] = \mu = \boldsymbol{w}^\top \boldsymbol{\mu}
 $$
 
 The expected portfolio variance across all states is:
@@ -142,11 +150,20 @@ $$\begin{aligned}
 E[(r_t - E[r_t])^2] &= E[r_t^2] - (E[r_t])^2 \\\
 &= \sum_k^K \pi_k E_k[r_t^2] - (E[r_t])^2 \\\
 &= \sum_k^K \pi_k \left( \sigma^2_k + (E_k[r_t])^2 \right) - (E[r_t])^2 \\\
+&= \sum_k^K \pi_k \sigma^2_k + \sum_k^K \pi_k (E_k[r_t])^2 - (E[r_t])^2 \\\
 \end{aligned}
 $$
-
+Expanding out the variance and moments:
 $$
-= \boldsymbol{w}^\top \left( \sum_k^K \pi_k \boldsymbol{\Sigma}_k \right) \boldsymbol{w} + \sum_k^K \pi_k (\boldsymbol{w}^\top \boldsymbol{\mu}_k)^2 - \left( \boldsymbol{w}^\top \left(\sum_k^K \pi_k \boldsymbol{\mu}_k\right) \right)^2
+= \sum_k^K \pi_k \boldsymbol{w}^\top \boldsymbol{\Sigma}_k \boldsymbol{w} + \sum_k^K \pi_k (\boldsymbol{w}^\top \boldsymbol{\mu}_k)^2 - ( \boldsymbol{w}^\top \boldsymbol{\mu} )^2
+$$
+which is just a sum of quadratic terms. We can collect the terms into a single covariance matrix:
+$$
+\boldsymbol{\Sigma} = \sum_k^K \pi_k \boldsymbol{\Sigma}_k + \sum_k^K \pi_k \boldsymbol{\mu}_k \boldsymbol{\mu}_k^\top - \boldsymbol{\mu}\boldsymbol{\mu}^\top
+$$
+such that the expected portfolio variance is:
+$$
+\sigma^2 = \boldsymbol{w}^\top \boldsymbol{\Sigma} \boldsymbol{w}
 $$
 
 In practice, you'll find that the GMM mean and cov matches almost exactly the empirical mean and cov when fitted to financial returns. The only difference is that in the GMM model, we can break the mean and cov down into different states.
@@ -358,7 +375,7 @@ Finally, state 2:
 
 ![](state_2_returns.svg)
 
-This is the most interesting state. It's a little harder to interpret as there are fewer examples of this state. As such, the return plots are mostly flat (as there are many time periods not in this state). However, we can see that the returnss are much more extreme in this state. Similarly to before, this state seems to represent a "tail" market with high volatility and extreme returns.
+This is the most interesting state. It's a little harder to interpret as there are fewer examples of this state. As such, the return plots are mostly flat (as there are many time periods not in this state). However, we can see that the returns are much more extreme in this state. Similarly to before, this state seems to represent a "tail" market with high volatility and extreme returns.
 
 The conclusion from this example is that a Gaussian Mixture Model can identify economically meaningful latent market states. The model was able to not just identify bull and bear periods, but also periods of tail risk.
 
