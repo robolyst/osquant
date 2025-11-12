@@ -27,7 +27,7 @@ Because there is a long history of yield data, it is possible to create a long t
 
 # Modelling bond ETF returns with yields
 
-A previous paper titled [Understanding bond ETF returns]({{< ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
+A previous paper titled [Understanding bond ETF returns]({{< ref "understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
 $$
 \text{return}\_t = \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
 $$

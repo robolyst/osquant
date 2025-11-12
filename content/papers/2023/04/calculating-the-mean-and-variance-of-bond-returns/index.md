@@ -16,7 +16,7 @@ notebook: ./notebook.js
 url: /papers/calculating-the-mean-and-variance-of-bond-returns
 ---
 
-A previous paper titled [Understanding bond ETF returns]({{< ref "/papers/understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
+A previous paper titled [Understanding bond ETF returns]({{< ref "understanding-bond-etf-returns" >}}) showed that a bond ETF's daily returns can be modelled from bond yields:
 $$
 \begin{aligned}
 R(r_t)  &= \frac{r_{t-1}}{f} + \frac{r_{t-1}}{r_t} \left( 1 - (1 + \frac{r_t}{p})^{-pT} \right) + (1 + \frac{r_t}{p})^{-pT} - 1
