@@ -418,6 +418,38 @@ Once we have fitted a GMM to historical returns, we have the following fitted pa
 2. Mean vectors $\boldsymbol{\mu}_k$
 3. Covariance matrices $\boldsymbol{\Sigma}_k$
 
+The next thing we want to do is make a prediction about the next time period's return. Specifically, we want to predict which state we will be in next period. With the current model, the mixing coefficients $\pi_k$ are fixed. This means that our best estimate for the next period's state is the historical frequency of each state.
+
+Now, let's say we have some extra information that we know at the decision point before $\boldsymbol{r}_t$ is realised. Let's denote it with the vector $\boldsymbol{x}_t$. Now, rather than modelling $p(k)$ we can model $p(k | \boldsymbol{x}_t)$. This means that our mixing coefficients are now time-varying and depend on the information $\boldsymbol{x}_t$. We're going to model $p(k | \boldsymbol{x}_t)$ as a multinomial logit model [^Gruen2008]:
+$$
+p(k|\boldsymbol{x}_t) = \frac{e^{\boldsymbol{\beta}_k^T\boldsymbol{x}_t + b_k}}{\sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t + b_j}}
+$$
+Where the coefficients $\boldsymbol{\beta}_k$ and intercept $b_k$ are parameters to be estimated. 
+
+We initialise the parameters in the same way (using KMeans) except that we set $\boldsymbol{\beta}_k = 0$ and $b_k = \log(\pi_k)$ so that the initial mixing coefficients match the historical frequencies.
+
+**E-step** The expected response works in much the same way as before, we just use  $p(k | \boldsymbol{x}_t)$ intead of $p(k)$:
+$$
+E[z\_{tk}] = p(k | \boldsymbol{r}_t, \boldsymbol{x}_t) = \frac{p(k|\boldsymbol{x}_t)\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_j^K p(j|\boldsymbol{x}_t)\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_j, \boldsymbol{\Sigma}_j)}
+$$
+
+**M-step** The state means and covariance matrices are the same as before:
+$$
+\begin{aligned}
+\boldsymbol{\mu}_k &= \frac{1}{T_k}\sum_t E[z\_{tk}] \boldsymbol{r}_t \\\
+\boldsymbol{\Sigma}_k &= \frac{1}{T_k} \sum_t E[z\_{tk}] (\boldsymbol{r}_t - \boldsymbol{\mu}_k)(\boldsymbol{r}_t - \boldsymbol{\mu}_k)^\top
+\end{aligned}
+$$
+
+
+
+# Making predictions v1
+
+Once we have fitted a GMM to historical returns, we have the following fitted parameters:
+1. Mixing coefficients $p(k) = \pi_k$
+2. Mean vectors $\boldsymbol{\mu}_k$
+3. Covariance matrices $\boldsymbol{\Sigma}_k$
+
 The next thing we want to do is make a prediction about the next time period's return. Specifically, we want to estimate the expected mean and covariance for the next time period. If we were to combine the mixing coefficients, mean vectors and covariance matrices as before, we would get the same empirical mean and covariance as the historical data. Instead, we want to combine some extra information to get time-varying parameters.
 
 Now, let's say that we have some extra information that we know at the decision point before $\boldsymbol{r}_t$ is realised. Let's denote it with the vector $\boldsymbol{x}_t$. Also, we assume that $\boldsymbol{x}_t$ is a multivariate Gaussian. We can combine $\boldsymbol{r}_t$ and $\boldsymbol{x}_t$ together into a new vector
@@ -494,4 +526,13 @@ For the curious, you can find a derivation of the Gaussian conditional distribut
     year="2006"
     publication="Springer"
     link="https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"
+%}}
+
+{{% citation
+    id="Gruen2008"
+    author="Bettina Grtün and Friedrich Leisch"
+    title="FlexMix Version 2: Finite Mixtures with Concomitant Variables and Varying and Constant Parameters"
+    year="2008"
+    publication="Journal of Statistical Software"
+    link="https://www.jstatsoft.org/article/view/v028i04"
 %}}
