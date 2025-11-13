@@ -441,6 +441,19 @@ $$
 \end{aligned}
 $$
 
+To find the logistic regression parameters $\boldsymbol{\beta}_k$ and $b_k$, we take the full set log-likelihood and isolate the terms that depend on these parameters:
+$$
+\mathcal{L}( \boldsymbol{R}, \boldsymbol{Z} | \boldsymbol{\beta}, \boldsymbol{b}) = \sum_t \sum_k E[z\_{tk}] \log \left( p(k|\boldsymbol{x}_t) \right) + \text{const}
+$$
+expanding out $p(k|\boldsymbol{x}_t)$ gives us:
+$$
+\mathcal{L}( \boldsymbol{R}, \boldsymbol{Z} | \boldsymbol{\beta}, \boldsymbol{b}) = \sum_t \sum_k E[z\_{tk}] \left( \boldsymbol{\beta}_k^T\boldsymbol{x}_t + b_k - \log \left( \sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t + b_j} \right) \right) + \text{const}
+$$
+To find the maximum, we'll assume that the intercept is in $\boldsymbol{x}_t$ so that we do not need to worry about $b_k$ and we take the derivative with respect to $\boldsymbol {\beta}_k$:
+$$
+\frac{\partial \mathcal{L}}{\partial \boldsymbol{\beta}_k} = \sum_t \left( E[z\_{tk}] - p(k|\boldsymbol{x}_t) \right) \boldsymbol{x}_t
+$$
+Setting this to zero gives us the maximum. There is no closed form solution for $\boldsymbol{\beta}_k$, but we can use gradient ascent to find the maximum.
 
 
 # Making predictions v1
