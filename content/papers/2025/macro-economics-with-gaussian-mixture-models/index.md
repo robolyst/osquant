@@ -478,12 +478,16 @@ We're going to investigate the use of macro-economic variables as information va
 **US Treasury yields.** We'll include daily treasury yields for 1, 2, 3, 5, 7, 10 and 30 year maturities. These yields reflect the market's expectations of future interest rates and economic growth. We fetch these from FRED.
 ![](treasury_yields.svg)
 
+**VIX.** The VIX index is a measure of market volatility derived from S&P 500 options prices. It is often referred to as the "fear gauge" as it tends to spike during periods of market stress. We fetch this from CBOE.
+![](vix.svg)
 
-1. The VIX index
+**US GDP growth rate.** The GDP growth rate is a measure of economic growth. It is released quarterly by the Bureau of Economic Analysis (BEA). We fetch this from FRED.
+![](gdp.svg)
+
+
 1. The economic policy uncertainty index (EPU)
 We can grab this data from various sources. The treasury yields can be grabbed from the Federal Reserve Economic Data (FRED) website. The VIX index can be grabbed from Yahoo Finance. The EPU index can be grabbed from [PolicyUncertainty.com](https://www.policyuncertainty.com/).
 1. Inflation (CPI)
-1. GDP
 1. Unemployment rate
 1. Savings
 1. Debt
