@@ -116,10 +116,10 @@ p(\boldsymbol{Z}, \boldsymbol{R}) &= \prod_t\prod_k \left[ p(k) p(\boldsymbol{r}
 $$
 
 The EM algorithm proceeds as follows:
-1. Pick some initial values for the parameters $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
+1. **Initialise**: Pick some initial values for the parameters $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
 2. **E-step**: Calculate the expected value of $\boldsymbol{Z}$ given: $\boldsymbol{R}$, $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$ $\forall k$.
 3. **M-step**: Use these values as values for $\boldsymbol{Z}$ and maximise the log-likelihood with respect to the parameters $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
-4. Calculate the log-likelihood $\mathcal{L}( \boldsymbol{R} | \boldsymbol{\pi}, \boldsymbol{\mu}, \boldsymbol{\Sigma})$ and check for convergence in the parameters or the log-likelihood value. If not converged, return to step 2.
+4. **Check**: Calculate the log-likelihood $\mathcal{L}( \boldsymbol{R} | \boldsymbol{\pi}, \boldsymbol{\mu}, \boldsymbol{\Sigma})$ and check for convergence in the parameters or the log-likelihood value. If not converged, return to step 2.
 
 **E-step** Recall that each element of $\boldsymbol{Z}$ is a one-hot vector indicating the state at time $t$. The expected value of $z\_{tk}$ is just the posterior probability that we are in state $k$ given $\boldsymbol{r}_t$:
 $$
@@ -420,6 +420,8 @@ Once we have fitted a GMM to historical returns, we have the following fitted pa
 
 The next thing we want to do is make a prediction about the next time period's return. Specifically, we want to predict which state we will be in next period. With the current model, the mixing coefficients $\pi_k$ are fixed. This means that our best estimate for the next period's state is the historical frequency of each state.
 
+## Incorporating information variables
+
 Now, let's say we have some extra information that we know at the decision point before $\boldsymbol{r}_t$ is realised. Let's denote it with the vector $\boldsymbol{x}_t$. Now, rather than modelling $p(k)$ we can model $p(k | \boldsymbol{x}_t)$. This means that our mixing coefficients are now time-varying and depend on the information $\boldsymbol{x}_t$. We're going to model $p(k | \boldsymbol{x}_t)$ as a multinomial logit model [^Gruen2008]:
 $$
 p(k|\boldsymbol{x}_t) = \frac{e^{\boldsymbol{\beta}_k^T\boldsymbol{x}_t + b_k}}{\sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t + b_j}}
@@ -454,6 +456,56 @@ $$
 \frac{\partial \mathcal{L}}{\partial \boldsymbol{\beta}_k} = \sum_t \left( E[z\_{tk}] - p(k|\boldsymbol{x}_t) \right) \boldsymbol{x}_t
 $$
 Setting this to zero gives us the maximum. There is no closed form solution for $\boldsymbol{\beta}_k$, but we can use gradient ascent to find the maximum.
+
+## Code
+
+The actual code works in log space as much as possible to avoid numerical issues.
+
+The current code forces an intercept in the logistic regression by adding a column of ones to $\boldsymbol{x}_t$. We might not want an intercept because this adds an indeterminancy to the model.
+
+<todo>Update model so that we do not have an intercept.</todo>
+
+# Economic analysis
+
+We now have a hidden state model with time-varying mixing coefficients. This means that we can investigate how different information variables $\boldsymbol{x}_t$ affect the probability of being in each state.
+
+## Macro-economic variables
+
+We're going to investigate the use of macro-economic variables as information variables. Specifically, we're going to use:
+
+**US Treasury yields.** We'll include daily treasury yields for 1, 2, 3, 5, 7, 10, 20 and 30 year maturities. These yields reflect the market's expectations of future interest rates and economic growth. 
+
+1. The 10 year treasury yield
+1. The 2 year treasury yield
+1. The yield spread (10 year - 2 year)
+1. The VIX index
+1. The economic policy uncertainty index (EPU)
+We can grab this data from various sources. The treasury yields can be grabbed from the Federal Reserve Economic Data (FRED) website. The VIX index can be grabbed from Yahoo Finance. The EPU index can be grabbed from [PolicyUncertainty.com](https://www.policyuncertainty.com/).
+1. Inflation (CPI)
+1. GDP
+1. Unemployment rate
+1. Savings
+1. Debt
+1. Consumer confidence index
+1. Manufacturing PMI
+1. Retail sales
+1. Housing starts
+1. Industrial production index
+1. Money supply (M2)
+1. Corporate bond spreads
+1. Credit default swap spreads
+1. Commodity prices (e.g., oil, gold)
+1. Exchange rates (e.g., USD index, EUR/USD)
+1. Market liquidity measures (e.g., bid-ask spreads, trading volume)
+1. Investor sentiment indicators (e.g., AAII sentiment survey)
+1. Geopolitical risk indices
+1. Financial stress indices
+1. Market volatility indices (e.g., VIX, MOVE)
+1. Economic policy uncertainty indices
+1. Yield curve measures (e.g., slope, curvature)
+1. Market breadth indicators (e.g., advance-decline line)
+1. Technical indicators (e.g., moving averages, RSI)
+
 
 
 # Making predictions v1
