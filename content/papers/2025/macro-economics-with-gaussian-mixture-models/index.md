@@ -457,6 +457,8 @@ $$
 $$
 Setting this to zero gives us the maximum. There is no closed form solution for $\boldsymbol{\beta}_k$, but we can use gradient ascent to find the maximum.
 
+The model has a fairly large number of degress of freedom as we are estimating a multinomial probability distribution. If there are $k$ classes then one of the class probabilities is just 1 minus the probability of the remaining classes. We get around this by Fixing one of the classes coefficents to 0. That means we are estimating the other states relative to that state.
+
 ## Code
 
 The actual code works in log space as much as possible to avoid numerical issues.
@@ -473,11 +475,10 @@ We now have a hidden state model with time-varying mixing coefficients. This mea
 
 We're going to investigate the use of macro-economic variables as information variables. Specifically, we're going to use:
 
-**US Treasury yields.** We'll include daily treasury yields for 1, 2, 3, 5, 7, 10, 20 and 30 year maturities. These yields reflect the market's expectations of future interest rates and economic growth. 
+**US Treasury yields.** We'll include daily treasury yields for 1, 2, 3, 5, 7, 10 and 30 year maturities. These yields reflect the market's expectations of future interest rates and economic growth. We fetch these from FRED.
+![](treasury_yields.svg)
 
-1. The 10 year treasury yield
-1. The 2 year treasury yield
-1. The yield spread (10 year - 2 year)
+
 1. The VIX index
 1. The economic policy uncertainty index (EPU)
 We can grab this data from various sources. The treasury yields can be grabbed from the Federal Reserve Economic Data (FRED) website. The VIX index can be grabbed from Yahoo Finance. The EPU index can be grabbed from [PolicyUncertainty.com](https://www.policyuncertainty.com/).
