@@ -232,9 +232,9 @@ The fitted mixing coefficients ($\pi_k$) can be found with `model.weights_` and 
 
 |   State 0 |   State 1 |   State 2 |
 |-----------|-----------|-----------|
-|    71.10% |    25.35% |     3.54% |
+|    60.34% |    35.78% |     3.88% |
 
-In this case, the model is saying that State 0 is the most common state, followed by State 1 and then State 2. Curiously, State 2 is very rare. This state is only active for 3.54% of the time.
+In this case, the model is saying that State 0 is the most common state, followed by State 1 and then State 2. Curiously, State 2 is very rare.
 
 We can look at the mean vectors ($\boldsymbol{\mu}_k$) with `model.means_`:
 
@@ -247,7 +247,7 @@ We can look at the mean vectors ($\boldsymbol{\mu}_k$) with `model.means_`:
       <th>2</th>
     </tr>
     <tr>
-      <th>Ticker</th>
+      <th>symbol</th>
       <th></th>
       <th></th>
       <th></th>
@@ -255,45 +255,33 @@ We can look at the mean vectors ($\boldsymbol{\mu}_k$) with `model.means_`:
   </thead>
   <tbody>
     <tr>
-      <th>GLD</th>
-      <td>0.0737%</td>
-      <td>-0.0424%</td>
-      <td>0.0498%</td>
-    </tr>
-    <tr>
-      <th>GSG</th>
-      <td>0.0862%</td>
-      <td>-0.2092%</td>
-      <td>-0.3531%</td>
-    </tr>
-    <tr>
-      <th>IWM</th>
-      <td>0.1338%</td>
-      <td>-0.2322%</td>
-      <td>0.2208%</td>
-    </tr>
-    <tr>
       <th>SPY</th>
-      <td>0.1387%</td>
-      <td>-0.2030%</td>
-      <td>0.0817%</td>
+      <td>0.1087%</td>
+      <td>-0.0488%</td>
+      <td>-0.1900%</td>
     </tr>
     <tr>
       <th>TLT</th>
-      <td>0.0072%</td>
-      <td>0.0408%</td>
-      <td>0.0727%</td>
+      <td>0.0431%</td>
+      <td>-0.0181%</td>
+      <td>0.1740%</td>
     </tr>
     <tr>
-      <th>VNQ</th>
-      <td>0.1135%</td>
-      <td>-0.2258%</td>
-      <td>0.4811%</td>
+      <th>GLD</th>
+      <td>0.0474%</td>
+      <td>0.0102%</td>
+      <td>-0.0021%</td>
+    </tr>
+    <tr>
+      <th>GSG</th>
+      <td>0.0697%</td>
+      <td>-0.0235%</td>
+      <td>-0.5395%</td>
     </tr>
   </tbody>
 </table>
 
-In the table above, we can see that State 0 has positive expected returns for all assets. This looks like a "bull" market. State 1 has negative expected returns for all assets except TLT. This looks like a "bear" market with maybe TLT providing a hedge. State 2 has some large positive expected returns (VNQ, IWM) and some large negative expected returns (GSG).
+In the table above, we can see that State 0 has positive expected returns for all assets. This looks like a "bull" market. State 1 has negative expected returns for most assets. State 2 has some large negative expected returns.
 
 We can also look at the covariance matrices ($\boldsymbol{\Sigma}_k$) with `model.covariances_`. These are a bit more difficult to visualise, but we can look at the standard deviations (the square root of the diagonal elements):
 
@@ -306,7 +294,7 @@ We can also look at the covariance matrices ($\boldsymbol{\Sigma}_k$) with `mode
       <th>State 2</th>
     </tr>
     <tr>
-      <th>Ticker</th>
+      <th>symbol</th>
       <th></th>
       <th></th>
       <th></th>
@@ -314,40 +302,28 @@ We can also look at the covariance matrices ($\boldsymbol{\Sigma}_k$) with `mode
   </thead>
   <tbody>
     <tr>
-      <th>GLD</th>
-      <td>12.17%</td>
-      <td>23.44%</td>
-      <td>42.55%</td>
-    </tr>
-    <tr>
-      <th>GSG</th>
-      <td>16.08%</td>
-      <td>30.65%</td>
-      <td>57.93%</td>
-    </tr>
-    <tr>
-      <th>IWM</th>
-      <td>15.19%</td>
-      <td>31.19%</td>
-      <td>73.84%</td>
-    </tr>
-    <tr>
       <th>SPY</th>
-      <td>10.36%</td>
-      <td>24.63%</td>
-      <td>65.36%</td>
+      <td>9.64%</td>
+      <td>21.06%</td>
+      <td>54.19%</td>
     </tr>
     <tr>
       <th>TLT</th>
-      <td>11.64%</td>
-      <td>19.28%</td>
-      <td>33.33%</td>
+      <td>9.40%</td>
+      <td>15.18%</td>
+      <td>29.89%</td>
     </tr>
     <tr>
-      <th>VNQ</th>
-      <td>13.70%</td>
-      <td>34.66%</td>
-      <td>110.96%</td>
+      <th>GLD</th>
+      <td>9.77%</td>
+      <td>19.37%</td>
+      <td>42.41%</td>
+    </tr>
+    <tr>
+      <th>GSG</th>
+      <td>14.52%</td>
+      <td>24.84%</td>
+      <td>55.10%</td>
     </tr>
   </tbody>
 </table>
@@ -484,11 +460,20 @@ We're going to investigate the use of macro-economic variables as information va
 **US GDP growth rate.** The GDP growth rate is a measure of economic growth. It is released quarterly by the Bureau of Economic Analysis (BEA). We fetch this from FRED.
 ![](gdp.svg)
 
+**US CPI growth rate.** The CPI growth rate is a measure of inflation. It is released monthly by the Bureau of Labor Statistics (BLS). We fetch this from FRED.
+![](cpi.svg)
+
+**US money supply.** The M2 money supply is a measure of the total amount of money in circulation. It is released weekly by the Federal Reserve. We fetch this from FRED.
+![](money_supply.svg)
+
+**Unemployment rate.** The unemployment rate is a measure of the percentage of people who are unemployed. It is released monthly by the BLS. We fetch this from FRED.
+![](unrate.svg)
+
+**Consumer sentiment index.** The consumer sentiment index is a measure of consumer confidence. It is released monthly by the University of Michigan. We fetch this from FRED.
+![](umcsent.svg)
 
 1. The economic policy uncertainty index (EPU)
 We can grab this data from various sources. The treasury yields can be grabbed from the Federal Reserve Economic Data (FRED) website. The VIX index can be grabbed from Yahoo Finance. The EPU index can be grabbed from [PolicyUncertainty.com](https://www.policyuncertainty.com/).
-1. Inflation (CPI)
-1. Unemployment rate
 1. Savings
 1. Debt
 1. Consumer confidence index
@@ -496,7 +481,6 @@ We can grab this data from various sources. The treasury yields can be grabbed f
 1. Retail sales
 1. Housing starts
 1. Industrial production index
-1. Money supply (M2)
 1. Corporate bond spreads
 1. Credit default swap spreads
 1. Commodity prices (e.g., oil, gold)
