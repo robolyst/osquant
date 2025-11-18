@@ -916,13 +916,12 @@ Sidebars
 
     .box {
         margin-bottom: 2rem;
+        border-top: 2px solid $light-border-color; 
 
         .title {
             font-weight: 600;
             margin-bottom: 0.5rem;
-            padding-top: 0.5rem; 
-            
-            border-top: 2px solid $light-border-color;  
+            padding-top: 0.5rem;  
         }
 
         #TableOfContents {
@@ -978,6 +977,24 @@ Sidebars
                     background-color: #428AD2;
                 }
             }
+        }
+    }
+
+    .mini {
+        font-size: 0.8rem;
+        color: $light-text-color;
+        display: block;
+        font-style: italic;
+
+        margin-top: 0;
+        padding: 0;
+        margin-bottom: 2rem;
+
+        .label {
+            font-weight: 700;
+            font-size: 0.6rem;
+            font-style: normal;
+            text-transform: uppercase;
         }
     }
 }

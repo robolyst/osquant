@@ -12,7 +12,6 @@
                 <span class="pre-title">{{ partial "category-links.html" . }}</span>
                 <h1 class='title'>{{ .Title }}</h1>
                 <p class="blurb">{{ .Summary }}</p>
-                {{ partial "paper_meta.html" . }}
             </div>
         </div>
 
@@ -29,6 +28,7 @@
 
             <div class="sidebar left">
                 {{- partial "sidebar_author_box.html" . -}}
+                {{- partial "sidebar_paper_meta_box.html" . -}}
             </div>
 
             <div class="sidebar right">

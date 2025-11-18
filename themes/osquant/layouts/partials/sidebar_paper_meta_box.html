@@ -1,0 +1,14 @@
+{{ if eq .Type "paper" }} 
+    {{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
+    {{ $minutes := math.Round (div $readTime 60) }}
+
+    <div class="mini">
+        <div class="label">Published</div>
+        <div>{{ .Date.Format "2 January 2006" }}</div>
+    </div>
+    <div class="mini">
+        <div class="label">Length</div>
+        <div>{{ $minutes }} {{ cond (eq $minutes 1) "minute" "minutes" }}</div>
+    </div>
+
+{{ end }}
