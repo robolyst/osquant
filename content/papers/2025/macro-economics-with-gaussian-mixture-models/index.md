@@ -65,7 +65,7 @@ The information $\boldsymbol{z}$ and $\boldsymbol{r}_t$ are often called the *fu
 $$
 p(\boldsymbol{r}_t) = \sum_k^K p(k)p(\boldsymbol{r}_t | k)
 $$
-Here we've combined or "mixed" the emission distributions into a "mixture" distribution.
+Here we've combined or "mixed" the emission distributions into a "mixture" distribution. Under this model, the prior distribution $p(k)$ is sometimes referred to as the *mixing weights*.
 
 **Posterior distribution.** The probability that we are in state $k$ given we observe $\boldsymbol{r}_t$ is derived from the above distributions using Bayes' theorem:
 $$
@@ -99,13 +99,16 @@ $$
 p(k|\boldsymbol{r}_t) = \frac{\pi_k\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_k^K \pi_k\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}
 $$
 
-<todo>Some good visuals of a GMM would work well here.</todo>
+{{<figure src="1d_gmm_example.svg" title="Example of mixing Gaussians." >}}
+Two Guassian distributions are shown on the top panel. By mixing the two we get a new distrituion illustrated on the bottom panel. We see an almost Gaussian looking shape with a pronounced right tail. Mixing more Gaussians would result in more complex shapes.
+{{</figure>}}
+
 
 ## Estimation
 
 Define $\boldsymbol{R} = [\boldsymbol{r}_1, \dots, \boldsymbol{r}_t]$ to be all the observations and $\boldsymbol{Z} = [\boldsymbol{z}_1, \dots, \boldsymbol{z}_t]$ to be the corresponding hidden states. We will fix the number of states to be $K$. We want to estimate the values $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$ for each of the states.
 
-The usual method of estimating a model is to maximise the log of the likelihood function of the given set of samples. In this case, the likelihood is:
+The usual method of estimating a model's parameters is to maximise the log of the likelihood function for the given set of samples. In this case, the likelihood is:
 $$
 p(\boldsymbol{R}) = \prod_t p(\boldsymbol{r}_t) = \prod_t \left[ \sum_k^K p(k)p(\boldsymbol{r}_t | k) \right]
 $$
@@ -208,7 +211,7 @@ $$
 \sigma^2 = \boldsymbol{w}^\top \boldsymbol{\Sigma} \boldsymbol{w}
 $$
 
-In practice, you'll find that the GMM mean and cov matches almost exactly the empirical mean and cov when fitted to financial returns. The only difference is that in the GMM model, we can break the mean and cov down into different states.
+In practice, you'll find that the GMM mean and cov matches almost exactly the empirical mean and cov when fitted to financial returns. The only difference is that in the GMM model, we can break the mean and cov down into different states. Later, we will modify the prior distribution (the mixing weights) to get time-varying means and covariances.
 
 # Key modelling decisions
 
