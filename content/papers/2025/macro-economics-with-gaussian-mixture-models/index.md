@@ -99,7 +99,7 @@ $$
 p(k|\boldsymbol{r}_t) = \frac{\pi_k\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_k^K \pi_k\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}
 $$
 
-{{<figure src="1d_gmm_example.svg" title="Example of mixing Gaussians." >}}
+{{<figure src="images/1d_gmm_example.svg" title="Example of mixing Gaussians." >}}
 Two Guassian distributions are shown on the top panel. By mixing the two we get a new distrituion illustrated on the bottom panel. We see an almost Gaussian looking shape with a pronounced right tail. Mixing more Gaussians would result in more complex shapes.
 {{</figure>}}
 
@@ -234,7 +234,7 @@ prices = tickers.download(period="30y", interval="1d")
 returns = prices["Close"].pct_change().dropna()
 ```
 
-![](asset_returns.svg)
+![](images/asset_returns.svg)
 
 We can fit a Gaussian Mixture Model with the help of scikit-learn's `GaussianMixture` class ([docs](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html)).
 
@@ -368,7 +368,7 @@ posterior = pd.DataFrame(
 
 Plotting these straight away gives us:
 
-![](posteriors.svg)
+![](images/posteriors.svg)
 
 This is a little bit hard to see what is going on. Looking at state 2, we can see it clustering around certain periods of time. We can highlight this clustering by smoothing the posterior probabilities with an exponential moving average:
 
@@ -378,7 +378,7 @@ posterior.ewm(halflife=5).mean()
 
 Plotting the smoothed posterior probabilities gives us:
 
-![](smoothed_posteriors.svg)
+![](images/smoothed_posteriors.svg)
 
 We see two big clusters of State 2 activity and lots of little clusters. The first big one is around the 2008 financial crisis and the second is around the 2020 COVID crash. This makes sense as these were both periods of high volatility---both tail events.
 
@@ -390,19 +390,19 @@ posterior.multiply(returns['SPY'], axis=0)
 
 Looking at state 0:
 
-![](state_0_returns.svg)
+![](images/state_0_returns.svg)
 
 The statistics we looked at for state 0 suggested a "bull" market and this plot confirms that. All of the returns are positive. The only one that stands out is TLT (bonds).
 
 State 1 looks like:
 
-![](state_1_returns.svg)
+![](images/state_1_returns.svg)
 
 This is also inline with our earlier intuition that state 1 is a "bear" market. Most of the returns are negative, with the exception of TLT which is mostly positive. Similarly to state 0, the returns for TLT do not quite match the rest of this state. In the case of state 1, TLT acts as a hedge with mostly positive returns while the remaining assets negative returns.
 
 Finally, state 2:
 
-![](state_2_returns.svg)
+![](images/state_2_returns.svg)
 
 This is the most interesting state. It's a little harder to interpret as there are fewer examples of this state. As such, the return plots are mostly flat (as there are many time periods not in this state). However, we can see that the returns are much more extreme in this state. Similarly to before, this state seems to represent a "tail" market with high volatility and extreme returns.
 
@@ -480,25 +480,25 @@ We now have a hidden state model with time-varying mixing coefficients. This mea
 We're going to investigate the use of macro-economic variables as information variables. Specifically, we're going to use:
 
 **US Treasury yields.** We'll include daily treasury yields for 1, 2, 3, 5, 7, 10 and 30 year maturities. These yields reflect the market's expectations of future interest rates and economic growth. We fetch these from FRED.
-![](treasury_yields.svg)
+![](images/treasury_yields.svg)
 
 **VIX.** The VIX index is a measure of market volatility derived from S&P 500 options prices. It is often referred to as the "fear gauge" as it tends to spike during periods of market stress. We fetch this from CBOE.
-![](vix.svg)
+![](images/vix.svg)
 
 **US GDP growth rate.** The GDP growth rate is a measure of economic growth. It is released quarterly by the Bureau of Economic Analysis (BEA). We fetch this from FRED.
-![](gdp.svg)
+![](images/gdp.svg)
 
 **US CPI growth rate.** The CPI growth rate is a measure of inflation. It is released monthly by the Bureau of Labor Statistics (BLS). We fetch this from FRED.
-![](cpi.svg)
+![](images/cpi.svg)
 
 **US money supply.** The M2 money supply is a measure of the total amount of money in circulation. It is released weekly by the Federal Reserve. We fetch this from FRED.
-![](money_supply.svg)
+![](images/money_supply.svg)
 
 **Unemployment rate.** The unemployment rate is a measure of the percentage of people who are unemployed. It is released monthly by the BLS. We fetch this from FRED.
-![](unrate.svg)
+![](images/unrate.svg)
 
 **Consumer sentiment index.** The consumer sentiment index is a measure of consumer confidence. It is released monthly by the University of Michigan. We fetch this from FRED.
-![](umcsent.svg)
+![](images/umcsent.svg)
 
 1. The economic policy uncertainty index (EPU)
 We can grab this data from various sources. The treasury yields can be grabbed from the Federal Reserve Economic Data (FRED) website. The VIX index can be grabbed from Yahoo Finance. The EPU index can be grabbed from [PolicyUncertainty.com](https://www.policyuncertainty.com/).
