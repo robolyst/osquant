@@ -547,16 +547,20 @@ Page (Single)
     margin-bottom: 1rem;
 }
 
-#page_content a {
+// Links should be styled in the main section, not in the
+// sidebars.
+#page_content .mainmatter a,
+#page_content feature a,
+#page_content #backmatter a {
     /* color: #374D9E; */
     color: inherit;
     border-bottom: 2px solid #dfdfdf;
-}
 
-#page_content a:hover {
-    background-color: #fff9e3;
-    border-bottom: 2px solid #ffedae;
-}
+    &:hover {
+        background-color: #fff9e3;
+        border-bottom: 2px solid #ffedae;
+    }
+} 
 
 #page_content .js-plotly-plot a.modebar-btn {
     border: 0px solid transparent;
@@ -905,83 +909,24 @@ details[open] summary:after {
 Sidebars
 ---------------------------------------------------------------------------- */
 
-// #page_content .share {
-//     margin-bottom: 3rem;
-//     font-family: $sans;
-
-//     .title {
-//         font-size: 0.9rem;
-//         font-weight: 600;
-//         margin-bottom: 0.8rem;
-//     }
-
-//     a.twitter-follow {
-//         background-color: #4A99E9;
-//         border-radius: 5px;
-//         text-decoration: none;
-//         border-bottom: none;
-//         box-shadow: none;
-//         text-align: center;
-//         font-weight: 600;
-//         color: white;
-//         padding-top: 8px;
-//         padding-bottom: 8px;
-//         padding-left: 30px;
-//         padding-right: 30px;
-//         display: inline-block;
-//     }
-
-//     a.twitter-follow:hover {
-//         background-color: #428AD2;
-//     }
-
-//     .icons {
-//         display: inline-flex;
-//         flex-wrap: wrap;
-//         gap: 10px;
-    
-//         text-align: left;
-
-//         a {
-//             text-decoration: none;
-//             border-bottom: none;
-//         }
-
-//         a:hover {
-//             background-color: transparent;
-//             filter: grayscale(1);
-//         }
-        
-//         img {
-//             width: 25px;
-//             display: inline;
-//         }
-
-//         @media (max-width: $phone) {
-//             width: calc(25px * 3 + 10px * 2);
-//         }
-//     }
-
-// }
-
 .sidebar {
     text-align: center;
+    font-family: $sans;
+    font-size: 0.9rem;
 
     .box {
         margin-bottom: 2rem;
 
         .title {
-            font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
             padding-top: 0.5rem; 
-            font-family: $sans;
+            
             border-top: 2px solid $light-border-color;  
         }
 
         #TableOfContents {
             text-align: left;
-            font-family: $sans;
             font-size: 0.8rem;
             margin-top: 0;
 
@@ -994,16 +939,44 @@ Sidebars
             li > ul > li {
                 margin-left: 1.5rem;
             }
+        }
 
-            a {
-                color: $text-color;
-                text-decoration: none;
-                border-bottom: none;
+        &.author {
+            img {
+                border-radius: 100%;
+                max-width: 100px;
+                max-height: 100px;
+                margin: 0 auto;
+                background-color: $light-border-color;
+            }
+            name a {
+                font-weight: 600;
+                display: block;
+                margin-top: 0.5rem;
+            }
+            job {
+                font-size: 0.8rem;
+                color: $light-text-color;
+                display: block;
+                font-style: italic;
             }
 
-            a:hover {
-                color: $blue;
-                background-color: transparent;
+            a.twitter-follow {
+                background-color: #4A99E9;
+                border-radius: 5px;
+                text-align: center;
+                font-weight: 600;
+                color: white;
+                padding-top: 8px;
+                padding-bottom: 8px;
+                padding-left: 30px;
+                padding-right: 30px;
+                display: inline-block;
+                margin-top: 1rem;
+
+                &:hover {
+                    background-color: #428AD2;
+                }
             }
         }
     }
