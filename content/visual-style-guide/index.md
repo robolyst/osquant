@@ -141,13 +141,13 @@ Use these to highlight important content or important small sections.
 
 If you want more space inside the feature block, you can use the `<bigfeature></bigfeature>` HTML element:
 
-<bigfeature>
+<feature class="big">
 
 ## A bit more space
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sodales libero sed lobortis dignissim. Aenean tempor lorem eget varius maximus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean mauris risus, vulputate ut diam molestie, consequat porta dui. Nulla sit amet justo ac eros aliquam fringilla et nec leo. Nullam ut orci sit amet elit imperdiet laoreet. Cras orci libero, eleifend non purus non, scelerisque fringilla nunc. Fusce tempor, enim non euismod ullamcorper, leo lectus tincidunt tortor, vel ornare ex lorem feugiat odio. Curabitur eu finibus nisi. Morbi vel ante ligula.
 
-</bigfeature>
+</feature>
 
 Try not to use these too often.
 

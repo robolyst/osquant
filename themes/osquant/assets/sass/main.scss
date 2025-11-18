@@ -241,8 +241,7 @@ $sidebar-width: 225px;
 .container,
 // #mainmatter > *,
 #backmatter > *,
-feature > *,
-bigfeature > *
+feature > *
 {
     max-width: $main-width;
     padding-right: 0px;
@@ -251,7 +250,7 @@ bigfeature > *
     margin-right: auto;
 }
 
-bigfeature > * {
+feature.big > * {
     max-width: 1300px;
     padding-right: 5vw;
     padding-left: 5vw;
@@ -294,7 +293,7 @@ bigfeature > * {
   grid-row: 1; /* aligns to the top */
 }
 
-feature, bigfeature {
+feature {
     grid-column: 1 / -1;
 
 }
