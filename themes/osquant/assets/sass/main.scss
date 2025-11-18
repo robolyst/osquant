@@ -599,11 +599,17 @@ Page (Single)
 
 #hero {
     background: linear-gradient(180deg, transparent 0%, transparent 50%, #FDFDFD 50%, #FDFDFD 100%);
-}
 
-#hero img {
-    width: 100%;
-    border-radius: 5px;
+    .container {
+        max-width: $full-content-width;
+        padding-right: $column-gap;
+        padding-left: $column-gap;
+    }
+
+    img {
+        width: 100%;
+        border-radius: 5px;
+    }
 }
 
 /* ----------------------------------------------------------------------------
