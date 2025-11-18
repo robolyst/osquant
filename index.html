@@ -1,0 +1,64 @@
+<body>
+    <style>
+        .page-grid {
+        display: grid;
+        grid-template-columns: 
+            minmax(150px, 1fr)   /* left sidebar */
+            minmax(600px, 2fr)   /* main content */
+            minmax(150px, 1fr);  /* right sidebar */
+        column-gap: 2rem;
+        width: 100%;
+        max-width: 1600px;   /* optional */
+        margin: 0 auto;      /* center the whole layout */
+        padding: 0 2rem;
+        }
+        /* Make the article wrapper invisible to the grid */
+        .article {
+            display: contents;  
+        }
+
+        /* DEFAULT: every article element goes into the center column */
+        .page-grid > .article > * {
+            grid-column: 2;
+        }
+
+        /* EXCEPTION: breakout / full-width feature */
+        .page-grid > .article > .feature {
+            grid-column: 1 / -1;
+        }
+
+        /* Image sizing */
+        .article .feature img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+
+
+  <div class="page-grid">
+
+    <aside class="sidebar left">
+      Author and other metadata
+    </aside>
+
+    <main class="article">
+      <h1>Article Title</h1>
+
+      <p>Lorem ipsum...</p>
+
+      <figure class="feature">
+        <img src="themes/osquant/static/feature.png" alt="">
+        <figcaption>Full width feature</figcaption>
+      </figure>
+
+      <p>More content...</p>
+    </main>
+
+    <aside class="sidebar right">
+        table of contents and other meta data
+    </aside>
+
+
+  </div>
+</body>

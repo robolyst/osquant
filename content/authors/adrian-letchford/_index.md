@@ -2,8 +2,9 @@
 title: Adrian Letchford
 first_name: Adrian
 last_name: Letchford
-full_name: Adrian Letchford
+full_name: Dr. Adrian Letchford
 last_first: Letchford, Adrian
+job_title: Quantitative Developer
 
 twitter: dradrian
 github: robolyst

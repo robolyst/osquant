@@ -91,26 +91,28 @@ $$
 
 You can play with the model here:
 
-<bigfeature>
+<feature class="big">
 
 ## Interest rate model demo
 
 For the long term rates we'll use the [30 year US government treasury yields (DGS30)](https://fred.stlouisfed.org/series/DGS30). For the short term rates, we'll use the [3 year US government treasury yields (DGS3)](https://fred.stlouisfed.org/series/DGS3).
 
-<div class="row align-items-center">
-    <div class="col-12 col-xl-8">
-        <plot id="interest_rate_model_plot"></plot>
-    </div>
-    <div class="col col-xl-4">
-        <cell id="viewof_long_sigma"></cell>
-        <cell id="viewof_spread_mean"></cell>
-        <cell id="viewof_spread_speed"></cell>
-        <cell id="viewof_spread_std"></cell>
-        <cell id="viewof_position"></cell>
+<div>
+    <div class="row align-items-center">
+        <div class="col-12 col-xl-8">
+            <plot id="interest_rate_model_plot"></plot>
+        </div>
+        <div class="col col-xl-4">
+            <cell id="viewof_long_sigma"></cell>
+            <cell id="viewof_spread_mean"></cell>
+            <cell id="viewof_spread_speed"></cell>
+            <cell id="viewof_spread_std"></cell>
+            <cell id="viewof_position"></cell>
+        </div>
     </div>
 </div>
 
-</bigfeature>
+</feature>
 
 # Estimating parameters
 

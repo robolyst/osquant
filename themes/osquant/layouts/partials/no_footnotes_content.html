@@ -1,1 +1,26 @@
-{{ replaceRE `(?s)<div class=\"footnotes\" role=\"doc-endnotes\">.*</div>` "" .Content | safeHTML }}
+{{- $content := .Content -}}
+
+<!-- First, get the content with footnotes stripped out -->
+{{ $content := replaceRE `(?s)<div class=\"footnotes\" role=\"doc-endnotes\">.*</div>` "" $content }}
+
+<!-- Regex to match <feature>...</feature> including newlines  -->
+{{- $re := `<feature[\s\S]*?<\/feature>` -}}
+
+<!-- Insert a unique delimiter before and after each feature block -->
+{{- $withDelims := replaceRE $re `@oh@yeah@${0}@oh@yeah@` $content -}}
+
+<!-- Now split on the delimiter -->
+{{- $parts := split $withDelims "@oh@yeah@" -}}
+
+{{ range $parts }}
+    {{ $part := . }}
+    {{ if hasPrefix $part "<feature" }}
+        {{ . | safeHTML }}
+    {{ else }}
+       <div class="mainmatter">
+            {{ . | safeHTML }}
+        </div>
+    {{ end }}
+
+    
+{{ end }}

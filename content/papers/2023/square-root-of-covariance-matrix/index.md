@@ -100,7 +100,7 @@ Here's an example using two assets. You can play with the variances, correlation
 
 Create the covariance matrix and square root:
 
-<p>
+<div>
     <div class="row align-items-center">
         <div class="col-12 col-md-6">
             <cell id="cov_matrix"></cell>
@@ -111,11 +111,11 @@ Create the covariance matrix and square root:
             <cell id="viewof_rho"></cell>
         </div>
     </div>
-</p>
+</div>
 
 Set the portfolio weights:
 
-<p>
+<div>
     <div class="row align-items-center">
         <div class="col-12 col-md-6">
             <cell id="w_vector"></cell>
@@ -125,13 +125,14 @@ Set the portfolio weights:
             <cell id="viewof_w2"></cell>
         </div>
     </div>
-</p>
+</div>
 
 Component and portfolio std:
-
-<div class="row">
-    <div class="col-12 col-md-6">
-        <cell id="component_std"></cell>
+<div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <cell id="component_std"></cell>
+        </div>
     </div>
 </div>
 

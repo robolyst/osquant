@@ -1,0 +1,20 @@
+<div class="box author">
+    <div class="title">Author</div>
+
+    <!-- Loop through each author -->
+    {{ range .Params.authors }}
+        {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
+
+            <img src="{{ .Permalink }}/picture.png">
+            <name><a href="{{ .Permalink }}">{{ .Params.full_name }}</a></name>
+            <job>{{ .Params.job_title }}</job>
+
+            <!-- If the author has a Twitter handle, display the call to action -->
+            {{ if isset .Params "twitter" }}
+                <a class="twitter-follow" href="https://twitter.com/{{ .Params.twitter }}" class="twitter-follow">Follow on X</a>
+            {{ end }}
+
+
+        {{ end }}
+    {{ end }}
+</div>
