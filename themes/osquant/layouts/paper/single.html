@@ -26,6 +26,8 @@
     <div id="page_content">
         <div id="page-grid">
 
+            {{- partial "no_footnotes_content.html" . -}}
+
             <div class="sidebar left">
                 {{- partial "sidebar_author_box.html" . -}}
                 {{- partial "sidebar_paper_meta_box.html" . -}}
@@ -35,8 +37,6 @@
                 {{- partial "sidebar_share_box.html" . -}}
                 {{- partial "sidebar_toc_box.html" . -}}
             </div>
-
-            {{- partial "no_footnotes_content.html" . -}}
 
         </div>
         {{- partial "back-matter.html" . -}}

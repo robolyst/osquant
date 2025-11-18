@@ -236,9 +236,11 @@ Define the page size
 
 $main-width: 750px;
 $sidebar-width: 225px;
+$column-gap: 50px;
+$full-content-width: calc(750px + 2 * 225px + 4 * 50px); // 1300px
 
 .container,
-// #mainmatter > *,
+.mainmatter,
 #backmatter > *,
 feature > *
 {
@@ -250,21 +252,10 @@ feature > *
 }
 
 feature.big > * {
-    max-width: 1300px;
+    max-width: $full-content-width;
     padding-right: 5vw;
     padding-left: 5vw;
 }
-
-@media (max-width:1000px) {
-    .container,
-    // #mainmatter > *,
-    #backmatter > *
-    {
-        padding-right: 5vw;
-        padding-left: 5vw;
-    }
-}
-
 
 #page-grid {
   display: grid;
@@ -274,7 +265,7 @@ feature.big > * {
     $main-width  // main content
     $sidebar-width
     1fr;         // right sidebar
-  column-gap: 3rem;
+  column-gap: $column-gap;
   align-items: start;
 }
 
@@ -297,6 +288,25 @@ feature {
 
 }
 
+// If the screen gets too small for a 3-column layout, switch to a single column.
+@media (max-width:$full-content-width) {
+    #page-grid {
+        display: block;
+    }
+}
+
+// Add padding on tablets and smaller for better readability.
+@media (max-width:$tablet) {
+    .container,
+    .mainmatter > *,
+    feature > *,
+    #backmatter > *
+    {
+        padding-right: 5vw;
+        padding-left: 5vw;
+    }
+
+}
 
 /* ----------------------------------------------------------------------------
 Nav bar
