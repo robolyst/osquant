@@ -231,13 +231,13 @@ Splash
 }
 
 /* ----------------------------------------------------------------------------
-Define the page size
+Define the page layout
 ---------------------------------------------------------------------------- */
 
 $main-width: 750px;
 $sidebar-width: 225px;
 $column-gap: 50px;
-$full-content-width: calc(750px + 2 * 225px + 4 * 50px); // 1300px
+$full-content-width: calc(750px + 2 * 225px + 4 * 50px);
 
 .container,
 .mainmatter,
@@ -292,6 +292,11 @@ feature {
 @media (max-width:$full-content-width) {
     #page-grid {
         display: block;
+    }
+    .sidebar
+    {
+        padding-right: 5vw;
+        padding-left: 5vw;
     }
 }
 
@@ -1029,13 +1034,7 @@ Sidebars
         width: 25px;
         display: inline;
     }
-
-    @media (max-width: $phone) {
-        width: calc(25px * 3 + 10px * 2);
-    }
 }
-
-
 
 /* ----------------------------------------------------------------------------
 
