@@ -24,13 +24,23 @@
 
     </div>
 
-
     <div id="page_content">
-        <div id="mainmatter">
-            {{- partial "share-block.html" . -}}
+        <div id="page-grid">
+
+            <div class="sidebar left">
+                {{- partial "sidebar_share_box.html" . -}}
+            </div>
+
+            <div class="sidebar right">
+                {{- partial "sidebar_share_box.html" . -}}
+                {{- partial "sidebar_toc_box.html" . -}}
+            </div>
+
             {{- partial "no_footnotes_content.html" . -}}
+
         </div>
         {{- partial "back-matter.html" . -}}
+
     </div>
 
     {{- partial "setup-notebook.html" . -}}
