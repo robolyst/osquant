@@ -1,13 +1,10 @@
 ---
 title: "Macro Economics with Gaussian Mixture Models"
 summary: "
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-    ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-    a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-    pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+There's an idea that returns are a product of the current market state or regime. In this article, we will explore a way to model these regimes and inform portfolio construction. We'll also look at how to extend the model to include macro-economic variables tying the regimes to observable economic indicators.
 "
 
-date: "2025-11-10"
+date: "2025-11-18"
 type: paper
 mathjax: true
 authors:
