@@ -19,7 +19,6 @@ MD033: # MD033/no-inline-html
     - todo
     - plot
     - feature
-    - bigfeature
     - cell
     - div
     - td

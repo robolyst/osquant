@@ -139,7 +139,7 @@ Use these to highlight important content or important small sections.
 
 </feature>
 
-If you want more space inside the feature block, you can use the `<bigfeature></bigfeature>` HTML element:
+If you want more space inside the feature block, you can use `<feature class="big">`:
 
 <feature class="big">
 
