@@ -235,14 +235,14 @@ Splash
 Define the page size
 ---------------------------------------------------------------------------- */
 
-$full-page-width: 1400px;
 $main-width: 750px;
+$sidebar-width: 225px;
 
 .container,
 // #mainmatter > *,
 #backmatter > *,
-feature > *
-// #mainmatter bigfeature > *
+feature > *,
+bigfeature > *
 {
     max-width: $main-width;
     padding-right: 0px;
@@ -251,11 +251,11 @@ feature > *
     margin-right: auto;
 }
 
-// #mainmatter bigfeature > * {
-//     max-width: 1300px;
-//     padding-right: 5vw;
-//     padding-left: 5vw;
-// }
+bigfeature > * {
+    max-width: 1300px;
+    padding-right: 5vw;
+    padding-left: 5vw;
+}
 
 @media (max-width:1000px) {
     .container,
@@ -271,31 +271,30 @@ feature > *
 #page-grid {
   display: grid;
   grid-template-columns: 
-    1fr  // left sidebar
+    1fr
+    $sidebar-width          // left sidebar
     $main-width  // main content
-    1fr; // right sidebar
+    $sidebar-width
+    1fr;         // right sidebar
   column-gap: 3rem;
-  max-width: $full-page-width;   /* optional */
-  margin: 0 auto;      /* center the whole layout */
-  padding: 0 2rem;
   align-items: start;
 }
 
 .mainmatter {
-  grid-column: 2; /* stays in the middle */
+  grid-column: 3; /* stays in the middle */
 }
 
 .sidebar.left {
-  grid-column: 1; /* stays in the middle */
+  grid-column: 2; /* stays in the middle */
   grid-row: 1; /* aligns to the top */
 }
 
 .sidebar.right {
-  grid-column: 3; /* stays in the middle */
+  grid-column: 4; /* stays in the middle */
   grid-row: 1; /* aligns to the top */
 }
 
-feature {
+feature, bigfeature {
     grid-column: 1 / -1;
 
 }

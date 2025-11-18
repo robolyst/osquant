@@ -7,14 +7,22 @@
 {{- $re := `<feature>[\s\S]*?<\/feature>` -}}
 
 <!-- Insert a unique delimiter before and after each feature block -->
-{{- $withDelims := replaceRE $re `@@@${0}@@@` $content -}}
+{{- $withDelims := replaceRE $re `@oh@yeah@${0}@oh@yeah@` $content -}}
+
+<!-- Regex to match <bigfeature>...</bigfeature> including newlines  -->
+{{- $re := `<bigfeature>[\s\S]*?<\/bigfeature>` -}}
+
+<!-- Insert a unique delimiter before and after each feature block -->
+{{- $withDelims := replaceRE $re `@oh@yeah@${0}@oh@yeah@` $withDelims -}}
 
 <!-- Now split on the delimiter -->
-{{- $parts := split $withDelims "@@@" -}}
+{{- $parts := split $withDelims "@oh@yeah@" -}}
 
 {{ range $parts }}
     {{ $part := . }}
     {{ if hasPrefix $part "<feature>" }}
+        {{ . | safeHTML }}
+    {{ else if hasPrefix $part "<bigfeature>" }}
         {{ . | safeHTML }}
     {{ else }}
        <div class="mainmatter">
