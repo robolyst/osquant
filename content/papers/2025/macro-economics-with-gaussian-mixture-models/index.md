@@ -17,7 +17,6 @@ categories:
     - finance
 ---
 
-# Intro
 1. GMMs are a type of hidden state model
 2. Normally, we estimate expected return, expected variance, expected correlation. In a state space model, we estimate these for some number of states and estimate the expected state, or the probability of each state.
 
@@ -198,9 +197,7 @@ $$
 
 In practice, you'll find that the GMM mean and cov matches almost exactly the empirical mean and cov when fitted to financial returns. The only difference is that in the GMM model, we can break the mean and cov down into different states.
 
-
-
-## Example
+# Example
 
 We can grab some returns with:
 ```python
@@ -387,6 +384,9 @@ The conclusion from this example is that a Gaussian Mixture Model can identify e
 
 However, once the model is fitted, we are limited to the sample wide set of mixing coefficients $\pi_k$. This means we are not able to predict future returns any better than using the empirical mean and covariance. We need to extend this model to be able to predict future states.
 
+# Reflecting current volatility
+We're fitting over long periods of time. This means that the current volatility is not reflected in our forecasts.
+
 # Making predictions
 
 Once we have fitted a GMM to historical returns, we have the following fitted parameters:
@@ -529,9 +529,6 @@ $$
 
 # Exponentially weighted estimates
 All information is important, recent information is more important. We want to discount prices far into the past more than recent prices.
-
-# Reflecting current market volatility
-We're fitting over long periods of time. This means that the current volatility is not reflected in our forecasts.
 
 # Appendix
 
