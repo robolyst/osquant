@@ -237,7 +237,8 @@ Define the page layout
 $main-width: 750px;
 $sidebar-width: 225px;
 $column-gap: 50px;
-$full-content-width: calc(750px + 2 * 225px + 4 * 50px);
+$full-content-width: calc(750px + 2 * 225px + 2 * 50px);
+$full-content-with-margin-width: calc(750px + 2 * 225px + 4 * 50px);
 
 .container,
 .mainmatter,
@@ -289,7 +290,7 @@ feature {
 }
 
 // If the screen gets too small for a 3-column layout, switch to a single column.
-@media (max-width:$full-content-width) {
+@media (max-width:$full-content-with-margin-width) {
     #page-grid {
         display: block;
     }
@@ -599,12 +600,6 @@ Page (Single)
 
 #hero {
     background: linear-gradient(180deg, transparent 0%, transparent 50%, #FDFDFD 50%, #FDFDFD 100%);
-
-    .container {
-        max-width: $full-content-width;
-        padding-right: $column-gap;
-        padding-left: $column-gap;
-    }
 
     img {
         width: 100%;
