@@ -460,24 +460,26 @@ The conclusion from this example is that a Gaussian Mixture Model can identify e
 
 However, once the model is fitted, we are limited to the sample wide set of mixing coefficients $\pi_k$. This means we are not able to predict future returns any better than using the empirical mean and covariance. We need to extend this model to be able to predict future states.
 
-# Making predictions
+# Covariates
 
 Once we have fitted a GMM to historical returns, we have the following fitted parameters:
 1. Mixing coefficients $p(k) = \pi_k$
 2. Mean vectors $\boldsymbol{\mu}_k$
 3. Covariance matrices $\boldsymbol{\Sigma}_k$
 
-The next thing we want to do is make a prediction about the next time period's return. Specifically, we want to predict which state we will be in next period. With the current model, the mixing coefficients $\pi_k$ are fixed. This means that our best estimate for the next period's state is the historical frequency of each state.
+The next thing we want to do is make a prediction about the state at some time $t$. Specifically, we want to predict the probability of being in each state at time $t$. With the current model, the mixing coefficients $\pi_k$ are fixed. This means that our best estimate for probability of being in state $k$ at time $t$ is $\pi_k$.
 
-## Incorporating information variables
+## Incorporating covariates
 
-Now, let's say we have some extra information that we know at the decision point before $\boldsymbol{r}_t$ is realised. Let's denote it with the vector $\boldsymbol{x}_t$. Now, rather than modelling $p(k)$ we can model $p(k | \boldsymbol{x}_t)$. This means that our mixing coefficients are now time-varying and depend on the information $\boldsymbol{x}_t$. We're going to model $p(k | \boldsymbol{x}_t)$ as a multinomial logit model [^Gruen2008]:
+Now, let's say we have some extra information that we at time $t$ before $\boldsymbol{r}_t$ is realised. Let's denote it with the vector $\boldsymbol{x}_t$. Now, rather than modelling $p(k)$ we can model $p(k | \boldsymbol{x}_t)$. This means that our mixing coefficients are now time-varying and depend on the information $\boldsymbol{x}_t$.
+
+We're going to model $p(k | \boldsymbol{x}_t)$ as a [multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression) [^Gruen2008]:
 $$
-p(k|\boldsymbol{x}_t) = \frac{e^{\boldsymbol{\beta}_k^T\boldsymbol{x}_t + b_k}}{\sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t + b_j}}
+p(k|\boldsymbol{x}_t) = \frac{e^{\boldsymbol{\beta}_k^T\boldsymbol{x}_t}}{\sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t}}
 $$
-Where the coefficients $\boldsymbol{\beta}_k$ and intercept $b_k$ are parameters to be estimated. 
+where the coefficients $\boldsymbol{\beta}_k$ are parameters to be estimated. 
 
-We initialise the parameters in the same way (using KMeans) except that we set $\boldsymbol{\beta}_k = 0$ and $b_k = \log(\pi_k)$ so that the initial mixing coefficients match the historical frequencies.
+We initialise the parameters in the same way as before. We set the posterior probabilities randomly and jump to the M-step to set the model's paramters.
 
 **E-step** The expected response works in much the same way as before, we just use  $p(k | \boldsymbol{x}_t)$ intead of $p(k)$:
 $$
@@ -492,26 +494,29 @@ $$
 \end{aligned}
 $$
 
-To find the logistic regression parameters $\boldsymbol{\beta}_k$ and $b_k$, we take the full set log-likelihood and isolate the terms that depend on these parameters:
+To find the logistic regression parameters $\boldsymbol{\beta}_k$, we take the full set log-likelihood and isolate the terms that depend on these parameters:
 $$
 \mathcal{L}( \boldsymbol{R}, \boldsymbol{Z} | \boldsymbol{\beta}, \boldsymbol{b}) = \sum_t \sum_k E[z\_{tk}] \log \left( p(k|\boldsymbol{x}_t) \right) + \text{const}
 $$
 expanding out $p(k|\boldsymbol{x}_t)$ gives us:
 $$
-\mathcal{L}( \boldsymbol{R}, \boldsymbol{Z} | \boldsymbol{\beta}, \boldsymbol{b}) = \sum_t \sum_k E[z\_{tk}] \left( \boldsymbol{\beta}_k^T\boldsymbol{x}_t + b_k - \log \left( \sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t + b_j} \right) \right) + \text{const}
+\mathcal{L}( \boldsymbol{R}, \boldsymbol{Z} | \boldsymbol{\beta}, \boldsymbol{b}) = \sum_t \sum_k E[z\_{tk}] \left( \boldsymbol{\beta}_k^T\boldsymbol{x}_t - \log \left( \sum_j^K e^{\boldsymbol{\beta}\_j^T\boldsymbol{x}\_t} \right) \right) + \text{const}
 $$
 We'll also add a L2 regularisation term to avoid overfitting:
 $$
 -\lambda \sum_k \left( ||\boldsymbol{\beta}\_k||^2 \right)
 $$
 
-To find the maximum, we'll assume that the intercept is in $\boldsymbol{x}_t$ so that we do not need to worry about $b_k$ and we take the derivative with respect to $\boldsymbol {\beta}_k$:
+To find the maximum we take the derivative with respect to $\boldsymbol {\beta}_k$:
 $$
 \frac{\partial \mathcal{L}}{\partial \boldsymbol{\beta}_k} = \sum_t \left( E[z\_{tk}] - p(k|\boldsymbol{x}_t) \right) \boldsymbol{x}_t - 2 \lambda \boldsymbol{\beta}_k
 $$
-Setting this to zero gives us the maximum. There is no closed form solution for $\boldsymbol{\beta}_k$, but we can use gradient ascent to find the maximum.
+and set it to zero. There is no closed form solution for $\boldsymbol{\beta}_k$, but we can use gradient ascent to find the maximum.
 
-The model has a fairly large number of degress of freedom as we are estimating a multinomial probability distribution. If there are $k$ classes then one of the class probabilities is just 1 minus the probability of the remaining classes. We get around this by Fixing one of the classes coefficents to 0. That means we are estimating the other states relative to that state.
+A couple of notes on solving for $\boldsymbol{\beta}_k$:
+
+1. We do not want to regularise the intercept term. We do not include the intercept in the regularisation term.
+1. The model has an indeterminancy as we can scale all the coefficents by a constant and get the same probabilities. Intuitively, as all the probabilites must sum to 1, then one of the probabilities is given by the remaining. To avoid this indeterminancy, we fix one of the state's coefficents to 0. This means we are estimating the other states relative to that state.
 
 ## Code
 
