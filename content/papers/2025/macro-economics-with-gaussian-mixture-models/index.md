@@ -213,14 +213,79 @@ $$
 
 In practice, you'll find that the GMM mean and cov matches almost exactly the empirical mean and cov when fitted to financial returns. The only difference is that in the GMM model, we can break the mean and cov down into different states. Later, we will modify the prior distribution (the mixing weights) to get time-varying means and covariances.
 
-# Key modelling decisions
+# Modelling decisions
+
+Before we dig into an example, there are a few key modelling decisions to make. We need to decide what **time interval** to use for returns, whether or not to **devolatise** and **how many states** to use. We'll look at each of these in turn.
+
+As we go through each of these decisions, we'll work on real data. Since we're interested in macro-economic regimes, we'll use broad market ETFs that represent different asset classes. Specifically, we'll use:
+- SPY -- *US equities*
+- TLT -- *US long-term bonds*
+- GLD -- *Gold*
+- GSG -- *Commodities*
 
 ## Time period
 
-## Number of states
+Now, we want to try and tie market regimes to macro-economic variables. These macro-economic variables are usually released at monthly or quarterly intervals. Quarterly intervals cuts the number of samples by a third. As such, we'll use monthly intervals for the economic variables and market returns.
 
-## Reflecting current volatility
-We're fitting over long periods of time. This means that the current volatility is not reflected in our forecasts.
+The ETFs that we're using do not have data going back very far. To get around this, we splice in index data for SPY, GLD and GSG. For TLT we use bond yields to approximate long-term bond returns before TLT's inception. This gets us prices going back to 1990. The details are in the appendix. 
+
+The dataset of prices is available [here]().
+
+<todo>add appendix and link</todo>
+
+You can load the prices with:
+```python
+import pandas as pd
+daily = pd.read_csv('broad_etf_prices.csv', index_col=0, parse_dates=True)
+monthly = daily.resample('MS').last()
+```
+There are 419 months in the sample which looks like this:
+
+![](images/asset_returns.svg)
+
+
+## Devolatise
+
+Returns are [heteroscedastic](https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity), meaning that their volatility changes over time. This causes problems for machine learning models which generally assume that the data is identically distributed. For GMMs, they will end up fitting states to different volatility regimes rather than different economic regimes.
+
+We can avoid this by normalising the returns by their recent volatility. This procedure is referred to as *devolatising* returns. A simple way to do this is to divide the returns by their exponentially weighted moving standard deviation.
+
+We can see how big of an impact this procedure has by testing on SPY returns. We will do this on daily returns as it is easier to visualise.
+
+```python
+# Get the daily returns
+returns = daily['SPY'].pct_change()
+
+# Standardize the returns so that the result
+# of all operations are on the same scale.
+returns -= returns.mean()
+returns /= returns.std()
+
+# Calculate the rolling volatility before
+# normalising over the last six months.
+before = returns.ewm(halflife=126, min_periods=21).std()
+
+# Remove the volatility clustering. Shift by 1
+# so that this could be used in a live trading
+# scenario.
+std = returns.ewm(halflife=21, min_periods=21).std()
+std = std.shift(1)
+returns /= std
+
+# Calculate the rolling volatility after
+# normalising over the last six months.
+after = returns.ewm(halflife=126, min_periods=21).std()
+```
+
+Plotting `before` and `after` gives us:
+
+{{<figure src="images/volatility_normalization.svg" title="Example of devolatising returns." >}}
+The exponentially weighted standard deviation of SPY daily returns are shown in blue. A half-life of 6 months was used. The SPY returns were then devolatised by dividing by the one month exponentially weighted standard deviation lagged by 1 to reflect real world trading. The results are shown in orange. We can see that the big swings in volatility have been removed.
+{{</figure>}}
+
+From here on, we will devolatise the monthly returns before fitting a GMM. We will devolatise with a 6 month half-life. This is a hyperparameter that could be tuned. However, this article is focused on the GMM rather than devolatisation so we will not go into detail here.
+
+## Number of states
 
 
 # Example
