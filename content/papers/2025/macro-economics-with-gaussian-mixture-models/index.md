@@ -299,6 +299,8 @@ The experiment:
 1. For each number of states, do 100 fits where we fit a GMM to the training set. The GMM does 40 random initialisations and picks the best one.
 1. For each fit save the number of states and the test set log-likelihood.
 
+We can fit a Gaussian Mixture Model with the help of scikit-learn's `GaussianMixture` class ([docs](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html)).
+
 Once we have all the results, we can plot the median test set log-likelihood for each number of states. We'll pick the number of states that maximises the median test set log-likelihood.
 
 Here is the code to run this experiment and collect the results:
@@ -365,188 +367,96 @@ For the rest of this article, we will use 3 states.
 
 # Example
 
-We can grab some returns with:
-```python
-import yfinance as yf
-
-tickers = yf.Tickers("SPY TLT GLD GSG VNQ IWM")
-prices = tickers.download(period="30y", interval="1d")
-returns = prices["Close"].pct_change().dropna()
-```
-
-![](images/asset_returns.svg)
-
-We can fit a Gaussian Mixture Model with the help of scikit-learn's `GaussianMixture` class ([docs](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html)).
-
-The only decision we need to make is how many states to use. It's fairly common to go with a small number of states (2-4). We're going to use 3 states as it gives us surprising results that are not immediately obvious. You might think that the model will converge to states that align with a "bull", "bear" and "neutral" market. However, this is not the case, and the actual states are far more interesting.
+Now that we have monthly returns, we know we should devolatise them and we have decided on the number of states, we can fit a GMM to the returns and investigate the results.
 
 We can fit the model with:
 
 ```python
 from sklearn.mixture import GaussianMixture
-import pandas as pd
 
-model = GaussianMixture(n_components=3, random_state=42)
-model.fit(returns)
+returns = monthly.pct_change().dropna()
+
+# Devolatise the returns
+std = returns.ewm(halflife=6, min_periods=12).std()
+std = std.shift(1)
+devoled = (returns / std).dropna()
+
+model = GaussianMixture(
+    n_components=3,
+    random_state=42,
+    n_init=40,
+    init_params='random',
+)
+model.fit(devoled)
 ```
-For now, we are going to do this in-sample and investigate the results.
 
 The fitted mixing coefficients ($\pi_k$) can be found with `model.weights_` and look like this:
 
 |   State 0 |   State 1 |   State 2 |
 |-----------|-----------|-----------|
-|    60.34% |    35.78% |     3.88% |
+|    40.21% |    33.04% |    26.75% |
 
-In this case, the model is saying that State 0 is the most common state, followed by State 1 and then State 2. Curiously, State 2 is very rare.
+In this case, the model is saying that State 0 is the most common state, followed by State 1 and then State 2.
 
 We can look at the mean vectors ($\boldsymbol{\mu}_k$) with `model.means_`:
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>0</th>
-      <th>1</th>
-      <th>2</th>
-    </tr>
-    <tr>
-      <th>symbol</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>SPY</th>
-      <td>0.1087%</td>
-      <td>-0.0488%</td>
-      <td>-0.1900%</td>
-    </tr>
-    <tr>
-      <th>TLT</th>
-      <td>0.0431%</td>
-      <td>-0.0181%</td>
-      <td>0.1740%</td>
-    </tr>
-    <tr>
-      <th>GLD</th>
-      <td>0.0474%</td>
-      <td>0.0102%</td>
-      <td>-0.0021%</td>
-    </tr>
-    <tr>
-      <th>GSG</th>
-      <td>0.0697%</td>
-      <td>-0.0235%</td>
-      <td>-0.5395%</td>
-    </tr>
-  </tbody>
-</table>
+|     |   State 0 |   State 1 |   State 2 |
+|:----|----------:|----------:|----------:|
+| SPY |    59.95% |    27.56% |   -47.29% |
+| TLT |    -4.81% |    12.95% |    68.64% |
+| GLD |    41.24% |   -35.78% |    48.17% |
+| GSG |    35.67% |    -8.04% |   -26.61% |
 
-In the table above, we can see that State 0 has positive expected returns for all assets. This looks like a "bull" market. State 1 has negative expected returns for most assets. State 2 has some large negative expected returns.
+It is very difficult to just look at these numbers and name the states. However, we already start to get an idea of what might be going on. From looking at the mean vectors, State 0 looks inflationary with positive returns for all hard assets and a negative return for the cash related asset (TLT bonds). State 1 looks more deflationary with a smaller mean for equities, cash now with positive returns and gold & commodities declining in value. State 2 looks like a destressed state with large negative means for equities and commodities but large positive means for bonds and gold which are traditionally flight to safety assets. 
 
-We can also look at the covariance matrices ($\boldsymbol{\Sigma}_k$) with `model.covariances_`. These are a bit more difficult to visualise, but we can look at the standard deviations (the square root of the diagonal elements):
+We can also look at the covariance matrices ($\boldsymbol{\Sigma}_k$) with `model.covariances_`. These are a bit more difficult to visualise, but we can look at the annualised standard deviations (the square root of the diagonal elements multiplied by $\sqrt{12}$):
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>State 0</th>
-      <th>State 1</th>
-      <th>State 2</th>
-    </tr>
-    <tr>
-      <th>symbol</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>SPY</th>
-      <td>9.64%</td>
-      <td>21.06%</td>
-      <td>54.19%</td>
-    </tr>
-    <tr>
-      <th>TLT</th>
-      <td>9.40%</td>
-      <td>15.18%</td>
-      <td>29.89%</td>
-    </tr>
-    <tr>
-      <th>GLD</th>
-      <td>9.77%</td>
-      <td>19.37%</td>
-      <td>42.41%</td>
-    </tr>
-    <tr>
-      <th>GSG</th>
-      <td>14.52%</td>
-      <td>24.84%</td>
-      <td>55.10%</td>
-    </tr>
-  </tbody>
-</table>
+|     |   State 0 |   State 1 |   State 2 |
+|:----|----------:|----------:|----------:|
+| SPY |      2.37 |      3.31 |      4.56 |
+| TLT |      2.74 |      3.20 |      5.19 |
+| GLD |      3.56 |      2.05 |      4.93 |
+| GSG |      2.36 |      4.32 |      4.45 |
 
-The main thing to notice here is that State 2 has much higher volatilities than the other two states. This suggests that State 2 is a high-volatility state.
 
-The story so far is that we have a "bull" market (State 0), a "bear" market (State 1) and a "tail" market (State 2).
+The main thing to notice here is that State 2 has much higher volatilities than the other two states. This is inline with the earlier intuition that State 2 is a destressed state.
 
-Things get really interesting when we look at the posterior state probabilities for each time period. We can get these into a DataFrame with:
+The story so far is that we have an inflationary market (State 0), a deflationary market (State 1) and a destressed market (State 2).
+
+The posterior probabilities are good to check for sanity reasons, but they're not easy to interpret on their own. We can get them with:
 
 ```python
-import pandas as pd
-
-posterior = pd.DataFrame(
-    data=model.predict_proba(returns),
-    index=returns.index,
-)
+model.predict_proba(devoled)
 ```
-
-Plotting these straight away gives us:
+and they look like:
 
 ![](images/posteriors.svg)
 
-This is a little bit hard to see what is going on. Looking at state 2, we can see it clustering around certain periods of time. We can highlight this clustering by smoothing the posterior probabilities with an exponential moving average:
-
-```python
-posterior.ewm(halflife=5).mean()
-```
-
-Plotting the smoothed posterior probabilities gives us:
-
-![](images/smoothed_posteriors.svg)
-
-We see two big clusters of State 2 activity and lots of little clusters. The first big one is around the 2008 financial crisis and the second is around the 2020 COVID crash. This makes sense as these were both periods of high volatility---both tail events.
-
-We can also get a good view of how returns behave in each state by multiplying the returns by the posterior probablities. To get a frame of each state's returns for a single asset, we can do:
+We can get a better view of how the different states behave by multiplying the returns by the posterior probablities. To get a frame of each state's returns for a single asset, we can do:
 
 ```python
 posterior.multiply(returns['SPY'], axis=0)
 ```
 
-Looking at state 0:
+Looking at State 0:
 
 ![](images/state_0_returns.svg)
 
-The statistics we looked at for state 0 suggested a "bull" market and this plot confirms that. All of the returns are positive. The only one that stands out is TLT (bonds).
+The statistics we looked at for State 0 suggested an inflationary market and this plot confirms that. All of the returns are positive except for TLT which is the cash related asset.
 
 State 1 looks like:
 
 ![](images/state_1_returns.svg)
 
-This is also inline with our earlier intuition that state 1 is a "bear" market. Most of the returns are negative, with the exception of TLT which is mostly positive. Similarly to state 0, the returns for TLT do not quite match the rest of this state. In the case of state 1, TLT acts as a hedge with mostly positive returns while the remaining assets negative returns.
+This is also inline with our earlier intuition that state 1 is a deflationary market. Equity returns are lackluster. Cash does better than the inflationary market. Gold and commodities do poorly.
 
 Finally, state 2:
 
 ![](images/state_2_returns.svg)
 
-This is the most interesting state. It's a little harder to interpret as there are fewer examples of this state. As such, the return plots are mostly flat (as there are many time periods not in this state). However, we can see that the returns are much more extreme in this state. Similarly to before, this state seems to represent a "tail" market with high volatility and extreme returns.
+This is the most interesting state. Here we see the flight to safety assets do best relative to equities and commodities. Together with the higher volatilities in this state, we can easily conlcude that this is a market in distress.
 
-The conclusion from this example is that a Gaussian Mixture Model can identify economically meaningful latent market states. The model was able to not just identify bull and bear periods, but also periods of tail risk.
+The conclusion from this example is that a Gaussian Mixture Model can identify economically meaningful latent market states. The model was able to not just identify up and down martkets, but also periods of distress.
 
 However, once the model is fitted, we are limited to the sample wide set of mixing coefficients $\pi_k$. This means we are not able to predict future returns any better than using the empirical mean and covariance. We need to extend this model to be able to predict future states.
 
