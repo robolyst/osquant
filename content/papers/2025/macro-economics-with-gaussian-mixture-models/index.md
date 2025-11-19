@@ -136,6 +136,8 @@ The EM algorithm proceeds as follows:
 3. **M-step**: Use these values as values for $\boldsymbol{Z}$ and maximise the log-likelihood with respect to the parameters $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
 4. **Check**: Calculate the log-likelihood $\mathcal{L}( \boldsymbol{R} | \boldsymbol{\pi}, \boldsymbol{\mu}, \boldsymbol{\Sigma})$ and check for convergence in the parameters or the log-likelihood value. If not converged, return to step 2.
 
+Initialisation involves picking some starting value for the posterior probabilities. Once you have those, you can proceed with the M-step to complete the initialisation. These starting probabilities can either be random or based on K-means clustering. For the clustering method, K-means is run and the closest cluster centre sets the initial probability to 1 for that state and 0 for all other states. K-means assumes the clusters are spherical (no correlations). This is not appropriate for financial returns, so we will use random initialisation.
+
 **E-step** Recall that each element of $\boldsymbol{Z}$ is a one-hot vector indicating the state at time $t$. The expected value of $z\_{tk}$ is just the posterior probability that we are in state $k$ given $\boldsymbol{r}_t$:
 $$
 E[z\_{tk}] = p(k | \boldsymbol{r}_t) = \frac{\pi_k\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_k^K \pi_k\mathcal{N}(\boldsymbol{r}_t | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}
@@ -287,6 +289,79 @@ From here on, we will devolatise the monthly returns before fitting a GMM. We wi
 
 ## Number of states
 
+The number of states is a critical parameter as we want each state to represent a meaningful economic regime. If we have too few states, then we will end up mixing together different regimes (underfitting). If we have too many states, then we will end up with states that are not economically meaningful (overfitting).
+
+We will do a quick experiment to select the number of states. As a warning, this is not a rigorous method as we will be looking at out-of-sample results. But, it will give us a good idea of the number of states that we can work with for the rest of the article.
+
+The experiment:
+1. Split the data into a training set and a test set. Training set is everything before 2022-01-01 and test set is everything after. The test set has about 11% of the data.
+1. Loop over a range for the number of states (1 to 8).
+1. For each number of states, do 100 fits where we fit a GMM to the training set. The GMM does 40 random initialisations and picks the best one.
+1. For each fit save the number of states and the test set log-likelihood.
+
+Once we have all the results, we can plot the median test set log-likelihood for each number of states. We'll pick the number of states that maximises the median test set log-likelihood.
+
+Here is the code to run this experiment and collect the results:
+```python
+from sklearn.mixture import GaussianMixture
+from tqdm import tqdm
+from datetime import datetime
+from itertools import product
+
+# Get our monthly returns
+returns = monthly.pct_change()
+
+# Devolatise the returns
+std = returns.ewm(halflife=6, min_periods=12).std()
+std = std.shift(1)
+devoled = (returns / std).dropna()
+
+# Split into train and test
+cutoff = datetime(2022, 1, 1)
+train = devoled.loc[:cutoff]
+test = devoled.loc[cutoff:]
+
+# Test different numbers of states
+states = [8, 7, 6, 5, 4, 3, 2, 1]
+
+# For each state, do multiple runs
+runs = range(100)
+
+# Put the states and runs together for
+# looping over.
+loops = list(product(states, runs))
+
+# We'll put the results of each
+# loop in here for analysis later.
+results: list[dict] = []
+
+for num_states, run in tqdm(loops):
+
+    gm = GaussianMixture(
+        n_components=num_states,
+        n_init=40,
+        init_params='random',
+    )
+
+    gm.fit(train.values)
+    
+    results.append({
+        'num_states': num_states,
+        'run': run,
+        'train_score': gm.score(train.values),
+        'test_score': gm.score(test.values),
+    })
+
+results = pd.DataFrame(results)
+```
+
+Plotting the media test score per state gives us:
+
+{{<figure src="images/number_of_states.svg" title="Test set scores." >}}
+A GMM is fitted to devolatised monthly returns for different numbers of states. The median test set log-likelihood is shown for each number of states. The highest median test set log-likelihood is achieved with 3 states.
+{{</figure>}}
+
+For the rest of this article, we will use 3 states.
 
 # Example
 
