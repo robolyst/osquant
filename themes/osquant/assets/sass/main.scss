@@ -107,6 +107,13 @@ todo {
 
 }
 
+note {
+    display: block;
+    font-style: italic;
+    color: $light-text-color;
+    font-size: 0.9rem;
+}
+
 blockquote {
     border-left: 3px solid #D2D2D2;
     padding-left: 1.5rem;
@@ -296,8 +303,15 @@ feature {
     }
     .sidebar
     {
+        max-width: $main-width;
         padding-right: 5vw;
         padding-left: 5vw;
+        margin-left: auto;
+        margin-right: auto;
+
+        &.left {
+            margin-top: 4rem;
+        }
     }
 }
 
@@ -624,10 +638,18 @@ Back matter
 }
 
 #backmatter h1 {
-    visibility: hidden;
-    height: 0;
-    margin: 0;
-    padding: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+
+    &.footnotes {
+        visibility: hidden;
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
 }
 
 #backmatter h2 {
@@ -635,6 +657,13 @@ Back matter
     font-weight: 700;
     margin-top: 3rem;
     margin-bottom: 1rem;
+}
+
+#backmatter h3 {
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 #backmatter pre {
