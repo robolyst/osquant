@@ -515,9 +515,7 @@ A couple of notes on solving for $\boldsymbol{\beta}_k$:
 
 ## Code
 
-The code to fit this model is quite involved. Rather than paste it all here, you can find it in this gist: [link]().
-
-<todo>Add gist link</todo>
+The code to fit this model is quite involved. Rather than paste it all here, you can find it in this gist: [link](https://gist.github.com/robolyst/a4ac0a38634673cd25c4879d9c9c86fe).
 
 Some things to note about the implementation:
 1. The code creates a class called `CondGaussianMixture` which implements the conditional algorithm described above.
