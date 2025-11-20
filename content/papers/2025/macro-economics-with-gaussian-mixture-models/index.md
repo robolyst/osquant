@@ -228,9 +228,7 @@ Now, we want to try and tie market regimes to macro-economic variables. These ma
 
 The ETFs that we're using do not have data going back very far. To get around this, we splice in index data for SPY, GLD and GSG. For TLT we use bond yields to approximate long-term bond returns before TLT's inception. This gets us prices going back to 1990. The details are in the appendix. 
 
-The dataset of prices is available [here]().
-
-<todo>add appendix and link</todo>
+The dataset of prices is available [here](broad_etf_prices.csv).
 
 You can load the prices with:
 ```python

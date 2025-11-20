@@ -4,7 +4,7 @@
 
 <div id="backmatter">
 
-    <h1>Footnotes</h1>
+    <h1 class="footnotes">Footnotes</h1>
 
     {{ with .Params.acknowledgements }}
         <h2>Acknowledgements</h2>
@@ -25,5 +25,9 @@
 
     <p>In BibTeX please use:</p>
     <div>{{- partial "bibtex.html" . -}}</div>
+
+    {{ with .Resources.Get "appendix.md" }}
+        {{ .Content | .Page.RenderString }}
+    {{ end }}
 
 </div>
