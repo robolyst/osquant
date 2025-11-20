@@ -692,6 +692,7 @@ The means:
 
 |     |   State 0 |   State 1 |   State 2 |
 |:----|----------:|----------:|----------:|
+|     |   *deflationary* |    *distress* |    *inflationary* |
 | SPY |    -1.58% |   -58.67% |    74.09% |
 | TLT |    -5.82% |   131.24% |   -19.21% |
 | GLD |   -46.68% |    55.27% |    36.56% |
@@ -701,6 +702,7 @@ The volatilities:
 
 |     |   State 0 |   State 1 |   State 2 |
 |:----|----------:|----------:|----------:|
+|     |   *deflationary* |    *distress* |    *inflationary* |
 | SPY |      3.20 |      4.38 |      2.36 |
 | TLT |      3.18 |      3.86 |      2.78 |
 | GLD |      2.16 |      4.63 |      3.56 |
@@ -710,12 +712,68 @@ State 2 looks like the inflationary state with strong positive returns for all a
 
 You will notice that the ordering of the states is different to before. This is because the states are identified in a different order each time the model is fitted. This is an indeterminancy. The important thing is that the states retain their economic meaning despite the new dependency on economic variables.
 
-
 ### Analyse AME
+
+For each variable in the FRED-MD dataset, we're going to calculate the maximum absolute average marginal effect across the three states. Then, we'll look at the top 10 variables to see if they make economic sense.
+
+The code for the analysis:
+```python
+ame = pd.DataFrame(
+    model.ame(X.values),
+    index=X.columns,
+)
+
+# We don't care about the intercept here
+ame = ame.drop('intercept', axis=0)
+
+# Calculate the score
+ame['score'] = ame.abs().max(1)
+
+# Sort
+ame = ame.sort_values('score', ascending=False)
+
+# And keep the best 10
+ame = ame.head(10)
+```
+which gives us the following results:
+
+|               |   State 0 |   State 1 |   State 2 |
+|:--------------|----------:|----------:|----------:|
+|     |   *deflationary* |    *distress* |    *inflationary* |
+| S&P 500       |    -3.23% |    -6.73% |     9.96% |
+| S&P div yield |     2.20% |     5.55% |    -7.75% |
+| OILPRICEx     |    -6.47% |     0.78% |     5.69% |
+| GS10          |     0.50% |    -6.18% |     5.67% |
+| CES1021000001 |    -4.04% |    -1.60% |     5.64% |
+| BAA           |    -0.28% |    -5.30% |     5.59% |
+| WPSID61       |     4.75% |     0.74% |    -5.49% |
+| AAA           |     2.07% |    -5.45% |     3.37% |
+| BUSINVx       |    -0.66% |    -4.58% |     5.24% |
+| VIXCLSx       |     2.66% |     2.58% |    -5.24% |
+
+**S&P 500.** The [S&P 500 index](https://fred.stlouisfed.org/series/SP500) level has a strong positive effect on the probability of being in the inflationary state and a strong negative effect on the probability of being in the distressed states. This makes sense as a rising stock market is often associated with economic growth and inflation.
+
+**S&P div yield.** The S&P 500 dividend yield has a strong negative effect on the probability of being in the inflationary state and a strong positive effect on the deflationary and distressed states. This is intuitive as, all else being equal, as prices rice (inflationary) the dividend yield falls. Conversely, in deflationary or distressed states, prices fall and dividend yields rise.
+
+**OILPRICEx.** The [oil price](https://fred.stlouisfed.org/series/OILPRICE) has a strong positive effect on the probability of being in the inflationary state and a strong negative effect on the deflationary state.
+
+**GS10.** The [10 year treasury yield](https://fred.stlouisfed.org/series/GS10) has a strong positive effect on the probability of being in the inflationary state and a strong negative effect on the distressed state. This is intuitive as rising yields are associated with inflation. Similarly, lower yields see more precarious borrowing (leading) or during times of distress investors flock to the safety of treasuries pushing yields down (lagging).
+
+**CES1021000001.** This is the [total number of people employed in the mining sector including jobs in mining, quarry, oil and gas](https://fred.stlouisfed.org/series/CES1021000001). I'm uncertain why this variable has such a strong effect vs the other employment variables.
+
+**AAA** and **BAA.** These are the yields on [AAA](https://fred.stlouisfed.org/series/AAA) and [BAA](https://fred.stlouisfed.org/series/BAA) rated corporate bonds. Both have a strong positive effect on the probability of being in the inflationary state and a strong negative effect on the distressed state. There is probably quite a bit of economics as to why this is. As a leading indicator, falling corporate bond yields may be a sign of under-pricing risk.
+
+**WPSID61.** This is the [producer price index for intermediate materials](https://fred.stlouisfed.org/series/WPSID61), supplies and components. It has a strong positive effect on the deflationary state and a strong negative effect on the inflationary state. This makes sense as rising input prices lower profit margins which can lead to deflationary pressures.
+
+**BUSINVx.** This is the [total business inventories](https://fred.stlouisfed.org/series/BUSINV). It has a strong positive effect on the inflationary state and a strong negative effect on the distressed state. This makes sense as rising inventories relative to sales can be a sign of strong demand which can lead to high profits.
+
+**VIXCLSx.** The [VIX index](https://fred.stlouisfed.org/series/VIXCLS) is a well known indicator of market uncertainty and distress. Unsurprisingly, when the VIX is increasing, there is a lower chance being in the inflationary state.
 
 # Summary
 
 In this article, we have seen how to fit a Gaussian Mixture Model to returns to identify meaningful market regimes. We then extended this model to include covariates which allowed us to have time-varying mixing coefficients. Finally, we applied this model to macro-economic variables to see how they affect the probability of being in each market state.
+
+While the analysis was done in-sample, the results are promising. The model was able to identify economically meaningful states and the macro-economic variables had intuitive effects on the state probabilities.
 
 
 {{% citation
