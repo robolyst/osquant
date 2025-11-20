@@ -686,6 +686,31 @@ model.fit(X=X.values, y=y.values)
 
 ### Check the states
 
+When we first fitted a GMM, we found three economically meaningful states. We found an inflationary state, a deflationary state and a distressed state. We can check if the conditional GMM finds similar states by looking at the state means and volatilities.
+
+The means:
+
+|     |   State 0 |   State 1 |   State 2 |
+|:----|----------:|----------:|----------:|
+| SPY |    -1.58% |   -58.67% |    74.09% |
+| TLT |    -5.82% |   131.24% |   -19.21% |
+| GLD |   -46.68% |    55.27% |    36.56% |
+| GSG |   -44.10% |    -5.99% |    40.53% |
+
+The volatilities:
+
+|     |   State 0 |   State 1 |   State 2 |
+|:----|----------:|----------:|----------:|
+| SPY |      3.20 |      4.38 |      2.36 |
+| TLT |      3.18 |      3.86 |      2.78 |
+| GLD |      2.16 |      4.63 |      3.56 |
+| GSG |      3.84 |      4.93 |      2.50 |
+
+State 2 looks like the inflationary state with strong positive returns for all assets except TLT. State 1 looks like the distressed state with large negative returns for equities, strong returns for the flight to safety assets and the highest levels of volatility. State 0 looks like the deflationary state with negative returns for all assets.
+
+You will notice that the ordering of the states is different to before. This is because the states are identified in a different order each time the model is fitted. This is an indeterminancy. The important thing is that the states retain their economic meaning despite the new dependency on economic variables.
+
+
 ### Analyse AME
 
 # Summary
