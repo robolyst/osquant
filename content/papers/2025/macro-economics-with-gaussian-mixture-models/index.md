@@ -633,11 +633,64 @@ class CondGaussianMixture:
 
 ## Results
 
-1. Fit the model
-2. Check the states make some economic sense
-3. Calculate the AME for each variable and investigate the top 10 most impactful variables
+We now have all the pieces to get prices, devolatise returns, get economic variables, fit a conditional Gaussian mixture model, check the states make economic sense, and calculate the average marginal effects for each variable.
+
+### Fit the model
+
+We start by prepping the dataset for fitting by a model:
+
+```python
+returns = monthly.pct_change().dropna()
+fred_md = pd.read_parquet('data/fred_md.parquet')
+
+# Use these to devolatise the returns
+std = returns.ewm(halflife=6, min_periods=12).std()
+std = std.shift(1)
+
+X = fred_md.copy()
+y = returns / std
+
+# Match dates
+dates = X.dropna().index.intersection(y.dropna().index)
+X = X.loc[dates]
+y = y.loc[dates]
+
+# Standardise the features for
+# fitting by a ML model.
+X = X - X.mean()
+X = X / X.std()
+
+# Make sure we have an intercept
+X['intercept'] = 1.0
+```
+
+And then we fit the model:
+```python
+from condgmm import CondGaussianMixture
+
+model = CondGaussianMixture(
+    random_state=42,  # For reproducibility
+    n_components=3,
+    intercept_index=-1,  # Last column is intercept
+    n_init=40,
+    init_params='random',
+    # Chosen to minimise fit time, smaller
+    # values take longer to fit. Larger
+    # values take less time, but limit
+    # the accuracy of the logistic regression.
+    l2_penalty=0.01,
+)
+
+model.fit(X=X.values, y=y.values)
+```
+
+### Check the states
+
+### Analyse AME
 
 # Summary
+
+In this article, we have seen how to fit a Gaussian Mixture Model to returns to identify meaningful market regimes. We then extended this model to include covariates which allowed us to have time-varying mixing coefficients. Finally, we applied this model to macro-economic variables to see how they affect the probability of being in each market state.
 
 
 {{% citation

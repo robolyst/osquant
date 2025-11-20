@@ -303,8 +303,15 @@ feature {
     }
     .sidebar
     {
+        max-width: $main-width;
         padding-right: 5vw;
         padding-left: 5vw;
+        margin-left: auto;
+        margin-right: auto;
+
+        &.left {
+            margin-top: 4rem;
+        }
     }
 }
 
