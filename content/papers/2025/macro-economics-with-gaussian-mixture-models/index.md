@@ -558,11 +558,78 @@ The FRED-MD dataset contains 124 variables once it's cleaned and it goes back to
 **Consumer sentiment index.** The consumer sentiment index (UMCSENTx) is a measure of consumer confidence by the University of Michigan.
 ![](images/umcsent.svg)
 
-The FRED-MD dataset needs to be lightly cleaned and many of the variables transformed. For example, the CPI index needs to be converted to a growth rate. The dataset includes a transformation code for each variable to help with this. 
+The FRED-MD dataset needs to be lightly cleaned and many of the variables transformed. For example, the CPI index needs to be converted to a growth rate. The dataset includes a transformation code for each variable to help with this which is documented in their paper [^McCracken2015]. The code I used is:
+
+```python
+import pandas as pd
+
+fred = pd.read_csv('2025-10-MD.csv')
+
+# The first row contains transformation codes
+tcodes = fred.loc[0].drop('sasdate')
+
+# Drop the first row and parse dates
+fred = fred.iloc[1:]
+fred['sasdate'] = pd.to_datetime(fred['sasdate'])
+fred = fred.set_index('sasdate')
+
+# This is the last month without missing data
+fred = fred.loc[:'2025-07-01']
+
+# Forward fill missing data
+fred = fred.ffill()
+
+# Two of the series have issues
+# ACOGNO starts late
+# NONBORRES just looks funny
+fred = fred.drop(columns=['ACOGNO', 'NONBORRES']).dropna()
+
+# Apply transformations based on tcodes as specified
+# in the FRED-MD paper.
+for col in fred:
+    match tcodes[col]:
+        case 2:
+            fred[col] = fred[col].diff()
+        case 5 | 6:
+            fred[col] = fred[col].pct_change()
+
+# If there are any remaining NaNs, drop them.
+fred = fred.dropna()
+```
 
 ## Impact of variables
 
-Average marginal effects (AME) are a way to measure the impact of each variable on the state probabilities.
+A multinomial logistic regression model is not very interpretable because the coefficient for state $k$ on variable $x_j$ effects all the other states due to the normalisation. We can still get an idea of the impact of each variable on each state's probability by calculating the average [marginal effects](https://bookdown.org/mike/data_analysis/sec-marginal-effects.html) (AME).
+
+The marginal effect tells us how much the probability of being in state $k$ at time $t$ changes when we change variable $x\_{tj}$ by a small amount. The average marginal effect is just the average of the marginal effects over all samples. We write the "average marginal effect of variable $j$ on state $k$" as:
+$$
+\begin{aligned}
+\text{AME}_{jk}&= \frac{1}{T} \sum_t \frac{\partial p(k|\boldsymbol{x}_t)}{\partial x\_{tj}} \\\
+&= \frac{1}{T} \sum_t \left[ p(k|\boldsymbol{x}_t) \left( \beta\_{kj} - \sum_m^K p(m|\boldsymbol{x}_t) \beta\_{mj} \right)\right] \\
+\end{aligned}
+$$
+Note that this is a function of the prior probabilities and the logistic regression coefficients. The class `CondGaussianMixture` has a method which calculates the AME for us:
+```python
+class CondGaussianMixture:
+    ...
+
+    def ame(self, X: np.ndarray) -> np.ndarray:
+        """
+        Compute average marginal effects for the
+        multinomial logistic regression.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            The conditioning features.
+
+        Returns
+        -------
+        ame : ndarray, shape (n_features, n_states)
+            Average marginal effect of each
+            feature on each state.
+        """
+```
 
 ## Results
 
