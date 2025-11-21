@@ -54,7 +54,7 @@ p(k, \boldsymbol{r}_t) &= p(k) p(\boldsymbol{r}_t | k) \\\
 p(\boldsymbol{z}, \boldsymbol{r}_t) &= \prod_k \left[ p(k) p(\boldsymbol{r}_t | k) \right]^{z_k} \\\
 \end{aligned}
 $$
-The information $\boldsymbol{z}$ and $\boldsymbol{r}_t$ are often called the *full set* because at time $t$ the full set of information is the state and the realised returns.
+The information $\boldsymbol{z}$ and $\boldsymbol{r}_t$ are often called the *full set* because at time $t$ the full set of information is the state and the realized returns.
 
 **Mixture distribution.** The probability that we observe $\boldsymbol{r}_t$ is:
 $$
@@ -125,10 +125,10 @@ p(\boldsymbol{Z}, \boldsymbol{R}) &= \prod_t\prod_k \left[ p(k) p(\boldsymbol{r}
 $$
 
 The EM algorithm proceeds as follows:
-1. **Initialise**: Pick some initial values for the parameters $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
-2. **E-step**: Calculate the expected value of $\boldsymbol{Z}$ (posterior probabilities) given: $\boldsymbol{R}$, $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$ $\forall k$.
-3. **M-step**: Assume $\boldsymbol{Z} = E[\boldsymbol{Z}]$ and maximise the log-likelihood with respect to the parameters $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
-4. **Check**: Calculate the log-likelihood $\mathcal{L}( \boldsymbol{R} | \boldsymbol{\pi}, \boldsymbol{\mu}, \boldsymbol{\Sigma})$ and check for convergence in the log-likelihood. If not converged, return to step 2.
+1. **Initialize**: Choose initial values for $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
+2. **E-step**: Calculate $E[\boldsymbol{Z}]$ (posterior probabilities) given $\boldsymbol{R}$, $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$ for all $k$.
+3. **M-step**: Set $\boldsymbol{Z} = E[\boldsymbol{Z}]$ and maximize the log-likelihood with respect to $\pi_k$, $\boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_k$.
+4. **Check**: Calculate $\mathcal{L}( \boldsymbol{R} | \boldsymbol{\pi}, \boldsymbol{\mu}, \boldsymbol{\Sigma})$ and test for convergence. If not converged, return to step 2.
 
 Initialization involves picking starting posterior probabilities. Once chosen, you can proceed with the M-step. These can be random or derived from K-means. K-means imposes spherical clusters (no correlations), which is inappropriate for financial returns, so we use random initialization.
 
@@ -211,7 +211,7 @@ In practice, GMM mean and covariance match the empirical mean and covariance clo
 
 # Modeling decisions
 
-Before we dig into an example, we need to decide what **time interval** to use for returns, whether or not to **devolatise** and **how many states** to use.
+Before we dig into an example, we need to decide the **time interval** for returns, whether to **devolatilize**, and **how many states** to use.
 
 As we go through these decisions, we'll use real data. Since we want macroeconomic regimes, we select broad market ETFs representing major asset classes:
 - SPY -- *US equities*
@@ -282,19 +282,19 @@ From here on, we devolatilize monthly returns using a 6-month half-life. This hy
 
 ## Number of states
 
-We want each state to represent a meaningful economic regime. Too few states will mix together different regimes (underfitting). Too many states will dillute economic meaning (overfitting).
+We want each state to represent a meaningful economic regime. Too few states mix different regimes (underfitting). Too many states dilute economic meaning (overfitting).
 
 We run a quick (not fully rigorous) out-of-sample experiment to guide the choice.
 
 The experiment:
 1. Split the data into a training set and a test set. Training set is everything before 2022-01-01 and test set is everything after. The test set has about 11% of the data.
 1. Loop over a range for the number of states (1 to 8).
-1. For each number of states, do 100 fits where we fit a GMM to the training set. The GMM does 40 random initialisations and picks the best one.
+1. For each number of states, run 100 fits on the training set. The GMM performs 40 random initializations and picks the best one.
 1. For each fit save the number of states and the test set log-likelihood.
 
 We can fit a Gaussian Mixture Model with the help of scikit-learn's `GaussianMixture` class ([docs](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html)).
 
-Once we have all the results, we can plot the median test set log-likelihood for each number of states. We'll pick the number of states that maximises the median test set log-likelihood.
+Once we have all the results, we plot the median test set log-likelihood for each number of states. We pick the number of states that maximizes the median test set log-likelihood.
 
 Code for the experiment:
 ```python
@@ -306,7 +306,7 @@ from itertools import product
 # Get our monthly returns
 returns = monthly.pct_change()
 
-# Devolatise the returns
+# Devolatilize the returns
 std = returns.ewm(halflife=6, min_periods=12).std()
 std = std.shift(1)
 devoled = (returns / std).dropna()
@@ -353,7 +353,7 @@ results = pd.DataFrame(results)
 Plotting the median test score per state gives us:
 
 {{<figure src="images/number_of_states.svg" title="Test set scores." >}}
-A GMM is fitted to devolatised monthly returns for varying number of states. The median test set log-likelihood is shown for each number of states. The highest median test set log-likelihood is achieved with 3 states.
+A GMM is fitted to devolatilized monthly returns for varying $K$ (number of states). The median test set log-likelihood is shown for each number of states. The highest median test set log-likelihood is achieved with 3 states.
 {{</figure>}}
 
 For the rest of this article, we will use 3 states.
@@ -369,7 +369,7 @@ from sklearn.mixture import GaussianMixture
 
 returns = monthly.pct_change().dropna()
 
-# Devolatise the returns
+# Devolatilize the returns
 std = returns.ewm(halflife=6, min_periods=12).std()
 std = std.shift(1)
 devoled = (returns / std).dropna()
@@ -400,7 +400,7 @@ We can look at the mean vectors ($\boldsymbol{\mu}_k$) with `model.means_`:
 | GLD |    41.24% |   -35.78% |    48.17% |
 | GSG |    35.67% |    -8.04% |   -26.61% |
 
-It is hard to label states from numbers alone, but some intuition emerges. **State 0** looks inflationary: positive returns for hard assets and negative for the cash related asset (TLT). **State 1** looks more deflationary: modest equity returns, weaker gold and commodities. **State 2** appears distressed: large negative equity and commodity returns, large positive bond and gold means (flight-to-safety assets).
+It is hard to label states from numbers alone, but some intuition emerges. **State 0** looks inflationary: positive returns for hard assets and negative for the cash-related asset (TLT). **State 1** looks deflationary: modest equity returns, weaker gold and commodities. **State 2** appears distressed: large negative equity and commodity returns, large positive bond and gold means (flight-to-safety assets).
 
 We can also look at the covariance matrices ($\boldsymbol{\Sigma}_k$) with `model.covariances_`. These are a bit more difficult to visualise, but we can look at the annualised standard deviations (the square root of the diagonal elements multiplied by $\sqrt{12}$):
 
@@ -450,7 +450,7 @@ Finally, state 2:
 
 This is the most interesting state. Here we see the flight-to-safety assets outperform. Combined with higher volatility, this indicates market distress.
 
-The conclusion from this example: a Gaussian mixture model can identify economically meaningful latent market states. The model distinguishes not just up and down markets, but periods of distress. The story so far is that we have an inflationary regime (State 0), a deflationary regime (State 1) and a destressed regime (State 2).
+The conclusion from this example: a Gaussian mixture model can identify economically meaningful latent market states. The model distinguishes not just up and down markets, but periods of distress. The story so far is that we have an inflationary regime (State 0), a deflationary regime (State 1) and a distressed regime (State 2).
 
 However, with fixed mixing coefficients $\pi_k$, interpretation is limited to return behavior. We extend the model to associate states with other variables.
 
@@ -510,7 +510,7 @@ and set to zero. There is no closed form solution for $\boldsymbol{\beta}_k$. We
 Notes on solving for $\boldsymbol{\beta}_k$:
 
 1. Do not regularize the intercept term.
-1. The model has an indeterminacy: shifting all coefficients yields equivalent probabilities. Intuitively, as all the probabilites must sum to 1, then one of the probabilities is given by the remaining. To avoid, fix one state's coefficents to 0. This means we are estimating the other states relative to that state.
+1. The model has an indeterminacy: shifting all coefficients yields equivalent probabilities. Because all probabilities sum to 1, one is implied by the rest. Fix one state's coefficients to 0 and estimate the remaining states relative to it.
 
 ## Code
 
@@ -557,7 +557,7 @@ After cleaning, FRED-MD contains 124 variables back to 1959. Examples include:
 
 The FRED-MD dataset needs to be lightly cleaned and many of the variables transformed. For example, the CPI index needs to be converted to a growth rate. The dataset includes a transformation code for each variable as a guide. These codes are documented in their paper [^McCracken2015].
 
-The cleaning and preperation process I used is:
+The cleaning and preparation process I used is:
 
 ```python
 import pandas as pd
@@ -700,7 +700,7 @@ The volatilities:
 | GLD |      2.16 |      4.63 |      3.56 |
 | GSG |      3.84 |      4.93 |      2.50 |
 
-**State 2** looks like the inflationary state with strong positive returns for all assets except the cash related asset TLT. **State 1** looks like the distressed state with large negative returns for equities, strong returns for the flight to safety assets and the highest levels of volatility. **State 0** looks like the deflationary state with negative returns for all assets.
+**State 2** looks like the inflationary state with strong positive returns for all assets except the cash-related asset TLT. **State 1** looks like the distressed state with large negative returns for equities, strong returns for flight-to-safety assets, and the highest levels of volatility. **State 0** looks like the deflationary state with negative returns for all assets.
 
 State ordering differs from before because identification order varies per fit (an indeterminacy). The important thing: economic meaning persists despite conditioning.
 
