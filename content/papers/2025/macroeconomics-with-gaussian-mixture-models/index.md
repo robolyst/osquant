@@ -745,7 +745,7 @@ which gives the following results:
 
 **S&P 500.** The [S&P 500 index](https://fred.stlouisfed.org/series/SP500) level has a strong positive effect on the probability of being in the inflationary state and a strong negative effect on the probability of being in the distressed state. This makes sense as a rising stock market is part of the definition of our inflationary state.
 
-**S&P div yield.** Higher S&P 500 dividend yield raises the probability of being in the inflationary state and lowers the probability of distress. This is intuitive as, all else being equal, as prices rice (inflationary) the dividend yield falls. Conversely, in deflationary or distressed states, prices fall and dividend yields rise.
+**S&P div yield.** Higher S&P 500 dividend yield raises the probability of being in the inflationary state and lowers the probability of distress. This is intuitive as, all else being equal, as prices rise (inflationary) the dividend yield falls. Conversely, in deflationary or distressed states, prices fall and dividend yields rise.
 
 **OILPRICEx.** The [oil price](https://fred.stlouisfed.org/series/OILPRICE) has a strong positive effect on the probability of being in the inflationary state and a strong negative effect on the deflationary state.
 
