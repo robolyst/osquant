@@ -223,7 +223,7 @@ As we go through these decisions, we'll use real data. Since we want macroeconom
 
 Macroeconomic variables are usually reported monthly or quarterly. Quarterly data would reduce sample size substantially, so we use monthly intervals for variables and returns.
 
-The ETF prices do not extend far back. We splice index data for SPY, GLD, and GSG, and approximate long-term bond returns for TLT using yields before inception, yielding prices back to 1990 (details in the appendix).
+The ETF prices do not extend far back. We splice index data for SPY, GLD, and GSG, and approximate long-term bond returns for TLT using yields before inception, yielding prices back to 1990 (details in the [appendix](#appendix)).
 
 The dataset of prices is available [here](broad_etf_prices.csv).
 
