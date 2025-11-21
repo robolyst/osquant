@@ -2,7 +2,7 @@
 title: "Macroeconomics with Gaussian Mixture Models"
 summary: "Returns can be viewed as a product of an underlying market regime. This article models those regimes and shows how to extend the model with macroeconomic variables to link regimes to observable economic indicators."
 
-date: "2025-11-18"
+date: "2025-11-20"
 type: paper
 mathjax: true
 authors:
