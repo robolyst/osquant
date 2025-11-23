@@ -465,7 +465,7 @@ The next thing we want to do is estimate the state at some time $t$. Specificall
 
 ## Incorporating covariates
 
-Suppose we have additional information known at time $t$ before $\boldsymbol{r}_t$ is realized. Denote it as $\boldsymbol{x}_t$. Rather than modelling $p(k), we model $p(k | \boldsymbol{x}_t)$, yielding time-varying mixing coefficients.
+Suppose we have additional information known at time $t$ before $\boldsymbol{r}_t$ is realized. Denote it as $\boldsymbol{x}_t$. Rather than modelling $p(k)$, we model $p(k | \boldsymbol{x}_t)$, yielding time-varying mixing coefficients.
 
 We're going to model $p(k | \boldsymbol{x}_t)$ as a [multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression) [^Gruen2008]:
 $$
