@@ -30,9 +30,19 @@ In this article, we're going to explore statistical factor modelling. We will ad
 
 # Factor models
 
+A factor model is formulated as
 $$
 \boldsymbol{r}_t =  \boldsymbol{\alpha} + \boldsymbol{\beta} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
 $$
+where
+* $\boldsymbol{r}_t$ is a random vector of returns for $N$ assets at time $t$. Generally, the risk free rate is subtracted, making these excess returns.
+* $\boldsymbol{\alpha}$ is the *alpha* vector. This is an $N \times 1$ vector of constants that represent the average return of each asset not explained by the factors.
+* $\boldsymbol{\beta}$ is the factor loading matrix. This is an $N \times K$ matrix where each row represents an asset and each column represents a factor. The entries represent the sensitivity of each asset to each factor.
+* $\boldsymbol{f}_t$ is a $K \times 1$ random vector of factor returns.
+* $\boldsymbol{\epsilon}_t$ is a random vector of *idiosyncratic* returns. This is an $N \times 1$ vector representing the portion of each asset's return not explained by the factors.
+
+
+outline:
 
 * Restate the factor model equation. I could probably make the intro equation simpler (drop the alpha term) and a full explainer here.
 * Explain each term
