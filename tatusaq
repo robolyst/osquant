@@ -1,0 +1,491 @@
+[33m0250f8b[m[33m ([m[1;36mHEAD -> [m[1;32mpaper/statistical-factor-modelling[m[33m, [m[1;31morigin/paper/statistical-factor-modelling[m[33m)[m WIP
+[33m60c92cd[m WIP
+[33mb1304f5[m WIP
+[33mff4e90e[m WIP
+[33mb8486c5[m WIP
+[33mebc814c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Fix some list styling
+[33m1e6eae7[m Missing $
+[33me51a3a9[m Fix publication date
+[33m16b5743[m Add link to appendix
+[33mcc423f6[m Another proof
+[33m94d5e1a[m Fix spelling
+[33m8b5fc7f[m Gaussian mixture models (#27)
+[33m1ff3641[m Feat/paper-3-column-layout (#26)
+[33m6c1f23b[m Remove month folder from 2025
+[33mf385d1c[m Remove month folder from 2023
+[33mbe5ab19[m Remove month folder from 2024
+[33m1ee0759[m Remove month folder from 2022
+[33mf73d4fe[m Move the remaining articles
+[33m5989880[m Fix internal links
+[33ma25f4c6[m Move 2022
+[33m04f09ba[m Fix internal links
+[33m0c90c3a[m Move all of 2023
+[33m81560b6[m Move  2024 papers to YEAR/MONTH file system
+[33mce54955[m Move the remainder of 2025 papers to YEAR/MONTH file system
+[33mce488b7[m Move dataframe-rec-tests-with-recx to YEAR/MONTH file system
+[33mb0817dc[m Move conditional value at risk article into YEAR/MONTH folder structure
+[33med42f3a[m Update Adrian's profile
+[33m7c4d74c[m Add a share block
+[33m62d28b8[m Add blurb
+[33m2e9c290[m Should specify the whole tag
+[33m74a69a2[m Missing character
+[33mde040d7[m Add the feature blocks to the visual style guide
+[33m347eb29[m Fix footer bg color
+[33me87d318[m Pull out setup blocks
+[33ma812b46[m Rejig layout files
+[33mece7047[m Add a feature
+[33mb787e6d[m Add software to footer (#25)
+[33m3e2b2d3[m Flesh out footer (#24)
+[33m899ffd5[m Correct git ignore
+[33mdb4d4e6[m Paper/conditional value at risk (#23)
+[33me85974d[m Paper/dataframe rec tests with recx (#22)
+[33m5b1c50f[m Paper/python tooling in 2025 (#21)
+[33m9a6273c[m Only show call to action if twitter handler exists
+[33mcb1a2f9[m Fixes
+[33m510de2f[m Paper/a quants guide to covariance matrix estimation (#20)
+[33mcb282e6[m Add some feature images
+[33m7127e17[m Add a hugo command
+[33ma1d3616[m Version and style update
+[33m6b15495[m Update about page
+[33mf10d2b2[m Put splash back
+[33m4dbc612[m Fiddle with sizing of splash image
+[33m1ffe478[m Make splash better on mobile
+[33m48e6006[m Clean up some fonts
+[33m4e36114[m Add numbered points to list
+[33m76de389[m Math rendering fixes
+[33m342eb32[m Hide the contribute page for now
+[33m50db082[m Fix some spelling
+[33mbd0bac6[m Fix spell checking
+[33mdfd08b4[m Fix typo
+[33m68661c7[m Disable linter ingithub
+[33m31e3d70[m Paper/modelling the yield curve of us government treasuries (#19)
+[33m158154c[m Update the dev container
+[33mc6707f6[m Remove about page for now
+[33m0ee1fa3[m Make sure it only impacts the front page
+[33m63fa819[m Fix up the index splash height
+[33m1e25689[m Update the default image
+[33m7ca2b7c[m Paper/replicating pandas ewm var (#18)
+[33mf0e3e02[m Remove blank line
+[33m53d065f[m Remove hack to hide unwanted cell
+[33mb7e4c5b[m Update styling around gradient background nav
+[33m78c21de[m Fix some copy on the contribute page
+[33mdad738a[m Handle missing feature image
+[33m60122d1[m Hover effect for pre-title
+[33mf70a558[m Change the generic blurb to description
+[33mcfcd7b2[m Add a contribute page
+[33m5c0d984[m Styling on the about/generic template
+[33m95b2b7c[m Update my author blurb
+[33m2a75886[m Style update (#17)
+[33m8e4bea3[m fix references
+[33m874db7c[m Upgrade quarto to 1.5.3
+[33m7d49263[m Change border radius to 5px
+[33mc985beb[m Put sections back into the main nav
+[33med61d38[m Fix typos
+[33mdf760bc[m Update quarto
+[33m4c21362[m Fix up self.P
+[33m0838937[m Rewrite article with OJS (#16)
+[33m3813a96[m Fix missing reference
+[33m0f5b394[m Switch fbm to mathjax
+[33m9bbf78a[m Update quarto to latest version
+[33m2993163[m Add quarto version env
+[33m41fe31c[m Split up preview command
+[33m5189415[m Get style checker ci passing (#15)
+[33m103cb74[m Add style checker workflow (#14)
+[33m9135d7f[m Fix linting issues with gp paper
+[33m6f6a458[m Shorten line length
+[33mdd229e4[m fix linting with square root of cov
+[33m2bcf4db[m Fix linting with recursive least squares
+[33m7c9d997[m Add alt to invest regularly
+[33mb14c946[m Fix linting problems with black scholes
+[33mdf8c82f[m Fix missing codeblock name
+[33mea85579[m LInting in fraction brownian motion
+[33m9b518b2[m Linting in black scholes
+[33m39bcb13[m Linting in limit order book
+[33mb0ca2db[m Lint about page
+[33mee4fffa[m Add format command
+[33mff7a067[m Disable vale
+[33m57303da[m Find latest working version of quarto
+[33mbb1cd9b[m About page refinements
+[33ma6abd5c[m Add link to readme
+[33ma4c9433[m Create about page (#13)
+[33m282cfcc[m Fix errors in gaussian paper
+[33ma59e6bf[m Update the development section in readme
+[33m62e04c1[m Add feature to readme
+[33m967c050[m Remove top level static folder
+[33m840f82f[m Update visual style guide
+[33m7980184[m Update paper bundle
+[33m1902302[m Fix citing styling
+[33m1079ec9[m Add a check command
+[33m4c30e57[m Update quarto render
+[33m9fd5003[m Move dockerfile into devcontainer
+[33m5ed9166[m Setup quarto (#12)
+[33mfa1edcc[m Add spectral density writeup
+[33m71dbf2d[m Remove draft status
+[33m022f09f[m typo
+[33m4d069d5[m Fix publicate date
+[33m4b04855[m Merge pull request #11 from robolyst/draft-imbalance
+[33m08c893f[m[33m ([m[1;31morigin/draft-imbalance[m[33m)[m Add feature image
+[33m42e20c4[m vale
+[33m50cf868[m Remove basics section
+[33mbc80db4[m udpate
+[33mf92a321[m Updates
+[33mc0c9233[m WIP
+[33ma952a8e[m Update paper archetype
+[33me1f375b[m Merge pull request #10 from robolyst/create-interview-question-section
+[33m121b976[m[33m ([m[1;31morigin/create-interview-question-section[m[33m)[m Remove scratch variables
+[33ma73d7b8[m Merge pull request #9 from robolyst/restyle-frontpage
+[33m5a72789[m[33m ([m[1;31morigin/restyle-frontpage[m[33m)[m put images back into static
+[33m2c40169[m typo
+[33m31d1b4c[m Restyle
+[33mf9a8b9e[m Add acknowledgements section to articles
+[33m7525c02[m Remove space from bibtex
+[33m0a17326[m Some css fixes
+[33m3d96563[m Add Acknowledgements, Corrections and Citations to backmatter
+[33m329424e[m Style backmatter
+[33m6f01bc7[m Add wrapper around main matter
+[33meebc94f[m Put light background colour into css variable
+[33mccd28b9[m Split out back matter from main content
+[33m651a691[m Merge pull request #8 from robolyst/intro-black-scholes
+[33m67860f8[m[33m ([m[1;31morigin/intro-black-scholes[m[33m)[m Update publication date
+[33me446e64[m Add feature image
+[33m93c24ab[m Remove 'in fact'
+[33md9b44b5[m Fixes
+[33m3013f6b[m Fixes
+[33m72a9749[m Add implied vol details
+[33m5966052[m Add call and put diagrams
+[33mf30be32[m Vale linting
+[33md02fad7[m Finish draft
+[33md5bfe73[m Fix acknowledgements
+[33m756d4c1[m Updates
+[33m8120f10[m edits
+[33mc50c412[m edits
+[33maf252d1[m Updates
+[33m876d4c6[m Add in implied volatility
+[33m1f46bc5[m Learn about greeks
+[33m26e7b55[m Handle dividends
+[33mbec6fde[m Add note
+[33m7067168[m put options
+[33mc39d72d[m initial
+[33m249ecec[m Fix threshold
+[33m0bcbbd5[m Fix publication date
+[33m08de8d5[m Merge pull request #7 from robolyst/fractional-brownian-motion
+[33m05aa39f[m[33m ([m[1;31morigin/fractional-brownian-motion[m[33m)[m Fixes
+[33m1ea2e43[m Draft
+[33m65af20d[m initial
+[33m43f24f4[m Fix context caching
+[33mc8f656d[m Merge pull request #6 from robolyst/square-root-cov-matrix
+[33m4a7f5c4[m[33m ([m[1;31morigin/square-root-cov-matrix[m[33m)[m Fix value problem
+[33m4c7a894[m Auto linting
+[33m7a8c662[m proof
+[33mf025157[m Remove feature from article metadata
+[33ma16a74c[m Initial
+[33m6004ddd[m Add images to papers
+[33m76597bc[m Change font size
+[33m16ee003[m Add twitter callout
+[33m7296fc9[m Merge pull request #5 from robolyst/recursive-least-squares
+[33m34c8eda[m[33m ([m[1;31morigin/recursive-least-squares[m[33m)[m Some fixes
+[33m6a8d2e9[m Finish
+[33m45529e9[m everything but l1 norm
+[33m19dd2e0[m Initial
+[33mf823cdf[m Linting
+[33m06c66d6[m Don't interfere with URLs
+[33m6c96c3c[m Add Telegraf to vocab
+[33m352cab8[m Rewrite monitoring article
+[33ma5caeed[m Add RSS header
+[33ma18df56[m Update image and date
+[33m73fb73c[m Add RSS note to readme
+[33mbd520fd[m Merge pull request #1 from robolyst/draft/mean-reversion-in-government-bonds
+[33m157e215[m[33m ([m[1;31morigin/draft/mean-reversion-in-government-bonds[m[33m)[m Create feature image
+[33m85813ea[m Use static notebook
+[33mb7f38b5[m Style fixes
+[33meb01460[m Auto linting
+[33m1ae56b7[m Finish writing
+[33mc5f41e2[m nearly complete write up
+[33m7f0b54d[m Move parameter section up
+[33mcb58c53[m Create feature from interest rate model
+[33mb1c0728[m Write up interest rate model section
+[33m8536443[m Add introduction
+[33m9bf5244[m Update subtext
+[33m2d8587b[m Remove guassian comoments
+[33mb3623fb[m WIP
+[33m5862e58[m WIP
+[33m6bdf676[m Add etf model
+[33m7035805[m Work on moments
+[33mfa01bbf[m Revert commit
+[33m28923b3[m config
+[33m3842f7c[m config
+[33me187699[m bump
+[33m9d3266e[m bump
+[33mb10ead5[m blank line
+[33mab900c3[m Finish taylor expansion
+[33m45e3793[m WIP
+[33m2f1c912[m Rename title
+[33m37f4624[m Remove unnecessary sentance
+[33m2ff5f23[m WIP
+[33mfc35a0c[m WIP
+[33meb4df77[m WIP
+[33m7709237[m Play with observable
+[33m490c857[m WIP
+[33m35a5e0a[m fix typo
+[33mf140bcc[m WIP
+[33mf02f55e[m Update table style
+[33mc27adec[m Add extra reference
+[33m821044a[m Merge pull request #4 from robolyst/draft/calculating-the-mean-and-variance-of-bond-returns
+[33mee4a0bb[m[33m ([m[1;31morigin/draft/calculating-the-mean-and-variance-of-bond-returns[m[33m)[m Update publication date
+[33m4ace0f8[m Load observable
+[33m66c7502[m Linting
+[33m713a5b6[m draft
+[33m4f3de77[m Add a feature to the Guassian distribution moments paper
+[33mf5bdae5[m Merge pull request #3 from robolyst/draft/moments-of-the-gaussian-distribution
+[33mc18ddaa[m[33m ([m[1;31morigin/draft/moments-of-the-gaussian-distribution[m[33m)[m Remove feature on front page
+[33m799a3dc[m Vale fixes
+[33m94ac90a[m Auto linting
+[33m274e7ff[m Some cleaning
+[33m8dd9bd6[m First draft
+[33m13e09ad[m bump hugo version
+[33me99bf7a[m Remove build envs
+[33m020b70b[m Extra logging
+[33mb513e64[m hotfix
+[33m4dd9b8c[m Merge pull request #2 from robolyst/dev-builds
+[33m6f4052a[m[33m ([m[1;31morigin/dev-builds[m[33m)[m Add build command
+[33mfe53af6[m Remove wrapping function around plotly shortcode
+[33m650b552[m Add a feature image
+[33m82a2a7c[m Update bond article
+[33m08efc8c[m Remove second feature and feature border
+[33m003601c[m bump
+[33m5504000[m Add link to weak sense stationarity on latest article
+[33m02edd49[m Rename timeseries to time series
+[33m8539086[m Add a hero image to latest article
+[33m1e4861d[m Delete tags
+[33m23cd584[m Remove 'The'
+[33me906e6e[m Typo
+[33m38d6fa8[m Add halflife paper
+[33m7e55688[m Allow using js files for plotly graphs
+[33mba2fd27[m Refactor plotly code
+[33mbec29e7[m Remove link to github
+[33ma1fe6ac[m Fix link
+[33mf1358e8[m Rewrite the subheading
+[33m242bc22[m Add feature to homepage
+[33m90cde5b[m Update feature image
+[33m22be89a[m Add feature image
+[33m92b51a4[m Remove twitter meta that are included in open graph
+[33ma78258f[m Back to large
+[33m85bdd68[m Try full summary
+[33ma6b334d[m Update to large image
+[33m55a13ee[m Add twitter cards
+[33m98f15be[m Add a favicon
+[33m227774a[m Make tables mobile friendly
+[33m13eb237[m Remove collapsible appendix
+[33m1b08f61[m Take out of draft mode
+[33m6955f5a[m[33m ([m[1;31morigin/draft/why-returns-are-not-gaussian[m[33m)[m Fix mobile margins
+[33m41962dc[m Fix anchor
+[33ma062596[m remove incorrect pages from citation
+[33maa1c492[m Fix footer padding
+[33ma7adb47[m Fix headings around appendicies
+[33m3274d93[m Add a scroll to oversized equations
+[33m6622b85[m Add expanding appendix
+[33m03b33c0[m Tighten margin around the tables
+[33m29cde53[m Update date
+[33mf3abfdf[m Style fixes
+[33m70a05a8[m SOme style fixes
+[33mfb69d9e[m Tidy up article
+[33m7292b62[m WIP
+[33m6aea472[m WIP
+[33m088eb4f[m WIP
+[33m1c3f3e9[m Move derivation to appendix
+[33med0db36[m derive kurtosis
+[33m981151b[m Dump most of the maths onto the page
+[33mb82308d[m Add moment tables
+[33m3a7a02d[m WIP
+[33m9799ab8[m Make codeblocks rounded
+[33mca0e94e[m Fix margins of math blocks
+[33mcd3024f[m Fix style of code blocks
+[33mf9b0e6d[m Tighten font sizes
+[33m4368b2f[m Change to .com
+[33mb08bd2f[m linting
+[33m9f61edb[m Change opacity on the nav divider
+[33ma0087ed[m Add a dimmed background to the header of papers
+[33mc21d0bc[m Remove id='section'
+[33mdaa60e9[m Remove content container from 404.html and index.html
+[33m3c45c07[m Remove content container from author.html
+[33m2650746[m Remove content container from list.html
+[33mfce3617[m Remove content container from single.html
+[33m9e17fc9[m Remove css for #content
+[33m561cb13[m Move page_header out of the content container
+[33m5b1a38f[m Move nav into the 'main' block in hugo
+[33m9775273[m Add social icons to author profile
+[33m44cd563[m Add a background to an author's photo
+[33m989917d[m Add todo tag
+[33mb656628[m Add support for mathjax
+[33mcadc7b9[m Add width and heigh param to plotly shortcode
+[33mf91447c[m Remove the github logo from the date link
+[33med4fade[m Add menu weights
+[33mf3c3ea5[m Use github icon for github link
+[33m90b16f4[m Put category link above article title
+[33me0843b9[m Add config option to plotly shortcode
+[33m599b62a[m Move plotly setup into a partial
+[33m0caaad4[m Rename csvplotly to plotly
+[33mb313920[m Fix footnote styles
+[33maefaae1[m Fixes to new command and lists
+[33mc1e9d3d[m Create new command to create new papers
+[33mda86e78[m Clear csvplotly from linter
+[33mef05916[m Add plotly for csvs
+[33m254f8d5[m Edit summary
+[33m46f289b[m linting
+[33m8c84d79[m Add content to author pages
+[33md1eef99[m Use author first name in minis
+[33ma6ed82c[m style expandable menu
+[33m60830d8[m expand nav border to full screen
+[33ma64ff37[m Move nav partial back into baseof.html
+[33mbca4b9d[m Remove splash
+[33m24cc0f3[m Add basic main menu
+[33me05ebb1[m Use 'and' instead of '&'
+[33m8b9868c[m Upgrade to bootstrap 5
+[33mf506fb0[m Remove unused css and javascript plugins
+[33mc72a44b[m Add some styling around authors and categories on page mini
+[33ma693c74[m Remove #section and rename to page mini
+[33me7bbda8[m Switch tags over to categories
+[33m8dc7015[m Update article
+[33md41650f[m Spell fix
+[33m955c2e3[m add link
+[33m3633a79[m Compact instructions
+[33mff869af[m finish article
+[33m1831201[m Automatic linting
+[33mbba6f45[m Write draft
+[33m3d19bfa[m WIP
+[33m0cbdc1e[m Add vale to check and ensure pass
+[33mf07977c[m Fix kernal paper
+[33m8d5f9d8[m Fix kernel regression
+[33ma0277bc[m Fix measuring performance paper
+[33m18dbb93[m Fix bond etfs paper
+[33m2a2beed[m Fix invest regularly paper
+[33m35e6a82[m Ignore citation short codes from vale
+[33m1c13d43[m Fix errors in dockerising paper
+[33m692c8b3[m Fix errors in 100 years of bond prices
+[33m7d40280[m Update Google style Units to ignore 1900s
+[33mddf7d86[m Update Vale to ignore math blocks
+[33mddf6cce[m Update basic Vale setup
+[33m5ec105e[m Fix Vale errors in dockerising paper
+[33m2a1229d[m Add Vale
+[33m032629b[m Add commented out research on bond etfs
+[33m40f4c4c[m Add commented out code to play with katex spacings
+[33m96469ed[m Make sure invoke command images don't hang around
+[33ma43922e[m Fix casing of rest -> REST
+[33m9de2550[m Trailing
+[33mfd59d08[m Remove trailing
+[33m17f55db[m Trailing
+[33m6316f22[m Reformat linting config
+[33mbb9e59b[m Lint bandwidth paper
+[33md8403a4[m Some more linting
+[33m87c98a1[m Some basic linting
+[33m1a56778[m Add linting command
+[33ma428f90[m Lint dockerising paper
+[33m68371c1[m Lint 100 years paper
+[33m1760c72[m lint invest regularly paper
+[33m3be6a0b[m Lint measuring performance
+[33m3063309[m Lint measuring performance
+[33md2b10fb[m Lint bond etf paper
+[33m7d5a3f3[m Lint visual style guide
+[33m7b60f62[m Ignore obsidian config files
+[33m40849d4[m Remove markup from frontmatter
+[33m7a8c4ba[m Move feature image into static folder
+[33macbe67a[m Add a feature image for the whole site
+[33m8d4f9b3[m Indenting
+[33m0a949a0[m Replace feature image
+[33m8140a76[m Rename blurb param to summary
+[33m78a608b[m Add open graph tags
+[33m012672b[m Fix broken links
+[33m5044557[m Add default support for meta tags
+[33m1579b2e[m Add h1 to list pages
+[33mefcd3b0[m Add alt text to dockerizing paper
+[33mda90e6e[m Add alt text to 100 years of bond prices
+[33m2c6064b[m Add alt text to investing regularly
+[33m2c9542c[m Add alt text to measuring performance article
+[33m69300dd[m Add alt text to images in understanding bond etfs
+[33mf577637[m Add nofollow to links that return incorrect 404
+[33m800876d[m Add lang tag
+[33m388799c[m Update ibportal tldr
+[33md7707e8[m disable section and taxonomy pages
+[33mfcf7c71[m Rewrite paragraphs
+[33m6ebfad7[m Add non negative assumption
+[33m3072de1[m Update bond paper
+[33md958a43[m Updates to understanding bond etfs
+[33m6161910[m Update visual style guide
+[33m1cded05[m Update publication date
+[33m63c7a36[m Update archetype
+[33m2a328ed[m Take 100 year bond history out of draft
+[33mbefc61d[m Finish draft of 100 years of bonds paper
+[33mb1b4175[m Update to 100 years of bonds
+[33m889e103[m Add draft for history paper
+[33mb9f28e4[m Rename bond return paper
+[33m8784c2a[m Add understanding bond prices paper
+[33m83a8a4a[m Tidy math font sizing
+[33maff24f0[m Move github link into site config
+[33mb22f125[m Make multiple tags look a little nicer
+[33m49405ba[m Add gtag
+[33m1bbe299[m Add https to base url
+[33m5f6cc89[m Fix base url
+[33m2cbc8f2[m Add sitemap
+[33m446fe13[m Slightly better 404 page
+[33mb54369b[m Small fixes
+[33m3c8bde9[m Use - instead of _ in filenames
+[33m116fdde[m Clean up author pages
+[33m3458449[m Add author pages
+[33m379ed03[m Set katex false by default
+[33m4839e75[m Add a link back to github
+[33m1e099f1[m Add tags to paper
+[33m9a44e65[m Add list page
+[33mf4942dc[m Add tags to each paper
+[33m37aa629[m Rename article to paper
+[33m1b08917[m Add paper archetype
+[33m95c60b2[m Add author guide
+[33mcd08cd9[m Convert toml to yaml
+[33m7013509[m Create papers
+[33m980c307[m Add author above mini
+[33m0c93a37[m Styling of the mini
+[33m7314662[m Tell readers that it is a docker file
+[33maaf4f55[m Remove yellow from header
+[33m5d18391[m Change page margins
+[33m0d4e75e[m Create dockerising article
+[33m790fbab[m Remove stray \newline
+[33m1d13ff7[m Fix broken citation
+[33m115e790[m Rewrite blurb and add a publication notice
+[33me8538b3[m Fix references
+[33m935fde4[m Fix equation label
+[33mba24cbc[m Remove equation numbers
+[33mff0f312[m Clean up some of the images
+[33me90407b[m Add images and appendix
+[33m34806f5[m Format main text
+[33mcc67e9c[m Some light editing of article and take it out of draft
+[33m7ebb361[m Fix up some of the images
+[33m0830538[m Figure caption and size formatting
+[33m883a9b5[m Put link on citation title
+[33ma1ec4c3[m Add basic link
+[33m154d0e2[m Rename refjournal to citation
+[33m7a7f4b2[m Switch proceedings over to same style as journal
+[33m075fffe[m Format journals
+[33me084020[m Finish first pass of article
+[33m35a5d19[m Delete unused PDFs
+[33mcbbbc52[m Clean up appendix 1
+[33ma7058e3[m More clean up
+[33mb3ca69d[m Clean up outline
+[33m9c51d26[m Cleaning up old paper
+[33m8f30868[m Introduce first paper - WIP
+[33m0dafdb2[m Footnote margins
+[33mcb03c78[m Fix article meta margins on phones
+[33me75139d[m Clean up author and remove weird padding
+[33m8b642cd[m Take articles out of draft
+[33m6b47c44[m fix margins
+[33mf49bfde[m Add invest regularly article
+[33maa66255[m Fix errors in article
+[33m95f04e1[m Style article meta
+[33m54339c4[m Make paths relative and remove adrian.html
+[33m663fb56[m Change font
+[33md61bfa5[m Add foot notes to style guide and reenable the footer
+[33mbf06fe1[m Deleted unused files
+[33m702e5c5[m Fix author section
+[33m053138a[m Splash
+[33md678027[m Upgrades
+[33m296914c[m Chagne site title
+[33me53f05e[m Add example abstract
+[33md5eb90c[m First commit
