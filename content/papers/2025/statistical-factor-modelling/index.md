@@ -74,7 +74,7 @@ I said earlier that factor models allow us to explain returns. Why this is usefu
 
 # Data
 
-We're going to use real data to illustrate statistical factor modelling. To keep things simple, we're going to use a selection of ETFs.
+We're going to use real data to illustrate the modelling in this article. To keep things simple, we're going to use a selection of ETFs.
 
 Choosing ETFs means we can focus on only a small number of assets but still capture a wide selection of the market. But more importantly, as ETFs tend to be mechanically constructed to track an index, we can extend their historical data backwards by using either the index returns or the returns of related assets before the ETF was created.
 
@@ -124,14 +124,21 @@ returns = pd.read_csv('returns.csv', index_col=0, parse_dates=True)
 
 # Statistical factors
 
-Now that we have a long history of returns, we can build a statistical factor model. For this section, we are going to work in-sample. There are unique challenges when working out-of-sample that distract from the core ideas of statistical factor modelling. We will address these challenges later.
+Now that we have a long history of returns, we can build a statistical factor model. For this section, we are going to work in-sample. There are unique challenges when working out-of-sample that distract from the core modelling ideas. We will address these challenges later.
 
 ## PCA
 
-1. How PCA works: gives us the loadings and the factors under two constraints:
-    1. Factors are uncorrelated
-    2. Factors explain maximum variance
-1. Issues with interpretation
+Principle component analysis [(PCA) is the workhorse](https://www.google.com/search?q=%22PCA+is+the+workhorse%22) of statistical factor modelling. It is robust and deeply understood. Many before me have written excellent explanations of PCA, see for example [this blog post](https://gregorygundersen.com/blog/2022/09/17/pca/). Here, will go through the idea and the theory behind PCA as it relates to factor modelling.
+
+* A short paragraph on what PCA is doing.
+* A visualisation of PCA in 2D. Make something of multiple panels in a similar way to quantamagazine.
+* Run through the mathematics of PCA.
+* Point out explicitly that PCA is just a rotation of the data. We're able to rotate the data to a new basis with certain properties. This is very powerful and will be a recurring idea in factor modelling.
+* Show the factor model found with PCA. That is, how do we get the factor loadings from PCA, and show that r = LF (a=0, e=0).
+* Run PCA on the ETF returns. Do all the code ourselves, do not use sklearn. This ensure no centering and drives home what we're doing.
+* Show that the correlation matrix of the factors is the identity matrix.
+* Convert the factor loadings to weights that we can use to interpret the factors.
+* Show one of the factors and point out that it's virtually impossible to interpret.
 
 ## Whitening
 
