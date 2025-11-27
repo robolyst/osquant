@@ -1,0 +1,5 @@
+# Appendix
+
+## Synthetic historical returns
+
+...
