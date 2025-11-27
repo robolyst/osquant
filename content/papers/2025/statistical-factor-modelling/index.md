@@ -22,7 +22,7 @@ The idea of a factor model is that every stream of returns can be explained by a
 
 Not only does this model allow us to explain returns, we can compare the returns of different assets in a meaningful way. For example, we could break down the returns of Apple and Orange and see how much of their returns are explained by the same factors.
 
-There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$, and want to estimate the loadings $\boldsymbol{\beta}$. This is *time series regression*. (2) You know the loadings and you want to estimate the factors. This is *cross-sectional regression*. (3) You don't know the factors or loadings and you want to estimate both. This is known as *statical factor modelling*.
+There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$, and want to estimate the loadings $\boldsymbol{\beta}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is as *statical factor model* [^Conner2007].
 
 The literature on these approaches is vast, but a fantastic overview is given in the paper [Factor Models, Machine Learning, and Asset Pricing](https://www.annualreviews.org/content/journals/10.1146/annurev-financial-101521-104735) [^Giglio2022].
 
@@ -30,10 +30,13 @@ In this article, we're going to explore statistical factor modelling. We will ad
 
 # Factor models
 
+*For a deep dive into factor models, the best resource on the market is [The Elements of Quantitative Investing](https://www.wiley.com/en-us/The+Elements+of+Quantitative+Investing-p-9781394265466) [^Paleologo2025]. Here, we'll lightly go over everything that will be useful for this article.*
+
 A factor model is formulated as
 $$
-\boldsymbol{r}_t =  \boldsymbol{\alpha} + \boldsymbol{\beta} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
+\boldsymbol{r}_t = \boldsymbol{\alpha} + \boldsymbol{\beta} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
 $$
+
 where
 * $\boldsymbol{r}_t$ is a random vector of returns for $N$ assets at time $t$. Generally, the risk free rate is subtracted, making these excess returns.
 * $\boldsymbol{\alpha}$ is the *alpha* vector. This is an $N \times 1$ vector of constants that represent the average return of each asset not explained by the factors.
@@ -41,18 +44,19 @@ where
 * $\boldsymbol{f}_t$ is a $K \times 1$ random vector of factor returns.
 * $\boldsymbol{\epsilon}_t$ is a random vector of *idiosyncratic* returns. This is an $N \times 1$ vector representing the portion of each asset's return not explained by the factors.
 
+The alpha vector $\boldsymbol{\alpha}$ is generally assumed to be $0$. If it is not, then we have an arbitrage opportunity. That is, we can find portfolio weights $\boldsymbol{w}$ such that $\boldsymbol{w}^\top \boldsymbol{\alpha} > 0$ and $\boldsymbol{w}^\top \boldsymbol{\beta} \boldsymbol{f}_t = 0$, meaning we can earn positive returns while having no exposure to the factors. In practice, a model that predicts asset returns is predicting this vector for time $t$, the elusive "alpha" that traders talk about.
 
-outline:
+The ideal factor returns have a covariance matrix that is the identity matrix, i.e. $\boldsymbol{\Sigma}_f = \boldsymbol{I}$. The immediate implication of this is that the covariance of $\boldsymbol{r}_t$ is
+$$
+\boldsymbol{\Sigma}_r = \boldsymbol{\beta} \boldsymbol{\Sigma}\_f \boldsymbol{\beta}^\top + \boldsymbol{\Sigma}\_\epsilon = \boldsymbol{\beta} \boldsymbol{\beta}^\top + \boldsymbol{\Sigma}\_\epsilon
+$$
+This condition turns out to be very easy to enforce as we will see later.
 
-* Restate the factor model equation. I could probably make the intro equation simpler (drop the alpha term) and a full explainer here.
-* Explain each term
-* Talk about the assumptions we make about each term
-    * E.g. factors are uncorrelated, errors are uncorrelated with factors, etc.
-* Provide the names of the terms. I.e. say "idiosyncratic" for the error term, etc.
-* point out that if alpha is not zero, then we have an arbitrage opportunity. In general, we assume alpha is zero, but it could be modeled as conditional on some variables.
-* A perfect factor model has alpha = 0, E[e] = 0, Cov(e) = diagonal matrix, Cov(f) = identity.
-* Most factor models aim for a small number of factors relative to the number of assets.
-* Factor are extremely difficult to build. Large institutions either use their vast resources to build the in house or purchase commercially available factor models. I.E. Barra, Axioma, Northfield, etc.
+The idiosyncratic returns $\boldsymbol{\epsilon}_t$ are assumed to have expectation of 0 as any mean is captured with the $\boldsymbol{\alpha}$ vector. They are also assumed to be uncorrelated with the factors and generally with eachother. This means that the covariance matrix $\boldsymbol{\Sigma}\_\epsilon$ is a diagonal matrix. This is known as the *idiosyncratic risk* or *specific risk* of each asset. In practice, this assumption does not hold perfectly. Practitioners instead aim for a sparsely populated covariance matrix, meaning that most assets have little correlation with each other after accounting for the factors. Intuitively, if two assets are very similar, then they will have some correlation that is not explained by the factors.
+
+Most factor models aim to have a small number of factors relative to the number of assets, $K \ll N$. For example, the commercially available [MSCI USA Equity Factor Models](https://www.msci.com/downloads/web/msci-com/data-and-analytics/factor-investing/equity-factor-models/MSCI%20USA%20Equity%20Factor%20Model-cfs-en.pdf) factor models have on the order of 50-100 factors for 20,000+ assets. These factor models require vast data resources and research to build. They are expensive to purchase and used by large institutions.
+
+For our purposes, we will focus on building a useful factor model that can be built with at home resources. We will be using the same number of factors as assets, but we will see that we will still gain a large amount of insight into the returns of our assets.
 
 # Why?
 
@@ -114,3 +118,22 @@ Or ensuring the factor model maintains in-sample properties out-of-sample.
     pages="337-68"
     link="https://doi.org/10.1146/annurev-financial-101521-104735"
 %}}
+
+{{% citation
+    id="Paleologo2025"
+    author="Giuseppe A. Paleologo"
+    title="The Elements of Quantitative Finance"
+    publication="Wiley"
+    year="2025"
+    link="https://www.wiley.com/en-us/The+Elements+of+Quantitative+Investing-p-9781394265466"
+%}}
+
+{{% citation
+    id="Conner2007"
+    author="Gregory Connor and Robert A. Korajczyk"
+    title="Factor Models of Asset Returns"
+    year="2007"
+    publication="ENCYCLOPEDIA OF QUANTITATIVE FINANCE"
+    link="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1024709"
+%}}
+
