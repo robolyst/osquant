@@ -318,14 +318,13 @@ feature {
 // Add padding on tablets and smaller for better readability.
 @media (max-width:$tablet) {
     .container,
-    .mainmatter > *,
+    .mainmatter,
     feature > *,
     #backmatter > *
     {
         padding-right: 5vw;
         padding-left: 5vw;
     }
-
 }
 
 /* ----------------------------------------------------------------------------
@@ -700,7 +699,8 @@ ol li {
 }
 
 ul {
-    list-style: inside disc;
+    list-style: outside disc;
+    padding-left: 20px;  // The default seems to be 20px OUTSIDE the bounds.
 }
 
 li p {
