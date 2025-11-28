@@ -30,7 +30,7 @@ In this article, we're going to explore statistical factor modelling. We will ad
 
 # Factor models
 
-*For a deep dive into factor models, the best resource on the market is [The Elements of Quantitative Investing](https://www.wiley.com/en-us/The+Elements+of+Quantitative+Investing-p-9781394265466) [^Paleologo2025]. Here, we'll lightly go over everything that will be useful for this article.*
+For a deep dive into factor models, the best resource on the market is [The Elements of Quantitative Investing](https://www.wiley.com/en-us/The+Elements+of+Quantitative+Investing-p-9781394265466) [^Paleologo2025]. Here, we'll lightly go over everything that will be useful for this article.
 
 A factor model is formulated as
 $$
@@ -176,21 +176,34 @@ factors = R @ iloadings
 
 You can check for yourself that the factors are not correlated by computing their correlation matrix: `factors.corr()`.
 
-Generally when you run PCA, the idea is that you only keep the first $K$ factors that explain most of the variance. Here, however, we are going to keep all the factors. Previous work on factor modelling shows that there are on the order of 100 factors. In our case, we only have 14 assets each of which covers a broad selection of the market. Therefore, we expect that all 14 factors are needed to explain the returns. Additionally, by keeping all the factors, $\boldsymbol{\beta}$ is square and invertible:
+Generally when you run PCA, the idea is that you only keep the first $K$ factors that explain most of the variance. Previous work on factor modelling shows that there are on the order of 100 factors. In our case, we only have 14 assets each of which covers a broad selection of the market. Therefore, I expect that all 14 factors are needed to explain the returns. So, we are going to keep all the factors.
+
+Additionally, by keeping all the factors, $\boldsymbol{\beta}$ is square and invertible which means we lose the terms $\boldsymbol{\alpha}$ and $\boldsymbol{\epsilon}_t$ from the factor model:
 $$
 \begin{aligned}
-\boldsymbol{R}^\top &= \boldsymbol{\beta}\boldsymbol{F}^\top \\\
-\boldsymbol{\beta}^{-1}\boldsymbol{R}^\top &= \boldsymbol{F}^\top \\\
+\boldsymbol{r}_t &= \boldsymbol{\beta}\boldsymbol{f}_t \\\
+\boldsymbol{\beta}^{-1}\boldsymbol{r} &= \boldsymbol{f}_t \\\
 \end{aligned}
 $$
+The returns can be perfectly reconstructed from the factors and vice versa.
 
-The factors look like:
+We can visualise the factors by adjusting their volatilities to be 1% per day. This dampens out the extreme movements when calculating the capital growth for each factor. The factors look like:
+
+<feature class="nostyle big">
 
 ![PCA factors](images/pca_factors.svg)
 
-The first factor is often called the "market factor" as it tends to represent the overall market movement. As we are looking at equities, we could interpret the first factor as the equity risk premia. The other factors are generally more difficult to interpret. However, we can see that there may be some hits of other orthogonal risk premia. For example, factor 3 exhibits an upward trend.
+</feature>
+
+The first factor is often called the "market factor" as it tends to represent the overall market movement. As we are looking at equities, we could interpret the first factor as the equity risk premia. That is, this is the return that investors expect to earn for taking on equity risk.
+
+The other factors are generally more difficult to interpret economically. However, we can see that there may be some hits of other orthogonal risk premia. For example, many of the other factors appear to exhibit long term trending behaviour. If those factors were economically meaningful, we would interpret those trends as risk premia.
+
+<feature class="nostyle big">
 
 ![PCA factor contributions](images/pca_asset_component_weights.svg)
+
+</feature>
 
 Some observations:
 
@@ -223,6 +236,12 @@ This makes the factor covariance matrix the identity matrix.
 ## Testing
 
 Or ensuring the factor model maintains in-sample properties out-of-sample.
+
+# The magic of rotations
+
+Discuss the maximally predicatble portfolio mathematics.
+
+# Summary
 
 {{% citation
     id="Giglio2022"
