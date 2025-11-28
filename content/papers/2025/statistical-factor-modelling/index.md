@@ -210,10 +210,33 @@ Some observations:
 * The market factor does not have any assets with large weights. This factor contributes fairly evenly to all assets.
 * I've taken the absolute value of the weights. This obscures slightly the significance of the market factor having all positive weights. The market factor influences all assets by roughly the same amount in the same direction.
 
+We're going to look at two things we can do to make these factors more interpretable: whitening and varimax rotation.
 
 ## Whitening
 
-This makes the factor covariance matrix the identity matrix.
+The idea behind whitening is to re-scale the factors to have the same variance. Generally, we set the variance to 1. Now, the factors already are uncorrelated which means that setting their variances to 1 results in the covariance matrix being the identity matrix.
+
+To whiten, we divide the factors by their standard deviations. The eigenvalues from PCA are the variances of each factor. Therefore, we can whiten by dividing each factor by the square root of its corresponding eigenvalue:
+$$
+\boldsymbol{r}_t = \boldsymbol{\beta}\boldsymbol{D} \boldsymbol{f}_t
+$$
+where $\boldsymbol{D}$ is a diagonal matrix with entries $D\_{ii} = 1 / \sqrt{\lambda_i}$ where $\lambda_i$ is the $i$th eigenvalue. In practice, we modify the loadings matrix $\boldsymbol{\beta}$ to include this scaling:
+```python
+# Whiten loadings so that the factors have
+# covariance = I
+vecs = vecs / np.sqrt(eigvals)
+```
+
+Now, the resulting factors have the identity matrix as their covariance matrix:
+$$
+\boldsymbol{\Sigma}_f = \text{Cov}[\boldsymbol{f}_t] = \boldsymbol{I}
+$$
+we say that these factors are [*orthonormal*](https://en.wikipedia.org/wiki/Orthonormality). The covariance of the returns is
+$$
+\boldsymbol{\Sigma}_r = \boldsymbol{\beta} \boldsymbol{\Sigma}_f  \boldsymbol{\beta}^\top = \boldsymbol{\beta} \boldsymbol{\beta}^\top
+$$
+
+The factors being orthonormal opens us up to a range of rotations we can use to find more interpretable factors.
 
 ## Varimax rotation
 
