@@ -124,6 +124,14 @@ import pandas as pd
 R = pd.read_csv('returns.csv', index_col=0, parse_dates=True)
 ```
 
+Risk adjusting the returns to have a daily volatility of 1% and plotting the capital growth gives:
+
+<feature class="nostyle big">
+
+![](images/etf_returns.svg)
+
+</feature>
+
 # Statistical factors
 
 Now that we have a long history of returns, we can build a statistical factor model. For this section, we are going to work in-sample. There are unique challenges when working out-of-sample that distract from the core modelling ideas. We will address these challenges later.
@@ -231,17 +239,68 @@ Now, the resulting factors have the identity matrix as their covariance matrix:
 $$
 \boldsymbol{\Sigma}_f = \text{Cov}[\boldsymbol{f}_t] = \boldsymbol{I}
 $$
-we say that these factors are [*orthonormal*](https://en.wikipedia.org/wiki/Orthonormality). The covariance of the returns is
+we say that these factors are [*orthonormal*](https://en.wikipedia.org/wiki/Orthonormality). This setup allows us to rotate the factors by any orthogonal matrix $\boldsymbol{C}$ and still maintain the identity covariance matrix:
 $$
-\boldsymbol{\Sigma}_r = \boldsymbol{\beta} \boldsymbol{\Sigma}_f  \boldsymbol{\beta}^\top = \boldsymbol{\beta} \boldsymbol{\beta}^\top
+\begin{aligned}
+\boldsymbol{C}^\top \boldsymbol{C} &= \boldsymbol{I} \\\
+\boldsymbol{r}_t &= \boldsymbol{\beta} \boldsymbol{C}^\top \boldsymbol{C} \boldsymbol{f}_t \\\
+\\\
+\text{Cov}[\boldsymbol{C} \boldsymbol{f}_t] &= \boldsymbol{C} \text{Cov}[\boldsymbol{f}_t] \boldsymbol{C}^\top \\\
+&= \boldsymbol{C} \boldsymbol{I} \boldsymbol{C}^\top = \boldsymbol{I} \\\
+\end{aligned}
 $$
-
-The factors being orthonormal opens us up to a range of rotations we can use to find more interpretable factors.
+This is a powerful idea. It means we can search for a rotation $\boldsymbol{C}$ that makes the factors more interpretable while still maintaining the properties we want.
 
 ## Varimax rotation
 
-* I want to know the origins of varimax rotation.
+Denote our loadings after rotation to be $\boldsymbol{L}^{(1)} = \boldsymbol{L} \boldsymbol{C}^\top$. We can make the factors more interpretable by making the loadings more sparse. That is, for each factor (column of $\boldsymbol{L}^{(1)}$), we want only a few assets to have large loadings, and the rest to be close to zero. This makes 
+it easy to interpret what each factor is doing as it only strongly influences a few assets. One rotation that achieves this is called the *varimax* rotation first described in 1958 in psychometric research [^Kaiser1958].
 
+Note again that the covariance matrix of returns under a factor model with orthonormal factors is:
+$$
+\boldsymbol{\Sigma}_r = \boldsymbol{L} \boldsymbol{L}^\top + \boldsymbol{\Sigma}\_\epsilon
+$$
+
+where the variance of asset $i$ is the $i$th diagonal entry of $\boldsymbol{\Sigma}\_r$:
+
+$$
+\sigma^2\_{r,i} = \sum_{j=1}^K L\_{ij}^2 + \sigma^2\_{\epsilon,i}
+$$
+
+that sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. The value $L\_{ij}^2$ is the contribution of factor $j$ to the variance of asset $i$. Therefore, if we want each factor to only contribute to a few assets, we want the squared loadings in each column of $\boldsymbol{L}$ to be sparse.
+
+We can formulate this sparsity requirement by saying we want each column of $\boldsymbol{L}$ to have a high variance of squared loadings. If the squared loadings are all similar, then the variance is low. If some squared loadings are large and the rest are small, then the variance is high. Recall that the variance of a random variable $X$ is given by $\text{Var}(X) = \text{E}[X^2] - (\text{E}[X])^2$. Therefore, the variance of the squared loadings for factor $j$ is:
+
+$$
+\text{Var}[L\_{\cdot j}^2] = \frac{1}{N} \sum_{i=1}^N L\_{ij}^4 - \left( \frac{1}{N} \sum_{i=1}^N L\_{ij}^2 \right)^2
+$$
+
+And the varimax objective function to maximise is the sum of these variances across all factors:
+$$
+\text{Varimx}(\boldsymbol{L}) = \sum_{j=1}^K \left[ \frac{1}{N} \sum_{i=1}^N L\_{ij}^4 - \left( \frac{1}{N} \sum_{i=1}^N L\_{ij}^2 \right)^2 \right]
+$$
+
+The original solution to maximising this objective rotates a single pair of factors at a time to increase the objective [^Kaiser1958]. The modern approach is to calculate the gradient and use an iterative method to find the maximum [^Jennrich2001]. We'll skip the derivation and just present the algorithm:
+
+1. initialise $T \leftarrow I$.
+2. compute $\Lambda = L T$.
+3. compute column means $d_j = \tfrac{1}{p}\sum_i \Lambda_{ij}^2$.
+4. compute (Z) with entries $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
+   (Recall $\partial V/\partial\Lambda = \tfrac{4}{p}Z$.)
+5. form (M = L^\top Z).
+6. SVD: (M = U\Sigma V^\top).
+7. update (T \leftarrow U V^\top).
+8. if (V) (the objective) has not converged, go back to step 2.
+
+This is the SVD / Jennrich–style varimax iteration. It produces a monotone increase in the varimax objective in practice and converges to a (local) maximiser.
+
+
+
+
+
+---
+
+For later:
 * Is it possible to keep one of the factors fixed and rotate the others around it? For example, can we keep the market factor fixed and rotate the other factors to be more interpretable?
 
 ## Interpretation
@@ -295,3 +354,25 @@ Discuss the maximally predicatble portfolio mathematics.
     link="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1024709"
 %}}
 
+{{% citation
+    id="Kaiser1958"
+    author="Henry F. Kaiser"
+    title="The varimax criterion for analytic rotation in factor analysis"
+    year="1958"
+    publication="Psychometrika"
+    volume="23"
+    pages="187-200"
+    link="http://cda.psych.uiuc.edu/psychometrika_highly_cited_articles/kaiser_1958.pdf"
+%}}
+
+{{% citation
+    id="Jennrich2001"
+    author="Robert I. Jennrich"
+    title="A SIMPLE GENERAL PROCEDURE FOR ORTHOGONAL ROTATION"
+    year="2001"
+    publication="Psychometrika"
+    volume="66"
+    number="2"
+    pages="289-306"
+    link="http://www.atmo.arizona.edu/students/courselinks/fall09/atmo529/Lectures/Jennrich2001.pdf"
+%}}
