@@ -282,26 +282,27 @@ $$
 
 The original solution to maximising this objective rotates a single pair of factors at a time to increase the objective [^Kaiser1958]. The modern approach is to calculate the gradient and use an iterative method to find the maximum [^Jennrich2001]. We'll skip the derivation and just present the algorithm:
 
-1. initialise $T \leftarrow I$.
-2. compute $\Lambda = L T$.
+1. initialise $C \leftarrow I$.
+2. compute $\Lambda = L C$.
 3. compute column means $d_j = \tfrac{1}{p}\sum_i \Lambda_{ij}^2$.
-4. compute (Z) with entries $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
-   (Recall $\partial V/\partial\Lambda = \tfrac{4}{p}Z$.)
-5. form (M = L^\top Z).
-6. SVD: (M = U\Sigma V^\top).
-7. update (T \leftarrow U V^\top).
-8. if (V) (the objective) has not converged, go back to step 2.
+4. compute the derivative  $\partial \text{Varimx}/\partial\Lambda = \tfrac{4}{p}Z$ where the entries are $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
+5. using the chain rule, compute the derivative $M = \partial \text{Varimx}/\partial
+C = L^\top Z$.
+6. compute the SVD: $M = U\Sigma V^\top$.
+7. update $C \leftarrow U V^\top$.
+8. if the objective has not converged, go back to step 2.
 
-This is the SVD / Jennrich–style varimax iteration. It produces a monotone increase in the varimax objective in practice and converges to a (local) maximiser.
+For our analysis, we're going to make a small change to the algorithm. The first factor we found with PCA is the market factor. Recall that the loadings for that factor are all fairly even. If we were to use the varimax rotation, we will lose this factor as varimax does not like factors with even loadings. We want to hold this factor fixed and only rotate the other factors. We pull this off by excluding the column in $\boldsymbol{L}$ corresponding to the market factor when computing the varimax rotation. That is, we run varimax on $\boldsymbol{L}\_{2:K}$ and then the rotation matrix is:
+$$
+\boldsymbol{C} = \begin{bmatrix}1 & \boldsymbol{0} \\\
+\boldsymbol{0} & \boldsymbol{C}\_{varimax} \\\
+\end{bmatrix}
+$$
 
-
-
-
-
----
-
-For later:
-* Is it possible to keep one of the factors fixed and rotate the others around it? For example, can we keep the market factor fixed and rotate the other factors to be more interpretable?
+The code for the varimax algorithm in Python is:
+```python
+# Add cod here
+```
 
 ## Interpretation
 
