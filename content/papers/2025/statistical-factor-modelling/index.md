@@ -306,23 +306,92 @@ The code for the varimax algorithm in Python is:
 
 ## Interpretation
 
+Our process for finding factors is: obtain PCA factors, whiten them, then varimax rotate all but the first factor. We convert the loadings to weights for interpretation as before. The results look like:
+
+<feature class="nostyle big">
+
+![Varimax factor contributions](images/varimax_asset_component_weights.svg)
+
+</feature>
+
+In comparison to the unrotated PCA factors, the varimax factors are much more interpretable. Factor 1 remains the market factor with all assets contributing fairly evenly. The other factors have become much more sparse. Keep in mind that these factors are all uncorrelated! So a factor that explains a high percentage of one asset and little of the others can be thought of as the unique source of risk and returns for that asset.
+
+**Factor 1** is the market factor. This explains a high percentage of all assets, roughly 50% for each asset. **Factor 2** explains a high percentage of consumer staples (XLP). There is some explaining power for other ETFs, but it is very small in comparison. We should expect to see small explaining power for all the other ETFs as the sectors economically overlap. If Factor 2 has a positive average return, then it could be interpreted as the consumer staples risk premia. Each factor in our example explains a high percentage of one of the assets and thus similar conclusions can be drawn for the other factors.
+
+At this point, we could talk about how to model the possible risk premia in each factor. We will leave that to another article. Instead, we will look at ensuring that a factor model maintains its properties out-of-sample.
+
 # In practice
 
-## Lagged loadings
+Up until now, the factor modelling has operated in-sample. That is, we have looked at factors historically computed with all available data. In practice, we want to be able to compute factor loadings and factors out-of-sample. That is, at time $t$, we want to be able to compute the factor loadings $\boldsymbol{\beta}$ using data available before time $t$ and factors $\boldsymbol{f}_t$ using only data available up to time $t$.
+
+We're now going to switch from a fixed matrix of loadings $\boldsymbol{L}$ to time varying loadings $\boldsymbol{L}_t$. For factors at time $t$, we will compute the loadings using data up to time $t-l$ where $l$ is a suitable lag. The factor model becomes:
+$$
+\boldsymbol{r}_t =\boldsymbol{\alpha} + \boldsymbol{L}\_{t-l} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
+$$
+
+## PCA consistency
+
+The first issue we'll encounter is that PCA has an indeterminancy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
+
+
+{{<figure src="images/equivalent_pca.svg" title="Example of PCA indeterminancy." width="medium" >}}
+The sign of the PCA factors is arbitrary. Here we illustrate two possible PCA factorizations of the same data. The difference is that the signs of the factors have been flipped. Both factorizations are equally valid PCA decompositions.
+{{</figure>}}
+
+For example, we'll fit a PCA factor model to a sliding window of 252 days of returns. We'll include whitenning. The loading for SPY on the first factor over time looks like:
+
+![](images/plain_pca_spy_loading.svg)
+
+where you can see the sign flips.
+
+To fix this, we enforce sign consistency by ensuring that the angle of each factor with its previous day's version remains small. If the angle is larger than 90 degress, we flip the sign. The cosine of the angle between two vectors $\boldsymbol{a}$ and $\boldsymbol{b}$ is given by:
+$$
+\cos(\theta) = \frac{\boldsymbol{a}^\top \boldsymbol{b}}{||\boldsymbol{a}|| \cdot ||\boldsymbol{b}||} 
+$$
+When the angle is less than 90 degrees, the cosine is positive. When the angle is greater than 90 degrees, the cosine is negative. Therefore, we can enforce sign consistency by checking the cosine of the angle between the current PCA loadings and the previous loadings. If it is negative, we flip the sign of the current loading. We can also drop the normalization as (1) we're only interested in the sign and (2) the PCA loadings are orthonormal.
+
+Repeating the above sliding window PCA with sign consistency enforced gives:
+
+![](images/adjusted_pca_spy_loading.svg)
+
+where we can see that the sign is no longer flipping randomly.
+
+Upading the `pca_loadings` function to enforce sign consistency gives:
+
+```python
+def pca_loadings(
+    cov: np.ndarray,
+    whiten: bool = False,
+    prev: np.ndarray | None = None,
+) -> np.ndarray:
+
+    # existing PCA code
+    ...
+
+    # Try to keep vecs consistent over time
+    if prev is not None:
+        signs = np.sign(np.diag(prev.T @ vecs))
+        vecs = vecs * signs
+    
+    return vecs
+```
+
+## Rotation consistency
 
 ## Exponential weighting
 
-## Ensuring factor orthogonality
+## Factor orthogonality
+
+we will assume that $\boldsymbol{\alpha} = 0$ and we will use a cross-sectional regression to compute the factor returns once the asset returns are realised:
+$$
+\boldsymbol{f}_t = (\boldsymbol{L}\_{t-l}^\top \boldsymbol{L}\_{t-l})^{-1} \boldsymbol{L}\_{t-l}^\top \boldsymbol{r}_t
+$$
 
 ## Interpretation
 
 ## Testing
 
 Or ensuring the factor model maintains in-sample properties out-of-sample.
-
-# The magic of rotations
-
-Discuss the maximally predicatble portfolio mathematics.
 
 # Summary
 
