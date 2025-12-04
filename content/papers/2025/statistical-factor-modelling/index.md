@@ -378,7 +378,17 @@ def pca_loadings(
 
 ## Rotation consistency
 
-## Exponential weighting
+The varimax rotation is an optimisation over a non-convex objective. This means that the solution we get may vary with different initialisations and different data. Therefore, when we compute the varimax rotation at different times, we may get different rotations. This means that the factors will change meaning day to day, making them impossible to interpret out-of-sample.
+
+As an example, we'll fit a varimax rotated factor model to a sliding window of 252 days of returns. We'll include PCA whitenning and sign consistency. Each time we fit the varimax rotation, we initialise with the identity matrix. The loading for SPY on the first factor over time looks like:
+
+![](images/plain_rotated_spy_loading.svg)
+
+where you can see the factor randomly jumping around all over the place. We can repeat this but initialising the varimax rotation with the previous day's rotation matrix. This gives:
+
+![](images/adj_rotated_spy_loading.svg)
+
+where we can see that the loading is now stable over time.
 
 ## Factor orthogonality
 
@@ -387,9 +397,12 @@ $$
 \boldsymbol{f}_t = (\boldsymbol{L}\_{t-l}^\top \boldsymbol{L}\_{t-l})^{-1} \boldsymbol{L}\_{t-l}^\top \boldsymbol{r}_t
 $$
 
+## Exponential weighting
+
+
 ## Interpretation
 
-## Testing
+# Testing
 
 Or ensuring the factor model maintains in-sample properties out-of-sample.
 
