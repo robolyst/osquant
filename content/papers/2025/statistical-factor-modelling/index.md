@@ -99,7 +99,7 @@ In this article, we're going to use the following U.S. based ETFs:
 
 At first, these ETFs look like they cover unrelated parts of the market. Looking in the figure below, we can see that the energy sector (XLE) is 45% correlated with the real estate sector (XLRE). In fact, all the ETFs are highly correlated suggesting that there are similar underlying factors that they all share. 
 
-{{<figure src="images/etf_correlations.svg" title="ETF correlation matrix." width="medium" >}}
+{{<figure src="images/etf_correlations.svg" title="ETF correlation matrix." width="medium" anchor="fig:etf_correlations" >}}
 Shows the correlations between the selected ETFs over the period 2016-01-01 to 2025-11-25. Key thing to note is that all of the ETFs are highly correlated, suggesting that there are common factors driving their returns.
 {{</figure>}}
 
@@ -341,6 +341,15 @@ $$
 
 ## Exponential weighting
 
+When computing the covariance matrix of returns to fit the PCA factor model, we could use a sliding window of historical returns. This approach gives equal weight to all returns in the window and zero weight to returns outside the window. A better approach is to use an exponentially weighted moving covariance matrix. This approach gives more weight to recent returns and less weight to older returns.
+
+We have a whole article on the exponentially weighted variance [here]({{< ref "replicating-pandas-ewm-var" >}}). In Python, we can compute the exponentially weighted covariance matrix with:
+```python
+covs = returns.ewm(halflife=252, min_periods=252).cov()
+```
+for a halflife of 252 trading days (1 year).
+
+When computing the factor loadings at time $t$, we use the exponentially weighted covariance matrix up to time $t-l$.
 
 ## PCA consistency
 
@@ -351,7 +360,7 @@ The first issue we'll encounter is that PCA has an indeterminancy where the sign
 The sign of the PCA factors is arbitrary. Here we illustrate two possible PCA factorizations of the same data. The difference is that the signs of the factors have been flipped. Both factorizations are equally valid PCA decompositions.
 {{</figure>}}
 
-For example, we'll fit a PCA factor model to a sliding window of 252 days of returns. We'll include whitenning. The loading for SPY on the first factor over time looks like:
+For example, we'll fit a PCA factor model to with an EWM covariance matrix with halflife of 252 days. We'll include whitenning. The loading for SPY on the first factor over time looks like:
 
 ![](images/plain_pca_spy_loading.svg)
 
@@ -393,7 +402,7 @@ def pca_loadings(
 
 The varimax rotation is an optimisation over a non-convex objective. This means that the solution we get may vary with different initialisations and different data. Therefore, when we compute the varimax rotation at different times, we may get different rotations. This means that the factors will change meaning day to day, making them impossible to interpret out-of-sample.
 
-As an example, we'll fit a varimax rotated factor model to a sliding window of 252 days of returns. We'll include PCA whitenning and sign consistency. Each time we fit the varimax rotation, we initialise with the identity matrix. The loading for SPY on the first factor over time looks like:
+As an example, we'll repeat the process from before: compute a EWM of the cov matrix, fit a PCA factor model, whiten, ensure sign consistency and then fit a varimax rotated. Each time we fit the varimax rotation, we initialise with the identity matrix. The loading for SPY on the first factor over time looks like:
 
 ![](images/plain_rotated_spy_loading.svg)
 
@@ -412,7 +421,7 @@ $$
 $$
 There is no way to fix this. We can reduce the issue by further rotating the factors at each time step. However, this further rotation impacts the interpretability of the factors and in my experience, only marginally improves the orthogonality of the factors.
 
-For now, we will accept that the factors are not perfectly orthonormal out-of-sample. We still have a significantly improved stream of returns. Recall the correlation matrix of the ETF returns from before. Now, observe the correlation matrix of the factor returns:
+For now, we will accept that the factors are not perfectly orthonormal out-of-sample. We still have a significantly improved stream of returns. Recall the [correlation matrix of the ETF returns](#fig:etf_correlations) from before. Now, observe the correlation matrix of the factor returns:
 
 {{<figure src="images/factor_correlations.svg" title="Factor correlation matrix." width="medium" >}}
 Shows the correlations between the realised factor returns over the period 2016-01-01 to 2025-11-25. In comparison to the ETF correlation matrix, the factors are mostly uncorrelated, showing that the factor model has successfully identified sources of risk and return.
