@@ -99,7 +99,7 @@ In this article, we're going to use the following U.S. based ETFs:
 
 At first, these ETFs look like they cover unrelated parts of the market. Looking in the figure below, we can see that the energy sector (XLE) is 45% correlated with the real estate sector (XLRE). In fact, all the ETFs are highly correlated suggesting that there are similar underlying factors that they all share. 
 
-{{<figure src="images/etf_correlations.svg" title="ETF correlation matrix." >}}
+{{<figure src="images/etf_correlations.svg" title="ETF correlation matrix." width="medium" >}}
 Shows the correlations between the selected ETFs over the period 2016-01-01 to 2025-11-25. Key thing to note is that all of the ETFs are highly correlated, suggesting that there are common factors driving their returns.
 {{</figure>}}
 
@@ -329,6 +329,19 @@ $$
 \boldsymbol{r}_t =\boldsymbol{\alpha} + \boldsymbol{L}\_{t-l} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
 $$
 
+We will assume that $\boldsymbol{\alpha} = 0$ and we will use a cross-sectional regression to compute the factor returns once the asset returns are realised:
+$$
+\boldsymbol{f}_t = (\boldsymbol{L}\_{t-l}^\top \boldsymbol{L}\_{t-l})^{-1} \boldsymbol{L}\_{t-l}^\top \boldsymbol{r}_t
+$$
+
+Because our loadings are invertible, this gives us the exact factor returns that reconstruct the realised returns:
+$$
+\boldsymbol{r}_t = \boldsymbol{L}\_{t-l} \boldsymbol{f}_t
+$$
+
+## Exponential weighting
+
+
 ## PCA consistency
 
 The first issue we'll encounter is that PCA has an indeterminancy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
@@ -392,19 +405,22 @@ where we can see that the loading is now stable over time.
 
 ## Factor orthogonality
 
-we will assume that $\boldsymbol{\alpha} = 0$ and we will use a cross-sectional regression to compute the factor returns once the asset returns are realised:
-$$
-\boldsymbol{f}_t = (\boldsymbol{L}\_{t-l}^\top \boldsymbol{L}\_{t-l})^{-1} \boldsymbol{L}\_{t-l}^\top \boldsymbol{r}_t
-$$
 
-## Exponential weighting
+Because the loadings are changing over time, the factors we get may not be orthonormal. That is, the covariance matrix of the factors may not be the identity matrix:
+$$
+\boldsymbol{\Sigma}_f = \text{Cov}[\boldsymbol{f}_t] \neq \boldsymbol{I}
+$$
+There is no way to fix this. We can reduce the issue by further rotating the factors at each time step. However, this further rotation impacts the interpretability of the factors and in my experience, only marginally improves the orthogonality of the factors.
 
+For now, we will accept that the factors are not perfectly orthonormal out-of-sample. We still have a significantly improved stream of returns. Recall the correlation matrix of the ETF returns from before. Now, observe the correlation matrix of the factor returns:
+
+{{<figure src="images/factor_correlations.svg" title="Factor correlation matrix." width="medium" >}}
+Shows the correlations between the realised factor returns over the period 2016-01-01 to 2025-11-25. In comparison to the ETF correlation matrix, the factors are mostly uncorrelated, showing that the factor model has successfully identified sources of risk and return.
+{{</figure>}}
 
 ## Interpretation
 
-# Testing
-
-Or ensuring the factor model maintains in-sample properties out-of-sample.
+Now that we've stabalised the out-of-sample factor model, we can inspect the factors over time to check that they are in fact stable and interpretable.
 
 # Summary
 
