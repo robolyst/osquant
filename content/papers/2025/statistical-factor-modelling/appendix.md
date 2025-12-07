@@ -2,6 +2,33 @@
 
 ## Synthetic historical returns
 
+The selection of ETFs cover three market indexes (S&P 500, NASDAQ-100 and Russell 2000) and the U.S. sector indexes.
+
+We want to extend the ETF returns back to 1990-01-01. To do this, we:
+1. Construct a list of Yahoo Finance tickers of instruments that were trading from 1990-01-01 to now.
+2. Download the daily returns for these instruments from Yahoo Finance.
+3. For each ETF, take the first 5 years of returns and regress the ETF returns off of the returns of the instruments in the dataset from step 2.
+4. Use the regression coefficients to construct synthetic returns for the ETFs going back to 1990-01-01.
+
+To construct the list of tickers, I downloaded the list of current holdings for each of the ETFs. For example, you can find an Excel doc of holdings for XLK on [this page](https://www.sectorspdrs.com/mainfund/xlk). I then limited this list to instruments that were trading from 1990-01-01 to now. I also added the following indexes to the list:
+
+| Yahoo Finance Ticker  | Index Name |
+|:----------------------|:------------|
+| [^SPX](https://finance.yahoo.com/quote/^SPX) | S&P 500 |
+| [^RUT](https://finance.yahoo.com/quote/^RUT) | Russell 2000 |
+| [^NDX](https://finance.yahoo.com/quote/^NDX) | NASDAQ-100 |
+| [^DJA](https://finance.yahoo.com/quote/^DJA) | Dow Jones Industrial Average |
+| [^SP600](https://finance.yahoo.com/quote/^SP600) | S&P 600 |
+| [^FTSE](https://finance.yahoo.com/quote/^FTSE) | FTSE 100 |
+| [^N225](https://finance.yahoo.com/quote/^N225) | Nikkei 225 |
+| [^HSI](https://finance.yahoo.com/quote/^HSI) | Hang Seng Index |
+| [^GDAXI](https://finance.yahoo.com/quote/^GDAXI) | DAX Index |
+| [^NYA](https://finance.yahoo.com/quote/^NYA) | NYSE Composite Index |
+| [^IXIC](https://finance.yahoo.com/quote/^IXIC) | NASDAQ Composite Index |
+| [^GSPC](https://finance.yahoo.com/quote/^GSPC) | S&P 500 Composite Index |
+
+You can download the spliced [ETF returns](data/returns.csv).
+
 ## Orthogonal Procrustes problem
 
 Given two matrices of the same shape $\boldsymbol{L}\_{t+1}$ and $\boldsymbol{L}\_{t}$ the orthogonal Procrustes problem is:

@@ -6,11 +6,11 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2025-11-28T18:50:04.475043</dc:date>
+    <dc:date>2025-12-07T21:59:41.627691</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
-      <dc:title>Matplotlib v3.10.5, https://matplotlib.org/</dc:title>
+      <dc:title>Matplotlib v3.10.7, https://matplotlib.org/</dc:title>
      </cc:Agent>
     </dc:creator>
    </cc:Work>
@@ -25,8 +25,9 @@
 L 784.8 280.8 
 L 784.8 0 
 L 0 0 
+L 0 280.8 
 z
-" style="fill: #ffffff"/>
+" style="fill: none; opacity: 0"/>
   </g>
   <g id="axes_1">
    <g id="patch_2">
@@ -2138,7 +2139,7 @@ L 140.473779 25.948904
 L 140.510756 24.170361 
 L 140.52 24.174535 
 L 140.52 24.174535 
-" clip-path="url(#p8a4ae5ef23)" style="fill: none; stroke: #1f77b4; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p5eafe1e2e9)" style="fill: none; stroke: #1f77b4; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_1">
     <!-- IWM -->
@@ -4148,7 +4149,7 @@ L 296.621338 23.138518
 L 296.713779 25.103433 
 L 296.750756 24.069805 
 L 296.76 24.070445 
-" clip-path="url(#p7d551c7133)" style="fill: none; stroke: #ff7f0e; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p07cca2f999)" style="fill: none; stroke: #ff7f0e; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_2">
     <!-- QQQ -->
@@ -6054,7 +6055,7 @@ L 452.926047 23.970594
 L 452.953779 24.863874 
 L 452.990756 23.760967 
 L 453 23.762649 
-" clip-path="url(#pc517ca5390)" style="fill: none; stroke: #2ca02c; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pb7d6cdaf25)" style="fill: none; stroke: #2ca02c; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_3">
     <!-- SPY -->
@@ -8294,7 +8295,7 @@ L 609.184535 26.539191
 L 609.193779 27.092779 
 L 609.24 26.198025 
 L 609.24 26.198025 
-" clip-path="url(#p2a7c10f4f9)" style="fill: none; stroke: #d62728; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p1c78fd0af8)" style="fill: none; stroke: #d62728; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_4">
     <!-- XLB -->
@@ -10532,7 +10533,7 @@ L 765.433779 25.183225
 L 765.443023 24.597584 
 L 765.48 24.262797 
 L 765.48 24.262797 
-" clip-path="url(#pccbaee49f8)" style="fill: none; stroke: #9467bd; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p2c7e2cc8a9)" style="fill: none; stroke: #9467bd; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_5">
     <!-- XLC -->
@@ -12783,7 +12784,7 @@ L 140.418314 115.285631
 L 140.464535 116.099692 
 L 140.473779 116.491259 
 L 140.52 116.370446 
-" clip-path="url(#pa9636fd8ea)" style="fill: none; stroke: #8c564b; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pdf3b1d525a)" style="fill: none; stroke: #8c564b; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_6">
     <!-- XLE -->
@@ -14893,7 +14894,7 @@ L 296.639826 115.167707
 L 296.658314 115.925386 
 L 296.713779 116.764469 
 L 296.76 116.272431 
-" clip-path="url(#p554ec555db)" style="fill: none; stroke: #e377c2; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pabf42662ed)" style="fill: none; stroke: #e377c2; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_7">
     <!-- XLF -->
@@ -16795,7 +16796,7 @@ L 452.935291 116.560309
 L 452.944535 116.419869 
 L 452.953779 117.127282 
 L 453 116.511509 
-" clip-path="url(#p905b774886)" style="fill: none; stroke: #7f7f7f; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pca301952d8)" style="fill: none; stroke: #7f7f7f; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_8">
     <!-- XLI -->
@@ -18669,7 +18670,7 @@ L 609.101338 115.88102
 L 609.193779 118.618202 
 L 609.24 117.714447 
 L 609.24 117.714447 
-" clip-path="url(#p0cf7d0d119)" style="fill: none; stroke: #bcbd22; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p3e53ce93fd)" style="fill: none; stroke: #bcbd22; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_9">
     <!-- XLK -->
@@ -20637,7 +20638,7 @@ L 765.341338 119.05318
 L 765.443023 118.076122 
 L 765.48 118.679514 
 L 765.48 118.679514 
-" clip-path="url(#pbbcb658ed9)" style="fill: none; stroke: #17becf; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p7b04a69a55)" style="fill: none; stroke: #17becf; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_10">
     <!-- XLP -->
@@ -22398,7 +22399,7 @@ L 140.473779 211.601363
 L 140.483023 211.095331 
 L 140.52 211.033814 
 L 140.52 211.033814 
-" clip-path="url(#p0e2212b766)" style="fill: none; stroke: #1f77b4; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p449b7cb579)" style="fill: none; stroke: #1f77b4; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_11">
     <!-- XLRE -->
@@ -24497,7 +24498,7 @@ L 296.64907 209.479144
 L 296.695291 209.198879 
 L 296.713779 209.821097 
 L 296.76 209.237211 
-" clip-path="url(#p844e3d9e51)" style="fill: none; stroke: #ff7f0e; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pc70cb8d68c)" style="fill: none; stroke: #ff7f0e; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_12">
     <!-- XLU -->
@@ -26486,7 +26487,7 @@ L 452.768896 210.872579
 L 452.796629 210.807609 
 L 452.990756 207.3 
 L 453 207.306253 
-" clip-path="url(#p46ff97b4a7)" style="fill: none; stroke: #2ca02c; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#p432605e9e1)" style="fill: none; stroke: #2ca02c; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_13">
     <!-- XLV -->
@@ -28397,7 +28398,7 @@ L 609.036629 207.3
 L 609.193779 210.720523 
 L 609.24 209.502981 
 L 609.24 209.502981 
-" clip-path="url(#pd6558ffd95)" style="fill: none; stroke: #d62728; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pdaa6a5ee8f)" style="fill: none; stroke: #d62728; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_14">
     <!-- XLY -->
@@ -28410,46 +28411,46 @@ L 609.24 209.502981
   </g>
  </g>
  <defs>
-  <clipPath id="p8a4ae5ef23">
+  <clipPath id="p5eafe1e2e9">
    <rect x="7.2" y="7.2" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p7d551c7133">
+  <clipPath id="p07cca2f999">
    <rect x="163.44" y="7.2" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="pc517ca5390">
+  <clipPath id="pb7d6cdaf25">
    <rect x="319.68" y="7.2" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p2a7c10f4f9">
+  <clipPath id="p1c78fd0af8">
    <rect x="475.92" y="7.2" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="pccbaee49f8">
+  <clipPath id="p2c7e2cc8a9">
    <rect x="632.16" y="7.2" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="pa9636fd8ea">
+  <clipPath id="pdf3b1d525a">
    <rect x="7.2" y="99.6" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p554ec555db">
+  <clipPath id="pabf42662ed">
    <rect x="163.44" y="99.6" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p905b774886">
+  <clipPath id="pca301952d8">
    <rect x="319.68" y="99.6" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p0cf7d0d119">
+  <clipPath id="p3e53ce93fd">
    <rect x="475.92" y="99.6" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="pbbcb658ed9">
+  <clipPath id="p7b04a69a55">
    <rect x="632.16" y="99.6" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p0e2212b766">
+  <clipPath id="p449b7cb579">
    <rect x="7.2" y="192" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p844e3d9e51">
+  <clipPath id="pc70cb8d68c">
    <rect x="163.44" y="192" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="p46ff97b4a7">
+  <clipPath id="p432605e9e1">
    <rect x="319.68" y="192" width="145.44" height="81.6"/>
   </clipPath>
-  <clipPath id="pd6558ffd95">
+  <clipPath id="pdaa6a5ee8f">
    <rect x="475.92" y="192" width="145.44" height="81.6"/>
   </clipPath>
  </defs>
