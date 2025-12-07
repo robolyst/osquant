@@ -1,10 +1,7 @@
 ---
 title: "Statistical Factor Modelling"
 summary: "
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-    ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-    a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-    pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+This article explores using data to uncover latent streams of returns, otherwise known as factors. We jump into the world of rotations to make sense of the factors and show how to ensure stability when used for real-world trading.
 "
 
 date: "2025-11-26"
@@ -18,11 +15,11 @@ categories:
 
 When you buy something, and the price changes, what happend? Let's say, for example, you buy shares in a made-up health company called "Orange". This company makes wearable health monitors. The price of Orange goes down by 5%. Why? It could be because the whole market went down, or because the technology sector went down, or because the health sector went down, or because Orange genuinely performed poorly. Each of these possible explanations is called a *factor*.
 
-The idea of a factor model is that every stream of returns can be explained by a number of underlying factors. A factor model roughly says $\boldsymbol{r}_t \approx \boldsymbol{\beta} \boldsymbol{f}_t$ where $\boldsymbol{r}_t$ is a vector of returns at time $t$, $\boldsymbol{\beta}$ is a matrix of factor loadings and $\boldsymbol{f}_t$ is a vector of factor returns. If we can identify these factors, we can understand what is driving returns.
+The idea of a factor model is that every stream of returns can be explained by a number of underlying factors. A factor model roughly says $\boldsymbol{r}_t \approx \boldsymbol{L} \boldsymbol{f}_t$ where $\boldsymbol{r}_t$ is a vector of returns at time $t$, $\boldsymbol{L}$ is a matrix of factor loadings and $\boldsymbol{f}_t$ is a vector of factor returns. If we can identify these factors, we can understand what is driving returns.
 
 Not only does this model allow us to explain returns, we can compare the returns of different assets in a meaningful way. For example, we could break down the returns of [Apple](https://uk.finance.yahoo.com/quote/AAPL/) and [Orange](https://en.wikipedia.org/wiki/Apples_and_oranges) and see how much of their returns are explained by the same factors.
 
-There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$, and want to estimate the loadings $\boldsymbol{\beta}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is as *statical factor model* [^Conner2007].
+There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$, and want to estimate the loadings $\boldsymbol{L}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is a *statical factor model* [^Conner2007].
 
 The literature on these approaches is vast, but a fantastic overview is given in the paper [Factor Models, Machine Learning, and Asset Pricing](https://www.annualreviews.org/content/journals/10.1146/annurev-financial-101521-104735) [^Giglio2022].
 
@@ -34,23 +31,25 @@ For a deep dive into factor models, the best resource on the market is [The Elem
 
 A factor model is formulated as
 $$
-\boldsymbol{r}_t = \boldsymbol{\alpha} + \boldsymbol{\beta} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
+\begin{equation}
+\boldsymbol{r}_t = \boldsymbol{\alpha} + \boldsymbol{L} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t \label{eq:factor_model}\tag{1}
+\end{equation}
 $$
 
 where
 * $\boldsymbol{r}_t$ is a random vector of returns for $N$ assets at time $t$. Generally, the risk free rate is subtracted, making these excess returns.
 * $\boldsymbol{\alpha}$ is the *alpha* vector. This is an $N \times 1$ vector of constants that represent the average return of each asset not explained by the factors.
-* $\boldsymbol{\beta}$ is the factor loading matrix. This is an $N \times K$ matrix where each row represents an asset and each column represents a factor. The entries represent the sensitivity of each asset to each factor.
+* $\boldsymbol{L}$ is the factor loading matrix. This is an $N \times K$ matrix where each row represents an asset and each column represents a factor. The entries represent the sensitivity of each asset to each factor.
 * $\boldsymbol{f}_t$ is a $K \times 1$ random vector of factor returns.
 * $\boldsymbol{\epsilon}_t$ is a random vector of *idiosyncratic* returns. This is an $N \times 1$ vector representing the portion of each asset's return not explained by the factors.
 
-The alpha vector $\boldsymbol{\alpha}$ is generally assumed to be $\text{E}[\boldsymbol{\alpha}] = 0$. If it is not, then we have an arbitrage opportunity. That is, we can find portfolio weights $\boldsymbol{w}$ such that $\boldsymbol{w}^\top \boldsymbol{\alpha} > 0$ and $\boldsymbol{w}^\top \boldsymbol{\beta} \boldsymbol{f}_t = 0$, meaning we can earn positive returns while having no exposure to the factors. In practice, a model that predicts asset returns is predicting this vector for time $t$, the elusive "alpha" that traders talk about.
+The alpha vector $\boldsymbol{\alpha}$ is generally assumed to be $\text{E}[\boldsymbol{\alpha}] = 0$. If it is not, then we have an arbitrage opportunity. That is, we can find portfolio weights $\boldsymbol{w}$ such that $\boldsymbol{w}^\top \boldsymbol{\alpha} > 0$ and $\boldsymbol{w}^\top \boldsymbol{L} \boldsymbol{f}_t = 0$, meaning we can earn positive returns while having no exposure to the factors. In practice, a model that predicts asset returns is predicting this vector for time $t$, the elusive "alpha" that traders talk about.
 
 Analogously, any model of $\text{E}[\boldsymbol{f}_t]$ is a model of the risk premia associated with each factor. 
 
 The ideal factor returns have a covariance matrix that is the identity matrix, i.e. $\boldsymbol{\Sigma}_f = \boldsymbol{I}$. The immediate implication of this is that the covariance of $\boldsymbol{r}_t$ is
 $$
-\boldsymbol{\Sigma}_r = \boldsymbol{\beta} \boldsymbol{\Sigma}\_f \boldsymbol{\beta}^\top + \boldsymbol{\Sigma}\_\epsilon = \boldsymbol{\beta} \boldsymbol{\beta}^\top + \boldsymbol{\Sigma}\_\epsilon
+\boldsymbol{\Sigma}_r = \boldsymbol{L} \boldsymbol{\Sigma}\_f \boldsymbol{L}^\top + \boldsymbol{\Sigma}\_\epsilon = \boldsymbol{L} \boldsymbol{L}^\top + \boldsymbol{\Sigma}\_\epsilon
 $$
 This condition turns out to be very easy to enforce as we will see later.
 
@@ -58,19 +57,25 @@ The idiosyncratic returns $\boldsymbol{\epsilon}_t$ are assumed to have expectat
 
 Most factor models aim to have a small number of factors relative to the number of assets, $K \ll N$. For example, the commercially available [MSCI USA Equity Factor Models](https://www.msci.com/downloads/web/msci-com/data-and-analytics/factor-investing/equity-factor-models/MSCI%20USA%20Equity%20Factor%20Model-cfs-en.pdf) factor models have on the order of 50-100 factors for 20,000+ assets. These factor models require vast data resources and research to build. They are expensive to purchase and used by large institutions.
 
-For our purposes, we will focus on building a useful factor model that can be built with at home resources. We will be using the same number of factors as assets, but we will see that we will still gain a large amount of insight into the returns of our assets.
+For our purposes, we will focus on building a useful factor model that can be built with at home resources. We will be using the same number of factors as assets, but we will still gain insight into the returns of our assets.
 
 # Why?
 
 I said earlier that factor models allow us to explain returns. Why this is useful is not immediately obvious. Before we jump into the details of building these models, let's explore what we can do with them.
 
-1. You can explain where returns come from.
-    1. You can attribute performance. I.e. you can attribute portfolio performance to specific factors or to asset-specific alpha/idio-syncratic.
-1. You can explicitly express risk premia.
-1. You can seperate risk premia from alpha in your return predictions.
-1. You can build better risk models. i.e. because we know where the risk is coming from, we can hedge it. Or, more specifically, we can invest in a single or multiple factors to the exclusion of all others.
-1. You can build more diversified portfolios. I.e. you diversify across factors, not across assets all exposed to the same factors.
+**You can explain where returns come from.** By breaking down returns into alpha, factor and idiosyncratic returns, we can see what is driving portfolio returns. Say that our portfolio weights are $\boldsymbol{w}$ which means the portfolio return is $\boldsymbol{w}^\top \boldsymbol{r}_t$. Using the factor model in $\eqref{eq:factor_model}$, we can write the portfolio return as:
+$$
+\boldsymbol{w}^\top \boldsymbol{r}_t = \boldsymbol{w}^\top \boldsymbol{\alpha} + \boldsymbol{w}^\top \boldsymbol{L} \boldsymbol{f}_t + \boldsymbol{w}^\top \boldsymbol{\epsilon}_t
+$$
+where we can see exactly how much of the portfolio return is coming from each source.
 
+**You can explicitly model risk premia.** Any model of the alpha vector $\boldsymbol{\alpha}$ is a model of the expected returns not explained by the factors. Any model of the factor returns $\boldsymbol{f}_t$ is a model of the risk premia associated with each factor. This means that if we have a model for $\text{E}[\boldsymbol{f}_t]$, we can directly trade on our beliefs about risk premia.
+
+Additionally, any model of the asset returns $\text{E}[\boldsymbol{r}_t]$ can be decomposed into a model of $\boldsymbol{\alpha}$ and $\text{E}[\boldsymbol{f}_t]$. This decomposition allows us to understand whether our return predictions are coming from alpha or risk premia. This decomposition into alpha and factor returns is often called *alpha orthogonal* and *alpha spanned* respectively [^Paleologo2025].
+
+**You can build better risk models.** Because we know where the risks are coming from, we can hedge them. Or, more specifically, we can invest in a single or multiple factors to the exclusion of all others. This is called *factor mimicking portfolios* [^Paleologo2025].
+
+**You can build diversified portfolios.** Rather than diversifying across assets which all share the same return drivers, you can directly diversify across factors. If the portfolio weights are $\boldsymbol{w}$, then the factor exposures are $\boldsymbol{w}^\top \boldsymbol{L}$. Therefore, you can choose portfolio weights $\boldsymbol{w}$ to achieve desired factor exposures.
 
 # Data
 
