@@ -20,7 +20,7 @@ When you buy something, and the price changes, what happend? Let's say, for exam
 
 The idea of a factor model is that every stream of returns can be explained by a number of underlying factors. A factor model roughly says $\boldsymbol{r}_t \approx \boldsymbol{\beta} \boldsymbol{f}_t$ where $\boldsymbol{r}_t$ is a vector of returns at time $t$, $\boldsymbol{\beta}$ is a matrix of factor loadings and $\boldsymbol{f}_t$ is a vector of factor returns. If we can identify these factors, we can understand what is driving returns.
 
-Not only does this model allow us to explain returns, we can compare the returns of different assets in a meaningful way. For example, we could break down the returns of [Apple](https://uk.finance.yahoo.com/quote/AAPL/) and Orange and see how much of their returns are explained by the same factors.
+Not only does this model allow us to explain returns, we can compare the returns of different assets in a meaningful way. For example, we could break down the returns of [Apple](https://uk.finance.yahoo.com/quote/AAPL/) and [Orange](https://en.wikipedia.org/wiki/Apples_and_oranges) and see how much of their returns are explained by the same factors.
 
 There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$, and want to estimate the loadings $\boldsymbol{\beta}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is as *statical factor model* [^Conner2007].
 
@@ -398,11 +398,41 @@ def pca_loadings(
     return vecs
 ```
 
-## Rotation consistency
+## Rotational consistency
 
-The varimax rotation is an optimisation over a non-convex objective. This means that the solution we get may vary with different initialisations and different data. Therefore, when we compute the varimax rotation at different times, we may get different rotations. This means that the factors will change meaning day to day, making them impossible to interpret out-of-sample.
+The varimax rotation is an optimisation over a non-convex objective. There are many solutions and local minima. Consider that since the factors are whitened, the order of the factors is not important. In fact, the same factors can be represented in any order which immediately gives us $K!$ equivalent solutions. This means that the factors will change meaning day to day, making them impossible to interpret consistently out-of-sample.
 
-As an example, we'll repeat the process from before: compute a EWM of the cov matrix, fit a PCA factor model, whiten, ensure sign consistency and then fit a varimax rotated. Each time we fit the varimax rotation, we initialise with the identity matrix. The loading for SPY on the first factor over time looks like:
+We can solve this by computing the varimax rotated loadings at time $t$ and rotating them to be as close as possible to the previous day's loadings. This means we want an orthornormal matrix $\boldsymbol{Q}$ such that the rotated loadings $\boldsymbol{L}_\{t+1} \boldsymbol{Q}$ are as close as possible to the previous day's loadings $\boldsymbol{L}_t$. We can formulate this as the minimisation problem:
+$$
+\begin{aligned}
+\arg\min\_{\boldsymbol{Q}} & \ || \boldsymbol{L}\_{t+1} \boldsymbol{Q} - \boldsymbol{L}_t ||_F^2 \\\
+\text{s.t.} & \  \boldsymbol{Q}^\top \boldsymbol{Q} = \boldsymbol{I} \\\
+\end{aligned}
+$$
+
+This is known as the [orthogonal Procrustes problem](https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem) and has a closed form solution. The derivation of the solution is in the [appendix](#orthogonal-procrustes-problem). We'll just present the final result here. The solution is to take the following SVD: 
+$$
+\boldsymbol{L}_t^\top \boldsymbol{L}\_{t+1} = \boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^\top
+$$
+and solve:
+$$
+\boldsymbol{Q} = \boldsymbol{U} \boldsymbol{V}^\top
+$$
+
+The code to implement this rotation matrix is:
+```python
+def procrustes_rotation(current, previous):
+    C = previous.T @ current
+    U, _, Vt = np.linalg.svd(C)
+    Q = Vt.T @ U.T
+    return Q
+```
+
+![](images/plain_varimax_weights.svg)
+![](images/adj_varimax_weights.svg)
+
+
+<!-- As an example, we'll repeat the process from before: compute a EWM of the cov matrix, fit a PCA factor model, whiten, ensure sign consistency and then fit a varimax rotated. Each time we fit the varimax rotation, we initialise with the identity matrix. The loading for SPY on the first factor over time looks like:
 
 ![](images/plain_rotated_spy_loading.svg)
 
@@ -410,7 +440,7 @@ where you can see the factor randomly jumping around all over the place. We can 
 
 ![](images/adj_rotated_spy_loading.svg)
 
-where we can see that the loading is now stable over time.
+where we can see that the loading is now stable over time. -->
 
 ## Factor orthogonality
 
