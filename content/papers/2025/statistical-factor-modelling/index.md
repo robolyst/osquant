@@ -351,7 +351,7 @@ for a halflife of 252 trading days (1 year).
 
 When computing the factor loadings at time $t$, we use the exponentially weighted covariance matrix up to time $t-l$.
 
-## PCA consistency
+## Loadings consistency
 
 The first issue we'll encounter is that PCA has an indeterminancy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
 
@@ -398,7 +398,7 @@ def pca_loadings(
     return vecs
 ```
 
-## Rotational consistency
+### Rotational consistency
 
 The varimax rotation is an optimisation over a non-convex objective. There are many solutions and local minima. Consider that since the factors are whitened, the order of the factors is not important. In fact, the same factors can be represented in any order which immediately gives us $K!$ equivalent solutions. This means that the factors will change meaning day to day, making them impossible to interpret consistently out-of-sample.
 
@@ -431,17 +431,6 @@ def procrustes_rotation(current, previous):
 ![](images/plain_varimax_weights.svg)
 ![](images/adj_varimax_weights.svg)
 
-
-<!-- As an example, we'll repeat the process from before: compute a EWM of the cov matrix, fit a PCA factor model, whiten, ensure sign consistency and then fit a varimax rotated. Each time we fit the varimax rotation, we initialise with the identity matrix. The loading for SPY on the first factor over time looks like:
-
-![](images/plain_rotated_spy_loading.svg)
-
-where you can see the factor randomly jumping around all over the place. We can repeat this but initialising the varimax rotation with the previous day's rotation matrix. This gives:
-
-![](images/adj_rotated_spy_loading.svg)
-
-where we can see that the loading is now stable over time. -->
-
 ## Factor orthogonality
 
 
@@ -461,7 +450,45 @@ Shows the correlations between the realised factor returns over the period 2016-
 
 Now that we've stabalised the out-of-sample factor model, we can inspect the factors over time to check that they are in fact stable and interpretable.
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
+ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
+a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
+pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+
+<feature class="nostyle big">
+
+![](images/ewm_weights.svg)
+
+</feature>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
+ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
+a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
+pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+
+<feature class="nostyle big">
+
+![](images/ewm_factors.svg)
+
+</feature>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
+ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
+a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
+pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
+ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
+a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
+pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+
+
 # Summary
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
+ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
+a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
+pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
 
 {{% citation
     id="Giglio2022"
