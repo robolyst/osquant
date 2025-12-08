@@ -2,15 +2,15 @@
 
 ## Synthetic historical returns
 
-The selection of ETFs cover three market indexes (S&P 500, NASDAQ-100 and Russell 2000) and the U.S. sector indexes.
+The selection of ETFs covers three market indexes (S&P 500, NASDAQ-100, and Russell 2000) and the U.S. sector indexes.
 
 We want to extend the ETF returns back to 1990-01-01. To do this, we:
 1. Construct a list of Yahoo Finance tickers of instruments that were trading from 1990-01-01 to now.
 2. Download the daily returns for these instruments from Yahoo Finance.
-3. For each ETF, take the first 5 years of returns and regress the ETF returns off of the returns of the instruments in the dataset from step 2.
+3. For each ETF, take the first 5 years of returns and regress the ETF returns on the returns of the instruments in the dataset from step 2.
 4. Use the regression coefficients to construct synthetic returns for the ETFs going back to 1990-01-01.
 
-To construct the list of tickers, I downloaded the list of current holdings for each of the ETFs. For example, you can find an Excel doc of holdings for XLK on [this page](https://www.sectorspdrs.com/mainfund/xlk). I then limited this list to instruments that were trading from 1990-01-01 to now. I also added the following indexes to the list:
+To construct the list of tickers, I downloaded the list of current holdings for each of the ETFs. For example, you can find an Excel document of holdings for XLK on [this page](https://www.sectorspdrs.com/mainfund/xlk). I then limited this list to instruments that were trading from 1990-01-01 to now. I also added the following indexes to the list:
 
 | Yahoo Finance Ticker  | Index Name |
 |:----------------------|:------------|
@@ -57,7 +57,7 @@ $$
 || \boldsymbol{L}\_{t+1} \boldsymbol{Q} - \boldsymbol{L}_t ||_F^2 = \text{const} - 2 \text{Tr}(\boldsymbol{L}_t^\top \boldsymbol{L}\_{t+1} \boldsymbol{Q})
 $$
 
-Now, minimising the Frobenius norm is equivalent to:
+Now, minimizing the Frobenius norm is equivalent to:
 $$
 \begin{aligned}
 \boldsymbol{Q}^* &= \arg\max\_{\boldsymbol{Q}}  \ \text{Tr}(\boldsymbol{L}_t^\top \boldsymbol{L}\_{t+1} \boldsymbol{Q}) \\\
@@ -86,7 +86,7 @@ $$
 $$
 where $\sigma_i$ are the diagonal entries of $\boldsymbol{\Sigma}$. 
 
-Since $\boldsymbol{Q}$, $\boldsymbol{U}$ and $\boldsymbol{V}$ are all orthonormal, $\boldsymbol{W}$ is also orthonormal. This means that the entries of $\boldsymbol{W}$ are bounded by $|W\_{ij}| \leq 1$. Since the singular values $\sigma_i$ are non-negative, we can maximise the trace by setting $W\_{ii} = 1$ for all $i$. If the diagonal entries of $\boldsymbol{W}$ are all 1, and the matrix is orthonormal, then $\boldsymbol{W} = \boldsymbol{I}$. Therefore:
+Since $\boldsymbol{Q}$, $\boldsymbol{U}$, and $\boldsymbol{V}$ are all orthonormal, $\boldsymbol{W}$ is also orthonormal. This means that the entries of $\boldsymbol{W}$ are bounded by $|W\_{ij}| \leq 1$. Since the singular values $\sigma_i$ are non-negative, we can maximize the trace by setting $W\_{ii} = 1$ for all $i$. If the diagonal entries of $\boldsymbol{W}$ are all 1, and the matrix is orthonormal, then $\boldsymbol{W} = \boldsymbol{I}$. Therefore:
 $$
 \boldsymbol{V}^\top \boldsymbol{Q} \boldsymbol{U} = \boldsymbol{I} \implies \boldsymbol{Q} = \boldsymbol{U} \boldsymbol{V}^\top
 $$
