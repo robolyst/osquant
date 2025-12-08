@@ -141,60 +141,80 @@ Now that we have a long history of returns, we can build a statistical factor mo
 
 ## PCA
 
-Principle component analysis [(PCA) is the workhorse](https://www.google.com/search?q=%22PCA+is+the+workhorse%22) of statistical factor modelling. It is robust and deeply understood. Many before me have written excellent explanations of PCA, see for example [this blog post](https://gregorygundersen.com/blog/2022/09/17/pca/). Here, will go through the idea and the theory behind PCA as it relates to factor modelling.
+Principle component analysis [(PCA) is the workhorse](https://www.google.com/search?q=%22PCA+is+the+workhorse%22) of statistical factor modelling. PCA transforms a dataset into a new set of orthogonal variables, called principal components, that are ordered by how much of the data's variance they explain. This is achieved by rotating the coordinate system so that the first axis captures the largest possible spread in the data, the second captures the largest remaining spread subject to being independent of the first, and so on.
 
-* I want to know the origins of PCA. Who invented it, when, why?
-* A short paragraph on what PCA is doing.
-* A visualisation of PCA in 2D. Make something of multiple panels in a similar way to quantamagazine.
-* Run through the mathematics of PCA.
-* Point out explicitly that PCA is just a rotation of the data. We're able to rotate the data to a new basis with certain properties. This is very powerful and will be a recurring idea in factor modelling.
-* Show the factor model found with PCA. That is, how do we get the factor loadings from PCA, and show that r = LF (a=0, e=0).
-* Run PCA on the ETF returns. Do all the code ourselves, do not use sklearn. This ensure no centering and drives home what we're doing.
-* Show that the correlation matrix of the factors is the identity matrix.
-* Convert the factor loadings to weights that we can use to interpret the factors.
-* Show one of the factors and point out that it's virtually impossible to interpret.
+PCA is robust and deeply understood. Many before me have written excellent explanations of PCA, see for example [this blog post](https://gregorygundersen.com/blog/2022/09/17/pca/). Here, we will go through the idea and the theory behind PCA as it relates to factor modelling.
 
-The PCA algorithm in Python with numpy:
+Take $\boldsymbol{\Sigma}_r$ to be the $N \times N$ covariance matrix of asset returns. The set of orthonormal vectors $\{\boldsymbol{p}_1, \boldsymbol{p}_2, \ldots, \boldsymbol{p}_N\}$ that maximise the variance of the data projected onto them are the eigenvectors of $\boldsymbol{\Sigma}_r$. The variance explained by each vector is given by the corresponding eigenvalue $\{\lambda_1, \lambda_2, \ldots, \lambda_N\}$. We generally order the eigenvalues and corresponding eigenvectors in descending order $\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_N$.
+
+Collect the eigenvectors into a matrix:
+$$
+\boldsymbol{L}\_\text{pca} = [\boldsymbol{p}_1, \boldsymbol{p}_2, \ldots, \boldsymbol{p}_N]
+$$
+Then, the factors at time $t$ are given by projecting the returns onto the eigenvectors:
+$$
+\boldsymbol{f}_t = \boldsymbol{L}\_\text{pca}^\top \boldsymbol{r}_t
+$$
+and since the eigenvectors are orthonormal, the transpose is also the inverse $\boldsymbol{L}\_\text{pca}\boldsymbol{L}\_\text{pca}^\top = \boldsymbol{I}$. Thus, we have:
+$$
+\boldsymbol{r}_t = \boldsymbol{L}\_\text{pca} \boldsymbol{f}_t
+$$
+which is a PCA factor model.
+
+Rotating the data is a powerful idea that we will use repeatedly. For now, just note that we have not changed the data, simply rotated the coordinate system. The coordinate system we rotate into has useful properties that the original coordinate system did not have. In the case of PCA, the new coordinate system has uncorrelated axes ordered by variance.
+
+The code to produce the PCA loadings and the inverse loadings (to convert returns to factors) looks like:
 ```python
-import numpy as np
+def pca_loadings(
+    cov: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Compute PCA factor loadings from a
+    covariance matrix.
 
+    Parameters
+    ----------
+    cov : np.ndarray
+        Covariance matrix.
+
+    Returns
+    -------
+    loadings: np.ndarray
+        Factor loadings. Such that
+        r_t = L f_t
+    
+    iloadings: np.ndarray
+        Inverse loadings. Such that
+        L^-1 r_t = f_t
+    """
+
+    eigvals, vecs = np.linalg.eigh(cov)
+
+    # The eigenvalues and eigenvectors are
+    # in ascending order. Reverse them so
+    # that the largest eigenvalues are first.
+    eigvals = eigvals[::-1]
+    vecs = vecs[:, ::-1]
+
+    loadings = vecs
+    iloadings = vecs.T
+    
+    return loadings, iloadings
+```
+Then to compute the factors from returns do:
+```python
 cov = R.cov()
-eigvals, vecs = np.linalg.eigh(cov)
-
-# The eigenvalues and eigenvectors are
-# in ascending order. Reverse them so
-# that the largest eigenvalues are first.
-eigvals = eigvals[::-1]
-vecs = vecs[:, ::-1]
-
-# Converts returns to factors
-iloadings = pd.DataFrame(vecs, index=R.columns)
-
-# Converts factors to returns
-loadings = pd.DataFrame(vecs.T, columns=R.columns)
-
-# PCA has an indeterminancy where the
-# sign of each factor is arbitrary.
-# Try to keep loadings positive.
-signs = np.median(np.sign(loadings), axis=1)
-signs[signs == 0] = 1
-sign = np.diag(signs)
-loadings = sign @ loadings
-iloadings = iloadings @ sign
-
-factors = R @ iloadings
+_, iloadings = pca_loadings(cov)
+factors = R @ iloadings.T
 ```
 
 You can check for yourself that the factors are not correlated by computing their correlation matrix: `factors.corr()`.
 
 Generally when you run PCA, the idea is that you only keep the first $K$ factors that explain most of the variance. Previous work on factor modelling shows that there are on the order of 100 factors. In our case, we only have 14 assets each of which covers a broad selection of the market. Therefore, I expect that all 14 factors are needed to explain the returns. So, we are going to keep all the factors.
 
-Additionally, by keeping all the factors, $\boldsymbol{\beta}$ is square and invertible which means we lose the terms $\boldsymbol{\alpha}$ and $\boldsymbol{\epsilon}_t$ from the factor model:
+Additionally, by keeping all the factors, $\boldsymbol{L}\_\text{pca}$ is square and invertible which means we lose the terms $\boldsymbol{\alpha}$ and $\boldsymbol{\epsilon}_t$ from the factor model:
 $$
-\begin{aligned}
-\boldsymbol{r}_t &= \boldsymbol{\beta}\boldsymbol{f}_t \\\
-\boldsymbol{\beta}^{-1}\boldsymbol{r} &= \boldsymbol{f}_t \\\
-\end{aligned}
+\boldsymbol{r}_t = \boldsymbol{L}\_\text{pca} \boldsymbol{f}_t
 $$
 The returns can be perfectly reconstructed from the factors and vice versa.
 
@@ -208,7 +228,13 @@ We can visualise the factors by adjusting their volatilities to be 1% per day. T
 
 The first factor is often called the "market factor" as it tends to represent the overall market movement. As we are looking at equities, we could interpret the first factor as the equity risk premia. That is, this is the return that investors expect to earn for taking on equity risk.
 
-The other factors are generally more difficult to interpret economically. However, we can see that there may be some hits of other orthogonal risk premia. For example, many of the other factors appear to exhibit long term trending behaviour. If those factors were economically meaningful, we would interpret those trends as risk premia.
+The big question is: what do the other factors represent economically? We've found orthogonal streams of returns, but besides the market factor, do the other factors represent anything meaningful? Without some understanding of what the factors are, we will struggle (emotionally) to allocate capital to them---particularly during times of crisis.
+
+* We want to tie the factors to the returns of the actual assets. If a factor explains a large portion of a particular sector and very little of the other sectors, then we can say that the factor represents the stream of returns for that sector.
+* We cannot do this unless each of the factors has the same variance, that way we can compare their contributions to each asset fairly.
+
+SWITCH TO WHITENING
+
 
 <feature class="nostyle big">
 
