@@ -644,6 +644,82 @@ For the curious, here are the logged factor returns over time:
 
 </feature>
 
+You can replicate this analysis with the following code:
+```python
+def ewm_factor_model(
+    returns: pd.DataFrame,
+    halflife: int,
+    min_periods: int,
+    lag: int = 2,
+    use_varimax: bool = True,
+    positive: bool = True,
+    procrustes: bool = True,
+):
+
+    X = returns.copy()
+
+    covs = X.ewm(halflife=halflife, min_periods=min_periods).cov()
+
+    loadings = None
+    prev_loadings = None
+
+    all_iloadings = []
+    all_loadings = []
+    all_factors = []
+
+    for date, cov in tqdm(covs.groupby(level=0)):
+
+        if cov.isnull().values.any():
+            continue
+
+        prev_loadings = loadings
+
+        # ------ PCA loadings and iloadings --------
+        loadings, iloadings = pca_loadings(cov.to_numpy(), whiten=True)
+
+        # ------- Rotate loadings with varimax -------
+        if use_varimax:
+            G = np.eye(loadings.shape[1])
+            G[1:, 1:] = varimax_rotation(loadings[:, 1:])
+            loadings = loadings @ G
+            iloadings = G.T @ iloadings
+
+        # ------- Try to keep loadings positive --------
+        if positive:
+            S = sign_rotation(loadings)
+            loadings = loadings @ S
+            iloadings = S @ iloadings
+
+        # --------- Rotate to previous loadings ---------
+        if procrustes and prev_loadings is not None:
+            Q = procrustes_rotation(loadings, prev_loadings)
+            loadings = loadings @ Q
+            iloadings = Q.T @ iloadings
+
+        # Convert to pandas
+        iloadings = pd.DataFrame(iloadings, columns=returns.columns)
+        iloadings = pd.concat([iloadings], keys=[date], names=['Date'])
+
+        loadings = pd.DataFrame(loadings, index=returns.columns)
+        loadings = pd.concat([loadings], keys=[date], names=['Date'])
+
+        all_iloadings.append(iloadings)
+        all_loadings.append(loadings)
+
+        # Calculate factors
+        if len(all_iloadings) >= lag:
+            iloadings = all_iloadings[-lag]
+            r = returns.loc[date]
+            f = iloadings @ r
+            all_factors.append(f)
+
+    iloadings = pd.concat(all_iloadings)
+    loadings = pd.concat(all_loadings)
+    factors = pd.concat(all_factors).unstack()
+
+    return iloadings, loadings, factors
+```
+
 # Summary
 
 This article builds a practical statistical factor model for ETF returns that is interpretable and stable out-of-sample. The model uses PCA as a starting point and then applies a series of rotations to force interpretability and stability. The resulting factors are mostly uncorrelated and represent economically meaningful sources of risk and return.
