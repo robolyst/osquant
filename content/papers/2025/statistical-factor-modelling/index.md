@@ -17,7 +17,7 @@ When you buy something and the price changes, what happened? Let's say, for exam
 
 The idea of a factor model is that every stream of returns can be explained by a number of underlying factors. A factor model roughly says $\boldsymbol{r}_t \approx \boldsymbol{L} \boldsymbol{f}_t$ where $\boldsymbol{r}_t$ is a vector of returns at time $t$, $\boldsymbol{L}$ is a matrix of factor loadings and $\boldsymbol{f}_t$ is a vector of factor returns. If we can identify these factors, we can understand what is driving returns.
 
-Not only does this model allow us to explain returns, we can compare the returns of different assets in a meaningful way. For example, we could break down the returns of [Apple](https://uk.finance.yahoo.com/quote/AAPL/) and [Orange](https://en.wikipedia.org/wiki/Apples_and_oranges) and see how much of their returns are explained by the same factors.
+Not only does this model allow us to explain returns, it lets us compare different assets in a meaningful way. For example, we can break down the returns of [Apple](https://uk.finance.yahoo.com/quote/AAPL/) and [Orange](https://en.wikipedia.org/wiki/Apples_and_oranges) and see how much of their returns are explained by the same factors.
 
 There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$ and want to estimate the loadings $\boldsymbol{L}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is a *statistical factor model* [^Conner2007].
 
@@ -73,7 +73,7 @@ where we can see exactly how much of the portfolio return is coming from each so
 
 Additionally, any model of the asset returns $\text{E}[\boldsymbol{r}_t]$ can be decomposed into a model of $\boldsymbol{\alpha}$ and $\text{E}[\boldsymbol{f}_t]$. This decomposition allows us to understand whether our return predictions are coming from alpha or risk premia. This decomposition into alpha and factor returns is often called *alpha orthogonal* and *alpha spanned* respectively [^Paleologo2025].
 
-**You can build better risk models.** Because we know where the risks are coming from, we can hedge them. Or, more specifically, we can invest in a single or multiple factors to the exclusion of all others. This is called *factor mimicking portfolios* [^Paleologo2025].
+**Build better risk models.** Because we know where risks come from, we can hedge them. More specifically, we can invest in one or more factors while excluding others. These are *factor-mimicking portfolios* [^Paleologo2025].
 
 **You can build diversified portfolios.** Rather than diversifying across assets which all share the same return drivers, you can directly diversify across factors. If the portfolio weights are $\boldsymbol{w}$, then the factor exposures are $\boldsymbol{w}^\top \boldsymbol{L}$. Therefore, you can choose portfolio weights $\boldsymbol{w}$ to achieve desired factor exposures.
 
@@ -230,7 +230,7 @@ The first factor is often called the "market factor" as it tends to represent th
 
 The big question is: What do the other factors represent economically? We've found orthogonal streams of returns, but besides the market factor, do the other factors represent anything meaningful? Without some understanding of what the factors are, we will struggle (emotionally) to allocate capital to them---particularly during times of crisis.
 
-The only data we have are the ETF returns. If a factor explains a large portion of a particular sector and very little of the other sectors, then we can say that the factor represents the stream of returns for that sector. We can do this by looking at the loadings matrix $\boldsymbol{L}\_\text{pca}$. However, because the variance of each factor is different, the loadings are not comparable.
+The only data we have are the ETF returns. If a factor explains a large portion of a particular sector and very little of the others, we can say that the factor represents the stream of returns for that sector. We can do this by looking at the loadings matrix $\boldsymbol{L}\_\text{pca}$. However, because each factor has different variance, the loadings are not comparable.
 
 To solve this, we whiten the factors.
 
@@ -563,7 +563,7 @@ Both the PCA and varimax rotations do not have unique solutions. This means that
 PCA has an indeterminacy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
 
 
-{{<figure src="images/equivalent_pca.svg" title="Example of PCA indeterminancy." width="medium" >}}
+{{<figure src="images/equivalent_pca.svg" title="Example of PCA indeterminacy." width="medium" >}}
 The sign of the PCA factors is arbitrary. Here we illustrate two possible PCA factorizations of the same data. The difference is that the signs of the factors have been flipped. Both factorizations are equally valid PCA decompositions.
 {{</figure>}}
 
@@ -571,7 +571,7 @@ The varimax rotation is an optimization over a non-convex objective. There are m
 
 For example, we'll fit our factor model to a moving EWM covariance matrix with a halflife of $252 \times 2$ days. We'll calculate the contributions matrix and plot the contributions for the 2nd factor over time. You can see the results in the figure below, which shows that the contributions are all over the place:
 
-{{<figure src="images/adjusted_False_contributions.svg" title="Example of rotation indeterminancy." >}}
+{{<figure src="images/adjusted_False_contributions.svg" title="Example of rotation indeterminacy." >}}
 The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of two years. You can observe that the contributions (and thereby the factor loadings) change meaning significantly over time.
 {{</figure>}}
 
@@ -603,7 +603,7 @@ def procrustes_rotation(current, previous):
 
 Repeating the analysis from before, we can examine the contributions of the 2nd factor over time after applying the Procrustes rotation each day:
 
-{{<figure src="images/adjusted_True_contributions.svg" title="Example of rotation indeterminancy fixed with Procrustes rotation." >}}
+{{<figure src="images/adjusted_True_contributions.svg" title="Example of rotation indeterminacy fixed with Procrustes rotation." >}}
 The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of two years. Additionally, the Procrustes rotation was applied each day to ensure that the loadings remain consistent over time. You can observe that the contributions (and thereby the factor loadings) are now stable over time.
 {{</figure>}}
 
