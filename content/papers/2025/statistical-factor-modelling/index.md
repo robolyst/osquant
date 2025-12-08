@@ -230,73 +230,139 @@ The first factor is often called the "market factor" as it tends to represent th
 
 The big question is: what do the other factors represent economically? We've found orthogonal streams of returns, but besides the market factor, do the other factors represent anything meaningful? Without some understanding of what the factors are, we will struggle (emotionally) to allocate capital to them---particularly during times of crisis.
 
-* We want to tie the factors to the returns of the actual assets. If a factor explains a large portion of a particular sector and very little of the other sectors, then we can say that the factor represents the stream of returns for that sector.
-* We cannot do this unless each of the factors has the same variance, that way we can compare their contributions to each asset fairly.
+The only data we have are the ETF returns. If a factor explains a large portion of a particular sector and very little of the other sectors, then we can say that the factor represents the stream of returns for that sector. We can do this by looking at the loadings matrix $\boldsymbol{L}\_\text{pca}$. However, because the variance of each factor is different, the loadings are not comparable.
 
-SWITCH TO WHITENING
+To solve this, we whiten the factors.
 
-
-<feature class="nostyle big">
-
-![PCA factor contributions](images/pca_asset_component_weights.svg)
-
-</feature>
-
-Some observations:
-
-* The market factor does not have any assets with large weights. This factor contributes fairly evenly to all assets.
-* I've taken the absolute value of the weights. This obscures slightly the significance of the market factor having all positive weights. The market factor influences all assets by roughly the same amount in the same direction.
-
-We're going to look at two things we can do to make these factors more interpretable: whitening and varimax rotation.
 
 ## Whitening
 
-The idea behind whitening is to re-scale the factors to have the same variance. Generally, we set the variance to 1. Now, the factors already are uncorrelated which means that setting their variances to 1 results in the covariance matrix being the identity matrix.
+The idea behind whitening is to re-scale the factors to have the same variance. Generally, we set the variance to 1. The factors are already uncorrelated which means that setting their variances make their covariance matrix the identity matrix.
 
-To whiten, we divide the factors by their standard deviations. The eigenvalues from PCA are the variances of each factor. Therefore, we can whiten by dividing each factor by the square root of its corresponding eigenvalue:
+To whiten, we divide the factors by their standard deviations. The eigenvalues from PCA are the variances of each factor. Therefore, we can whiten by dividing each factor by the square root of its corresponding eigenvalue.
+
+Set $\boldsymbol{D}$ to be a diagonal matrix where each entry is $D\_{ii} = \sqrt{\lambda_i}$. Then, we can write the whitened factor model as:
 $$
-\boldsymbol{r}_t = \boldsymbol{\beta}\boldsymbol{D} \boldsymbol{f}_t
+\begin{aligned}
+ \boldsymbol{f}_t &= \boldsymbol{D}^{-1}\boldsymbol{L}\_\text{pca}^\top \boldsymbol{r}_t \\\
+ \\\
+\boldsymbol{r}_t &= \boldsymbol{L}\_\text{pca}\boldsymbol{D} \boldsymbol{f}_t \\\
+\end{aligned}
 $$
-where $\boldsymbol{D}$ is a diagonal matrix with entries $D\_{ii} = 1 / \sqrt{\lambda_i}$ where $\lambda_i$ is the $i$th eigenvalue. In practice, we modify the loadings matrix $\boldsymbol{\beta}$ to include this scaling:
+And the loadings and inverse loadings become:
+$$
+\begin{aligned}
+\boldsymbol{L} &= \boldsymbol{L}\_\text{pca}\boldsymbol{D} \\\
+\boldsymbol{L}^{-1} &= \boldsymbol{D}^{-1}\boldsymbol{L}\_\text{pca}^\top \\\
+\end{aligned}
+$$
+
+The pca loadings function is updated with:
 ```python
-# Whiten loadings so that the factors have
-# covariance = I
-vecs = vecs / np.sqrt(eigvals)
+def pca_loadings(
+    cov: np.ndarray,
+    whiten: bool = False,
+) -> tuple[np.ndarray, np.ndarray]:
+
+    ...  # Existing code
+
+    if whiten:
+        # Whiten loadings so that the factors have
+        # covariance = I
+        seigvals = np.sqrt(eigvals)[:, None]  # Column vector
+        loadings = loadings * seigvals.T
+        iloadings = (1 / seigvals) * iloadings
+    
+    return loadings, iloadings
 ```
 
-Now, the resulting factors have the identity matrix as their covariance matrix:
+The whitened factors all have unit variance and are uncorrelated. This means that the covariance matrix of the factors is the identity matrix:
 $$
 \boldsymbol{\Sigma}_f = \text{Cov}[\boldsymbol{f}_t] = \boldsymbol{I}
 $$
-we say that these factors are [*orthonormal*](https://en.wikipedia.org/wiki/Orthonormality). This setup allows us to rotate the factors by any orthogonal matrix $\boldsymbol{C}$ and still maintain the identity covariance matrix:
+As the factors are now statistically the same, we can compare the loadings. We specifically want to know how much of each asset's variance is explained by each factor. The covariance matrix of returns under our factor model is:
 $$
-\begin{aligned}
-\boldsymbol{C}^\top \boldsymbol{C} &= \boldsymbol{I} \\\
-\boldsymbol{r}_t &= \boldsymbol{\beta} \boldsymbol{C}^\top \boldsymbol{C} \boldsymbol{f}_t \\\
-\\\
-\text{Cov}[\boldsymbol{C} \boldsymbol{f}_t] &= \boldsymbol{C} \text{Cov}[\boldsymbol{f}_t] \boldsymbol{C}^\top \\\
-&= \boldsymbol{C} \boldsymbol{I} \boldsymbol{C}^\top = \boldsymbol{I} \\\
-\end{aligned}
-$$
-This is a powerful idea. It means we can search for a rotation $\boldsymbol{C}$ that makes the factors more interpretable while still maintaining the properties we want.
-
-## Varimax rotation
-
-Denote our loadings after rotation to be $\boldsymbol{L}^{(1)} = \boldsymbol{L} \boldsymbol{C}^\top$. We can make the factors more interpretable by making the loadings more sparse. That is, for each factor (column of $\boldsymbol{L}^{(1)}$), we want only a few assets to have large loadings, and the rest to be close to zero. This makes 
-it easy to interpret what each factor is doing as it only strongly influences a few assets. One rotation that achieves this is called the *varimax* rotation first described in 1958 in psychometric research [^Kaiser1958].
-
-Note again that the covariance matrix of returns under a factor model with orthonormal factors is:
-$$
-\boldsymbol{\Sigma}_r = \boldsymbol{L} \boldsymbol{L}^\top + \boldsymbol{\Sigma}\_\epsilon
+\boldsymbol{\Sigma}\_r = \text{Cov}[\boldsymbol{r}_t] = \boldsymbol{L} \text{Cov}[\boldsymbol{f}_t] \boldsymbol{L}^\top = \boldsymbol{L} \boldsymbol{I} \boldsymbol{L}^\top = \boldsymbol{L} \boldsymbol{L}^\top
 $$
 
 where the variance of asset $i$ is the $i$th diagonal entry of $\boldsymbol{\Sigma}\_r$:
 
 $$
-\sigma^2\_{r,i} = \sum_{j=1}^K L\_{ij}^2 + \sigma^2\_{\epsilon,i}
+\sigma^2\_{r,i} = \sum_{j=1}^K L\_{ij}^2
 $$
 
-that sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. The value $L\_{ij}^2$ is the contribution of factor $j$ to the variance of asset $i$. Therefore, if we want each factor to only contribute to a few assets, we want the squared loadings in each column of $\boldsymbol{L}$ to be sparse.
+that sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. The value $L\_{ij}^2$ is the contribution of factor $j$ to the variance of asset $i$.
+
+We're going to define the *contribution matrix* as the matrix $\boldsymbol{C}$ where each entry is the proportion of asset $i$'s variance explained by factor $j$ with the sign added back in:
+$$
+C\_{ij} = \frac{L\_{ij}^2}{\sigma^2\_{r,i}} = \text{sign}(L\_{ij}) \frac{L\_{ij}^2}{\sum_{k=1}^K L\_{ik}^2}
+$$
+We say that factor $j$ contributes $C\_{ij}$ percent to asset $i$'s variance. Note that the absolute contributions for each asset sum to 1. We keep the sign to help with interpretation later. The code to compute the contribution matrix is:
+```python
+def contribution_matrix(loadings: np.ndarray) -> np.ndarray:
+    return np.sign(loadings) * (loadings**2) / (loadings**2).sum(1)[:, None]
+```
+And we can get the contribution matrix for our whitened PCA factors with:
+```python
+cov = R.cov()
+loadings, _ = pca_loadings(cov, whiten=True)
+contributions = contribution_matrix(loadings)
+```
+
+We can then visualise the contribution matrix by plotting the contributions by factor:
+
+<feature class="nostyle big">
+
+![PCA factor contributions](images/whitened_contributions.svg)
+
+</feature>
+
+We can make the following observations from the contribution matrix:
+
+* **Market factor.** The first factor is very clearly the market factor. It explains most of the variance for each of the assets.
+* **Inexplainable factors.** Most of the remaining factors do not explain a small set of assets. For example, see factor 2. Instead, they appear to explain similar proportions of many assets.
+* **Explainable factors.** A couple of factors do appear to have some meaning. For example, factor 4 explains a much larger proportion of utilities (XLU) than the other assets. We could say that this factor represents the utilities sector.
+* **Decreasing explaining power.** As we go to higher numbered factors, the amount of variance explained decreases. This is expected as PCA orders the factors by variance explained.
+
+The conclusion so far is that besides the first factor, the remaining factors have no clear economic meaning. We can get around this by noting that we do not care that the PCA factors represent directions of maximum variance. We only care that they are uncorrelated. Therefore, we can rotate the factors out of the PCA coordinate system into another coordinate system that is more interpretable.
+
+## Rotations
+
+Recall that the PCA loadings are simply a rotation of the returns into a new coordinate system with special properties. Now that we've whitened the factors, rotations become very powerful.
+
+A rotation is represented by an orthonormal matrix $\boldsymbol{G}$ where:
+$$
+\boldsymbol{G}^\top \boldsymbol{G} = \boldsymbol{G} \boldsymbol{G}^\top = \boldsymbol{I}
+$$
+which means that we can rotate the factors by any valid rotation matrix without changing the model:
+$$
+\boldsymbol{r}_t = \boldsymbol{L} \boldsymbol{f}_t = \boldsymbol{L} \boldsymbol{G} \boldsymbol{G}^\top \boldsymbol{f}_t
+$$
+The rotated factors are $ \boldsymbol{G}^\top \boldsymbol{f}_t$ and critically:
+$$
+\text{Cov}[\boldsymbol{G}^\top \boldsymbol{f}_t] = \boldsymbol{G}^\top \text{Cov}[\boldsymbol{f}_t] \boldsymbol{G} = \boldsymbol{G}^\top \boldsymbol{I} \boldsymbol{G} = \boldsymbol{I} = \text{Cov}[\boldsymbol{f}_t]
+$$
+So any valid roatation matrix maintains the orthonormality of the factors! This is powerful because it means we can search for a rotation matrix that makes the factors more interpretable while still maintaining the properties we want.
+
+We're going to look at a roation that makes the factors more interpretable, the varimax rotation.
+
+## Varimax rotation
+
+We can make the factors more interpretable by making the loadings matrix $\boldsymbol{L}$ more sparse. That is, for each factor (column of $\boldsymbol{L}$), we want only a few assets to have large loadings, and the rest to be close to zero. This makes 
+it easy to interpret what each factor is doing as it only strongly influences a few assets. One rotation that achieves this is called the *varimax* rotation first described in 1958 in psychometric research [^Kaiser1958].
+
+Note again that the covariance matrix of returns under our factor model with orthonormal factors is:
+$$
+\boldsymbol{\Sigma}_r = \boldsymbol{L} \boldsymbol{L}^\top
+$$
+
+where the variance of asset $i$ is the $i$th diagonal entry of $\boldsymbol{\Sigma}\_r$:
+
+$$
+\sigma^2\_{r,i} = \sum_{j=1}^K L\_{ij}^2
+$$
+
+that sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. We previoualy name the value $L\_{ij}^2$ the *contribution* of factor $j$ to the variance of asset $i$. If we want each factor to only contribute to a few assets, we want the squared loadings in each column of $\boldsymbol{L}$ to be sparse.
 
 We can formulate this sparsity requirement by saying we want each column of $\boldsymbol{L}$ to have a high variance of squared loadings. If the squared loadings are all similar, then the variance is low. If some squared loadings are large and the rest are small, then the variance is high. Recall that the variance of a random variable $X$ is given by $\text{Var}(X) = \text{E}[X^2] - (\text{E}[X])^2$. Therefore, the variance of the squared loadings for factor $j$ is:
 
@@ -309,33 +375,134 @@ $$
 \text{Varimx}(\boldsymbol{L}) = \sum_{j=1}^K \left[ \frac{1}{N} \sum_{i=1}^N L\_{ij}^4 - \left( \frac{1}{N} \sum_{i=1}^N L\_{ij}^2 \right)^2 \right]
 $$
 
-The original solution to maximising this objective rotates a single pair of factors at a time to increase the objective [^Kaiser1958]. The modern approach is to calculate the gradient and use an iterative method to find the maximum [^Jennrich2001]. We'll skip the derivation and just present the algorithm:
+The original solution to maximising this objective rotates a single pair of factors at a time to increase the objective [^Kaiser1958]. The modern approach is to calculate the gradient and use an iterative method to find the maximum [^Jennrich2001]. We'll skip the derivation and just present the algorithm. Say that the given unrotated loadings matrix is $\boldsymbol{L} = \boldsymbol{L}\_\text{pca}\boldsymbol{D}$. The algorithm is:
 
-1. initialise $C \leftarrow I$.
-2. compute $\Lambda = L C$.
-3. compute column means $d_j = \tfrac{1}{p}\sum_i \Lambda_{ij}^2$.
-4. compute the derivative  $\partial \text{Varimx}/\partial\Lambda = \tfrac{4}{p}Z$ where the entries are $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
-5. using the chain rule, compute the derivative $M = \partial \text{Varimx}/\partial
-C = L^\top Z$.
-6. compute the SVD: $M = U\Sigma V^\top$.
-7. update $C \leftarrow U V^\top$.
-8. if the objective has not converged, go back to step 2.
-
-For our analysis, we're going to make a small change to the algorithm. The first factor we found with PCA is the market factor. Recall that the loadings for that factor are all fairly even. If we were to use the varimax rotation, we will lose this factor as varimax does not like factors with even loadings. We want to hold this factor fixed and only rotate the other factors. We pull this off by excluding the column in $\boldsymbol{L}$ corresponding to the market factor when computing the varimax rotation. That is, we run varimax on $\boldsymbol{L}\_{2:K}$ and then the rotation matrix is:
-$$
-\boldsymbol{C} = \begin{bmatrix}1 & \boldsymbol{0} \\\
-\boldsymbol{0} & \boldsymbol{C}\_{varimax} \\\
-\end{bmatrix}
-$$
+1. Initialise the rotation $\boldsymbol{G} \leftarrow \boldsymbol{I}$.
+2. Compute $\boldsymbol{\Lambda} = \boldsymbol{L} \boldsymbol{G}$.
+3. Compute column means $d_j = \tfrac{1}{p}\sum_i \Lambda_{ij}^2$.
+4. Compute the derivative  $\partial \text{Varimx}(\boldsymbol{L})/\partial\boldsymbol{\Lambda} = \tfrac{4}{p}\boldsymbol{Z}$ where the entries are $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
+5. Using the chain rule, compute the derivative $\boldsymbol{M} = \partial \text{Varimx}(\boldsymbol{L})/\partial \boldsymbol{G} = \boldsymbol{L}^\top \boldsymbol{Z}$.
+6. Compute the SVD: $\boldsymbol{M} = \boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^\top$.
+7. Update $\boldsymbol{G} \leftarrow \boldsymbol{U} \boldsymbol{V}^\top$.
+8. If the objective has not converged, go back to step 2.
 
 The code for the varimax algorithm in Python is:
 ```python
-# Add cod here
+def varimax_rotation(
+    loadings: np.ndarray,
+    max_iter: int = 1000,
+    tol: float = 1e-5,
+) -> np.ndarray:
+    """
+    Calculates the varimax rotation matrix
+    corresponding to the input loading matrix.
+
+    Code is stolen and modified from the
+    factor_analyzer package.
+
+    Parameters
+    ----------
+    loadings : array-like
+        The loading matrix.
+
+    max_iter : int, optional
+        The maximum number of iterations.
+        Defaults to 1000.
+    
+    tol : float, optional
+        The convergence threshold.
+        Defaults to 1e-5.
+
+    Returns
+    -------
+    rotation_mtx : array-like
+        The rotation matrix. The loadings
+        are rotated by: L @ rotation_mtx
+    """
+    X = loadings.copy()
+    n_rows, n_cols = X.shape
+    if n_cols < 2:
+        return X
+
+    # initialize the rotation matrix
+    # to N x N identity matrix
+    rotation_mtx = np.eye(n_cols)
+
+    d = 0
+    for _ in range(max_iter):
+        old_d = d
+
+        # take inner product of loading matrix
+        # and rotation matrix
+        basis = np.dot(X, rotation_mtx)
+
+        # transform data for singular value decomposition using updated formula :
+        # B <- t(x) %*% (z^3 - z %*% diag(drop(rep(1, p) %*% z^2))/p)
+        diagonal = np.diag(np.squeeze(np.repeat(1, n_rows).dot(basis**2)))
+        transformed = X.T.dot(basis**3 - basis.dot(diagonal) / n_rows)
+
+        # perform SVD on
+        # the transformed matrix
+        U, S, V = np.linalg.svd(transformed)
+
+        # take inner product of U and V, and sum of S
+        rotation_mtx = np.dot(U, V)
+        d = np.sum(S)
+
+        # check convergence
+        if d < old_d * (1 + tol):
+            break
+
+    return rotation_mtx
+```
+
+For our analysis, we're going to make a small change to the algorithm. The first factor we found with PCA is the market factor. Recall that the loadings for that factor are all fairly even. If we were to use the varimax rotation, we will lose this factor as varimax does not like factors with even loadings. We want to hold this factor fixed and only rotate the other factors. We pull this off by excluding the column in $\boldsymbol{L}$ corresponding to the market factor when computing the varimax rotation. That is, we run varimax on $\boldsymbol{L}\_{2:K}$ and then the rotation matrix is:
+$$
+\boldsymbol{G} = \begin{bmatrix}1 & \boldsymbol{0} \\\
+\boldsymbol{0} & \boldsymbol{G}\_{varimax} \\\
+\end{bmatrix}
+$$
+
+The final step we want to do is ensure that the factors have a consistent sign. PCA has an indeterminancy where the sign of each factor is arbitrary. We will fix the sign by ensuring that the largest contribution for each factor is positive. This amounts to a diagonal matrix $\boldsymbol{S}$ where $S\_{ii} = \pm 1$ depending on the sign of the largest contribution for factor $i$. $\boldsymbol{S}$ is orthonormal and thus it is a valid rotation matrix. We'll use the following function to get the sign matrix:
+```python
+def sign_rotation(loadings: np.ndarray) -> np.ndarray:
+    c = contribution_matrix(loadings)
+    signs = np.sign([max(c[:, j], key=abs) for j in range(c.shape[1])])
+    signs[signs == 0] = 1  # avoid zeros
+    S = np.diag(signs)
+    return S
+```
+
+Our factor model with PCA, whitening, varimax rotation and sign consistency becomes:
+$$
+\begin{aligned}
+ \boldsymbol{f}_t &= \boldsymbol{S}^\top \boldsymbol{G}^\top \boldsymbol{D}^{-1}\boldsymbol{L}\_\text{pca}^\top \boldsymbol{r}_t \\\
+ \\\
+\boldsymbol{r}_t &= \boldsymbol{L}\_\text{pca}\boldsymbol{D} \boldsymbol{G} \boldsymbol{S} \boldsymbol{f}_t \\\
+\end{aligned}
+$$
+and you can compute everything with:
+```python
+cov = R.cov()
+loadings, iloadings = pca_loadings(cov, whiten=True)
+
+# Varimax rotate all but the first (market) factor
+G = np.eye(loadings.shape[1])
+G[1:, 1:] = varimax_rotation(loadings[:, 1:])
+loadings = loadings @ G
+iloadings = G.T @ iloadings
+
+# Make sure everything is positive
+S = sign_rotation(loadings)
+loadings = loadings @ S
+iloadings = S @ iloadings
 ```
 
 ## Interpretation
 
-Our process for finding factors is: obtain PCA factors, whiten them, then varimax rotate all but the first factor. We convert the loadings to weights for interpretation as before. The results look like:
+Our process for finding factors is: obtain PCA factors, whiten them, varimax rotate all but the first factor, and ensure positive signs. We then convert the loadings matrix to the contribution matrix for interpretation as before.
+
+The results look like:
 
 <feature class="nostyle big">
 
@@ -343,9 +510,19 @@ Our process for finding factors is: obtain PCA factors, whiten them, then varima
 
 </feature>
 
+These results are quite remarkable.
+
 In comparison to the unrotated PCA factors, the varimax factors are much more interpretable. Factor 1 remains the market factor with all assets contributing fairly evenly. The other factors have become much more sparse. Keep in mind that these factors are all uncorrelated! So a factor that explains a high percentage of one asset and little of the others can be thought of as the unique source of risk and returns for that asset.
 
-**Factor 1** is the market factor. This explains a high percentage of all assets, roughly 50% for each asset. **Factor 2** explains a high percentage of consumer staples (XLP). There is some explaining power for other ETFs, but it is very small in comparison. We should expect to see small explaining power for all the other ETFs as the sectors economically overlap. If Factor 2 has a positive average return, then it could be interpreted as the consumer staples risk premia. Each factor in our example explains a high percentage of one of the assets and thus similar conclusions can be drawn for the other factors.
+**Factor 1** is the market factor. This explains a high percentage of all assets, roughly 50% for each asset. **Factor 4** explains a high percentage of the utilities sector (XLU). There is some explaining power for other ETFs, but it is tiny in comparison. We should expect to see small explaining power for all the other ETFs as the sectors economically overlap. If Factor 4 has a positive average return, then it could be interpreted as the consumer staples risk premia. Each factor in our example explains a high percentage of one of the assets and thus similar conclusions can be drawn for the other factors.
+
+The logged factor returns look like:
+
+<feature class="nostyle big">
+
+![Varimax factor contributions](images/insample_factor_returns.svg)
+
+</feature>
 
 At this point, we could talk about how to model the possible risk premia in each factor. We will leave that to another article. Instead, we will look at ensuring that a factor model maintains its properties out-of-sample.
 
