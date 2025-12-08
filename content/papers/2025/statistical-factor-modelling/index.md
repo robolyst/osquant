@@ -559,56 +559,24 @@ When computing the factor loadings at time $t$, we use the exponentially weighte
 
 ## Loadings consistency
 
-The first issue we'll encounter is that PCA has an indeterminancy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
+Both the PCA and varimax rotations do not have unique solutions. This means that when we compute the loadings day to day, the loadings may change in ways that make them impossible to interpret consistently over time.
+
+PCA has an indeterminancy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
 
 
 {{<figure src="images/equivalent_pca.svg" title="Example of PCA indeterminancy." width="medium" >}}
 The sign of the PCA factors is arbitrary. Here we illustrate two possible PCA factorizations of the same data. The difference is that the signs of the factors have been flipped. Both factorizations are equally valid PCA decompositions.
 {{</figure>}}
 
-For example, we'll fit a PCA factor model to with an EWM covariance matrix with halflife of 252 days. We'll include whitenning. The loading for SPY on the first factor over time looks like:
-
-![](images/plain_pca_spy_loading.svg)
-
-where you can see the sign flips.
-
-To fix this, we enforce sign consistency by ensuring that the angle of each factor with its previous day's version remains small. If the angle is larger than 90 degress, we flip the sign. The cosine of the angle between two vectors $\boldsymbol{a}$ and $\boldsymbol{b}$ is given by:
-$$
-\cos(\theta) = \frac{\boldsymbol{a}^\top \boldsymbol{b}}{||\boldsymbol{a}|| \cdot ||\boldsymbol{b}||} 
-$$
-When the angle is less than 90 degrees, the cosine is positive. When the angle is greater than 90 degrees, the cosine is negative. Therefore, we can enforce sign consistency by checking the cosine of the angle between the current PCA loadings and the previous loadings. If it is negative, we flip the sign of the current loading. We can also drop the normalization as (1) we're only interested in the sign and (2) the PCA loadings are orthonormal.
-
-Repeating the above sliding window PCA with sign consistency enforced gives:
-
-![](images/adjusted_pca_spy_loading.svg)
-
-where we can see that the sign is no longer flipping randomly.
-
-Upading the `pca_loadings` function to enforce sign consistency gives:
-
-```python
-def pca_loadings(
-    cov: np.ndarray,
-    whiten: bool = False,
-    prev: np.ndarray | None = None,
-) -> np.ndarray:
-
-    # existing PCA code
-    ...
-
-    # Try to keep vecs consistent over time
-    if prev is not None:
-        signs = np.sign(np.diag(prev.T @ vecs))
-        vecs = vecs * signs
-    
-    return vecs
-```
-
-### Rotational consistency
-
 The varimax rotation is an optimisation over a non-convex objective. There are many solutions and local minima. Consider that since the factors are whitened, the order of the factors is not important. In fact, the same factors can be represented in any order which immediately gives us $K!$ equivalent solutions. This means that the factors will change meaning day to day, making them impossible to interpret consistently out-of-sample.
 
-We can solve this by computing the varimax rotated loadings at time $t$ and rotating them to be as close as possible to the previous day's loadings. This means we want an orthornormal matrix $\boldsymbol{Q}$ such that the rotated loadings $\boldsymbol{L}_\{t+1} \boldsymbol{Q}$ are as close as possible to the previous day's loadings $\boldsymbol{L}_t$. We can formulate this as the minimisation problem:
+For example, we'll fit our factor model to a moving EWM covariance matrix with a halflife of $252 \times 3$ day. We'll calculate the contributions matrix and plot the contributions for the 2nd factor over time. You can see the results in the figure below which shows that the contributions are all over the place:
+
+{{<figure src="images/adjusted_False_contributions.svg" title="Example of rotation indeterminancy." >}}
+The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of 3 years. You can observe that the contributions (and thereby the factor loadings) change meaning significantly over time.
+{{</figure>}}
+
+We can solve this by computing the loadings for time $t+1$ and rotating them to be as close as possible to the previous day's loadings. This means we want an orthornormal matrix $\boldsymbol{Q}$ such that the rotated loadings $\boldsymbol{L}_\{t+1} \boldsymbol{Q}$ are as close as possible to the previous day's loadings $\boldsymbol{L}_t$. We can formulate this as the minimisation problem:
 $$
 \begin{aligned}
 \arg\min\_{\boldsymbol{Q}} & \ || \boldsymbol{L}\_{t+1} \boldsymbol{Q} - \boldsymbol{L}_t ||_F^2 \\\
@@ -634,8 +602,11 @@ def procrustes_rotation(current, previous):
     return Q
 ```
 
-![](images/plain_varimax_weights.svg)
-![](images/adj_varimax_weights.svg)
+Repeating the analysis from before, we can examine the contributions of the 2nd factor over time after applying the Procrustes rotation each day:
+
+{{<figure src="images/adjusted_True_contributions.svg" title="Example of rotation indeterminancy fixed with Procrustes rotation." >}}
+The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of 3 years. Additionally, the Procrustes rotation was applied each day to ensure that the loadings remain consistent over time. You can observe that the contributions (and thereby the factor loadings) are now stable over time.
+{{</figure>}}
 
 ## Factor orthogonality
 
@@ -652,14 +623,11 @@ For now, we will accept that the factors are not perfectly orthonormal out-of-sa
 Shows the correlations between the realised factor returns over the period 2016-01-01 to 2025-11-25. In comparison to the ETF correlation matrix, the factors are mostly uncorrelated, showing that the factor model has successfully identified sources of risk and return.
 {{</figure>}}
 
+In comparison to the ETF correlation matrix, the factors are mostly uncorrelated. There are some clusters of small correlations; factor 14 has some negative correlations with a bunch of the factors. However, the level of correlations is tiny in comparison to the raw ETF returns. We can easily conclude that the factor model has successfully identified sources of risk and return.
+
 ## Interpretation
 
-Now that we've stabalised the out-of-sample factor model, we can inspect the factors over time to check that they are in fact stable and interpretable.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+Now that we've stabalised the out-of-sample factor model, we can inspect the factors over time to check that they are in fact stable and interpretable. For each factor, we'll plot the contributions over time for each of the assets:
 
 <feature class="nostyle big">
 
@@ -667,10 +635,9 @@ pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhon
 
 </feature>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+I've omitted the names of each asset/line to keep the figure clean. The main point is that the factors maintain their meaning over time. This is exactly what we wanted. Each factor represents a unique source of risk and return and it is stable out-of-sample.
+
+For the curious, here are the logged factor returns over times:
 
 <feature class="nostyle big">
 
@@ -678,23 +645,21 @@ pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhon
 
 </feature>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
-
-
 # Summary
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer odio neque, volutpat vel nunc
-ut. Duis maximus massa vitae libero imperdiet feugiat quis a sapien. Quisque sodales neque dui,
-a mollis justo porta eu. Nullam semper ipsum ac ante rhoncus, ac facilisis lacus posuere. Mauris
-pulvinar elementum ligula in mattis. Fusce rhoncus consequat lorem accumsan rhoncus.
+This article builds a practical statistical factor model for ETF returns that is interpretable and stable out-of-sample. The model uses PCA as a starting point and then applies a series of rotations to force interpretability and stability. The resulting factors are mostly uncorrelated and represent economically meaningful sources of risk and return.
+
+To be able to examine the long-term behaviour of the factors, long run historical returns were approximated for each of the assets.
+
+You can apply this method to any set of asset returns where you have enough historical data. The methods are not limited to ETFs, nor to a daily frequency. The key steps are:
+
+1. Collect historical returns for your assets.
+2. Compute an exponentially weighted covariance matrix of returns.
+3. Compute PCA loadings and whiten the factors.
+4. Apply a varimax rotation (holding the market factor fixed).
+5. Apply a sign-consistency rotation.
+6. For out-of-sample, apply a Procrustes rotation to ensure stability.
+
 
 {{% citation
     id="Giglio2022"
