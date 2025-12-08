@@ -13,17 +13,17 @@ categories:
     - finance
 ---
 
-When you buy something, and the price changes, what happend? Let's say, for example, you buy shares in a made-up health company called "Orange". This company makes wearable health monitors. The price of Orange goes down by 5%. Why? It could be because the whole market went down, or because the technology sector went down, or because the health sector went down, or because Orange genuinely performed poorly. Each of these possible explanations is called a *factor*.
+When you buy something and the price changes, what happened? Let's say, for example, you buy shares in a made-up health company called "Orange." This company makes wearable health monitors. The price of Orange goes down by 5%. Why? It could be because the whole market went down, or because the technology sector went down, or because the health sector went down, or because Orange genuinely performed poorly. Each of these possible explanations is called a *factor*.
 
 The idea of a factor model is that every stream of returns can be explained by a number of underlying factors. A factor model roughly says $\boldsymbol{r}_t \approx \boldsymbol{L} \boldsymbol{f}_t$ where $\boldsymbol{r}_t$ is a vector of returns at time $t$, $\boldsymbol{L}$ is a matrix of factor loadings and $\boldsymbol{f}_t$ is a vector of factor returns. If we can identify these factors, we can understand what is driving returns.
 
 Not only does this model allow us to explain returns, we can compare the returns of different assets in a meaningful way. For example, we could break down the returns of [Apple](https://uk.finance.yahoo.com/quote/AAPL/) and [Orange](https://en.wikipedia.org/wiki/Apples_and_oranges) and see how much of their returns are explained by the same factors.
 
-There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$, and want to estimate the loadings $\boldsymbol{L}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is a *statical factor model* [^Conner2007].
+There are a handful of ways to build a factor model. (1) You know the factors $\boldsymbol{f}_t$ and want to estimate the loadings $\boldsymbol{L}$. This is a macroeconomic factor model. (2) You know the loadings and you want to estimate the factors. This is a characteristic factor model. (3) You don't know the factors or loadings and you want to estimate both. This is a *statistical factor model* [^Conner2007].
 
 The literature on these approaches is vast, but a fantastic overview is given in the paper [Factor Models, Machine Learning, and Asset Pricing](https://www.annualreviews.org/content/journals/10.1146/annurev-financial-101521-104735) [^Giglio2022].
 
-In this article, we're going to explore statistical factor modelling. We will address a few issues that arise in this approach: (1) the method is data-hungry, requiring long historical return series; (2) the factors we get are often not economically meaningful; (3) the factors we get may not be stable out-of-sample.
+In this article, we're going to explore statistical factor modeling. We will address a few issues that arise in this approach: (1) the method is data-hungry, requiring long historical return series; (2) the factors we get are often not economically meaningful; (3) the factors we get may not be stable out-of-sample.
 
 # Factor models
 
@@ -37,7 +37,7 @@ $$
 $$
 
 where
-* $\boldsymbol{r}_t$ is a random vector of returns for $N$ assets at time $t$. Generally, the risk free rate is subtracted, making these excess returns.
+* $\boldsymbol{r}_t$ is a random vector of returns for $N$ assets at time $t$. Generally, the risk-free rate is subtracted, making these excess returns.
 * $\boldsymbol{\alpha}$ is the *alpha* vector. This is an $N \times 1$ vector of constants that represent the average return of each asset not explained by the factors.
 * $\boldsymbol{L}$ is the factor loading matrix. This is an $N \times K$ matrix where each row represents an asset and each column represents a factor. The entries represent the sensitivity of each asset to each factor.
 * $\boldsymbol{f}_t$ is a $K \times 1$ random vector of factor returns.
@@ -47,17 +47,17 @@ The alpha vector $\boldsymbol{\alpha}$ is generally assumed to be $\text{E}[\bol
 
 Analogously, any model of $\text{E}[\boldsymbol{f}_t]$ is a model of the risk premia associated with each factor. 
 
-The ideal factor returns have a covariance matrix that is the identity matrix, i.e. $\boldsymbol{\Sigma}_f = \boldsymbol{I}$. The immediate implication of this is that the covariance of $\boldsymbol{r}_t$ is
+The ideal factor returns have a covariance matrix that is the identity matrix, i.e., $\boldsymbol{\Sigma}_f = \boldsymbol{I}$. The immediate implication of this is that the covariance of $\boldsymbol{r}_t$ is
 $$
 \boldsymbol{\Sigma}_r = \boldsymbol{L} \boldsymbol{\Sigma}\_f \boldsymbol{L}^\top + \boldsymbol{\Sigma}\_\epsilon = \boldsymbol{L} \boldsymbol{L}^\top + \boldsymbol{\Sigma}\_\epsilon
 $$
 This condition turns out to be very easy to enforce as we will see later.
 
-The idiosyncratic returns $\boldsymbol{\epsilon}_t$ are assumed to have expectation of 0 as any mean is captured with the $\boldsymbol{\alpha}$ vector. They are also assumed to be uncorrelated with the factors and generally with eachother. This means that the covariance matrix $\boldsymbol{\Sigma}\_\epsilon$ is a diagonal matrix. This is known as the *idiosyncratic risk* or *specific risk* of each asset. In practice, this assumption does not hold perfectly. Practitioners instead aim for a sparsely populated covariance matrix, meaning that most assets have little correlation with each other after accounting for the factors. Intuitively, if two assets are very similar, then they will have some correlation that is not explained by the factors.
+The idiosyncratic returns $\boldsymbol{\epsilon}_t$ are assumed to have expectation of 0 as any mean is captured with the $\boldsymbol{\alpha}$ vector. They are also assumed to be uncorrelated with the factors and generally with each other. This means that the covariance matrix $\boldsymbol{\Sigma}\_\epsilon$ is a diagonal matrix. This is known as the *idiosyncratic risk* or *specific risk* of each asset. In practice, this assumption does not hold perfectly. Practitioners instead aim for a sparsely populated covariance matrix, meaning that most assets have little correlation with each other after accounting for the factors. Intuitively, if two assets are very similar, then they will have some correlation that is not explained by the factors.
 
 Most factor models aim to have a small number of factors relative to the number of assets, $K \ll N$. For example, the commercially available [MSCI USA Equity Factor Models](https://www.msci.com/downloads/web/msci-com/data-and-analytics/factor-investing/equity-factor-models/MSCI%20USA%20Equity%20Factor%20Model-cfs-en.pdf) factor models have on the order of 50-100 factors for 20,000+ assets. These factor models require vast data resources and research to build. They are expensive to purchase and used by large institutions.
 
-For our purposes, we will focus on building a useful factor model that can be built with at home resources. We will be using the same number of factors as assets, but we will still gain insight into the returns of our assets.
+For our purposes, we will focus on building a useful factor model that can be built with at-home resources. We will be using the same number of factors as assets, but we will still gain insight into the returns of our assets.
 
 # Why?
 
@@ -79,11 +79,11 @@ Additionally, any model of the asset returns $\text{E}[\boldsymbol{r}_t]$ can be
 
 # Data
 
-We're going to use real data to illustrate the modelling in this article. We want a small selection of assets where we have long historical returns and that cover a wide range of the economy. To that end, we'll use a selection of ETFs.
+We're going to use real data to illustrate the modeling in this article. We want a small selection of assets where we have long historical returns and that cover a wide range of the economy. To that end, we'll use a selection of ETFs.
 
 Choosing ETFs means we can focus on only a small number of assets but still capture a wide selection of the market. As ETFs tend to be mechanically constructed to track an index, we can extend their historical returns backwards by using either the index returns or the returns of related assets before the ETF was created.
 
-In this article, we're going to use the following U.S. based ETFs:
+In this article, we're going to use the following U.S. ETFs:
 
 | Ticker  |Inception    | Description |
 |:--------|:------------|:------------|
@@ -102,15 +102,15 @@ In this article, we're going to use the following U.S. based ETFs:
 | [XLK](https://www.sectorspdrs.com/mainfund/xlk)                               | 16 Dec 1998 | Tracks the technology sector.                              |
 | [XLU](https://www.sectorspdrs.com/mainfund/xlu)                               | 16 Dec 1998 | Tracks the utilities sector.                               |
 
-At first, these ETFs look like they cover unrelated parts of the market. Looking in the figure below, we can see that the energy sector (XLE) is 45% correlated with the real estate sector (XLRE). In fact, all the ETFs are highly correlated suggesting that there are similar underlying factors that they all share. 
+At first, these ETFs look like they cover unrelated parts of the market. Looking in the figure below, we can see that the energy sector (XLE) is 45% correlated with the real estate sector (XLRE). In fact, all the ETFs are highly correlated, suggesting that there are similar underlying factors that they all share. 
 
 {{<figure src="images/etf_correlations.svg" title="ETF correlation matrix." width="medium" anchor="fig:etf_correlations" >}}
-Shows the correlations between the selected ETFs over the period 2016-01-01 to 2025-11-25. Key thing to note is that all of the ETFs are highly correlated, suggesting that there are common factors driving their returns.
+Shows the correlations between the selected ETFs over the period 2016-01-01 to 2025-11-25. The key thing to note is that all of the ETFs are highly correlated, suggesting that there are common factors driving their returns.
 {{</figure>}}
 
-The only issue with these ETFs is that that they have different inception dates and some only have a few years of history. For example, the communication sector ETF (XLC) only has data from 2018 onwards. To get around this, I construct synthetic returns for each ETF before its inception date going back to 1990-01-01. I do this by getting a large set of related stock returns and index returns and regress the first 5 years of ETF returns against these related returns. I then use the resulting regressed returns as the historical returns before the ETF's inception date.
+The only issue with these ETFs is that they have different inception dates and some only have a few years of history. For example, the communication services sector ETF (XLC) only has data from 2018 onward. To get around this, I construct synthetic returns for each ETF before its inception date, going back to 1990-01-01. I do this by getting a large set of related stock returns and index returns and regressing the first five years of ETF returns against these related returns. I then use the resulting regressed returns as the historical returns before the ETF's inception date.
 
-While this is not perfect, it does give us an approximation of the returns you might have realised if you were tracking the sector (or index) before the ETF was created.
+While this is not perfect, it does give us an approximation of the returns you might have realized if you were tracking the sector (or index) before the ETF was created.
 
 The full details of this process are in the [appendix](#appendix).
 
@@ -120,7 +120,7 @@ As an example, here are the returns of the materials sector ETF (XLB) spliced on
 The capital over time from investing in the materials sector ETF (XLB). From 1990-01-01 to 1998-12-15, the returns are synthetic, generated by regressing related stock and index returns against the actual ETF returns for the 5 year period starting at inception. After inception, the actual ETF returns are used. The synthetic returns after inception are included in the plot to show how well the synthetic returns approximate the actual returns after inception.
 {{</figure>}}
 
-So that you can reproduce what we do here, the full set of returns can be downloaded [here](data/returns.csv). And you can read them in with:
+So that you can reproduce what we do here, the full set of returns can be downloaded [here](data/returns.csv). You can read them in with:
 ```python
 import pandas as pd
 
@@ -137,15 +137,15 @@ Risk adjusting the returns to have a daily volatility of 1% and plotting the cap
 
 # Statistical factors
 
-Now that we have a long history of returns, we can build a statistical factor model. For this section, we are going to work in-sample. There are unique challenges when working out-of-sample that distract from the core modelling ideas. We will address these challenges later.
+Now that we have a long history of returns, we can build a statistical factor model. For this section, we are going to work in-sample. There are unique challenges when working out-of-sample that distract from the core modeling ideas. We will address these challenges later.
 
 ## PCA
 
-Principle component analysis [(PCA) is the workhorse](https://www.google.com/search?q=%22PCA+is+the+workhorse%22) of statistical factor modelling. PCA transforms a dataset into a new set of orthogonal variables, called principal components, that are ordered by how much of the data's variance they explain. This is achieved by rotating the coordinate system so that the first axis captures the largest possible spread in the data, the second captures the largest remaining spread subject to being independent of the first, and so on.
+Principal component analysis [(PCA) is the workhorse](https://www.google.com/search?q=%22PCA+is+the+workhorse%22) of statistical factor modeling. PCA transforms a dataset into a new set of orthogonal variables, called principal components, that are ordered by how much of the data's variance they explain. This is achieved by rotating the coordinate system so that the first axis captures the largest possible spread in the data, the second captures the largest remaining spread subject to being independent of the first, and so on.
 
-PCA is robust and deeply understood. Many before me have written excellent explanations of PCA, see for example [this blog post](https://gregorygundersen.com/blog/2022/09/17/pca/). Here, we will go through the idea and the theory behind PCA as it relates to factor modelling.
+PCA is robust and deeply understood. Many before me have written excellent explanations of PCA, see for example [this blog post](https://gregorygundersen.com/blog/2022/09/17/pca/). Here, we will go through the idea and the theory behind PCA as it relates to factor modeling.
 
-Take $\boldsymbol{\Sigma}_r$ to be the $N \times N$ covariance matrix of asset returns. The set of orthonormal vectors $\{\boldsymbol{p}_1, \boldsymbol{p}_2, \ldots, \boldsymbol{p}_N\}$ that maximise the variance of the data projected onto them are the eigenvectors of $\boldsymbol{\Sigma}_r$. The variance explained by each vector is given by the corresponding eigenvalue $\{\lambda_1, \lambda_2, \ldots, \lambda_N\}$. We generally order the eigenvalues and corresponding eigenvectors in descending order $\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_N$.
+Take $\boldsymbol{\Sigma}_r$ to be the $N \times N$ covariance matrix of asset returns. The set of orthonormal vectors $\{\boldsymbol{p}_1, \boldsymbol{p}_2, \ldots, \boldsymbol{p}_N\}$ that maximize the variance of the data projected onto them are the eigenvectors of $\boldsymbol{\Sigma}_r$. The variance explained by each vector is given by the corresponding eigenvalue $\{\lambda_1, \lambda_2, \ldots, \lambda_N\}$. We generally order the eigenvalues and corresponding eigenvectors in descending order $\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_N$.
 
 Collect the eigenvectors into a matrix:
 $$
@@ -163,7 +163,7 @@ which is a PCA factor model.
 
 Rotating the data is a powerful idea that we will use repeatedly. For now, just note that we have not changed the data, simply rotated the coordinate system. The coordinate system we rotate into has useful properties that the original coordinate system did not have. In the case of PCA, the new coordinate system has uncorrelated axes ordered by variance.
 
-The code to produce the PCA loadings and the inverse loadings (to convert returns to factors) looks like:
+The code to produce the PCA loadings and the inverse loadings (to convert returns to factors) looks like this:
 ```python
 def pca_loadings(
     cov: np.ndarray,
@@ -210,15 +210,15 @@ factors = R @ iloadings.T
 
 You can check for yourself that the factors are not correlated by computing their correlation matrix: `factors.corr()`.
 
-Generally when you run PCA, the idea is that you only keep the first $K$ factors that explain most of the variance. Previous work on factor modelling shows that there are on the order of 100 factors. In our case, we only have 14 assets each of which covers a broad selection of the market. Therefore, I expect that all 14 factors are needed to explain the returns. So, we are going to keep all the factors.
+Generally, when you run PCA, the idea is that you only keep the first $K$ factors that explain most of the variance. Previous work on factor modeling shows that there are on the order of 100 factors. In our case, we only have 14 assets, each of which covers a broad selection of the market. Therefore, I expect that all 14 factors are needed to explain the returns. So, we are going to keep all the factors.
 
-Additionally, by keeping all the factors, $\boldsymbol{L}\_\text{pca}$ is square and invertible which means we lose the terms $\boldsymbol{\alpha}$ and $\boldsymbol{\epsilon}_t$ from the factor model:
+Additionally, by keeping all the factors, $\boldsymbol{L}\_\text{pca}$ is square and invertible, which means we lose the terms $\boldsymbol{\alpha}$ and $\boldsymbol{\epsilon}_t$ from the factor model:
 $$
 \boldsymbol{r}_t = \boldsymbol{L}\_\text{pca} \boldsymbol{f}_t
 $$
 The returns can be perfectly reconstructed from the factors and vice versa.
 
-We can visualise the factors by adjusting their volatilities to be 1% per day. This dampens out the extreme movements when calculating the capital growth for each factor. The factors look like:
+We can visualize the factors by adjusting their volatilities to be 1% per day. This dampens out the extreme movements when calculating the capital growth for each factor. The factors look like:
 
 <feature class="nostyle big">
 
@@ -228,7 +228,7 @@ We can visualise the factors by adjusting their volatilities to be 1% per day. T
 
 The first factor is often called the "market factor" as it tends to represent the overall market movement. As we are looking at equities, we could interpret the first factor as the equity risk premia. That is, this is the return that investors expect to earn for taking on equity risk.
 
-The big question is: what do the other factors represent economically? We've found orthogonal streams of returns, but besides the market factor, do the other factors represent anything meaningful? Without some understanding of what the factors are, we will struggle (emotionally) to allocate capital to them---particularly during times of crisis.
+The big question is: What do the other factors represent economically? We've found orthogonal streams of returns, but besides the market factor, do the other factors represent anything meaningful? Without some understanding of what the factors are, we will struggle (emotionally) to allocate capital to them---particularly during times of crisis.
 
 The only data we have are the ETF returns. If a factor explains a large portion of a particular sector and very little of the other sectors, then we can say that the factor represents the stream of returns for that sector. We can do this by looking at the loadings matrix $\boldsymbol{L}\_\text{pca}$. However, because the variance of each factor is different, the loadings are not comparable.
 
@@ -237,7 +237,7 @@ To solve this, we whiten the factors.
 
 ## Whitening
 
-The idea behind whitening is to re-scale the factors to have the same variance. Generally, we set the variance to 1. The factors are already uncorrelated which means that setting their variances make their covariance matrix the identity matrix.
+The idea behind whitening is to rescale the factors to have the same variance. Generally, we set the variance to 1. The factors are already uncorrelated, which means that setting their variances makes their covariance matrix the identity matrix.
 
 To whiten, we divide the factors by their standard deviations. The eigenvalues from PCA are the variances of each factor. Therefore, we can whiten by dividing each factor by the square root of its corresponding eigenvalue.
 
@@ -257,7 +257,7 @@ $$
 \end{aligned}
 $$
 
-The pca loadings function is updated with:
+The PCA loadings function is updated with:
 ```python
 def pca_loadings(
     cov: np.ndarray,
@@ -293,7 +293,7 @@ $$
 
 that sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. The value $L\_{ij}^2$ is the contribution of factor $j$ to the variance of asset $i$.
 
-We're going to define the *contribution matrix* as the matrix $\boldsymbol{C}$ where each entry is the proportion of asset $i$'s variance explained by factor $j$ with the sign added back in:
+We're going to define the *contribution matrix* as the matrix $\boldsymbol{C}$ where each entry is the proportion of asset $i$'s variance explained by factor $j$, with the sign added back in:
 $$
 C\_{ij} = \frac{L\_{ij}^2}{\sigma^2\_{r,i}} = \text{sign}(L\_{ij}) \frac{L\_{ij}^2}{\sum_{k=1}^K L\_{ik}^2}
 $$
@@ -309,7 +309,7 @@ loadings, _ = pca_loadings(cov, whiten=True)
 contributions = contribution_matrix(loadings)
 ```
 
-We can then visualise the contribution matrix by plotting the contributions by factor:
+We can then visualize the contribution matrix by plotting the contributions by factor:
 
 <feature class="nostyle big">
 
@@ -320,7 +320,7 @@ We can then visualise the contribution matrix by plotting the contributions by f
 We can make the following observations from the contribution matrix:
 
 * **Market factor.** The first factor is very clearly the market factor. It explains most of the variance for each of the assets.
-* **Inexplainable factors.** Most of the remaining factors do not explain a small set of assets. For example, see factor 2. Instead, they appear to explain similar proportions of many assets.
+* **Inexplicable factors.** Most of the remaining factors do not explain a small set of assets. For example, see factor 2. Instead, they appear to explain similar proportions of many assets.
 * **Explainable factors.** A couple of factors do appear to have some meaning. For example, factor 4 explains a much larger proportion of utilities (XLU) than the other assets. We could say that this factor represents the utilities sector.
 * **Decreasing explaining power.** As we go to higher numbered factors, the amount of variance explained decreases. This is expected as PCA orders the factors by variance explained.
 
@@ -342,14 +342,13 @@ The rotated factors are $ \boldsymbol{G}^\top \boldsymbol{f}_t$ and critically:
 $$
 \text{Cov}[\boldsymbol{G}^\top \boldsymbol{f}_t] = \boldsymbol{G}^\top \text{Cov}[\boldsymbol{f}_t] \boldsymbol{G} = \boldsymbol{G}^\top \boldsymbol{I} \boldsymbol{G} = \boldsymbol{I} = \text{Cov}[\boldsymbol{f}_t]
 $$
-So any valid roatation matrix maintains the orthonormality of the factors! This is powerful because it means we can search for a rotation matrix that makes the factors more interpretable while still maintaining the properties we want.
+So any valid rotation matrix maintains the orthonormality of the factors! This is powerful because it means we can search for a rotation matrix that makes the factors more interpretable while still maintaining the properties we want.
 
-We're going to look at a roation that makes the factors more interpretable, the varimax rotation.
+We're going to look at a rotation that makes the factors more interpretable---the varimax rotation.
 
 ## Varimax rotation
 
-We can make the factors more interpretable by making the loadings matrix $\boldsymbol{L}$ more sparse. That is, for each factor (column of $\boldsymbol{L}$), we want only a few assets to have large loadings, and the rest to be close to zero. This makes 
-it easy to interpret what each factor is doing as it only strongly influences a few assets. One rotation that achieves this is called the *varimax* rotation first described in 1958 in psychometric research [^Kaiser1958].
+We can make the factors more interpretable by making the loadings matrix $\boldsymbol{L}$ sparser. That is, for each factor (column of $\boldsymbol{L}$), we want only a few assets to have large loadings, and the rest to be close to zero. This makes it easy to interpret what each factor is doing, as it only strongly influences a few assets. One rotation that achieves this is called the *varimax* rotation, first described in 1958 in psychometric research [^Kaiser1958].
 
 Note again that the covariance matrix of returns under our factor model with orthonormal factors is:
 $$
@@ -362,7 +361,7 @@ $$
 \sigma^2\_{r,i} = \sum_{j=1}^K L\_{ij}^2
 $$
 
-that sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. We previoualy name the value $L\_{ij}^2$ the *contribution* of factor $j$ to the variance of asset $i$. If we want each factor to only contribute to a few assets, we want the squared loadings in each column of $\boldsymbol{L}$ to be sparse.
+That sum of squared loadings is the sum over the row of $\boldsymbol{L}$ corresponding to asset $i$. We previously named the value $L\_{ij}^2$ the *contribution* of factor $j$ to the variance of asset $i$. If we want each factor to contribute to only a few assets, we want the squared loadings in each column of $\boldsymbol{L}$ to be sparse.
 
 We can formulate this sparsity requirement by saying we want each column of $\boldsymbol{L}$ to have a high variance of squared loadings. If the squared loadings are all similar, then the variance is low. If some squared loadings are large and the rest are small, then the variance is high. Recall that the variance of a random variable $X$ is given by $\text{Var}(X) = \text{E}[X^2] - (\text{E}[X])^2$. Therefore, the variance of the squared loadings for factor $j$ is:
 
@@ -370,17 +369,17 @@ $$
 \text{Var}[L\_{\cdot j}^2] = \frac{1}{N} \sum_{i=1}^N L\_{ij}^4 - \left( \frac{1}{N} \sum_{i=1}^N L\_{ij}^2 \right)^2
 $$
 
-And the varimax objective function to maximise is the sum of these variances across all factors:
+And the varimax objective function to maximize is the sum of these variances across all factors:
 $$
-\text{Varimx}(\boldsymbol{L}) = \sum_{j=1}^K \left[ \frac{1}{N} \sum_{i=1}^N L\_{ij}^4 - \left( \frac{1}{N} \sum_{i=1}^N L\_{ij}^2 \right)^2 \right]
+\text{Varimax}(\boldsymbol{L}) = \sum_{j=1}^K \left[ \frac{1}{N} \sum_{i=1}^N L\_{ij}^4 - \left( \frac{1}{N} \sum_{i=1}^N L\_{ij}^2 \right)^2 \right]
 $$
 
-The original solution to maximising this objective rotates a single pair of factors at a time to increase the objective [^Kaiser1958]. The modern approach is to calculate the gradient and use an iterative method to find the maximum [^Jennrich2001]. We'll skip the derivation and just present the algorithm. Say that the given unrotated loadings matrix is $\boldsymbol{L} = \boldsymbol{L}\_\text{pca}\boldsymbol{D}$. The algorithm is:
+The original solution to maximizing this objective rotates a single pair of factors at a time to increase the objective [^Kaiser1958]. The modern approach is to calculate the gradient and use an iterative method to find the maximum [^Jennrich2001]. We'll skip the derivation and just present the algorithm. Say that the given unrotated loadings matrix is $\boldsymbol{L} = \boldsymbol{L}\_\text{pca}\boldsymbol{D}$. The algorithm is:
 
-1. Initialise the rotation $\boldsymbol{G} \leftarrow \boldsymbol{I}$.
+1. Initialize the rotation $\boldsymbol{G} \leftarrow \boldsymbol{I}$.
 2. Compute $\boldsymbol{\Lambda} = \boldsymbol{L} \boldsymbol{G}$.
 3. Compute column means $d_j = \tfrac{1}{p}\sum_i \Lambda_{ij}^2$.
-4. Compute the derivative  $\partial \text{Varimx}(\boldsymbol{L})/\partial\boldsymbol{\Lambda} = \tfrac{4}{p}\boldsymbol{Z}$ where the entries are $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
+4. Compute the derivative  $\partial \text{Varimax}(\boldsymbol{L})/\partial\boldsymbol{\Lambda} = \tfrac{4}{p}\boldsymbol{Z}$ where the entries are $Z_{ij} = \Lambda_{ij}^3 - d_j \Lambda_{ij}$.
 5. Using the chain rule, compute the derivative $\boldsymbol{M} = \partial \text{Varimx}(\boldsymbol{L})/\partial \boldsymbol{G} = \boldsymbol{L}^\top \boldsymbol{Z}$.
 6. Compute the SVD: $\boldsymbol{M} = \boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^\top$.
 7. Update $\boldsymbol{G} \leftarrow \boldsymbol{U} \boldsymbol{V}^\top$.
@@ -456,14 +455,14 @@ def varimax_rotation(
     return rotation_mtx
 ```
 
-For our analysis, we're going to make a small change to the algorithm. The first factor we found with PCA is the market factor. Recall that the loadings for that factor are all fairly even. If we were to use the varimax rotation, we will lose this factor as varimax does not like factors with even loadings. We want to hold this factor fixed and only rotate the other factors. We pull this off by excluding the column in $\boldsymbol{L}$ corresponding to the market factor when computing the varimax rotation. That is, we run varimax on $\boldsymbol{L}\_{2:K}$ and then the rotation matrix is:
+For our analysis, we're going to make a small change to the algorithm. The first factor we found with PCA is the market factor. Recall that the loadings for that factor are all fairly even. If we were to use the varimax rotation, we would lose this factor, as varimax does not favor factors with even loadings. We want to hold this factor fixed and only rotate the other factors. We pull this off by excluding the column in $\boldsymbol{L}$ corresponding to the market factor when computing the varimax rotation. That is, we run varimax on $\boldsymbol{L}\_{2:K}$, and then the rotation matrix is:
 $$
 \boldsymbol{G} = \begin{bmatrix}1 & \boldsymbol{0} \\\
 \boldsymbol{0} & \boldsymbol{G}\_{varimax} \\\
 \end{bmatrix}
 $$
 
-The final step we want to do is ensure that the factors have a consistent sign. PCA has an indeterminancy where the sign of each factor is arbitrary. We will fix the sign by ensuring that the largest contribution for each factor is positive. This amounts to a diagonal matrix $\boldsymbol{S}$ where $S\_{ii} = \pm 1$ depending on the sign of the largest contribution for factor $i$. $\boldsymbol{S}$ is orthonormal and thus it is a valid rotation matrix. We'll use the following function to get the sign matrix:
+The final step we want to do is ensure that the factors have a consistent sign. PCA has an indeterminacy where the sign of each factor is arbitrary. We will fix the sign by ensuring that the largest contribution for each factor is positive. This amounts to a diagonal matrix $\boldsymbol{S}$ where $S\_{ii} = \pm 1$, depending on the sign of the largest contribution for factor $i$. $\boldsymbol{S}$ is orthonormal, and thus it is a valid rotation matrix. We'll use the following function to get the sign matrix:
 ```python
 def sign_rotation(loadings: np.ndarray) -> np.ndarray:
     c = contribution_matrix(loadings)
@@ -528,19 +527,19 @@ At this point, we could talk about how to model the possible risk premia in each
 
 # In practice
 
-Up until now, the factor modelling has operated in-sample. That is, we have looked at factors historically computed with all available data. In practice, we want to be able to compute factor loadings and factors out-of-sample. That is, at time $t$, we want to be able to compute the factor loadings $\boldsymbol{\beta}$ using data available before time $t$ and factors $\boldsymbol{f}_t$ using only data available up to time $t$.
+Up until now, the factor modeling has operated in-sample. That is, we have looked at factors historically computed with all available data. In practice, we want to be able to compute factor loadings and factors out-of-sample. That is, at time $t$, we want to be able to compute the factor loadings $\boldsymbol{\beta}$ using data available before time $t$ and factors $\boldsymbol{f}_t$ using only data available up to time $t$.
 
 We're now going to switch from a fixed matrix of loadings $\boldsymbol{L}$ to time varying loadings $\boldsymbol{L}_t$. For factors at time $t$, we will compute the loadings using data up to time $t-l$ where $l$ is a suitable lag. The factor model becomes:
 $$
 \boldsymbol{r}_t =\boldsymbol{\alpha} + \boldsymbol{L}\_{t-l} \boldsymbol{f}_t + \boldsymbol{\epsilon}_t
 $$
 
-We will assume that $\boldsymbol{\alpha} = 0$ and we will use a cross-sectional regression to compute the factor returns once the asset returns are realised:
+We will assume that $\boldsymbol{\alpha} = 0$ and we will use a cross-sectional regression to compute the factor returns once the asset returns are realized:
 $$
 \boldsymbol{f}_t = (\boldsymbol{L}\_{t-l}^\top \boldsymbol{L}\_{t-l})^{-1} \boldsymbol{L}\_{t-l}^\top \boldsymbol{r}_t
 $$
 
-Because our loadings are invertible, this gives us the exact factor returns that reconstruct the realised returns:
+Because our loadings are invertible, this gives us the exact factor returns that reconstruct the realized returns:
 $$
 \boldsymbol{r}_t = \boldsymbol{L}\_{t-l} \boldsymbol{f}_t
 $$
@@ -561,22 +560,22 @@ When computing the factor loadings at time $t$, we use the exponentially weighte
 
 Both the PCA and varimax rotations do not have unique solutions. This means that when we compute the loadings day to day, the loadings may change in ways that make them impossible to interpret consistently over time.
 
-PCA has an indeterminancy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
+PCA has an indeterminacy where the sign of each factor is arbitrary. See the figure below. This means that if we compute the loadings at different times, the signs of the factors may be flipped. This means that the factors will flip signs randomly day to day, making them impossible to interpret.
 
 
 {{<figure src="images/equivalent_pca.svg" title="Example of PCA indeterminancy." width="medium" >}}
 The sign of the PCA factors is arbitrary. Here we illustrate two possible PCA factorizations of the same data. The difference is that the signs of the factors have been flipped. Both factorizations are equally valid PCA decompositions.
 {{</figure>}}
 
-The varimax rotation is an optimisation over a non-convex objective. There are many solutions and local minima. Consider that since the factors are whitened, the order of the factors is not important. In fact, the same factors can be represented in any order which immediately gives us $K!$ equivalent solutions. This means that the factors will change meaning day to day, making them impossible to interpret consistently out-of-sample.
+The varimax rotation is an optimization over a non-convex objective. There are many solutions and local minima. Consider that since the factors are whitened, the order of the factors is not important. In fact, the same factors can be represented in any order, which immediately gives us $K!$ equivalent solutions. This means that the factors will change meaning day to day, making them impossible to interpret consistently out-of-sample.
 
-For example, we'll fit our factor model to a moving EWM covariance matrix with a halflife of $252 \times 3$ day. We'll calculate the contributions matrix and plot the contributions for the 2nd factor over time. You can see the results in the figure below which shows that the contributions are all over the place:
+For example, we'll fit our factor model to a moving EWM covariance matrix with a halflife of $252 \times 2$ days. We'll calculate the contributions matrix and plot the contributions for the 2nd factor over time. You can see the results in the figure below, which shows that the contributions are all over the place:
 
 {{<figure src="images/adjusted_False_contributions.svg" title="Example of rotation indeterminancy." >}}
-The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of 3 years. You can observe that the contributions (and thereby the factor loadings) change meaning significantly over time.
+The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of two years. You can observe that the contributions (and thereby the factor loadings) change meaning significantly over time.
 {{</figure>}}
 
-We can solve this by computing the loadings for time $t+1$ and rotating them to be as close as possible to the previous day's loadings. This means we want an orthornormal matrix $\boldsymbol{Q}$ such that the rotated loadings $\boldsymbol{L}_\{t+1} \boldsymbol{Q}$ are as close as possible to the previous day's loadings $\boldsymbol{L}_t$. We can formulate this as the minimisation problem:
+We can solve this by computing the loadings for time $t+1$ and rotating them to be as close as possible to the previous day's loadings. This means we want an orthonormal matrix $\boldsymbol{Q}$ such that the rotated loadings $\boldsymbol{L}_{t+1} \boldsymbol{Q}$ are as close as possible to the previous day's loadings $\boldsymbol{L}_t$. We can formulate this as the minimization problem:
 $$
 \begin{aligned}
 \arg\min\_{\boldsymbol{Q}} & \ || \boldsymbol{L}\_{t+1} \boldsymbol{Q} - \boldsymbol{L}_t ||_F^2 \\\
@@ -584,7 +583,7 @@ $$
 \end{aligned}
 $$
 
-This is known as the [orthogonal Procrustes problem](https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem) and has a closed form solution. The derivation of the solution is in the [appendix](#orthogonal-procrustes-problem). We'll just present the final result here. The solution is to take the following SVD: 
+This is known as the [orthogonal Procrustes problem](https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem) and has a closed-form solution. The derivation of the solution is in the [appendix](#orthogonal-procrustes-problem). We'll just present the final result here. The solution is to take the following SVD: 
 $$
 \boldsymbol{L}_t^\top \boldsymbol{L}\_{t+1} = \boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^\top
 $$
@@ -605,7 +604,7 @@ def procrustes_rotation(current, previous):
 Repeating the analysis from before, we can examine the contributions of the 2nd factor over time after applying the Procrustes rotation each day:
 
 {{<figure src="images/adjusted_True_contributions.svg" title="Example of rotation indeterminancy fixed with Procrustes rotation." >}}
-The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of 3 years. Additionally, the Procrustes rotation was applied each day to ensure that the loadings remain consistent over time. You can observe that the contributions (and thereby the factor loadings) are now stable over time.
+The contributions of the 2nd factor over time are shown. The factor model was fitted with an EWM covariance matrix with a halflife of two years. Additionally, the Procrustes rotation was applied each day to ensure that the loadings remain consistent over time. You can observe that the contributions (and thereby the factor loadings) are now stable over time.
 {{</figure>}}
 
 ## Factor orthogonality
@@ -627,7 +626,7 @@ In comparison to the ETF correlation matrix, the factors are mostly uncorrelated
 
 ## Interpretation
 
-Now that we've stabalised the out-of-sample factor model, we can inspect the factors over time to check that they are in fact stable and interpretable. For each factor, we'll plot the contributions over time for each of the assets:
+Now that we've stabilized the out-of-sample factor model, we can inspect the factors over time to check that they are in fact stable and interpretable. For each factor, we'll plot the contributions over time for each of the assets:
 
 <feature class="nostyle big">
 
@@ -637,7 +636,7 @@ Now that we've stabalised the out-of-sample factor model, we can inspect the fac
 
 I've omitted the names of each asset/line to keep the figure clean. The main point is that the factors maintain their meaning over time. This is exactly what we wanted. Each factor represents a unique source of risk and return and it is stable out-of-sample.
 
-For the curious, here are the logged factor returns over times:
+For the curious, here are the logged factor returns over time:
 
 <feature class="nostyle big">
 
@@ -649,7 +648,7 @@ For the curious, here are the logged factor returns over times:
 
 This article builds a practical statistical factor model for ETF returns that is interpretable and stable out-of-sample. The model uses PCA as a starting point and then applies a series of rotations to force interpretability and stability. The resulting factors are mostly uncorrelated and represent economically meaningful sources of risk and return.
 
-To be able to examine the long-term behaviour of the factors, long run historical returns were approximated for each of the assets.
+To be able to examine the long-term behavior of the factors, long-run historical returns were approximated for each of the assets.
 
 You can apply this method to any set of asset returns where you have enough historical data. The methods are not limited to ETFs, nor to a daily frequency. The key steps are:
 
