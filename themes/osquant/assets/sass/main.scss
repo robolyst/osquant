@@ -220,9 +220,14 @@ Splash
         display: block;
         max-width: 100%;
         overflow: hidden;
-        margin-top: 40pt;
-        margin-bottom: 40pt;
-        padding-bottom: 40pt;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+
+        &.nostyle {
+            background-color: transparent;
+            padding-bottom: 0pt;
+        }
     }
 
     plot {
@@ -261,8 +266,8 @@ feature > *
 
 feature.big > * {
     max-width: $full-content-width;
-    padding-right: 5vw;
-    padding-left: 5vw;
+    padding-right: 3vw;
+    padding-left: 3vw;
 }
 
 #page-grid {

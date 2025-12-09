@@ -14,6 +14,10 @@
                 <a class="twitter-follow" href="https://twitter.com/{{ .Params.twitter }}" class="twitter-follow">Follow on X</a>
             {{ end }}
 
+            <!-- If the author has a LinkedIn handle, display the call to action -->
+            {{ if isset .Params "linkedin" }}
+                <a class="twitter-follow" href="https://www.linkedin.com/in/{{ .Params.linkedin }}" class="twitter-follow">Connect on LinkedIn</a>
+            {{ end }}
 
         {{ end }}
     {{ end }}
