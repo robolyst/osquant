@@ -23,5 +23,6 @@ Some things to look out for include:
 
 You must:
 - Parse the entire text.
+- Parse the frontmatter if present. Specifically, the "title" and "summary" fields.
 - Apply corrections where necessary.
 - Not replace an em-dash "---" with a hyphen.
