@@ -4,7 +4,7 @@ summary: "
 This article explores using data to uncover latent streams of returns, otherwise known as factors. We jump into the world of rotations to make sense of the factors and show how to ensure stability when used for real-world trading.
 "
 
-date: "2025-11-26"
+date: "2025-12-09"
 type: paper
 mathjax: true
 authors:
