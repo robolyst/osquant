@@ -514,7 +514,7 @@ These results are quite remarkable.
 
 In comparison to the unrotated PCA factors, the varimax factors are much more interpretable. Factor 1 remains the market factor with all assets contributing fairly evenly. The other factors have become much more sparse. Keep in mind that these factors are all uncorrelated! So a factor that explains a high percentage of one asset and little of the others can be thought of as the unique source of risk and returns for that asset.
 
-**Factor 1** is the market factor. This explains a high percentage of all assets, roughly 50% for each asset. **Factor 4** explains a high percentage of the utilities sector (XLU). There is some explaining power for other ETFs, but it is tiny in comparison. We should expect to see small explaining power for all the other ETFs as the sectors economically overlap. If Factor 4 has a positive average return, then it could be interpreted as the consumer staples risk premia. Each factor in our example explains a high percentage of one of the assets and thus similar conclusions can be drawn for the other factors.
+**Factor 1** is the market factor. This explains a high percentage of all assets, roughly 50% for each asset. **Factor 4** explains a high percentage of the utilities sector (XLU). There is some explaining power for other ETFs, but it is tiny in comparison. We should expect to see small explaining power for all the other ETFs as the sectors economically overlap. If Factor 4 has a positive average return, then it could be interpreted as the utilities sector risk premia. Each factor in our example explains a high percentage of one of the assets and thus similar conclusions can be drawn for the other factors.
 
 The logged factor returns look like:
 
