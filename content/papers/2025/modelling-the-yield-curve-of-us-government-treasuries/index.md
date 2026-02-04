@@ -11,6 +11,9 @@ categories:
   - finance
 hover_color: '#FFFF00'
 url: /papers/modelling-the-yield-curve-of-us-government-treasuries
+acknowledgements: >-
+  Thank you to [Daniel Nunns](https://www.linkedin.com/in/daniel-nunns/) who
+  proofread and provided corrections.
 ---
 
 

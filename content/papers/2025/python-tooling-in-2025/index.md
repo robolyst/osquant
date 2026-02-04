@@ -14,6 +14,7 @@ categories:
 hover_color: "#c6dd73ff"
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/python-tooling-in-2025
+acknowledgements: "Thank you to [Daniel Nunns](https://www.linkedin.com/in/daniel-nunns/) who proofread and provided corrections."
 ---
 
 Today, Python's ecosystem offers an abundance of tooling to support every aspect of the development workflow. From dependency management to static analysis, from linting to environment setup, there are more options than ever.
