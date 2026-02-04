@@ -12,6 +12,7 @@ categories:
     - mathematics
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/recursive-least-squares-linear-regression
+acknowledgements: "Thank you to [Joseph Abdo](https://www.linkedin.com/in/joseph-abdo/) who provided corrections."
 ---
 
 *I first learned about this algorithm in the book Kernel Adaptive Filter: A Comprehensive Introduction[^Liu-2010] sometime in 2012 or 2013. This book goes in depth into how to build kernel filters and does a fantastic job of easing you into the mathematics. I highly recommend having a read if you can.*
@@ -170,7 +171,7 @@ class L2Regression:
         self.n = num_features
         self.lam = lam
         self.w = np.zeros(self.n)
-        self.P = np.diag(np.ones(self.n) * self.lam)
+        self.P = np.diag(np.ones(self.n) / self.lam)
         
     def update(self, x: np.ndarray, y: float) -> None:
         r = 1 + (x.T @ self.P @ x)
@@ -251,7 +252,7 @@ class ExpL2Regression:
         self.lam = lam
         self.beta = np.exp(np.log(0.5) / halflife)
         self.w = np.zeros(self.n)
-        self.P = np.diag(np.ones(self.n) * self.lam)
+        self.P = np.diag(np.ones(self.n) / self.lam)
         
     def update(self, x: np.ndarray, y: float) -> None:
         r = 1 + (x.T @ self.P @ x) / self.beta
@@ -335,7 +336,7 @@ class ExpL1L2Regression:
         self.epsilon = epsilon
         self.beta = np.exp(np.log(0.5) / halflife)
         self.w = np.zeros(self.n)
-        self.P = np.diag(np.ones(self.n) * self.lam)
+        self.P = np.diag(np.ones(self.n) / self.lam)
         
     def update(self, x: np.ndarray, y: float) -> None:
         r = 1 + (x.T @ self.P @ x) / self.beta
