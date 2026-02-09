@@ -1,6 +1,7 @@
 project:
   type: hugo
   preview:
+    # Details here: https://quarto.org/docs/reference/projects/options.html
     serve:
       cmd: "hugo serve --port {port} --bind {host} --navigateToChanged --buildDrafts"
       env:
