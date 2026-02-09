@@ -10,6 +10,7 @@ summary: "
 date: "1900-01-01"
 type: paper
 mathjax: true
+draft: true
 authors:
     - Adrian Letchford
 categories:
