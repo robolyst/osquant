@@ -14,10 +14,12 @@ RUN wget -q -O /tmp/vale.tar.gz https://github.com/errata-ai/vale/releases/downl
 # Setup oh my zsh for dev
 RUN apt install -y git zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
-ENV SHELL /usr/bin/zsh
+ENV SHELL=/usr/bin/zsh
 
-# Install quarto
+# Install quarto (pick correct arch at build time)
 ENV QUARTO_VERSION=1.7.31
-RUN wget -q -O /tmp/quarto.deb https://github.com/quarto-dev/quarto-cli/releases/download/v$QUARTO_VERSION/quarto-$QUARTO_VERSION-linux-arm64.deb \
+
+RUN QUARTO_ARCH=$(dpkg --print-architecture 2>/dev/null || echo amd64) \
+  && wget -q -O /tmp/quarto.deb "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.deb" \
   && dpkg -i /tmp/quarto.deb \
   && rm /tmp/quarto.deb
