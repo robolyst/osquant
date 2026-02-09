@@ -1,6 +1,12 @@
 project:
   type: hugo
-      
+  preview:
+    serve:
+      cmd: "hugo serve --port {port} --bind {host} --navigateToChanged --buildDrafts"
+      env:
+        HUGO_RELATIVEURLS: "true"
+      ready: "Web Server is available at"
+    
 format: 
   hugo-md:
     code-fold: false
