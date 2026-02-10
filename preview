@@ -4,10 +4,10 @@ set -e
 
 docker build .devcontainer --tag osquant
 
-# docker run -it --rm \
-#     --volume $(pwd):/app \
-#     -p 1313:1313 \
-#     --workdir /app \
-#     --env HUGO_SHOW_DEV=true \
-#     osquant \
-#     hugo server -w --buildDrafts --bind 0.0.0.0 --port 1313
+docker run -it --rm \
+    --volume $(pwd):/app \
+    -p 1313:1313 \
+    --workdir /app \
+    --env HUGO_SHOW_DEV=true \
+    osquant \
+    hugo server -w --buildDrafts --bind 0.0.0.0 --port 1313
