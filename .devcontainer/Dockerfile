@@ -4,14 +4,14 @@ RUN apt update
 
 # Install hugo for local development.
 # This takes up a lot of space
-RUN apt install -y hugo
+RUN apt install -y hugo=0.111.3-1
 
 # Markdown linting.
 RUN apt install -y npm
 RUN npm install -g markdownlint-cli
 
 # Install vale
-RUN apt install -y npm hugo wget
+RUN apt install -y wget
 RUN wget -q -O /tmp/vale.tar.gz https://github.com/errata-ai/vale/releases/download/v2.28.0/vale_2.28.0_Linux_64-bit.tar.gz \
   && tar -xvzf /tmp/vale.tar.gz -C bin \
   && rm /tmp/vale.tar.gz
