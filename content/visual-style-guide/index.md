@@ -151,6 +151,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sodales libero 
 </feature>
 
 Try not to use these too often.
+# Test Section Without Blank Lines
+This violates MD022 - headings should be surrounded by blank lines.
 
 # Footnotes & references
 
