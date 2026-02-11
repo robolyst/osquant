@@ -41,7 +41,14 @@ jobs:
             CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA...$HEAD_SHA | grep -E '\.(md|qmd)$' || true)
           else
             # For push to main, check files in the commit
-            CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }}..${{ github.sha }} | grep -E '\.(md|qmd)$' || true)
+            # Handle edge case of first push where before is all zeros
+            BEFORE_SHA="${{ github.event.before }}"
+            if [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+              # For initial commit, use the commit itself
+              CHANGED_FILES=$(git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${{ github.sha }} | grep -E '\.(md|qmd)$' || true)
+            else
+              CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BEFORE_SHA..${{ github.sha }} | grep -E '\.(md|qmd)$' || true)
+            fi
           fi
           
           if [ -z "$CHANGED_FILES" ]; then
@@ -50,13 +57,16 @@ jobs:
           else
             echo "Changed markdown files:"
             echo "$CHANGED_FILES"
-            # Convert newlines to spaces for the command
-            FILES_LIST=$(echo "$CHANGED_FILES" | tr '\n' ' ')
-            echo "files=$FILES_LIST" >> $GITHUB_OUTPUT
+            # Save files as multiline output for proper handling
+            {
+              echo 'files<<EOF'
+              echo "$CHANGED_FILES"
+              echo 'EOF'
+            } >> $GITHUB_OUTPUT
             echo "has_files=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Run markdownlint on changed files
         if: steps.changed-files.outputs.has_files == 'true'
         run: |
-          markdownlint ${{ steps.changed-files.outputs.files }}
+          echo "${{ steps.changed-files.outputs.files }}" | xargs markdownlint
