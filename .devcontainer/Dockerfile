@@ -15,3 +15,4 @@ RUN wget -q -O /tmp/vale.tar.gz https://github.com/errata-ai/vale/releases/downl
 # Setup oh my zsh for dev
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 ENV SHELL=/usr/bin/zsh
+COPY .zshrc /root/.zshrc
