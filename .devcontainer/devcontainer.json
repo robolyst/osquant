@@ -1,12 +1,13 @@
 {
-    "build": { "dockerfile": "Dockerfile" },
-    "forwardPorts": [1313],
-    "customizations": {
-      "vscode": {
-        "extensions": [
-          "donjayamanne.githistory"
-        ]
-      }
+  "build": { "dockerfile": "Dockerfile" },
+  "forwardPorts": [1313],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "donjayamanne.githistory",
+        "github.copilot-chat",
+        "davidanson.vscode-markdownlint"
+      ]
     }
   }
-  
+}

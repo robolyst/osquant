@@ -26,6 +26,7 @@ MD033: # MD033/no-inline-html
     - span
     - script
     - style
+    - sectionbreak
 
 MD013: # MD013/line-length
   line_length: 100000000000000

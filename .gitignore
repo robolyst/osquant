@@ -8,3 +8,4 @@
 /.quarto
 /_freeze
 /.quarto/
+.vscode/**
