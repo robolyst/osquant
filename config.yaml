@@ -4,6 +4,16 @@ title: "Open Source Quant"
 theme: "osquant"
 FootnoteReturnLinkContents: "↑"
 
+# These default to the project root. We mount the project
+# in the docker file so that hugo can refresh content when
+# files are changed.
+# The side effect of this is that the docker user writes
+# files to the project root which can annoy some people.
+# Setting non-mounted directories here.
+publishDir: "/public"
+resourceDir: "/resources"
+noBuildLock: true
+
 disableKinds: ["taxonomy", "section"]
 ignoreErrors: ["error-disable-taxonomy"]
 ignoreFiles: [ "\\.qmd$", "\\.py$" ]
