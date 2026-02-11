@@ -1,0 +1,62 @@
+name: Markdown Lint
+
+on:
+  pull_request:
+    paths:
+      - '**.md'
+      - '**.qmd'
+      - '.markdownlint.yaml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - '**.qmd'
+      - '.markdownlint.yaml'
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Get changed markdown files
+        id: changed-files
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PRs, get files changed compared to base branch
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+            CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA...$HEAD_SHA | grep -E '\.(md|qmd)$' || true)
+          else
+            # For push to main, check files in the commit
+            CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }}..${{ github.sha }} | grep -E '\.(md|qmd)$' || true)
+          fi
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No markdown files changed"
+            echo "has_files=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changed markdown files:"
+            echo "$CHANGED_FILES"
+            # Convert newlines to spaces for the command
+            FILES_LIST=$(echo "$CHANGED_FILES" | tr '\n' ' ')
+            echo "files=$FILES_LIST" >> $GITHUB_OUTPUT
+            echo "has_files=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run markdownlint on changed files
+        if: steps.changed-files.outputs.has_files == 'true'
+        run: |
+          markdownlint ${{ steps.changed-files.outputs.files }}
