@@ -1,7 +1,7 @@
 ---
 title: "Entering Quantitative Commodity Fundamentals"
 summary: "
-This article explores using data to uncover latent streams of returns, otherwise known as factors. We jump into the world of rotations to make sense of the factors and show how to ensure stability when used for real-world trading.
+This article explores using linear programming in real-world modelling scenarios. We jump into the land of optimisation utilising AMPL to crudely understand our maximum oil refinery profits.
 "
 
 date: "2026-02-21"
@@ -14,13 +14,11 @@ categories:
     - mathematics
 ---
 
-# Entering Quantitative Commodity Fundamentals
-
 Trading commodities can be done in various ways. One can use a black-box model to trade signals, another can be speculating on fundamentals, and other players have physical flow to hedge in markets. If you belong to one of the two latter categories, you generally want to model a system and optimise for a profit to understand necessary trades.
 
 In this article, we'll be exploring some basic fundamentals about the oil market, and introducing [AMPL](https://ampl.com/) to optimise a ficticious distillation facility. Check the [appendix](#package-installation) for instructions on package installation.
 
-## Background
+# Background
 
 Running an oil operation is conceptually rather straightforward. You bring in some crude oil, you process it, you get a bunch of products you can then sell on to various markets. However, as with anything in the real-world, there are complexities coming in the form of grades of oil, regulations in certain markets, and seasonality of product demand, to only name a few.
 
@@ -32,7 +30,7 @@ To better understand the grades of oil and how they're used, [*Oil 101*](https:/
 
 There's a tonne of theory we could dive into. Instead, I'll be highlighting the important concepts required to optimise the refinery.
 
-### Fractional Distillation
+## Fractional Distillation
 
 One form of distillation is 'fractional distillation', whereby a fractioning column is heated with a particular grade of oil inside. Distillates are grouped together, predominantly on the lengths of their hydrocarbon chains, and these lengths are separated in the column with lighter hydrocarbons rising to the surface. The 'fractioning' process is then taking the hydrocarbons at various levels to create the products within specification.
 
@@ -40,11 +38,11 @@ Because the hydrocarbons don't separate discretely, i.e. it's a continuous gradi
 
 For further information on fractional distillation, *Oil 101* covers many concepts, though the theory is widely available across the web.
 
-### Distillate Products
+## Distillate Products
 
 Once crude has been refined, the lighter hydrocarbon products are usually more volatile, and thus less easy to store, or may cost more to produce with required additives. As such, gasoline is usually produced inline with the demand at any one time, i.e. we need not worry about optimising our production with respect to storage.
 
-## Crude & Distillates
+# Crude & Distillates
 
 We will be taking crude oil and producing two fuels, heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 24 months to ensure we're operationally efficient into the future, and can hedge our exposure to prices of the crude and distillates.
 
@@ -115,7 +113,7 @@ We can note some characteristics already:
 - For the two distillates of interest, we see heating oil consistently attracts a higher premium.
 - The gasoline has a seasonal shape, attracting a higher premium in the U.S.-based summer months, where generally more driving occurs leading to a higher demand.
 
-## OSQ Fuels
+# OSQ Fuels Optimisation
 
 OSQ Fuels, a subsidiary of the Open Source Quant Group, has purchased a refinery.
 
@@ -123,7 +121,7 @@ We'll first define our refining problem with simple constraints to see how this 
 
 Translating the linear model into AMPL is rather straightforward given its syntax. The documentation [introduction](https://dev.ampl.com/ampl/introduction.html) goes over the basics which we'll be applying here, namely parameters (`param`), sets (`set`), variables (`var`), objectives and constraints.
 
-### Sets
+## Sets
 
 The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$ for each month in our optimisation.
 
@@ -135,7 +133,7 @@ param N integer > 0;
 set T = 1..N;
 ```
 
-### Parameters
+## Parameters
 
 The direct inputs into the model will be:
 
@@ -165,7 +163,7 @@ Notice here the `maximum_barrels_per_month` is a single number (as it does not v
 
 Conversions are also defined to normalise the units for the optimisation.
 
-### Variables
+## Variables
 
 Decision variables are defined internally within the model. These are the objects which AMPL adjusts in order to optimise the output based on the obective function.
 
@@ -183,7 +181,7 @@ var gasoline_production {t in T} >= 0;     # Gasoline production at time t
 var residual {t in T} >= 0;                # Residual at time t
 ```
 
-### Objective
+## Objective
 
 The objective is to maximise the total profit, which is calculated as the total revenue from selling refined fuels minus the total cost of purchasing and processing crude oil. This is summed over all time points $t$.
 
@@ -197,7 +195,7 @@ maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
 
 Note the residual is not sold. Consider this as wasted product.
 
-### Constraints
+## Constraints
 
 The model includes several constraints to ensure the refinery's operations are realistic and adhere to specified production limits and ratios.
 
@@ -260,7 +258,7 @@ subject to Residual_Definition {t in T}:
     residual[t] >= crude_used_gal[t] - (heating_oil_production[t] + gasoline_production[t]);
 ```
 
-### Full AMPL Definition
+## Full AMPL Definition
 
 <!-- TODO Make this a dropdown? -->
 
@@ -324,7 +322,7 @@ subject to Residual_Definition {t in T}:
     residual[t] >= crude_used_gal[t] - (heating_oil_production[t] + gasoline_production[t]);
 ```
 
-### Results
+## Results
 
 <!-- TODO -->
 
@@ -358,7 +356,7 @@ A somewhat anticlimatic output, it's exactly what we expect, the heating oil was
 
 For a sanity check, we can confirm the volumes align (sum of outputs = input), and the relative ratios of each fuel produce align with the constraints we defined earlier.
 
-### Introducing Processing Costs
+## Introducing Processing Costs
 
 As mentioned previously, sometimes additives need to be incorporated to distillate outputs either for stability, environmental or efficiency reasons. To model the per-gallon costs of production for heating oil and gasoline, two parameters will be introduced, $C^{H}$ and $C^{G}$.
 
@@ -381,7 +379,7 @@ $$\max \quad \text{profit} = \sum_{t \in T} \left( \left( P^{H}_{t} - C^{H} \rig
 
 Now it's clear the facility should be swapping between the two distillates given the changing demand profiles over the year.
 
-## Conclusion
+# Conclusion
 
 This article should have provided some context on quantitative commodities modelling which includes everything from understanding the physical context, through to implementing the likes of linear optimisation and interpreting the outputs.
 
@@ -397,9 +395,9 @@ A couple of much more in-depth examples of a refinery optimisation can be found 
 - [Oil refinery production optimization](https://ampl.com/colab/notebooks/oil-refinery-production-optimization.html)
 - [Extra material: Refinery production and shadow pricing with CVXPY](https://ampl.com/mo-book/notebooks/05/refinery-production.html)
 
-## Appendix
+# Appendix
 
-### Obtaining Futures Data
+## Obtaining Futures Data
 
 ```python
 import yfinance as yf
@@ -474,7 +472,7 @@ df = close_data.pivot(columns="symbol", index="date", values="close").sort_index
 df.to_csv("commodity_futures_prices.csv")
 ```
 
-## Package Installation
+# Package Installation
 
 <!-- TODO -->
 
