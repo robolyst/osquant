@@ -1,7 +1,7 @@
 ---
 title: "Entering Quantitative Commodity Fundamentals"
 summary: "
-This article explores using linear programming in real-world modelling scenarios. We jump into the land of optimisation utilising AMPL to crudely understand our maximum oil refinery profits.
+This article explores using linear programming in real-world modelling scenarios. We jump into optimisation utilising AMPL to crudely understand our maximum oil refinery profits.
 "
 
 date: "2026-02-22"
@@ -14,9 +14,9 @@ categories:
     - mathematics
 ---
 
-Trading commodities can be done in various ways. One can use a black-box model to trade signals, another can be speculating on fundamentals, and other players have physical flow to hedge in markets. If you belong to one of the two latter categories, you generally want to model a system and optimise for a profit to understand necessary trades.
+Trading commodities can be done in various ways. One can use a black-box model to trade signals, another can speculate on fundamentals, and others participate in physical flows to hedge in markets. If you belong to the latter two categories, you generally want to model a system and optimise profit to understand necessary trades.
 
-In this article, we'll be exploring some basic fundamentals about the oil market, and introducing [AMPL](https://ampl.com/) to optimise a ficticious distillation facility. Check the [appendix](#package-installation) for instructions on package installation.
+In this article, we'll explore basic fundamentals of the oil market and introduce [AMPL](https://ampl.com/) to optimise a fictitious distillation facility.
 
 # Background
 
@@ -34,13 +34,13 @@ There's a tonne of theory we could dive into. Instead, I'll be highlighting the 
 
 One form of distillation is 'fractional distillation', whereby a fractioning column is heated with a particular grade of oil inside. Distillates are grouped together, predominantly on the lengths of their hydrocarbon chains, and these lengths are separated in the column with lighter hydrocarbons rising to the surface. The 'fractioning' process is then taking the hydrocarbons at various levels to create the products within specification.
 
-Because the hydrocarbons don't separate discretely, i.e. it's a continuous gradient of their length, one must choose how much at each level to fraction to create various products. This becomes important when the relative pricing of two similar fuels changes over time, as this forms the crux of the distillate optimisation.
+Because hydrocarbons don't separate discretely — they form a continuous gradient by chain length — one must choose how much to fractionate at each level to create various products. This becomes important when the relative pricing of two similar fuels changes over time, as it forms the crux of distillate optimisation.
 
 For further information on fractional distillation, *Oil 101* covers many concepts, though the theory is widely available across the web.
 
 ## Distillate Products
 
-Once crude has been refined, the lighter hydrocarbon products are usually more volatile, and thus less easy to store, or may cost more to produce with required additives. As such, gasoline is usually produced inline with the demand at any one time, i.e. we need not worry about optimising our production with respect to storage.
+Once crude has been refined, lighter hydrocarbon products are usually more volatile, harder to store, and may cost more to produce because of required additives. As such, gasoline is usually produced in line with demand, so storage typically plays a smaller role in optimisation.
 
 # Crude & Distillates
 
@@ -48,7 +48,7 @@ We will be taking crude oil and producing two fuels, heating oil and gasoline. W
 
 Because our crude and distillates trade on a liquid exchange (CME) as futures, we have good fair valuations of these products per-unit over the next two years.
 
-The data can be loaded in with the below. The data used can be [downloaded here](link), or otherwise can be obtained following the [instructions](#obtaining-futures-data).
+The data can be loaded with the code below. The data used can be [downloaded here](data/commodity_futures_prices.csv), or obtained following the [instructions](#obtaining-futures-data).
 
 ```python
 import pandas as pd
@@ -77,9 +77,9 @@ Plotting their current valuation, we see the following...
 We can note some characteristics already:
 
 - The quotation units are different. Crude oil is in USD per barrel (42 U.S. gallons per barrel), whilst the distillates are in USD per U.S. gallon. The above graph has normalised units to USD/gal.
-- Crude oil prices are in **backwardation**, meaning the spot price (i.e. the price right now for oil) is higher than that of in the future. The reverse situation is known as contango. More about these phenomena can be understood on the [CME's guide](https://www.investopedia.com/articles/07/contango_backwardation.asp).
-- For the two distillates of interest, we see heating oil consistently attracts a higher premium.
-- The gasoline has a seasonal shape, attracting a higher premium in the U.S.-based summer months, where generally more driving occurs leading to a higher demand.
+- Crude oil prices are in **backwardation**, meaning the spot price is higher than prices for later delivery. The reverse situation is contango. See this [Investopedia guide](https://www.investopedia.com/articles/07/contango_backwardation.asp) for more detail.
+- For the two distillates of interest, heating oil consistently attracts a higher premium.
+- Gasoline shows a seasonal pattern, with a higher premium in US summer months when driving increases.
 
 # OSQ Fuels Optimisation
 
@@ -124,13 +124,13 @@ param maximum_crude_per_month_gal = maximum_barrels_per_month * 42;
 param crude_price_gal {t in T} = crude_price[t] / 42;
 ```
 
-Notice here the `maximum_barrels_per_month` is a single number (as it is time invarient) and also includes a constraint, a sense check to make our model more foolproof.
+Notice here the `maximum_barrels_per_month` is a single number (it is time-invariant) and includes a constraint as a sanity check.
 
 Conversions are also defined to normalise the units for the optimisation.
 
 ## Variables
 
-Decision variables are defined internally within the model. These are the objects which AMPL adjusts in order to optimise the output based on the obective function.
+Decision variables are defined internally within the model. These are the objects which AMPL adjusts in order to optimise the output based on the objective function.
 
 The model's decision variables represent the quantities of crude oil to be processed and the quantities of various fuels to be produced at each time point.
 
@@ -214,7 +214,7 @@ subject to Total_Production {t in T}:
 
 **5. Residual Balance:**
 
-More a technicality of the model, but for the residual to properly calculate so we can read the output, it needs to be constrained as the 'leftover' from production. Otherwise, given the above contraint for material balance, the residual is illdefined and the solver would likely leave this at zero.
+To ensure the residual is defined, constrain it as the leftover from production. Otherwise, given the material-balance constraint, the residual is ill-defined and the solver would likely leave it at zero.
 
 $$ O_{t}^{R} \geq I_{t} - \left( O_{t}^{H} + O_{t}^{G} \right) \quad \forall t \in T$$
 
@@ -231,7 +231,7 @@ The full AMPL definition can be [seen in the appendix](#full-ampl-definition).
 
 To run the model, the following setup can be used whereby we create the optimisation interface, choose the solver ([CBC](https://github.com/coin-or/Cbc) in this case), load the parameters and solve. For instructions on installing AMPL, visit the [AMPL documentation](https://dev.ampl.com/ampl/python/modules.html).
 
-Note the maximum processed barrels per month is being set to 10. This is an extremely low number in terms of real-world context, but makes the results easily digestable.
+Note the maximum processed barrels per month is set to 10. This is extremely low in real-world terms but makes the results easier to digest.
 
 ```python
 from amplpy import AMPL
@@ -263,7 +263,7 @@ To extract the output variables as a series, you can use, for example:
 ampl.get_variable("gasoline_production").get_values().to_pandas().reset_index(drop=True)
 ```
 
-Plotting each optimised variable over time, we can see the net facility most profitable action.
+Plotting each optimised variable over time shows the facility's most profitable action.
 
 <!-- TODO: Convert this into figure shortcode usage -->
 <figure>
@@ -271,9 +271,9 @@ Plotting each optimised variable over time, we can see the net facility most pro
 <figcaption aria-hidden="true"><b>Figure 2:</b> Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output.</figcaption>
 </figure>
 
-A somewhat anticlimatic output, though it's exactly what we expect, the heating oil was always the higher premium fuel, so the facility is consistently optimised to produce that.
+A somewhat anticlimactic result, but it's exactly what we expect: heating oil had the higher premium, so the facility is optimised to produce it.
 
-For a sanity check, we can confirm the volumes align (sum of outputs = input), and the relative ratios of each fuel produce align with the constraints we defined earlier.
+For a sanity check, we can confirm the volumes align (sum of outputs = input) and that the relative production ratios satisfy the constraints defined earlier.
 
 ## Introducing Processing Costs
 
