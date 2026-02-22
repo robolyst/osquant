@@ -4,7 +4,7 @@ summary: "
 This article explores using linear programming in real-world modelling scenarios. We jump into the land of optimisation utilising AMPL to crudely understand our maximum oil refinery profits.
 "
 
-date: "2026-02-21"
+date: "2026-02-22"
 type: paper
 mathjax: true
 authors:
@@ -59,56 +59,24 @@ HO: Heating Oil (USD/gallon)
 RB: RBOB Gasoline (USD/gallon)
 """
 
-df = pd.read_csv("commodity_futures_prices.csv", index_col=0, parse_dates=True)
-
-df
+df = pd.read_csv(
+    "commodity_futures_prices.csv",
+    index_col=0,
+    parse_dates=True,
+)
 ```
 
 Plotting their current valuation, we see the following...
 
-<!-- TODO Expand  -->
-
-```python
-import plotly.graph_objs as go
-
-fig = go.Figure()
-
-fig.add_trace(
-    go.Scatter(x=df.index, y=df["CL"], mode="lines", name="Crude Oil (USD/bbl)", line=dict(shape="hv")),
-)
-fig.add_trace(
-    go.Scatter(x=df.index, y=df["HO"], mode="lines", name="Heating Oil (USD/gal)", line=dict(shape="hv"), yaxis="y2"),
-)
-fig.add_trace(
-    go.Scatter(x=df.index, y=df["RB"], mode="lines", name="Gasoline (USD/gal)", line=dict(shape="hv"), yaxis="y2"),
-)
-
-fig.update_layout(
-    title="Futures Contract Prices for Fuels (Next 18 Months)",
-    xaxis_title="Date",
-    yaxis_title="Crude Oil Price (USD/bbl)",
-    yaxis2=dict(
-        title="Product Prices (USD/gallon)",
-        overlaying="y",
-        side="right",
-        showgrid=False,
-        zeroline=False,
-    ),
-    legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=-0.3,
-        xanchor="center",
-        x=0.5,
-    ),
-)
-```
-
-<!-- TODO Insert graph with everything, split y-axis for bbl vs gals -->
+<!-- TODO: Convert this into figure shortcode usage -->
+<figure>
+<img src="img/product_prices.svg" alt="Figure 1: For the given mark date, the prices of crude oil, heating oil and gasoline all normalised to USD per gallon." />
+<figcaption aria-hidden="true"><b>Figure 1:</b> For the given mark date, the prices of crude oil, heating oil and gasoline all normalised to USD per gallon.</figcaption>
+</figure>
 
 We can note some characteristics already:
 
-- The quotation units are different. Crude oil is in USD per barrel (42 U.S. gallons per barrel), whilst the distillates are in USD per U.S. gallon.
+- The quotation units are different. Crude oil is in USD per barrel (42 U.S. gallons per barrel), whilst the distillates are in USD per U.S. gallon. The above graph has normalised units to USD/gal.
 - Crude oil prices are in **backwardation**, meaning the spot price (i.e. the price right now for oil) is higher than that of in the future. The reverse situation is known as contango. More about these phenomena can be understood on the [CME's guide](https://www.investopedia.com/articles/07/contango_backwardation.asp).
 - For the two distillates of interest, we see heating oil consistently attracts a higher premium.
 - The gasoline has a seasonal shape, attracting a higher premium in the U.S.-based summer months, where generally more driving occurs leading to a higher demand.
@@ -119,11 +87,11 @@ OSQ Fuels, a subsidiary of the Open Source Quant Group, has purchased a refinery
 
 We'll first define our refining problem with simple constraints to see how this translates into the AMPL syntax.
 
-Translating the linear model into AMPL is rather straightforward given its syntax. The documentation [introduction](https://dev.ampl.com/ampl/introduction.html) goes over the basics which we'll be applying here, namely parameters (`param`), sets (`set`), variables (`var`), objectives and constraints.
+Translating the linear model into AMPL is rather straightforward. The documentation [introduction](https://dev.ampl.com/ampl/introduction.html) goes over the basics which we'll be applying here, namely parameters (`param`), sets (`set`), variables (`var`), objectives and constraints.
 
 ## Sets
 
-The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$ for each month in our optimisation.
+The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$, representing each month in our optimisation.
 
 ```ampl
 # The number of months within the optimisation
@@ -137,14 +105,11 @@ set T = 1..N;
 
 The direct inputs into the model will be:
 
-- $T$: Set of time points, indexed by $t = 1, \dots, N$.
-- $P^{C,B}_{t}$: Crude oil price at time $t$ (USD/barrel).
-- $P^{H}_{t}$: Heating oil price at time $t$ (USD/gallon).
-- $P^{G}_{t}$: Gasoline price at time $t$ (USD/gallon).
+- $P_{t}^{C,B}$: Crude oil price at time $t$ (USD/barrel).
+- $P_{t}^{H}$: Heating oil price at time $t$ (USD/gallon).
+- $P_{t}^{G}$: Gasoline price at time $t$ (USD/gallon).
 
-To simplify calculations, some parameters are converted to a per-gallon basis:
-
-- $P^{C}_{t}$: Crude oil price at time $t$ (USD/gallon), where $P^{C}_{t} = P^{C,B}_{t} \div 42$.
+To simplify calculations, the crude oil is converted to a per-gallon basis, where $P_{t}^{C} = P_{t}^{C,B} \div 42$.
 
 ```ampl
 param crude_price {T};                 # Crude USD/bbl at time t
@@ -159,7 +124,7 @@ param maximum_crude_per_month_gal = maximum_barrels_per_month * 42;
 param crude_price_gal {t in T} = crude_price[t] / 42;
 ```
 
-Notice here the `maximum_barrels_per_month` is a single number (as it does not vary over time) and also includes a constraint, a sense check to make our model more foolproof.
+Notice here the `maximum_barrels_per_month` is a single number (as it is time invarient) and also includes a constraint, a sense check to make our model more foolproof.
 
 Conversions are also defined to normalise the units for the optimisation.
 
@@ -170,9 +135,9 @@ Decision variables are defined internally within the model. These are the object
 The model's decision variables represent the quantities of crude oil to be processed and the quantities of various fuels to be produced at each time point.
 
 - $I_{t}$: Gallons of crude oil used at time $t$.
-- $O^{H}_{t}$: Gallons of heating oil production at time $t$.
-- $O^{G}_{t}$: Gallons of gasoline production at time $t$.
-- $O^{R}_{t}$: Gallons of residual material at time $t$.
+- $O_{t}^{H}$: Gallons of heating oil production at time $t$.
+- $O_{t}^{G}$: Gallons of gasoline production at time $t$.
+- $O_{t}^{R}$: Gallons of residual material at time $t$.
 
 ```ampl
 var crude_used_gal {t in T} >= 0;          # Crude used at time t in gallons
@@ -185,7 +150,7 @@ var residual {t in T} >= 0;                # Residual at time t
 
 The objective is to maximise the total profit, which is calculated as the total revenue from selling refined fuels minus the total cost of purchasing and processing crude oil. This is summed over all time points $t$.
 
-$$\max \quad \text{profit} = \sum_{t \in T} \left( P^{H}_{t} O^{H}_{t} + P^{G}_{t} O^{G}_{t} - P^{C}_{t} I^{G}_{t} \right)$$
+$$\max \quad \text{profit} = \sum_{t \in T} \left( P_{t}^{H} O_{t}^{H} + P_{t}^{G} O_{t}^{G} - P_{t}^{C} I_{t} \right)$$
 
 ```ampl
 maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
@@ -203,7 +168,7 @@ The model includes several constraints to ensure the refinery's operations are r
 
 The amount of crude oil processed at each time point cannot exceed the maximum monthly capacity.
 
-$$I^{G}_{t} \leq M^{G} \quad \forall t \in T$$
+$$I_{t} \leq M^{G} \quad \forall t \in T$$
 
 ```ampl
 subject to Maximum_Crude_Used {t in T}:
@@ -214,8 +179,8 @@ subject to Maximum_Crude_Used {t in T}:
 
 These constraints ensure that the production of specific fuels does not exceed a certain percentage of the total crude oil used. This is a simplified expression of the aforementioned 'fractioning'.
 
-- Heating Oil: $O^{H}_{t} \leq 0.6 \times I^{G}_{t} \quad \forall t \in T$
-- Gasoline: $O^{G}_{t} \leq 0.6 \times I^{G}_{t} \quad \forall t \in T$
+- Heating Oil: $O_{t}^{H} \leq 0.6 \times I_{t} \quad \forall t \in T$
+- Gasoline: $O_{t}^{G} \leq 0.6 \times I_{t} \quad \forall t \in T$
 
 ```ampl
 subject to Heating_Oil_Ratio {t in T}:
@@ -229,7 +194,7 @@ subject to Gasoline_Ratio {t in T}:
 
 These constraints specify limits on the combined production of certain fuel types. This is again a simplified expression of having to choose between fuels when they may contain similar hydrocarbon lengths.
 
-- Heating Oil and Gasoline: $O^{H}_{t} + O^{G}_{t} \leq 0.9 \times I^{G}_{t} \quad \forall t \in T$
+- Heating Oil and Gasoline: $O_{t}^{H} + O_{t}^{G} \leq 0.9 \times I_{t} \quad \forall t \in T$
 
 ```ampl
 subject to Gasoline_Heating_Oil_Ratio {t in T}:
@@ -240,7 +205,7 @@ subject to Gasoline_Heating_Oil_Ratio {t in T}:
 
 The total quantity of all refined products (heating oil, gasoline, and residual) cannot exceed the total crude oil used at each time point.
 
-$$O^{H}_{t} + O^{G}_{t} + O^{R}_{t} \leq I^{G}_{t} \quad \forall t \in T$$
+$$O_{t}^{H} + O_{t}^{G} + O_{t}^{R} \leq I_{t} \quad \forall t \in T$$
 
 ```ampl
 subject to Total_Production {t in T}:
@@ -251,84 +216,26 @@ subject to Total_Production {t in T}:
 
 More a technicality of the model, but for the residual to properly calculate so we can read the output, it needs to be constrained as the 'leftover' from production. Otherwise, given the above contraint for material balance, the residual is illdefined and the solver would likely leave this at zero.
 
-$$ O^{R}_{t} \geq I^{G}_{t} - \left( O^{H}_{t} + O^{G}_{t} \right) \quad \forall t \in T$$
+$$ O_{t}^{R} \geq I_{t} - \left( O_{t}^{H} + O_{t}^{G} \right) \quad \forall t \in T$$
 
 ```ampl
 subject to Residual_Definition {t in T}:
     residual[t] >= crude_used_gal[t] - (heating_oil_production[t] + gasoline_production[t]);
 ```
 
-## Full AMPL Definition
-
-<!-- TODO Make this a dropdown? -->
-
-```ampl
-# =================================== SETS ===================================
-
-# The number of months within the optimisation
-param N integer > 0;
-
-# Create the set (or array) of time points within the optimisation
-set T = 1..N;
-
-# ================================ PARAMETERS ================================
-
-param crude_price {T};                 # Crude USD/bbl at time t
-param heating_oil_price {T};           # Heating oil USD/gal at time t
-param gasoline_price {T};              # Gasoline USD/gal at time t
-
-# Refinery characteristics and economic constraints
-param maximum_barrels_per_month >= 0;  # Maximum barrels processed per month
-
-# Conversions
-param maximum_crude_per_month_gal = maximum_barrels_per_month * 42;
-param crude_price_gal {t in T} = crude_price[t] / 42;
-
-# ================================= VARIABLES =================================
-
-var crude_used_gal {t in T} >= 0;          # Crude used at time t in gallons
-var heating_oil_production {t in T} >= 0;  # Heating oil production at time t
-var gasoline_production {t in T} >= 0;     # Gasoline production at time t
-var residual {t in T} >= 0;                # Residual at time t
-
-# ============================ OBJECTIVE FUNCTION =============================
-
-maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
-                + heating_oil_price[t] * heating_oil_production[t]
-                + gasoline_price[t] * gasoline_production[t]);
-
-# ================================ CONSTRAINTS ================================
-
-# Maximum production
-subject to Maximum_Crude_Used {t in T}:
-    crude_used_gal[t] <= maximum_crude_per_month_gal;
-
-# Contrain the ratios of distillates
-subject to Heating_Oil_Ratio {t in T}:
-    heating_oil_production[t] <= 0.6 * crude_used_gal[t];
-
-subject to Gasoline_Ratio {t in T}:
-    gasoline_production[t] <= 0.6 * crude_used_gal[t];
-
-subject to Gasoline_Heating_Oil_Ratio {t in T}:
-    gasoline_production[t] + heating_oil_production[t] <= 0.9 * crude_used_gal[t];
-
-# Ensure the total production does not exceed the crude used
-subject to Total_Production {t in T}:
-    heating_oil_production[t] + gasoline_production[t] + residual[t] <= crude_used_gal[t];
-
-# Define the residual as the difference between crude used and total production
-subject to Residual_Definition {t in T}:
-    residual[t] >= crude_used_gal[t] - (heating_oil_production[t] + gasoline_production[t]);
-```
+The full AMPL definition can be [seen in the appendix](#full-ampl-definition).
 
 ## Results
 
 <!-- TODO -->
 
-To run this, assuming a lowly 10 barrels a month being processed...
+To run the model, the following setup can be used whereby we create the optimisation interface, choose the solver ([CBC](https://github.com/coin-or/Cbc) in this case), load the parameters and solve. For instructions on installing AMPL, visit the [AMPL documentation](https://dev.ampl.com/ampl/python/modules.html).
+
+Note the maximum processed barrels per month is being set to 10. This is an extremely low number in terms of real-world context, but makes the results easily digestable.
 
 ```python
+from amplpy import AMPL
+
 # Create an AMPL instance
 ampl = AMPL()
 
@@ -337,7 +244,7 @@ ampl.set_option("solver", "cbc")
 
 ampl.eval(
     r"""
-        ...
+        FULL AMPL MODEL DEFINITION HERE
     """
 )
 
@@ -350,9 +257,21 @@ ampl.get_parameter("maximum_barrels_per_month").set(10)
 ampl.solve()
 ```
 
-<!-- TODO Put production graph in -->
+To extract the output variables as a series, you can use, for example:
 
-A somewhat anticlimatic output, it's exactly what we expect, the heating oil was always the higher premium fuel, so the facility is consistently optimised to produce that.
+```python
+ampl.get_variable("gasoline_production").get_values().to_pandas().reset_index(drop=True)
+```
+
+Plotting each optimised variable over time, we can see the net facility most profitable action.
+
+<!-- TODO: Convert this into figure shortcode usage -->
+<figure>
+<img src="img/production_plan.svg" alt="Figure 2: Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output." />
+<figcaption aria-hidden="true"><b>Figure 2:</b> Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output.</figcaption>
+</figure>
+
+A somewhat anticlimatic output, though it's exactly what we expect, the heating oil was always the higher premium fuel, so the facility is consistently optimised to produce that.
 
 For a sanity check, we can confirm the volumes align (sum of outputs = input), and the relative ratios of each fuel produce align with the constraints we defined earlier.
 
@@ -367,17 +286,31 @@ param gasoline_production_cost >= 0;
 
 Incorporating this into a new objective function is simple.
 
-$$\max \quad \text{profit} = \sum_{t \in T} \left( \left( P^{H}_{t} - C^{H} \right) O^{H}_{t} + \left( P^{G}_{t} - C^{G} \right) O^{G}_{t} - P^{C}_{t} I^{G}_{t} \right)$$
+$$\max \quad \text{profit} = \sum_{t \in T} \left( \left( P_{t}^{H} - C^{H} \right) O_{t}^{H} + \left( P_{t}^{G} - C^{G} \right) O_{t}^{G} - P_{t}^{C} I_{t} \right)$$
 
 ```ampl
-        maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
-                       + (heating_oil_price[t] - heating_oil_production_cost) * heating_oil_production[t]
-                       + (gasoline_price[t] - gasoline_production_cost) * gasoline_production[t]);
+maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
+                + (heating_oil_price[t] - heating_oil_production_cost) * heating_oil_production[t]
+                + (gasoline_price[t] - gasoline_production_cost) * gasoline_production[t]);
 ```
 
-<!-- TODO Put the new results in here -->
+If we set these costs to 0.40 USD/gal for heating oil, and 0.10 USD/gal for gasoline, and then plot the effective premium for the futures contracts, we see the most valuable output is changing over time.
 
-Now it's clear the facility should be swapping between the two distillates given the changing demand profiles over the year.
+<!-- TODO: Convert this into figure shortcode usage -->
+<figure>
+<img src="img/product_prices_adjusted.svg" alt="Figure 3: Adjusting the futures price by the modelled cost, the effective sell price shows we should be optimising different fuels over time." />
+<figcaption aria-hidden="true"><b>Figure 3:</b> Adjusting the futures price by the modelled cost, the effective sell price shows we should be optimising different fuels over time.</figcaption>
+</figure>
+
+It's clear our facility should be adjusting the distillate offtake over time, based on which has the higher effective premium. Running the optimisation again provides the optimal facility result.
+
+<!-- TODO: Convert this into figure shortcode usage -->
+<figure>
+<img src="img/production_plan_with_costs.svg" alt="Figure 4: By incorporating production costs, the optimal facility production varies by the relative demand throughout the year." />
+<figcaption aria-hidden="true"><b>Figure 4:</b> By incorporating production costs, the optimal facility production varies by the relative demand throughout the year.</figcaption>
+</figure>
+
+Now, it's clear the facility should be swapping between the two distillates given the changing demand profiles over the year.
 
 # Conclusion
 
@@ -386,9 +319,9 @@ This article should have provided some context on quantitative commodities model
 If the model were to be extended for real-world context, some interesting features might include:
 
 - Shipping charges (usage of pipelines/tankers to transport crude/products).
-- Accounting for other distillate products which are produced.
+- Accounting for other distillate products which are produced (petroleum gas, napthta, paraffin, jet fuel, diesel, fuel oil, bitumen, etc.).
 - Accounting for any environmental policies for certain regions (parts of the U.S. require certain fuel additives, for example).
-- Expansion/reduction of hydrocarbon densities, which means the model needs to account for volume adjustments.
+- Expansion/reduction of hydrocarbon densities (based on the variable heat within the physical chamber), which means the model needs to account for volume adjustments.
 
 A couple of much more in-depth examples of a refinery optimisation can be found on the AMPL website:
 
@@ -472,8 +405,64 @@ df = close_data.pivot(columns="symbol", index="date", values="close").sort_index
 df.to_csv("commodity_futures_prices.csv")
 ```
 
-# Package Installation
+## Full AMPL Definition
 
-<!-- TODO -->
+```ampl
+# =================================== SETS ===================================
 
-https://dev.ampl.com/ampl/python/modules.html
+# The number of months within the optimisation
+param N integer > 0;
+
+# Create the set (or array) of time points within the optimisation
+set T = 1..N;
+
+# ================================ PARAMETERS ================================
+
+param crude_price {T};                 # Crude USD/bbl at time t
+param heating_oil_price {T};           # Heating oil USD/gal at time t
+param gasoline_price {T};              # Gasoline USD/gal at time t
+
+# Refinery characteristics and economic constraints
+param maximum_barrels_per_month >= 0;  # Maximum barrels processed per month
+
+# Conversions
+param maximum_crude_per_month_gal = maximum_barrels_per_month * 42;
+param crude_price_gal {t in T} = crude_price[t] / 42;
+
+# ================================= VARIABLES =================================
+
+var crude_used_gal {t in T} >= 0;          # Crude used at time t in gallons
+var heating_oil_production {t in T} >= 0;  # Heating oil production at time t
+var gasoline_production {t in T} >= 0;     # Gasoline production at time t
+var residual {t in T} >= 0;                # Residual at time t
+
+# ============================ OBJECTIVE FUNCTION =============================
+
+maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
+                + heating_oil_price[t] * heating_oil_production[t]
+                + gasoline_price[t] * gasoline_production[t]);
+
+# ================================ CONSTRAINTS ================================
+
+# Maximum production
+subject to Maximum_Crude_Used {t in T}:
+    crude_used_gal[t] <= maximum_crude_per_month_gal;
+
+# Contrain the ratios of distillates
+subject to Heating_Oil_Ratio {t in T}:
+    heating_oil_production[t] <= 0.6 * crude_used_gal[t];
+
+subject to Gasoline_Ratio {t in T}:
+    gasoline_production[t] <= 0.6 * crude_used_gal[t];
+
+subject to Gasoline_Heating_Oil_Ratio {t in T}:
+    gasoline_production[t] + heating_oil_production[t] <= 0.9 * crude_used_gal[t];
+
+# Ensure the total production does not exceed the crude used
+subject to Total_Production {t in T}:
+    heating_oil_production[t] + gasoline_production[t] + residual[t] <= crude_used_gal[t];
+
+# Define the residual as the difference between crude used and total production
+subject to Residual_Definition {t in T}:
+    residual[t] >= crude_used_gal[t] - (heating_oil_production[t] + gasoline_production[t]);
+```
