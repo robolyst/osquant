@@ -1,12 +1,13 @@
 ---
-title: "Entering Quantitative Commodity Fundamentals"
+title: "Crudely Optimising an Oil Refinery"
 summary: "
-This article explores using linear programming in real-world modelling scenarios. We jump into optimisation utilising AMPL to crudely understand our maximum oil refinery profits.
+This article scratches the surface of how oil is used and traded within the world's energy complex. We introduce linear optimisation utilising AMPL to understand the optimal outputs from a ficticious refinery.
 "
 
 date: "2026-02-22"
 type: paper
 mathjax: true
+hover_color: '#f5c875'
 authors:
     - Daniel Nunns
 categories:
@@ -20,35 +21,35 @@ In this article, we'll explore basic fundamentals of the oil market and introduc
 
 # Background
 
-Running an oil operation is conceptually rather straightforward. You bring in some crude oil, you process it, you get a bunch of products you can then sell on to various markets. However, as with anything in the real-world, there are complexities coming in the form of grades of oil, regulations in certain markets, and seasonality of product demand, to only name a few.
+Running an oil operation is conceptually straightforward: you bring in crude oil, process it, and sell the resulting products to various markets. In the real world, however, complications arise from oil grades, regional regulations, and seasonal demand, among other factors.
 
-Because oil and its refined products are such a large market, naturally exchanges exist to trade these products, allowing them to find their fair values over time, solving the supply-and-demand structure. How then, as a refiner, will you optimise your facility to maximise profit given production constraints?
+Because oil and refined products form a large market, exchanges exist to trade them, allowing fair-values to be discovered, solving the supply-and-demand structure. How, then, as a refiner, do you optimise your facility to maximise profit given production constraints?
 
 Crude oil comes in various 'grades', which refers to its specific gravity (light/medium/heavy) and sulfur content (sweet/sour). Essentially, these measures relate to the proportion of different distillates received when refining, with light-sweet usually attracting the highest premium given the low sulfur content (less corrosive on equipment) and lighter hydrocarbons (yielding higher value products like diesel and gasoline).
 
 To better understand the grades of oil and how they're used, [*Oil 101*](https://www.goodreads.com/book/show/6377613-oil-101) by Morgan Downey gives a great overview of oil, beginning with its history and explaining various stages of production, consumption, and how the markets operate. To gain insight into the various oil producing regions, the [Platts Periodic Table of Oil](https://www.spglobal.com/commodity-insights/en/news-research/infographics/content-design-infographics/platts-periodic-table-of-oil) provides an interactive infographic which also describes the type of crude oil from each region.
 
-There's a tonne of theory we could dive into. Instead, I'll be highlighting the important concepts required to optimise the refinery.
+There is a lot of theory we could explore; instead, this article highlights the important concepts required to optimise the refinery.
 
 ## Fractional Distillation
 
-One form of distillation is 'fractional distillation', whereby a fractioning column is heated with a particular grade of oil inside. Distillates are grouped together, predominantly on the lengths of their hydrocarbon chains, and these lengths are separated in the column with lighter hydrocarbons rising to the surface. The 'fractioning' process is then taking the hydrocarbons at various levels to create the products within specification.
+One form of refining (i.e. processing oil into higher value products) is 'fractional distillation', whereby a fractioning column (think 'big tank') is heated with a particular grade of oil inside. Distillates are grouped together, predominantly on the lengths of their hydrocarbon chains, and these lengths are separated in the column with lighter hydrocarbons rising to the surface. The 'fractioning' process is then taking the hydrocarbons at various levels to create the refined products within specification.
 
-Because hydrocarbons don't separate discretely — they form a continuous gradient by chain length — one must choose how much to fractionate at each level to create various products. This becomes important when the relative pricing of two similar fuels changes over time, as it forms the crux of distillate optimisation.
+Because hydrocarbons don't separate discretely - they form a continuous gradient by chain length - one must choose how much to fractionate at each level to create various products. This becomes important when the relative pricing of two similar fuels changes over time, as it forms the crux of refining optimisation.
 
-For further information on fractional distillation, *Oil 101* covers many concepts, though the theory is widely available across the web.
+For more on fractional distillation, see *Oil 101*; the theory is also widely available online.
 
 ## Distillate Products
 
-Once crude has been refined, lighter hydrocarbon products are usually more volatile, harder to store, and may cost more to produce because of required additives. As such, gasoline is usually produced in line with demand, so storage typically plays a smaller role in optimisation.
+Once crude has been refined, lighter hydrocarbon products - like fuels - are usually more volatile, harder to store, and may cost more to produce because of required additives. Consequently, gasoline is often produced in line with demand, so storage typically plays a smaller role in production optimisation.
 
-# Crude & Distillates
+# The Crude & Distillates Market
 
-We will be taking crude oil and producing two fuels, heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 24 months to ensure we're operationally efficient into the future, and can hedge our exposure to prices of the crude and distillates.
+We will be taking crude oil and producing two fuels: heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 24 months to ensure we're operationally efficient into the future, and can hedge our exposure to prices of the crude and distillates.
 
-Because our crude and distillates trade on a liquid exchange (CME) as futures, we have good fair valuations of these products per-unit over the next two years.
+Because crude oil and its distillates trade on a liquid exchange (CME) as futures, we have good fair-valuations of these products per-unit over the next two years.
 
-The data can be loaded with the code below. The data used can be [downloaded here](data/commodity_futures_prices.csv), or obtained following the [instructions](#obtaining-futures-data).
+The data can be loaded with the code below. The data used can be [downloaded here](data/commodity_futures_prices.csv), or freshly obtained following the [instructions](#obtaining-futures-data).
 
 ```python
 import pandas as pd
@@ -66,28 +67,26 @@ df = pd.read_csv(
 )
 ```
 
-Plotting their current valuation, we see the following...
+Plotting their current valuations shows the following:
 
-<!-- TODO: Convert this into figure shortcode usage -->
-<figure>
-<img src="img/product_prices.svg" alt="Figure 1: For the given mark date, the prices of crude oil, heating oil and gasoline all normalised to USD per gallon." />
-<figcaption aria-hidden="true"><b>Figure 1:</b> For the given mark date, the prices of crude oil, heating oil and gasoline all normalised to USD per gallon.</figcaption>
-</figure>
+{{< figure src="img/product_prices.svg" title="Normalised Futures Prices" >}}
+For the given mark date, the prices of crude oil, heating oil and gasoline all normalised to USD per gallon.
+{{< /figure >}}
 
-We can note some characteristics already:
+Some characteristics are already apparent:
 
-- The quotation units are different. Crude oil is in USD per barrel (42 U.S. gallons per barrel), whilst the distillates are in USD per U.S. gallon. The above graph has normalised units to USD/gal.
-- Crude oil prices are in **backwardation**, meaning the spot price is higher than prices for later delivery. The reverse situation is contango. See this [Investopedia guide](https://www.investopedia.com/articles/07/contango_backwardation.asp) for more detail.
+- The quoted units differ: crude oil is in USD per barrel (42 U.S. gallons per barrel), while distillates are in USD per U.S. gallon. The graph above normalised units to USD/gal.
+- Crude oil prices are in **backwardation**, meaning the spot price is higher than prices for later delivery. The reverse situation is contango. See this [Investopedia guide](https://www.investopedia.com/articles/07/contango_backwardation.asp) for more detail. In this case, there is little incentive to store crude and refine it later.
 - For the two distillates of interest, heating oil consistently attracts a higher premium.
-- Gasoline shows a seasonal pattern, with a higher premium in US summer months when driving increases.
+- Gasoline shows a seasonal pattern, with higher prices in US summer months when driving increases.
 
 # OSQ Fuels Optimisation
 
 OSQ Fuels, a subsidiary of the Open Source Quant Group, has purchased a refinery.
 
-We'll first define our refining problem with simple constraints to see how this translates into the AMPL syntax.
+We'll first define our refining problem with simple constraints to show how this translates into AMPL syntax.
 
-Translating the linear model into AMPL is rather straightforward. The documentation [introduction](https://dev.ampl.com/ampl/introduction.html) goes over the basics which we'll be applying here, namely parameters (`param`), sets (`set`), variables (`var`), objectives and constraints.
+Translating the linear model into AMPL is rather straightforward. The documentation [introduction](https://dev.ampl.com/ampl/introduction.html) covers the basics we apply here, namely parameters (`param`), sets (`set`), variables (`var`), objectives and constraints.
 
 ## Sets
 
@@ -109,22 +108,25 @@ The direct inputs into the model will be:
 - $P_{t}^{H}$: Heating oil price at time $t$ (USD/gallon).
 - $P_{t}^{G}$: Gasoline price at time $t$ (USD/gallon).
 
-To simplify calculations, the crude oil is converted to a per-gallon basis, where $P_{t}^{C} = P_{t}^{C,B} \div 42$.
+To simplify calculations, the crude oil is converted to a per-gallon basis, where:
+
+$$P_{t}^{C} = P_{t}^{C,B} \div 42$$
 
 ```ampl
-param crude_price {T};                 # Crude USD/bbl at time t
-param heating_oil_price {T};           # Heating oil USD/gal at time t
-param gasoline_price {T};              # Gasoline USD/gal at time t
+param crude_price {T};        # Crude USD/bbl at time t
+param heating_oil_price {T};  # Heating oil USD/gal at time t
+param gasoline_price {T};     # Gasoline USD/gal at time t
 
 # Refinery characteristics and economic constraints
-param maximum_barrels_per_month >= 0;  # Maximum barrels processed per month
+# - Maximum barrels processed per month
+param maximum_barrels_per_month >= 0;
 
 # Conversions
 param maximum_crude_per_month_gal = maximum_barrels_per_month * 42;
 param crude_price_gal {t in T} = crude_price[t] / 42;
 ```
 
-Notice here the `maximum_barrels_per_month` is a single number (it is time-invariant) and includes a constraint as a sanity check.
+Note that the `maximum_barrels_per_month` is a single (time-invarient) number and includes a lower-bound constraint as a sanity check.
 
 Conversions are also defined to normalise the units for the optimisation.
 
@@ -140,10 +142,17 @@ The model's decision variables represent the quantities of crude oil to be proce
 - $O_{t}^{R}$: Gallons of residual material at time $t$.
 
 ```ampl
-var crude_used_gal {t in T} >= 0;          # Crude used at time t in gallons
-var heating_oil_production {t in T} >= 0;  # Heating oil production at time t
-var gasoline_production {t in T} >= 0;     # Gasoline production at time t
-var residual {t in T} >= 0;                # Residual at time t
+# Crude used at time t in gallons
+var crude_used_gal {t in T} >= 0;
+
+# Heating oil production at time t
+var heating_oil_production {t in T} >= 0;
+
+# Gasoline production at time t
+var gasoline_production {t in T} >= 0;
+
+# Residual at time t
+var residual {t in T} >= 0;
 ```
 
 ## Objective
@@ -153,12 +162,14 @@ The objective is to maximise the total profit, which is calculated as the total 
 $$\max \quad \text{profit} = \sum_{t \in T} \left( P_{t}^{H} O_{t}^{H} + P_{t}^{G} O_{t}^{G} - P_{t}^{C} I_{t} \right)$$
 
 ```ampl
-maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
-                + heating_oil_price[t] * heating_oil_production[t]
-                + gasoline_price[t] * gasoline_production[t]);
+maximize profit: sum{t in T} (
+    -1 * crude_price_gal[t] * crude_used_gal[t]
+    + heating_oil_price[t] * heating_oil_production[t]
+    + gasoline_price[t] * gasoline_production[t]
+);
 ```
 
-Note the residual is not sold. Consider this as wasted product.
+The residual is not sold — consider it wasted product.
 
 ## Constraints
 
@@ -192,13 +203,14 @@ subject to Gasoline_Ratio {t in T}:
 
 **3. Combined Product Ratios:**
 
-These constraints specify limits on the combined production of certain fuel types. This is again a simplified expression of having to choose between fuels when they may contain similar hydrocarbon lengths.
+These constraints specify limits on combined production of certain fuel types. This is again a simplified expression of having to choose between fuels when they may contain similar hydrocarbon lengths.
 
 - Heating Oil and Gasoline: $O_{t}^{H} + O_{t}^{G} \leq 0.9 \times I_{t} \quad \forall t \in T$
 
 ```ampl
 subject to Gasoline_Heating_Oil_Ratio {t in T}:
-    gasoline_production[t] + heating_oil_production[t] <= 0.9 * crude_used_gal[t];
+    (gasoline_production[t] + heating_oil_production[t]
+        <= 0.9 * crude_used_gal[t]);
 ```
 
 **4. Material Balance:**
@@ -209,7 +221,8 @@ $$O_{t}^{H} + O_{t}^{G} + O_{t}^{R} \leq I_{t} \quad \forall t \in T$$
 
 ```ampl
 subject to Total_Production {t in T}:
-    heating_oil_production[t] + gasoline_production[t] + residual[t] <= crude_used_gal[t];
+    (heating_oil_production[t] + gasoline_production[t] + residual[t]
+        <= crude_used_gal[t]);
 ```
 
 **5. Residual Balance:**
@@ -220,14 +233,14 @@ $$ O_{t}^{R} \geq I_{t} - \left( O_{t}^{H} + O_{t}^{G} \right) \quad \forall t \
 
 ```ampl
 subject to Residual_Definition {t in T}:
-    residual[t] >= crude_used_gal[t] - (heating_oil_production[t] + gasoline_production[t]);
+    (residual[t] >=
+        crude_used_gal[t]
+        - (heating_oil_production[t] + gasoline_production[t]));
 ```
 
 The full AMPL definition can be [seen in the appendix](#full-ampl-definition).
 
 ## Results
-
-<!-- TODO -->
 
 To run the model, the following setup can be used whereby we create the optimisation interface, choose the solver ([CBC](https://github.com/coin-or/Cbc) in this case), load the parameters and solve. For instructions on installing AMPL, visit the [AMPL documentation](https://dev.ampl.com/ampl/python/modules.html).
 
@@ -260,16 +273,16 @@ ampl.solve()
 To extract the output variables as a series, you can use, for example:
 
 ```python
-ampl.get_variable("gasoline_production").get_values().to_pandas().reset_index(drop=True)
+ampl.get_variable(
+    "gasoline_production"
+).get_values().to_pandas().reset_index(drop=True)
 ```
 
 Plotting each optimised variable over time shows the facility's most profitable action.
 
-<!-- TODO: Convert this into figure shortcode usage -->
-<figure>
-<img src="img/production_plan.svg" alt="Figure 2: Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output." />
-<figcaption aria-hidden="true"><b>Figure 2:</b> Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output.</figcaption>
-</figure>
+{{< figure src="img/production_plan.svg" title="Optimal Facility Output" >}}
+Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output.
+{{< /figure >}}
 
 A somewhat anticlimactic result, but it's exactly what we expect: heating oil had the higher premium, so the facility is optimised to produce it.
 
@@ -289,32 +302,32 @@ Incorporating this into a new objective function is simple.
 $$\max \quad \text{profit} = \sum_{t \in T} \left( \left( P_{t}^{H} - C^{H} \right) O_{t}^{H} + \left( P_{t}^{G} - C^{G} \right) O_{t}^{G} - P_{t}^{C} I_{t} \right)$$
 
 ```ampl
-maximize profit: sum{t in T} (-1 * crude_price_gal[t] * crude_used_gal[t]
-                + (heating_oil_price[t] - heating_oil_production_cost) * heating_oil_production[t]
-                + (gasoline_price[t] - gasoline_production_cost) * gasoline_production[t]);
+maximize profit: sum{t in T} (
+    -1 * crude_price_gal[t] * crude_used_gal[t]
+    + ((heating_oil_price[t] - heating_oil_production_cost)
+           * heating_oil_production[t])
+    + ((gasoline_price[t] - gasoline_production_cost)
+           * gasoline_production[t])
+);
 ```
 
 If we set these costs to 0.40 USD/gal for heating oil, and 0.10 USD/gal for gasoline, and then plot the effective premium for the futures contracts, we see the most valuable output is changing over time.
 
-<!-- TODO: Convert this into figure shortcode usage -->
-<figure>
-<img src="img/product_prices_adjusted.svg" alt="Figure 3: Adjusting the futures price by the modelled cost, the effective sell price shows we should be optimising different fuels over time." />
-<figcaption aria-hidden="true"><b>Figure 3:</b> Adjusting the futures price by the modelled cost, the effective sell price shows we should be optimising different fuels over time.</figcaption>
-</figure>
+{{< figure src="img/product_prices_adjusted.svg" title="Adjusted Fuel Premiums based on Processing Cost" >}}
+Adjusting the futures price by the modelled cost, the effective sell price shows we should be optimising different fuels over time.
+{{< /figure >}}
 
 It's clear our facility should be adjusting the distillate offtake over time, based on which has the higher effective premium. Running the optimisation again provides the optimal facility result.
 
-<!-- TODO: Convert this into figure shortcode usage -->
-<figure>
-<img src="img/production_plan_with_costs.svg" alt="Figure 4: By incorporating production costs, the optimal facility production varies by the relative demand throughout the year." />
-<figcaption aria-hidden="true"><b>Figure 4:</b> By incorporating production costs, the optimal facility production varies by the relative demand throughout the year.</figcaption>
-</figure>
+{{< figure src="img/production_plan_with_costs.svg" title="Optimal Production given Processing Costs" >}}
+By incorporating production costs, the optimal facility production varies by the relative demand throughout the year.
+{{< /figure >}}
 
 Now, it's clear the facility should be swapping between the two distillates given the changing demand profiles over the year.
 
 # Conclusion
 
-This article should have provided some context on quantitative commodities modelling which includes everything from understanding the physical context, through to implementing the likes of linear optimisation and interpreting the outputs.
+This article should have provided some context on quantitative oil refining modelling which includes everything from understanding the physical context, through to implementing the likes of linear optimisation and interpreting the outputs.
 
 If the model were to be extended for real-world context, some interesting features might include:
 
