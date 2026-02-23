@@ -14,7 +14,7 @@ categories:
 hover_color: "#FF9696"
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/conditional-value-at-risk
-acknowledgements: "Thank you to [Daniel Nunns](https://www.linkedin.com/in/daniel-nunns/) who proofread and provided corrections."
+acknowledgements: "Thank you to [Daniel Nunns](/authors/daniel-nunns/) who proofread and provided corrections."
 ---
 
 [Value at Risk](https://en.wikipedia.org/wiki/Value_at_risk) (VaR) is the industry's go-to portfolio risk metric. But, it's a cutoff completely ignoring tail risk. It tells you how often you'll breach a threshold, not how bad losses are when you do. [Conditional Value at Risk](https://en.wikipedia.org/wiki/Expected_shortfall)  (CVaR) looks at that damage. It measures the average of your worst days.

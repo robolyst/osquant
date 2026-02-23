@@ -10,7 +10,7 @@ authors:
 categories:
     - mathematics
     - finance
-acknowledgements: "Thank you to [Daniel Nunns](https://www.linkedin.com/in/daniel-nunns/) who proofread and provided corrections."
+acknowledgements: "Thank you to [Daniel Nunns](/authors/daniel-nunns/) who proofread and provided corrections."
 ---
 <note>Some time ago I read a Two Sigma article on using Gaussian mixture models for regime detection [^Botte2021]. I wanted to understand the math behind these methods and extend them by tying the results to economic variables. This article is the write-up of that work.</note>
 
