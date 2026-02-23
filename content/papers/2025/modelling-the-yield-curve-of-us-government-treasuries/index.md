@@ -147,7 +147,7 @@ This method has the advantages that (1) if there are any yields missing at time 
 
 The paper by Diebold and Li present what they call the Nelson-Siegel yield curve [^Diebold2003]:
 $$
-y_t(\tau) = f_{1,t} + f_{2,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau}\right) + f_{3,t}\left(\frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau}\right)
+y_t(\tau) = f_{1,t} + f_{2,t}\left(\frac{1 - e^{- \lambda \tau}}{\lambda \tau}\right) + f_{3,t}\left(\frac{1 - e^{- \lambda \tau}}{\lambda \tau} - e^{- \lambda \tau}\right)
 $$
 In their paper, they call this model the "Nelson-Siegel yield curve" as they base it on another paper. However, they do make some modifications of their own.
 
@@ -155,8 +155,8 @@ The equation says that the yield $y$ of maturity $\tau$ (in months) at time $t$ 
 $$
 \begin{aligned}
   \beta_1(\tau) &= 1 \\\
-  \beta_2(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} \\\
-  \beta_3(\tau) &= \frac{1 - e^{\lambda \tau}}{\lambda \tau} - e^{\lambda \tau} \\\
+  \beta_2(\tau) &= \frac{1 - e^{- \lambda \tau}}{\lambda \tau} \\\
+  \beta_3(\tau) &= \frac{1 - e^{- \lambda \tau}}{\lambda \tau} - e^{- \lambda \tau} \\\
 \end{aligned}
 $$
 
