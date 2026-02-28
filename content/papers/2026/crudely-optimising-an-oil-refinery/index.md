@@ -4,7 +4,7 @@ summary: "
 This article scratches the surface of how oil is used and traded within the world's energy complex. We introduce linear optimisation utilising AMPL to understand the optimal outputs from a fictitious refinery.
 "
 
-date: "2026-02-22"
+date: "2026-02-28"
 type: paper
 mathjax: true
 hover_color: '#f5c875'
@@ -15,7 +15,7 @@ categories:
     - mathematics
 ---
 
-Trading commodities can be done in various ways. One can use a black-box model to trade signals, another can speculate on fundamentals, and others participate in physical flows to hedge in markets. If you belong to the latter two categories, you generally want to model a system and optimise profit to understand necessary trades.
+Trading commodities can be done in various ways. One can use a black-box model to trade signals, another can speculate on fundamentals, and others participate with physical flows to hedge in markets. If you belong to the latter two categories, you generally want to model a system and optimise profit to understand necessary trades.
 
 In this article, we'll explore basic fundamentals of the oil market and introduce [AMPL](https://ampl.com/) to optimise a fictitious distillation facility.
 
@@ -25,7 +25,7 @@ Running an oil operation is conceptually straightforward: you bring in crude oil
 
 Because oil and refined products form a large market, exchanges exist to trade them, allowing fair-values to be discovered, solving the supply-and-demand structure. How, then, as a refiner, do you optimise your facility to maximise profit given production constraints?
 
-Crude oil comes in various 'grades', which refers to its specific [gravity](https://en.wikipedia.org/wiki/API_gravity) (light/medium/heavy) and sulfur content ([sweet](https://en.wikipedia.org/wiki/Sweet_crude_oil)/[sour](https://en.wikipedia.org/wiki/Sour_crude_oil)). Essentially, these measures relate to the proportion of different distillates received when refining, with light-sweet usually attracting the highest premium given the low sulfur content (less corrosive on equipment) and lighter hydrocarbons (yielding higher value products like diesel and gasoline).
+Crude oil comes in various 'grades', which refers to its [specific gravity](https://en.wikipedia.org/wiki/API_gravity) (light/medium/heavy) and sulfur content ([sweet](https://en.wikipedia.org/wiki/Sweet_crude_oil)/[sour](https://en.wikipedia.org/wiki/Sour_crude_oil)). Essentially, these measures relate to the proportion of different distillates received when refining, with light-sweet usually attracting the highest premium given the low sulfur content (less corrosive on equipment) and lighter hydrocarbons (yielding higher value products like diesel and gasoline).
 
 To better understand the grades of oil and how they're used, [*Oil 101*](https://www.goodreads.com/book/show/6377613-oil-101) by Morgan Downey gives a great overview of oil, beginning with its history and explaining various stages of production, consumption, and how the markets operate. To gain insight into the various oil producing regions, the [Platts Periodic Table of Oil](https://www.spglobal.com/commodity-insights/en/news-research/infographics/content-design-infographics/platts-periodic-table-of-oil) provides an interactive infographic which also describes the type of crude oil from each region.
 
@@ -39,13 +39,13 @@ For more on fractional distillation, see [*Oil 101*](https://www.goodreads.com/b
 
 ## Distillate Products
 
-Once crude has been refined, lighter hydrocarbon products, like fuels, are usually more volatile, harder to store, and may cost more to produce because of required additives. Consequently, gasoline is often produced in line with demand, so storage --- which is a sensitive economic factor for crude and a subset of distillates --- typically plays a smaller role in production optimisation.
+Once crude has been refined, lighter hydrocarbon products, like fuels, are usually more volatile, harder to store, and may cost more to produce because of required additives. Consequently, gasoline is often produced in line with demand. For this article, we will assume 'instantaneous use', and thus not be considereding time-lag effects, namely storage, for any of the refined products.
 
 # OSQ Fuels Optimisation
 
 OSQ Fuels, a subsidiary of the Open Source Quant Group, has purchased a refinery.
 
-We will be taking crude oil and producing two fuels: heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 24 months to ensure we're operationally efficient into the future, and can hedge our exposure to prices of the crude and distillates.
+We will be taking crude oil and producing two fuels: heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 18 months to ensure we're operationally efficient into the future, and can hedge our exposure to prices of the crude and distillates.
 
 Because crude oil and its distillates trade on a liquid exchange ([CME](https://www.cmegroup.com/)) as futures, we have good fair-valuations of these products per-unit over the next two years:
 
@@ -84,13 +84,13 @@ Some high-level conclusions can be drawn from the plotted data:
 - For the two distillates of interest, heating oil consistently attracts a higher premium.
 - Gasoline shows a seasonal pattern, with higher prices in US summer months when driving increases.
 
-With an intuitive understanding of the forward curves, we'll now define our refining profit optimisation with simple constraints to show how this translates into AMPL syntax.
+Using the forward prices, we'll now define our refining profit optimisation.
 
 Translating the linear model into AMPL is rather straightforward. The documentation [introduction](https://dev.ampl.com/ampl/introduction.html) covers the basics we apply here, namely parameters (`param`), sets (`set`), variables (`var`), objectives and constraints.
 
 ## Sets
 
-The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$, representing each month in our optimisation. In this example, each time point will be optimised for profit independently. However, that does not prevent a linear problem from including cross-time dependencies.
+The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$, representing each month in our optimisation. In this example, each time point will be optimised for profit independently.
 
 <!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
 ```cython
@@ -195,7 +195,13 @@ subject to Maximum_Crude_Used {t in T}:
 
 **2. Product Production Ratios:**
 
-These constraints ensure that the production of specific fuels does not exceed a certain percentage of the total crude oil used, inline with physical limitations of the fractioning given the hydrocarbons found within our crude. This is a simplified expression of the aforementioned 'fractioning'. Here, we assume for a given amount of crude oil, 60% of it may be suitable for heating oil production, and indepdendently, 60% is suitable for gasoline production.
+These constraints ensure that the production of specific fuels does not exceed a certain percentage of the total crude oil used, inline with physical limitations of the fractioning given the hydrocarbons found within our crude. This is a simplified expression of the aforementioned 'fractioning'.
+
+{{< figure src="img/ratios.svg" title="Product Ratios Visualised" >}}
+With all our crude oil entering the fractioning column, this visualises how our hydrocarbon offtake ratios look within the tank, and what we intend to model using the linear constraints below.
+{{< /figure >}}
+
+Here, we assume for a given amount of crude oil, 60% of it may be suitable for heating oil production, and indepdendently, 60% is suitable for gasoline production.
 
 - Heating Oil: $O_{t}^{H} \leq 0.6 \times I_{t} \quad \forall t \in T$
 - Gasoline: $O_{t}^{G} \leq 0.6 \times I_{t} \quad \forall t \in T$
@@ -224,7 +230,7 @@ subject to Gasoline_Heating_Oil_Ratio {t in T}:
 
 **4. Material Balance:**
 
-The total quantity of all refined products (heating oil, gasoline, and residual) cannot exceed the total crude oil used at each time point. Given we have previously defined 90% of our crude can produce our two fuels of interest, this leaves 10% in 'unused' oil, which is the 'residual'.
+The total quantity of all refined products (heating oil, gasoline, and residual) cannot exceed the total crude oil used at each time point.
 
 $$O_{t}^{H} + O_{t}^{G} + O_{t}^{R} \leq I_{t} \quad \forall t \in T$$
 
@@ -237,7 +243,7 @@ subject to Total_Production {t in T}:
 
 **5. Residual Balance:**
 
-To ensure the residual is defined, constrain it as the leftover from production. Otherwise, given the material-balance constraint, the residual is ill-defined and the solver would likely leave it at zero.
+Given we have previously defined 90% of our crude can produce a marketable product, this leaves 10% in 'unused' oil, which is the 'residual'. To ensure the residual is calculated, constrain it as the leftover from production. Otherwise, given the material balance constraint, the residual is ill-defined and the solver would likely leave it at zero.
 
 $$ O_{t}^{R} \geq I_{t} - \left( O_{t}^{H} + O_{t}^{G} \right) \quad \forall t \in T$$
 
@@ -281,13 +287,7 @@ ampl.get_parameter("maximum_barrels_per_month").set(10)
 ampl.solve()
 ```
 
-The problem itself is technically defined as a ['mixed-integer linear programming' (MILP)](https://en.wikipedia.org/wiki/Integer_programming) optimisation. Utilising CBC itself employs a ['branch and cut' algorithm](https://en.wikipedia.org/wiki/Branch_and_cut), whereby our defined linear model is iteratively "tightened" by minimising the region of feasability by effectively cutting it with planes. MILP has many advantages over traditional, functional optimisation techniques, including;
-
-- guaranteeing global optimality (as opposed to getting stuck in a local optima);
-- binary variable processing;
-- and the flexibility of both numeric and logical constraints to express co‑dependencies based on defined sets.
-
-We have only scratched the surface of the power of MILP here, but the foundations of optimisation definition are explored and can be easily further built upon.
+The problem itself is technically defined as a ['mixed-integer linear programming' (MILP)](https://en.wikipedia.org/wiki/Integer_programming) optimisation. Although we are only utilising linear programming here (i.e. not mixed-integer), the solver can handle our simplified definition, and leaves our model ready for additional, mixed-integer dependent, development (some examples of which are discussed in the [conclusion](#conclusion)).
 
 With the optimisation solved, we can extract the output variables as a series, for example:
 
@@ -352,6 +352,7 @@ This article should have provided some context on quantitative oil refining mode
 
 If the model were to be extended for real-world context, some interesting features might include:
 
+- Storage optimisation if the facility is able to have a product buffer on either crude and/or distillates.
 - Shipping charges (pipelines or tankers to transport crude and refined products).
 - Accounting for other distillate products (petroleum gas, naphtha, paraffin, jet fuel, diesel, fuel oil, bitumen, etc.).
 - Accounting for any environmental policies for certain regions (parts of the U.S. require certain fuel additives, for example).
