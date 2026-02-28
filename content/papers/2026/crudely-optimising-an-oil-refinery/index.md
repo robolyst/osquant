@@ -281,7 +281,7 @@ ampl.get_parameter("maximum_barrels_per_month").set(10)
 ampl.solve()
 ```
 
-The problem itself is technically defined as a ['mixed-integer linear programming' (MILP)](https://en.wikipedia.org/wiki/Integer_programming) optimisation. Utilising CBC itself employs a ['branch and cut' algorithm](https://en.wikipedia.org/wiki/Branch_and_cut), whereby our defined linear model is iteratively 'tightened' by minimising the region of feasability by effectively cutting it with planes. MILP has many advantages over traditional, functional optimisation techniques, including;
+The problem itself is technically defined as a ['mixed-integer linear programming' (MILP)](https://en.wikipedia.org/wiki/Integer_programming) optimisation. Utilising CBC itself employs a ['branch and cut' algorithm](https://en.wikipedia.org/wiki/Branch_and_cut), whereby our defined linear model is iteratively "tightened" by minimising the region of feasability by effectively cutting it with planes. MILP has many advantages over traditional, functional optimisation techniques, including;
 
 - guaranteeing global optimality (as opposed to getting stuck in a local optima);
 - binary variable processing;
