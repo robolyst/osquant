@@ -53,10 +53,20 @@
 
     <div class="container">
         {{ .Content }}
-
-        {{ range after 1 $papers }}
-            {{ partial "mini.html" . }}
-        {{ end }}
     </div>
+
+    {{ $remaining := after 1 $papers }}
+    {{ if $remaining }}
+    <div class="magazine-section">
+        <div class="magazine-section-header">
+            <span>More Articles</span>
+        </div>
+        <div class="magazine-grid">
+            {{ range $remaining }}
+                {{ partial "grid-card.html" . }}
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
 
 {{ end }}

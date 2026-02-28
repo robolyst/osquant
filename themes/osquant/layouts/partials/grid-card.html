@@ -1,0 +1,33 @@
+{{ $readTime := mul (div (countwords .Content) 220.0) 60 }}
+{{ $minutes := math.Round (div $readTime 60) }}
+
+{{ $images := $.Resources.ByType "image" }}
+{{ $featured := $images.GetMatch "*feature*" }}
+
+<div class="grid-card">
+    {{ with $featured }}
+    <a href="{{ $.Permalink }}" class="grid-card-image-link">
+        <div class="grid-card-image">
+            <img src="{{ $featured.Permalink }}" alt="{{ $.Title }}" />
+        </div>
+    </a>
+    {{ end }}
+    <div class="grid-card-body">
+        <div class="pre-title">{{ partial "category-links.html" . }}</div>
+        <a class="grid-card-title" href="{{ .Permalink }}">{{ .Title }}</a>
+        <div class="grid-card-meta">
+            {{ with (.GetTerms "authors") }}
+                By
+                {{ $links := apply . "partial" "author-link.html" "." }}
+                {{ $clean := apply $links "chomp" "." }}
+                {{ delimit $clean ", " " & " }}
+                <span class="space">·</span>
+            {{ end }}
+            <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+            <span class="space">·</span>
+            <span>{{ $minutes }} min read</span>
+            {{ if .Params.draft }}<span class="tag">Draft</span>{{ end }}
+        </div>
+        <div class="grid-card-summary">{{ .Summary }}</div>
+    </div>
+</div>

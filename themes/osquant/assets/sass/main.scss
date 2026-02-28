@@ -450,6 +450,134 @@ First post
 }
 
 /* ----------------------------------------------------------------------------
+Magazine grid (front page)
+---------------------------------------------------------------------------- */
+
+.magazine-section {
+    border-top: 1px solid $light-border-color;
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+}
+
+.magazine-section-header {
+    max-width: 1200px;
+    margin: 0 auto 2.5rem;
+    padding: 0 3vw;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    span {
+        font-family: $sans;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: $light-text-color;
+        white-space: nowrap;
+    }
+
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background-color: $light-border-color;
+    }
+}
+
+.magazine-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3vw;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 2.5rem;
+
+    @media (max-width: $tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $phone) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.grid-card {
+    font-family: $sans;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-top: 1px solid $light-border-color;
+
+    &:first-child {
+        grid-column: span 2;
+
+        @media (max-width: $tablet) {
+            grid-column: span 1;
+        }
+
+        .grid-card-title {
+            font-size: 1.5rem;
+            line-height: 1.35;
+        }
+    }
+
+    .grid-card-image-link {
+        display: block;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+    }
+
+    .grid-card-image {
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            display: block;
+            border-radius: 3px;
+            transition: transform 0.3s ease;
+        }
+    }
+
+    &:hover .grid-card-image img {
+        transform: scale(1.02);
+    }
+
+    .grid-card-title {
+        display: block;
+        font-family: $serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.4;
+        margin-top: 0.4rem;
+        margin-bottom: 0.5rem;
+        color: $text-color;
+        transition: color 0.25s;
+
+        &:hover {
+            color: $blue;
+        }
+    }
+
+    .grid-card-meta {
+        font-size: 0.7rem;
+        color: $light-text-color;
+        margin-bottom: 0.5rem;
+
+        .space {
+            padding-left: 3px;
+            padding-right: 3px;
+        }
+    }
+
+    .grid-card-summary {
+        font-size: 0.85rem;
+        color: $light-text-color;
+        line-height: 1.5;
+    }
+}
+
+/* ----------------------------------------------------------------------------
 Page mini
 ---------------------------------------------------------------------------- */
 .mini {
