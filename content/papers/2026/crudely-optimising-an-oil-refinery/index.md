@@ -287,8 +287,6 @@ ampl.get_parameter("maximum_barrels_per_month").set(10)
 ampl.solve()
 ```
 
-The problem itself is technically defined as a ['mixed-integer linear programming' (MILP)](https://en.wikipedia.org/wiki/Integer_programming) optimisation. Although we are only utilising linear programming here (i.e. not mixed-integer), the solver can handle our simplified definition, and leaves our model ready for additional, mixed-integer dependent, development (some examples of which are discussed in the [conclusion](#conclusion)).
-
 With the optimisation solved, we can extract the output variables as a series, for example:
 
 ```python
@@ -353,6 +351,7 @@ This article should have provided some context on quantitative oil refining mode
 If the model were to be extended for real-world context, some interesting features might include:
 
 - Storage optimisation if the facility is able to have a product buffer on either crude and/or distillates.
+- Shutdown periods given scheduled maintenance which would need to occur.
 - Shipping charges (pipelines or tankers to transport crude and refined products).
 - Accounting for other distillate products (petroleum gas, naphtha, paraffin, jet fuel, diesel, fuel oil, bitumen, etc.).
 - Accounting for any environmental policies for certain regions (parts of the U.S. require certain fuel additives, for example).
