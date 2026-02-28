@@ -1,7 +1,7 @@
 ---
 title: "Crudely Optimising an Oil Refinery"
 summary: "
-This article scratches the surface of how oil is used and traded within the world's energy complex. We introduce linear optimisation utilising AMPL to understand the optimal outputs from a ficticious refinery.
+This article scratches the surface of how oil is used and traded within the world's energy complex. We introduce linear optimisation utilising AMPL to understand the optimal outputs from a fictitious refinery.
 "
 
 date: "2026-02-22"
@@ -53,7 +53,7 @@ Because crude oil and its distillates trade on a liquid exchange ([CME](https://
 - `HO`: [NY Harbor ULSD **Heating Oil**](https://www.cmegroup.com/markets/energy/refined-products/heating-oil.html)
 - `RB`: [Reformulated Blendstock for Oxygenate Blending (RBOB) **Gasoline**](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html)
 
-The futures data can be loaded with the code below. This represents the monthly deliverable price (as of Feburary 13th, 2026) of the product in the quoted units, USD per barrel for oil, and USD per gallon for the refined products. Stitching together these monthly prices produces the forward curve visualised below. The data used in this article can be [downloaded here](data/commodity_futures_prices.csv), or freshly obtained following the [instructions in the appendix](#obtaining-futures-data).
+The futures data can be loaded with the code below. This represents the monthly deliverable price (as of February 13th, 2026) of the product in the quoted units, USD per barrel for oil, and USD per gallon for the refined products. Stitching together these monthly prices produces the forward curve visualised below. The data used in this article can be [downloaded here](data/commodity_futures_prices.csv), or freshly obtained following the [instructions in the appendix](#obtaining-futures-data).
 
 ```python
 import pandas as pd
@@ -74,7 +74,7 @@ df = pd.read_csv(
 Plotting their current future valuations (`df.plot()`) shows the following:
 
 {{< figure src="img/product_prices.svg" title="Normalised Futures Prices" >}}
-As of February 13th, 2026, the monthly prices of physically delivered crude oil, heating oil and gasoline. The crude oil has been scaled to convert it from USD per barrel to USD per gallon, better representing the increase in value refined products have.
+As of February 13th, 2026, the monthly prices of physically delivered crude oil, heating oil and gasoline. The crude oil has been scaled from USD per barrel to USD per gallon to better show the value increase of refined products.
 {{< /figure >}}
 
 Some high-level conclusions can be drawn from the plotted data:
@@ -90,7 +90,7 @@ Translating the linear model into AMPL is rather straightforward. The documentat
 
 ## Sets
 
-The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$, representing each month in our optimisation. In this example, each time point will be optimised for profit indepdendently. However, that does not prohibit a linear optimisation to have cross-time-dependencies.
+The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$, representing each month in our optimisation. In this example, each time point will be optimised for profit independently. However, that does not prevent a linear problem from including cross-time dependencies.
 
 <!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
 ```cython
@@ -128,7 +128,7 @@ param maximum_crude_per_month_gal = maximum_barrels_per_month * 42;
 param crude_price_gal {t in T} = crude_price[t] / 42;
 ```
 
-Note that the `maximum_barrels_per_month` is a single (time-invarient) number and includes a lower-bound constraint as a sanity check.
+Note that the `maximum_barrels_per_month` is a single (time-invariant) number and includes a lower-bound constraint as a sanity check.
 
 Conversions are also defined to normalise the units for the optimisation.
 
@@ -283,9 +283,9 @@ ampl.solve()
 
 The problem itself is technically defined as a ['mixed-integer linear programming' (MILP)](https://en.wikipedia.org/wiki/Integer_programming) optimisation. Utilising CBC itself employs a ['branch and cut' algorithm](https://en.wikipedia.org/wiki/Branch_and_cut), whereby our defined linear model is iteratively 'tightened' by minimising the region of feasability by effectively cutting it with planes. MILP has many advantages over traditional, functional optimisation techniques, including;
 
-- guaranteeing global optimiality (as opposed to getting stuck in a local optima);
+- guaranteeing global optimality (as opposed to getting stuck in a local optima);
 - binary variable processing;
-- and, the flexibility of both numeric and logical constraints to have co-dependencies based on the set points.
+- and the flexibility of both numeric and logical constraints to express co‑dependencies based on defined sets.
 
 We have only scratched the surface of the power of MILP here, but the foundations of optimisation definition are explored and can be easily further built upon.
 
@@ -300,7 +300,7 @@ ampl.get_variable(
 Plotting each optimised variable over time shows the facility's most profitable action.
 
 {{< figure src="img/production_plan.svg" title="Optimal Facility Output" >}}
-Given the futures contract prices, the facility output (in gallons) is continuously optimising for heating oil output.
+Given the futures contract prices, the facility output (in gallons) is continuously optimised for heating oil.
 {{< /figure >}}
 
 A somewhat anticlimactic result, but it's exactly what we expect: heating oil had the higher premium, so the facility is optimised to produce it.
@@ -309,7 +309,7 @@ For a sanity check, we can confirm the volumes align (sum of outputs = input) an
 
 ## Introducing Processing Costs
 
-As mentioned previously, sometimes additives need to be incorporated to distillate outputs either for stability, environmental or efficiency reasons. To model the per-gallon costs of production for heating oil and gasoline, two parameters will be introduced, $C^{H}$ and $C^{G}$.
+As mentioned previously, sometimes additives need to be incorporated into distillate outputs for stability, environmental, or efficiency reasons. To model the per-gallon costs of production for heating oil and gasoline, two parameters will be introduced, $C^{H}$ and $C^{G}$.
 
 <!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
 ```cython
@@ -352,8 +352,8 @@ This article should have provided some context on quantitative oil refining mode
 
 If the model were to be extended for real-world context, some interesting features might include:
 
-- Shipping charges (usage of pipelines/tankers to transport crude/products).
-- Accounting for other distillate products which are produced (petroleum gas, napthta, paraffin, jet fuel, diesel, fuel oil, bitumen, etc.).
+- Shipping charges (pipelines or tankers to transport crude and refined products).
+- Accounting for other distillate products (petroleum gas, naphtha, paraffin, jet fuel, diesel, fuel oil, bitumen, etc.).
 - Accounting for any environmental policies for certain regions (parts of the U.S. require certain fuel additives, for example).
 - Expansion/reduction of hydrocarbon densities (based on the variable heat within the physical chamber), which means the model needs to account for volume adjustments.
 
@@ -392,7 +392,8 @@ CRUDE_TEMPLATE: str = "CL{month_code}{year_code}.NYM"  # USD/bbl
 HEATING_OIL_TEMPLATE: str = "HO{month_code}{year_code}.NYM"  # USD/gal
 RBOB_GASOLINE_TEMPLATE: str = "RB{month_code}{year_code}.NYM"  # USD/gal
 
-HOLIDAY_CALENDAR: holidays.HolidayBase = holidays.financial_holidays("NYSE")  # same as CME
+# NYSE is equivalent to CME holiday schedule
+HOLIDAY_CALENDAR: holidays.HolidayBase = holidays.financial_holidays("NYSE")
 
 MONTHS_FORWARD_TO_QUERY: int = 18
 
@@ -408,9 +409,15 @@ for i in range(MONTHS_FORWARD_TO_QUERY):
     month_code: str = MONTH_TO_CODE[current_month.month]
     year_code: str = str(current_month.year)[-2:]
 
-    crude_tickers.append(CRUDE_TEMPLATE.format(month_code=month_code, year_code=year_code))
-    heating_oil_tickers.append(HEATING_OIL_TEMPLATE.format(month_code=month_code, year_code=year_code))
-    rbob_gasoline_tickers.append(RBOB_GASOLINE_TEMPLATE.format(month_code=month_code, year_code=year_code))
+    crude_tickers.append(
+        CRUDE_TEMPLATE.format(month_code=month_code, year_code=year_code)
+    )
+    heating_oil_tickers.append(
+        HEATING_OIL_TEMPLATE.format(month_code=month_code, year_code=year_code)
+    )
+    rbob_gasoline_tickers.append(
+        RBOB_GASOLINE_TEMPLATE.format(month_code=month_code, year_code=year_code)
+    )
 
 print(f"Crude tickers: {crude_tickers}")
 print(f"Heating Oil tickers: {heating_oil_tickers}")
@@ -424,7 +431,8 @@ t_minus_1_data = yf.Tickers(crude_tickers + heating_oil_tickers + rbob_gasoline_
     period=query_period, start=query_date
 )
 
-# Manipulate the data for the one futures snapshot where the index is the delivery month, and the columns represent the contracts of interests' prices.
+# Manipulate the data for the one futures snapshot where the index is the
+# delivery month, and the columns represent the contracts of interests' prices.
 close_data: pd.DataFrame = t_minus_1_data["Close"].T
 close_data.columns = ["close"]
 close_data["symbol"] = close_data.index.str[:2]
