@@ -27,7 +27,7 @@ Because oil and refined products form a large market, exchanges exist to trade t
 
 Crude oil comes in various 'grades', which refers to its [specific gravity](https://en.wikipedia.org/wiki/API_gravity) (light/medium/heavy) and sulfur content ([sweet](https://en.wikipedia.org/wiki/Sweet_crude_oil)/[sour](https://en.wikipedia.org/wiki/Sour_crude_oil)). Essentially, these measures relate to the proportion of different distillates received when refining, with light-sweet usually attracting the highest premium given the low sulfur content (less corrosive on equipment) and lighter hydrocarbons (yielding higher value products like diesel and gasoline).
 
-To better understand the grades of oil and how they're used, [*Oil 101*](https://www.goodreads.com/book/show/6377613-oil-101) by Morgan Downey gives a great overview of oil, beginning with its history and explaining various stages of production, consumption, and how the markets operate. To gain insight into the various oil producing regions, the [Platts Periodic Table of Oil](https://www.spglobal.com/commodity-insights/en/news-research/infographics/content-design-infographics/platts-periodic-table-of-oil) provides an interactive infographic which also describes the type of crude oil from each region.
+To better understand oil grades and how they're used, [*Oil 101*](https://www.goodreads.com/book/show/6377613-oil-101) by Morgan Downey offers a great overview, beginning with its history and explaining various stages of production, consumption, and market mechanics. To gain insight into the various oil producing regions, the [Platts Periodic Table of Oil](https://www.spglobal.com/commodity-insights/en/news-research/infographics/content-design-infographics/platts-periodic-table-of-oil) provides an interactive infographic which also describes the type of crude oil from each region.
 
 ## Fractional Distillation
 
@@ -39,13 +39,13 @@ For more on fractional distillation, see [*Oil 101*](https://www.goodreads.com/b
 
 ## Distillate Products
 
-Once crude has been refined, lighter hydrocarbon products, like fuels, are usually more volatile, harder to store, and may cost more to produce because of required additives. Consequently, gasoline is often produced in line with demand. For this article, we will assume 'instantaneous use', and thus not be considereding time-lag effects, namely storage, for any of the refined products.
+Once crude has been refined, lighter hydrocarbon products, like fuels, are usually more volatile, harder to store, and may cost more to produce because of required additives. Consequently, gasoline is often produced in line with demand. For this article, we will assume 'instantaneous use', and thus not be considering time-lag effects, namely storage, for any of the refined products.
 
 # OSQ Fuels Optimisation
 
 OSQ Fuels, a subsidiary of the Open Source Quant Group, has purchased a refinery.
 
-We will be taking crude oil and producing two fuels: heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 18 months to ensure we're operationally efficient into the future, and can hedge our exposure to prices of the crude and distillates.
+We will take crude oil and produce two fuels: heating oil and gasoline. We also wish to understand how much of each we'll be producing over the next 18 months to ensure operational efficiency over time and to hedge our exposure to crude and distillate prices.
 
 Because crude oil and its distillates trade on a liquid exchange ([CME](https://www.cmegroup.com/)) as futures, we have good fair-valuations of these products per-unit over the next two years:
 
@@ -53,7 +53,7 @@ Because crude oil and its distillates trade on a liquid exchange ([CME](https://
 - `HO`: [NY Harbor ULSD **Heating Oil**](https://www.cmegroup.com/markets/energy/refined-products/heating-oil.html)
 - `RB`: [Reformulated Blendstock for Oxygenate Blending (RBOB) **Gasoline**](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html)
 
-The futures data can be loaded with the code below. This represents the monthly deliverable price (as of February 13th, 2026) of the product in the quoted units, USD per barrel for oil, and USD per gallon for the refined products. Stitching together these monthly prices produces the forward curve visualised below. The data used in this article can be [downloaded here](data/commodity_futures_prices.csv), or freshly obtained following the [instructions in the appendix](#obtaining-futures-data).
+The futures data can be loaded with the code below; it represents the monthly deliverable price (as of February 13th, 2026) in the quoted units: USD per barrel for oil and USD per gallon for refined products. Stitching these prices together produces the forward curve visualised below. The data used in this article can be [downloaded here](data/commodity_futures_prices.csv), or freshly obtained following the [instructions in the appendix](#obtaining-futures-data).
 
 ```python
 import pandas as pd
@@ -198,10 +198,10 @@ subject to Maximum_Crude_Used {t in T}:
 These constraints ensure that the production of specific fuels does not exceed a certain percentage of the total crude oil used, inline with physical limitations of the fractioning given the hydrocarbons found within our crude. This is a simplified expression of the aforementioned 'fractioning'.
 
 {{< figure src="img/ratios.svg" title="Product Ratios Visualised" >}}
-With all our crude oil entering the fractioning column, this visualises how our hydrocarbon offtake ratios look within the tank, and what we intend to model using the linear constraints below.
+With all our crude oil entering the fractioning column, this visualises our hydrocarbon offtake ratios within the tank and what we intend to model with the linear constraints below.
 {{< /figure >}}
 
-Here, we assume for a given amount of crude oil, 60% of it may be suitable for heating oil production, and indepdendently, 60% is suitable for gasoline production.
+Here, we assume for a given amount of crude oil, 60% of it may be suitable for heating oil production, and independently, 60% is suitable for gasoline production.
 
 - Heating Oil: $O_{t}^{H} \leq 0.6 \times I_{t} \quad \forall t \in T$
 - Gasoline: $O_{t}^{G} \leq 0.6 \times I_{t} \quad \forall t \in T$
@@ -358,7 +358,7 @@ If the model were to be extended for real-world context, some interesting featur
 - Accounting for any environmental policies for certain regions (parts of the U.S. require certain fuel additives, for example).
 - Expansion/reduction of hydrocarbon densities (based on the variable heat within the physical chamber), which means the model needs to account for volume adjustments.
 
-A couple of much more in-depth examples of a refinery optimisation can be found on the AMPL website:
+A couple of much more in-depth examples of refinery optimisation can be found on the AMPL website:
 
 - [Oil refinery production optimization](https://ampl.com/colab/notebooks/oil-refinery-production-optimization.html)
 - [Extra material: Refinery production and shadow pricing with CVXPY](https://ampl.com/mo-book/notebooks/05/refinery-production.html)
