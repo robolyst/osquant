@@ -6,9 +6,12 @@ Source code for <http://osquant.com>
 
 # Development
 
-### Docker (preferred)
+## Docker (preferred)
+
 From the repo's root directory, execute:
-```
+
+```bash
 ./preview
 ```
+
 which will build a Docker image and serve the site from <http://localhost:1313>.

@@ -15,7 +15,7 @@ categories:
 hover_color: "#FF9F7F"
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/a-quants-guide-to-covariance-matrix-estimation
-acknowledgements: "Thank you to [Daniel Nunns](https://www.linkedin.com/in/daniel-nunns/) who proofread and provided corrections."
+acknowledgements: "Thank you to [Daniel Nunns](/authors/daniel-nunns/) who proofread and provided corrections."
 ---
 
 Estimating a covariance matrix from historical prices is a core task in quantitative finance. The go-to solution is an exponentially weighted moving (EWM) estimate of the covariance matrix. It's a simple, fast, and widely available method.
