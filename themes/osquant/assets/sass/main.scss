@@ -446,7 +446,7 @@ First post
         }  
     }
 
-    margin-bottom: 6rem;
+    // margin-bottom: 6rem;
 }
 
 /* ----------------------------------------------------------------------------
@@ -454,7 +454,6 @@ Magazine grid (front page)
 ---------------------------------------------------------------------------- */
 
 .magazine-section {
-    border-top: 1px solid $light-border-color;
     padding-top: 3rem;
     padding-bottom: 5rem;
 }
@@ -506,9 +505,8 @@ Magazine grid (front page)
     font-family: $sans;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
-    border-top: 1px solid $light-border-color;
 
-    &:first-child {
+    &:first-child, &:nth-child(7) {
         grid-column: span 2;
 
         @media (max-width: $tablet) {
