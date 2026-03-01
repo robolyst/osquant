@@ -459,7 +459,7 @@ Magazine grid (front page)
 }
 
 .magazine-section-header {
-    max-width: 1200px;
+    max-width: $full-content-width;
     margin: 0 auto 2.5rem;
     padding: 0 3vw;
     display: flex;
@@ -485,7 +485,7 @@ Magazine grid (front page)
 }
 
 .magazine-grid {
-    max-width: 1200px;
+    max-width: $full-content-width;
     margin: 0 auto;
     padding: 0 3vw;
     display: grid;
