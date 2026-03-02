@@ -6,7 +6,7 @@ full_name: Dr. Adrian Letchford
 last_first: Letchford, Adrian
 job_title: Quantitative Developer
 
-twitter: dradrian
+x: dradrian
 github: robolyst
 linkedin: adrianletchford
 ---

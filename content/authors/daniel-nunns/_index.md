@@ -6,7 +6,7 @@ full_name: Daniel Nunns
 last_first: Nunns, Daniel
 job_title: Quantitative Trader
 
-twitter: dbnunns
+x: dbnunns
 github: nunnsy
 linkedin: daniel-nunns
 ---
