@@ -20,7 +20,7 @@
     {{ if .Params.katex }}{{ partial "katex.html" . }}{{ end }}
     {{ if .Params.plotly }}{{ partial "plotly.html" . }}{{ end }}
 
-    {{ $options := dict "transpiler" "libsass" "targetPath" "css/main.css" }}
+    {{ $options := dict "targetPath" "css/main.css" }}
     {{ with resources.Get "sass/main.scss" | toCSS $options | minify | fingerprint }}
         <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
     {{ end }}
