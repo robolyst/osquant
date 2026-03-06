@@ -4,7 +4,7 @@
     {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
 
         <!-- If the author has an X handle, display the call to action -->
-        {{ if isset .Params "x" }}
+        {{ if isset .Params "x_handle" }}
 
             <div class="container">
                 <div class="callout">
@@ -12,7 +12,7 @@
                         <span class="title">Like what you see?</span>
                         <span class="subtext">Follow {{ .Params.first_name }} on X to be notified of new content.</span>
                     </span>
-                    <a href="https://x.com/{{ .Params.x }}" class="x-follow">Follow</a>
+                    <a href="https://x.com/{{ .Params.x_handle }}" class="x-follow">Follow</a>
                 </div>
             </div>
 
