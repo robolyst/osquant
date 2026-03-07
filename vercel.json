@@ -6,7 +6,7 @@
   ],
   "build": {
     "env": {
-      "HUGO_VERSION": "0.115.3"
+      "HUGO_VERSION": "0.157.0"
     }
   },
   "buildCommand": "./build.sh"

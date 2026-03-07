@@ -37,7 +37,7 @@
                         By
                         {{ $links := apply . "partial" "author-link.html" "." }}
                         {{ $clean := apply $links "chomp" "." }}
-                        {{ delimit $clean ", " " & " }}
+                        {{ delimit $clean ", " " & " | safeHTML }}
                     {{ end }}
                     <span class="space">·</span>
                     <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>

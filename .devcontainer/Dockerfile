@@ -1,7 +1,7 @@
-FROM debian:bookworm-slim
+FROM debian:forky-slim
 
 RUN apt update \
-    && apt install -y hugo=0.111.3-1 npm wget git zsh --no-install-recommends \
+    && apt install -y hugo=0.157.0-3 npm wget git zsh --no-install-recommends \
     && apt-get clean
 
 # Markdown linting.
