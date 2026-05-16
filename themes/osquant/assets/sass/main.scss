@@ -615,38 +615,6 @@ Page mini
         display: flex;
         flex-direction: column;
     }
-
-    .title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        font-family: $serif;
-    }
-
-    img.feature {
-        border-radius: 5px;
-        width: 100%;
-        margin-bottom: 1em;
-    }
-
-    .meta {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 400;
-        font-size: 0.7rem;
-        color: $light-text-color;
-
-        .space {
-            padding-left: 4px;
-            padding-right: 4px;
-        }  
-    }
-
-    .summary {
-        font-size: 0.85em;
-        @media (max-width: $tablet) {
-            font-size: 1em;
-        }
-    }
 }
 
 /* ----------------------------------------------------------------------------
