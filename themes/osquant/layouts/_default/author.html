@@ -28,11 +28,6 @@
 
 </div>
 
-    <div class="container author-bio">
-        {{ .Content }}
-    </div>
-
-
     <div class="archive-grid">
         {{ range .Pages.ByDate.Reverse }}
             {{- partial "grid-card.html" . -}}
