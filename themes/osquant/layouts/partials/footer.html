@@ -28,6 +28,19 @@
                 </ul>
             </div>
 
+            {{ with .Site.GetPage "/authors" }}
+                <div class="footer-section">
+                    <div class="title">Team</div>
+                    <ul>
+                        {{ range .Pages.ByParam "last_name" }}
+                            <li>
+                                <a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a>
+                            </li>
+                        {{ end }}
+                    </ul>
+                </div>
+            {{ end }}
+
             <div class="footer-section">
                 <div class="title">Elsewhere</div>
                 <ul class="socials">
