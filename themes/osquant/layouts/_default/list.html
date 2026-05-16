@@ -14,9 +14,9 @@
 
     </div>
 
-    <div class="container">
-        {{ range $index, $element := .Pages.ByDate.Reverse }}
-            {{ partial "mini.html" . }}
+    <div class="archive-grid">
+        {{ range .Pages.ByDate.Reverse }}
+            {{ partial "grid-card.html" . }}
         {{ end }}
     </div>
 

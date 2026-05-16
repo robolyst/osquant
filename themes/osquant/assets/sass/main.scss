@@ -488,7 +488,8 @@ Magazine grid (front page)
     }
 }
 
-.magazine-grid {
+.magazine-grid,
+.archive-grid {
     max-width: $full-content-width;
     margin: 0 auto;
     padding: 0 3vw;
@@ -503,6 +504,10 @@ Magazine grid (front page)
     @media (max-width: $phone) {
         grid-template-columns: 1fr;
     }
+}
+
+.archive-grid {
+    padding-bottom: 4rem;
 }
 
 .grid-card {
@@ -576,6 +581,19 @@ Magazine grid (front page)
         font-size: 0.85rem;
         color: $light-text-color;
         line-height: 1.5;
+    }
+}
+
+.archive-grid .grid-card:first-child {
+    grid-column: span 2;
+
+    @media (max-width: $tablet) {
+        grid-column: span 1;
+    }
+
+    .grid-card-title {
+        font-size: 1.5rem;
+        line-height: 1.35;
     }
 }
 
