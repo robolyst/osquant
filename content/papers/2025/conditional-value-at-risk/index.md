@@ -9,7 +9,6 @@ mathjax: true
 authors:
     - Adrian Letchford
 categories:
-    - mathematics
     - finance
 hover_color: "#FF9696"
 # This article was written before the site organised articles under YEAR/MONTH/slug

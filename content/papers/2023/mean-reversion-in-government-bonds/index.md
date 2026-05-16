@@ -9,7 +9,6 @@ date: "2023-04-08"
 authors:
     - Adrian Letchford
 categories:
-    - mathematics
     - finance
 notebook: ./notebook.js
 # This article was written before the site organised articles under YEAR/MONTH/slug

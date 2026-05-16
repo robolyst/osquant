@@ -8,7 +8,7 @@
             <div class="label">Author</div>
             {{ range .Params.authors }}
                 {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
-                    <div><a href="{{ .Permalink }}">{{ .Params.full_name }}</a></div>
+                    <div><a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a></div>
                 {{ end }}
             {{ end }}
         </div>

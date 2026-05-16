@@ -7,7 +7,6 @@ date: '2023-08-09'
 authors:
   - Adrian Letchford
 categories:
-  - mathematics
   - finance
 acknowledgements: >-
   All graphs were made with [Observable](https://observablehq.com/). The

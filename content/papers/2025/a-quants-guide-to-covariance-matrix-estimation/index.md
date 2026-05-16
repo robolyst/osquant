@@ -11,7 +11,6 @@ authors:
     - Adrian Letchford
 categories:
     - mathematics
-    - finance
 hover_color: "#FF9F7F"
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/a-quants-guide-to-covariance-matrix-estimation

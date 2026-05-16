@@ -10,7 +10,6 @@ mathjax: true
 authors:
     - Adrian Letchford
 categories:
-    - finance
     - mathematics
 ---
 

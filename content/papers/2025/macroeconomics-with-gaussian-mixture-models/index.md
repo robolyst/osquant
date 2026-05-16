@@ -8,7 +8,6 @@ mathjax: true
 authors:
     - Adrian Letchford
 categories:
-    - mathematics
     - finance
 acknowledgements: "Thank you to [Daniel Nunns](/authors/daniel-nunns/) who proofread and provided corrections."
 ---

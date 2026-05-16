@@ -5,19 +5,9 @@
     {{ range .Params.authors }}
         {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
 
-            <img src="{{ .Permalink }}/picture.png">
-            <name><a href="{{ .Permalink }}">{{ .Params.full_name }}</a></name>
-            <job>{{ .Params.job_title }}</job>
-
-            <!-- If the author has an X handle, display the call to action -->
-            {{ if isset .Params "x_handle" }}
-                <a class="x-follow" href="https://x.com/{{ .Params.x_handle }}" class="x-follow">Follow on X</a>
-            {{ end }}
-
-            <!-- If the author has a LinkedIn handle, display the call to action -->
-            {{ if isset .Params "linkedin_handle" }}
-                <a class="linkedin-follow" href="https://www.linkedin.com/in/{{ .Params.linkedin_handle }}/" class="linkedin-follow">Connect on LinkedIn</a>
-            {{ end }}
+            <img src="{{ .RelPermalink }}picture.png">
+            <name><a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a></name>
+            <job>{{ .Params.role }}</job>
 
         {{ end }}
     {{ end }}

@@ -7,7 +7,6 @@ mathjax: true
 authors:
   - Adrian Letchford
 categories:
-  - mathematics
   - finance
 hover_color: '#FFFF00'
 url: /papers/modelling-the-yield-curve-of-us-government-treasuries

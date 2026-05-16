@@ -488,7 +488,8 @@ Magazine grid (front page)
     }
 }
 
-.magazine-grid {
+.magazine-grid,
+.archive-grid {
     max-width: $full-content-width;
     margin: 0 auto;
     padding: 0 3vw;
@@ -503,6 +504,10 @@ Magazine grid (front page)
     @media (max-width: $phone) {
         grid-template-columns: 1fr;
     }
+}
+
+.archive-grid {
+    padding-bottom: 4rem;
 }
 
 .grid-card {
@@ -579,6 +584,19 @@ Magazine grid (front page)
     }
 }
 
+.archive-grid .grid-card:first-child {
+    grid-column: span 2;
+
+    @media (max-width: $tablet) {
+        grid-column: span 1;
+    }
+
+    .grid-card-title {
+        font-size: 1.5rem;
+        line-height: 1.35;
+    }
+}
+
 /* ----------------------------------------------------------------------------
 Page mini
 ---------------------------------------------------------------------------- */
@@ -596,38 +614,6 @@ Page mini
     @media (max-width: $phone) {
         display: flex;
         flex-direction: column;
-    }
-
-    .title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        font-family: $serif;
-    }
-
-    img.feature {
-        border-radius: 5px;
-        width: 100%;
-        margin-bottom: 1em;
-    }
-
-    .meta {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 400;
-        font-size: 0.7rem;
-        color: $light-text-color;
-
-        .space {
-            padding-left: 4px;
-            padding-right: 4px;
-        }  
-    }
-
-    .summary {
-        font-size: 0.85em;
-        @media (max-width: $tablet) {
-            font-size: 1em;
-        }
     }
 }
 
@@ -848,74 +834,95 @@ Footer
 ---------------------------------------------------------------------------- */
 
 footer {
-    padding-top: 2rem;
+    padding-top: 4rem;
     padding-bottom: 2rem;
     font-family: $sans;
     background-color: $dark-bg-color;
+    text-align: center;
 
-    .columns {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    @media (max-width: $phone) {
-        .columns {
-            display: block;
-        }
-    }
-
-    .left {
-        margin-bottom: 2rem;
-    }
-
-    .right {
-        min-width: 50%;
+    .container {
+        max-width: $full-content-width;
+        padding-left: 3vw;
+        padding-right: 3vw;
     }
 
     .logo {
         font-weight: 600;
-        font-size: 1.2rem;
+        font-size: 1.05rem;
     }
 
-    .slogan {
-        font-size: 0.9rem;
-        margin-top: 0.2rem;
+    .footer-sections {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 3rem 4rem;
+        margin-top: 2.5rem;
+    }
+
+    @media (max-width: $phone) {
+        .footer-sections {
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .footer-section {
+            min-width: 0;
+            width: 100%;
+            max-width: 14rem;
+        }
+    }
+
+    .footer-section {
+        min-width: 10rem;
+        text-align: left;
     }
 
     .socials {
-        margin-top: 0.5rem;
+        li {
+            a {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
 
-        img {
-            max-width: 20px;
-            margin-right: 0.25rem;
+            img {
+                max-width: 18px;
+                display: block;
+                opacity: 0.9;
+            }
         }
     }
 
     .title {
         font-weight: 600;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-        // margin-right: 2rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.9rem;
+        color: $light-text-color;
+        opacity: 0.5;
     }
 
     ul {
         padding-left: 0;
         list-style: none;
         font-size: 0.85rem;
+        margin: 0;
 
         li {
-            margin-top: 0.5rem;
+            margin-top: 0.75rem;
             a {
-                color: $light-text-color;
+                color: $text-color;
             }
         }
     }
 
     .copyright {
-        margin-top: 2rem;
+        margin-top: 5rem;
+        padding-top: 2rem;
         font-size: 0.8rem;
         color: $light-text-color;
+        opacity: 0.5;
     }
 }
 
@@ -1021,37 +1028,74 @@ Author profile
 ---------------------------------------------------------------------------- */
 
 #author_header {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    column-gap: 40px;
-    row-gap: 40px;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 3rem;
+    row-gap: 2rem;
 }
 
 #author_header img.profile {
     background-color: #f5f5f5;
-    border-radius: 10%;
-    max-width: 200px;
-    max-height: 200px;
+    border-radius: 10px;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+#author_header .author-intro {
+    max-width: 42rem;
+}
+
+#author_header .title {
+    margin-top: 0.35rem;
+    margin-bottom: 0.35rem;
+}
+
+#author_header .author-role {
+    color: $blue;
+    font-family: $sans;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+#author_header .author-dek {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    max-width: 38rem;
+    line-height: 1.6;
+}
+
+#author_header .author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    margin-top: 1.5rem;
 }
 
 @media (max-width:600px) {
     #author_header {
-        flex-direction: column-reverse;
+        grid-template-columns: 1fr;
     }
 }
 
-
-#author_header .social-links a img {
-    display: inline;
-    max-width: 20px;
-    max-height: 20px;
-    margin-right: 15px;
+#author_header .author-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#author_header .social-links a:hover img {
-    opacity: 0.3;
+#author_header .author-links a img {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+#author_header .author-links a:hover img {
+    opacity: 0.35;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1140,7 +1184,7 @@ Sidebars
                 font-style: italic;
             }
 
-            a.x-follow, a.linkedin-follow {
+            a.x-follow {
                 background-color: #4A99E9;
                 border-radius: 5px;
                 text-align: center;
