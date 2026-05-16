@@ -1,5 +1,7 @@
 {{ define "main" }}
 
+{{ $intro := or .Params.blurb (.Plain | truncate 180) }}
+
 <div id="splash">
 
     {{- partial "nav.html" . -}}
@@ -8,22 +10,27 @@
     <div id="page_header">
         <div class='container'>
             <div id="author_header">
-                <div>
+                <img class="profile" src="{{ .RelPermalink }}picture.png">
+                <div class="author-intro">
+                    {{ with .Params.role }}<div class="author-role">{{ . }}</div>{{ end }}
                     <h1 class='title'>{{ .Title | title }}</h1>
-                    {{ .Content }}
-                    <div class="social-links">
-                        {{ with .Params.x_handle }}<a href="https://x.com/{{ . }}"><img src="/img/x-grey.svg" /></a>{{ end }}
-                        {{ with .Params.github_handle }}<a href="https://github.com/{{ . }}"><img src="/img/github-grey.svg" /></a>{{ end }}
-                        {{ with .Params.linkedin_handle }}<a href="https://www.linkedin.com/in/{{ . }}/"><img src="/img/linkedin-grey.svg" /></a>{{ end }}
-                        {{ with .Params.instagram_handle }}<a href="https://instagram.com/{{ . }}"><img src="/img/instagram-grey.svg" /></a>{{ end }}
+                    <p class="author-dek">{{ $intro }}</p>
+                    <div class="author-links">
+                        {{ with .Params.github_handle }}<a href="https://github.com/{{ . }}" aria-label="GitHub"><img src="/img/github-grey.svg" alt="GitHub" /></a>{{ end }}
+                        {{ with .Params.linkedin_handle }}<a href="https://www.linkedin.com/in/{{ . }}/" aria-label="LinkedIn"><img src="/img/linkedin-grey.svg" alt="LinkedIn" /></a>{{ end }}
+                        {{ with .Params.x_handle }}<a href="https://x.com/{{ . }}" aria-label="X"><img src="/img/x-grey.svg" alt="X" /></a>{{ end }}
+                        {{ with .Params.instagram_handle }}<a href="https://instagram.com/{{ . }}" aria-label="Instagram"><img src="/img/instagram-grey.svg" alt="Instagram" /></a>{{ end }}
                     </div>
                 </div>
-                <img class="profile" src="{{ .RelPermalink }}picture.png">
             </div>
         </div>
     </div>
 
 </div>
+
+    <div class="container author-bio">
+        {{ .Content }}
+    </div>
 
 
     <div class="archive-grid">
