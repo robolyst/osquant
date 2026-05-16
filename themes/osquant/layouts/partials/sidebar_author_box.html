@@ -6,7 +6,7 @@
         {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
 
             <img src="{{ .Permalink }}/picture.png">
-            <name><a href="{{ .Permalink }}">{{ .Params.full_name }}</a></name>
+            <name><a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a></name>
             <job>{{ .Params.job_title }}</job>
 
         {{ end }}
