@@ -848,7 +848,7 @@ footer {
 
     .logo {
         font-weight: 600;
-        font-size: 1.2rem;
+        font-size: 1.05rem;
     }
 
     .footer-sections {
@@ -897,8 +897,10 @@ footer {
 
     .title {
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.85rem;
         margin-bottom: 0.9rem;
+        color: $light-text-color;
+        opacity: 0.5;
     }
 
     ul {
@@ -910,7 +912,7 @@ footer {
         li {
             margin-top: 0.75rem;
             a {
-                color: $light-text-color;
+                color: $text-color;
             }
         }
     }
@@ -920,6 +922,7 @@ footer {
         padding-top: 2rem;
         font-size: 0.8rem;
         color: $light-text-color;
+        opacity: 0.5;
     }
 }
 
