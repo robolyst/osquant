@@ -866,29 +866,16 @@ Footer
 ---------------------------------------------------------------------------- */
 
 footer {
-    padding-top: 2rem;
+    padding-top: 4rem;
     padding-bottom: 2rem;
     font-family: $sans;
     background-color: $dark-bg-color;
+    text-align: center;
 
-    .columns {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    @media (max-width: $phone) {
-        .columns {
-            display: block;
-        }
-    }
-
-    .left {
-        margin-bottom: 2rem;
-    }
-
-    .right {
-        min-width: 50%;
+    .container {
+        max-width: $full-content-width;
+        padding-left: 3vw;
+        padding-right: 3vw;
     }
 
     .logo {
@@ -896,34 +883,64 @@ footer {
         font-size: 1.2rem;
     }
 
-    .slogan {
-        font-size: 0.9rem;
-        margin-top: 0.2rem;
+    .footer-sections {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 3rem 4rem;
+        margin-top: 2.5rem;
+    }
+
+    @media (max-width: $phone) {
+        .footer-sections {
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .footer-section {
+            min-width: 0;
+            width: 100%;
+            max-width: 14rem;
+        }
+    }
+
+    .footer-section {
+        min-width: 10rem;
+        text-align: left;
     }
 
     .socials {
-        margin-top: 0.5rem;
+        li {
+            a {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
 
-        img {
-            max-width: 20px;
-            margin-right: 0.25rem;
+            img {
+                max-width: 18px;
+                display: block;
+                opacity: 0.9;
+            }
         }
     }
 
     .title {
         font-weight: 600;
         font-size: 1rem;
-        margin-bottom: 0.5rem;
-        // margin-right: 2rem;
+        margin-bottom: 0.9rem;
     }
 
     ul {
         padding-left: 0;
         list-style: none;
         font-size: 0.85rem;
+        margin: 0;
 
         li {
-            margin-top: 0.5rem;
+            margin-top: 0.75rem;
             a {
                 color: $light-text-color;
             }
@@ -931,7 +948,8 @@ footer {
     }
 
     .copyright {
-        margin-top: 2rem;
+        margin-top: 5rem;
+        padding-top: 2rem;
         font-size: 0.8rem;
         color: $light-text-color;
     }

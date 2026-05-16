@@ -3,53 +3,65 @@
 <footer>
     <div class='container'>
 
-        <div class="columns">
-            <div class="left">
-                <div class="logo">Open Source Quant</div>
-                <div class="slogan">Clear. Rigorous. Beautiful.</div>
-                <div class="socials">
-                    {{ with .Site.Params.site_x_handle }}<a href="https://x.com/{{ . }}"><img src="/img/x-grey.svg" /></a>{{ end }}
-                    {{ with .Site.Params.site_github_handle }}<a href="https://github.com/{{ . }}"><img src="/img/github-grey.svg" /></a>{{ end }}
-                </div>
-            </div>
-            <div class="right">
+        <div class="logo">Open Source Quant</div>
 
-                <div class="row align-items-start justify-content-between">
-                    <div class="col-6">
-                        <div class="title">Products</div>
-                        <ul>
-                            {{ range .Site.Menus.footer_software }}
-                                <li>
-                                    <a href="{{ .URL }}">{{ .Name }}</a>
-                                </li>
-                            {{ end }}
-                        </ul>
-                    </div>
-                    <div class="col-6">
-                        <div class="title">Categories</div>
-                        <ul>
-                            {{ range .Site.Menus.footer_categories }}
-                                <li>
-                                    <a href="{{ .URL }}">{{ .Name }}</a>
-                                </li>
-                            {{ end }}
-                        </ul>
-                    </div>
-                    {{ if $show_author }}
-                        <div class="col-6">
-                            <div class="title">Dev</div>
-                            <ul>
-                                {{ range .Site.Menus.footer_dev }}
-                                    <li>
-                                        <a href="{{ .URL }}">{{ .Name }}</a>
-                                    </li>
-                                {{ end }}
-                            </ul>
-                        </div>
+        <div class="footer-sections">
+            <div class="footer-section">
+                <div class="title">Products</div>
+                <ul>
+                    {{ range .Site.Menus.footer_software }}
+                        <li>
+                            <a href="{{ .URL }}">{{ .Name }}</a>
+                        </li>
                     {{ end }}
-                </div>
-
+                </ul>
             </div>
+
+            <div class="footer-section">
+                <div class="title">Categories</div>
+                <ul>
+                    {{ range .Site.Menus.footer_categories }}
+                        <li>
+                            <a href="{{ .URL }}">{{ .Name }}</a>
+                        </li>
+                    {{ end }}
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <div class="title">Elsewhere</div>
+                <ul class="socials">
+                    {{ with .Site.Params.site_x_handle }}
+                        <li>
+                            <a href="https://x.com/{{ . }}">
+                                <img src="/img/x-grey.svg" alt="X" />
+                                <span>X</span>
+                            </a>
+                        </li>
+                    {{ end }}
+                    {{ with .Site.Params.site_github_handle }}
+                        <li>
+                            <a href="https://github.com/{{ . }}">
+                                <img src="/img/github-grey.svg" alt="GitHub" />
+                                <span>GitHub</span>
+                            </a>
+                        </li>
+                    {{ end }}
+                </ul>
+            </div>
+
+            {{ if $show_author }}
+                <div class="footer-section">
+                    <div class="title">Dev</div>
+                    <ul>
+                        {{ range .Site.Menus.footer_dev }}
+                            <li>
+                                <a href="{{ .URL }}">{{ .Name }}</a>
+                            </li>
+                        {{ end }}
+                    </ul>
+                </div>
+            {{ end }}
         </div>
 
 
