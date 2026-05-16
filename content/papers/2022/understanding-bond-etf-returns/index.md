@@ -9,7 +9,6 @@ mathjax: true
 authors:
     - Adrian Letchford
 categories:
-    - mathematics
     - finance
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/understanding-bond-etf-returns

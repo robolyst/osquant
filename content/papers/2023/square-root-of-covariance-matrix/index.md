@@ -10,7 +10,6 @@ authors:
     - Adrian Letchford
 categories:
     - mathematics
-    - finance
 notebook: ./notebook.js
 # This article was written before the site organised articles under YEAR/MONTH/slug
 url: /papers/square-root-of-covariance-matrix

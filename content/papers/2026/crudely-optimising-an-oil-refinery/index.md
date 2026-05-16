@@ -12,7 +12,6 @@ authors:
     - Daniel Nunns
 categories:
     - finance
-    - mathematics
 ---
 
 Trading commodities can be done in various ways. One can use a black-box model to trade signals, another can speculate on fundamentals, and others participate with physical flows to hedge in markets. If you belong to the latter two categories, you generally want to model a system and optimise profit to understand necessary trades.
