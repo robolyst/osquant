@@ -1,0 +1,25 @@
+{{ define "main" }}
+
+    <div id="splash" class="about-splash">
+
+        {{- partial "nav.html" . -}}
+
+        <div id="page_header" class="about-page-header">
+            <div class='container'>
+                <h1 class='title-callout'>{{ .Params.header | safeHTML }}</h1>
+                <p class="blurb">{{ .Description | markdownify }}</p>
+                <a class="about-scroll-cue" href="#page_content" aria-label="Scroll down">⌄</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="page_content">
+
+        <div class="container">
+            {{ .Content }}
+        </div>
+
+    </div>
+
+{{ end }}

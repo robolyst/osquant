@@ -1,7 +1,8 @@
 ---
 title: About
-header: Quant finance, explained clearly.
-description: "Open Source Quant is a home for thoughtful writing on mathematical methods, engineering, and real-world finance. The goal is to make serious quantitative ideas accessible without oversimplifying them."
+layout: about
+header: Quant finance,<br/>explained clearly.
+description: "This is a home for thoughtful writing on mathematical methods, engineering, and real-world finance. Our goal is to make serious quantitative ideas accessible without oversimplifying."
 ---
 
 # What is this about?
