@@ -13,7 +13,7 @@
                 <img class="profile" src="{{ .RelPermalink }}picture.png">
                 <div class="author-intro">
                     {{ with .Params.role }}<div class="author-role">{{ . }}</div>{{ end }}
-                    <h1 class='title'>{{ .Title | title }}</h1>
+                    <h1 class='title'>{{ .Params.full_name }}</h1>
                     <p class="author-dek">{{ $intro }}</p>
                     <div class="author-links">
                         {{ with .Params.github_handle }}<a href="https://github.com/{{ . }}" aria-label="GitHub"><img src="/img/github-grey.svg" alt="GitHub" /></a>{{ end }}
