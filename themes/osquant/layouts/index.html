@@ -17,7 +17,7 @@
         </div>
         
         {{- with $featured -}}
-            <img src="{{ $featured.Permalink }}" class="front_page" />
+            <img src="{{ $featured.RelPermalink }}" class="front_page" />
         {{- else -}}
             {{- with $.Site.Params.images }}
                 <img src="{{ index . 0 | absURL }}" class="front_page" />
@@ -30,7 +30,7 @@
         <div class="container">
             <div id="first-post">
                 <div class="pre-title">{{ partial "category-links.html" . }}</div>
-                <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
+                <a class="title" href="{{ .RelPermalink }}">{{ .Title }}</a>
                 <div class="summary">{{ .Summary }}</div>
                 <div class="meta">
                     {{ with (.GetTerms "authors") }}

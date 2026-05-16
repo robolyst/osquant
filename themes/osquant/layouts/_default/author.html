@@ -18,7 +18,7 @@
                         {{ with .Params.instagram_handle }}<a href="https://instagram.com/{{ . }}"><img src="/img/instagram-grey.svg" /></a>{{ end }}
                     </div>
                 </div>
-                <img class="profile" src="{{ .Permalink }}/picture.png">
+                <img class="profile" src="{{ .RelPermalink }}picture.png">
             </div>
         </div>
     </div>

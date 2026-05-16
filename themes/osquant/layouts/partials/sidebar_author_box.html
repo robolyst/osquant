@@ -5,7 +5,7 @@
     {{ range .Params.authors }}
         {{ with $.Site.GetPage (printf "/%s/%s" "authors" (. | urlize)) }}
 
-            <img src="{{ .Permalink }}/picture.png">
+            <img src="{{ .RelPermalink }}picture.png">
             <name><a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a></name>
             <job>{{ .Params.job_title }}</job>
 
