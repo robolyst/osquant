@@ -1,7 +1,7 @@
 ---
 title: About
-header: Scientific research should be open source.
-description: "Scientific publishing should be free, collaborative, and iterative---everything open source stands for."
+header: Quant finance, explained clearly.
+description: "Open Source Quant is a home for thoughtful writing on mathematical methods, engineering, and real-world finance. The goal is to make serious quantitative ideas accessible without oversimplifying them."
 ---
 
 # What is this about?
