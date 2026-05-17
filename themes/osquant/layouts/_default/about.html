@@ -1,0 +1,81 @@
+{{ define "main" }}
+
+    <div id="splash" class="about-splash">
+
+        {{- partial "nav.html" . -}}
+
+        <div id="page_header" class="about-page-header">
+            <div class='container'>
+                <h1 class='title-callout'>{{ .Params.header | safeHTML }}</h1>
+                <p class="blurb">{{ .Description | markdownify }}</p>
+                <a class="about-scroll-cue" href="#page_content" aria-label="Scroll down">⌄</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="page_content" class="about-page-content">
+
+        <section class="about-section about-overview">
+            <div class="container">
+                <div class="about-section-header">
+                    <div class="pre-title">What you'll find here</div>
+                    <h2 class="about-section-title">The technical side of quantitative finance, written to be read.</h2>
+                </div>
+                <div class="about-overview-grid">
+                    {{ range .Params.focus_areas }}
+                        <div class="about-card">
+                            <h3>{{ .title }}</h3>
+                            <p>{{ .description }}</p>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section about-principles-section">
+            <div class="container">
+                <div class="about-section-header">
+                    <div class="pre-title">Open by design</div>
+                    <h2 class="about-section-title">Built around a few simple principles.</h2>
+                </div>
+                <div class="about-principles-grid">
+                    {{ range .Params.principles }}
+                        <div class="about-card about-principle-card">
+                            <h3>{{ .title }}</h3>
+                            <p>{{ .description }}</p>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+        </section>
+
+        <section class="about-manifesto">
+            <div class="container">
+                <div class="pre-title">Manifesto</div>
+                <p class="about-manifesto-text">{{ .Params.manifesto }}</p>
+                <p class="about-manifesto-support">{{ .Params.manifesto_support }}</p>
+            </div>
+        </section>
+
+        <section class="about-section about-cta-section">
+            <div class="container">
+                <div class="about-section-header">
+                    <div class="pre-title">{{ .Params.cta_heading }}</div>
+                    <p class="about-section-intro">{{ .Params.cta_intro }}</p>
+                </div>
+                <div class="about-action-grid">
+                    {{ range .Params.cta_items }}
+                        <a class="about-action-card" href="{{ .url }}">
+                            <h3>{{ .title }}</h3>
+                            <p>{{ .description }}</p>
+                            <span>{{ .link_text }} &rarr;</span>
+                        </a>
+                    {{ end }}
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+{{ end }}
