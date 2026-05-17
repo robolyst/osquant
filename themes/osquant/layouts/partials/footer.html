@@ -14,6 +14,11 @@
                             <a href="{{ .URL }}">{{ .Name }}</a>
                         </li>
                     {{ end }}
+                    {{ range .Site.Menus.footer_dev }}
+                        <li>
+                            <a href="{{ .URL }}">{{ .Name }}</a>
+                        </li>
+                    {{ end }}
                 </ul>
             </div>
 
@@ -28,18 +33,21 @@
                 </ul>
             </div>
 
-            {{ with .Site.GetPage "/authors" }}
-                <div class="footer-section">
-                    <div class="title">Team</div>
-                    <ul>
-                        {{ range .Pages.ByParam "last_name" }}
-                            <li>
-                                <a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a>
-                            </li>
-                        {{ end }}
-                    </ul>
-                </div>
-            {{ end }}
+            <div class="footer-section">
+                <div class="title">Info</div>
+                <ul>
+                    {{ with .Site.GetPage "/about" }}
+                        <li>
+                            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                        </li>
+                    {{ end }}
+                    {{ with .Site.GetPage "/contribute" }}
+                        <li>
+                            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                        </li>
+                    {{ end }}
+                </ul>
+            </div>
 
             <div class="footer-section">
                 <div class="title">Elsewhere</div>
@@ -63,18 +71,19 @@
                 </ul>
             </div>
 
-            {{ if $show_author }}
+            {{ with .Site.GetPage "/authors" }}
                 <div class="footer-section">
-                    <div class="title">Dev</div>
+                    <div class="title">Team</div>
                     <ul>
-                        {{ range .Site.Menus.footer_dev }}
+                        {{ range .Pages.ByParam "last_name" }}
                             <li>
-                                <a href="{{ .URL }}">{{ .Name }}</a>
+                                <a href="{{ .RelPermalink }}">{{ .Params.full_name }}</a>
                             </li>
                         {{ end }}
                     </ul>
                 </div>
             {{ end }}
+
         </div>
 
 

@@ -1064,10 +1064,10 @@ footer {
 
     .footer-sections {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
         align-items: flex-start;
-        gap: 3rem 4rem;
+        gap: 2rem;
         margin-top: 2.5rem;
     }
 
@@ -1086,7 +1086,8 @@ footer {
     }
 
     .footer-section {
-        min-width: 10rem;
+        min-width: 0;
+        flex: 1 1 0;
         text-align: left;
     }
 
