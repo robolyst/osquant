@@ -1,49 +1,52 @@
 ---
 title: Contribute
-header: Publishing with us
-description: Share your knowledge with the world for free with Open Source Quant.
+header: Publish with Open Source Quant
+description: A guide to proposing, writing, and submitting an article.
 ---
 
-## Why publish with us?
+## Why publish here?
 
-**Free** -- Publishing will not cost you nor your readers anything.
+- **Free** — There are no fees for authors or readers.
+- **Open** — Articles are reviewed and improved in public on [GitHub](https://github.com/).
+- **Iterative** — Published work can keep improving as ideas, methods, and evidence move on.
+- **Practical** — Articles are written in Markdown, with support for open tooling such as [Hugo](https://gohugo.io/), [MathJax](https://www.mathjax.org/), and [Observable](https://observablehq.com/).
+- **Credited** — Authors keep credit for their work.
 
-**Collaborative** -- Leverage the power of [Github](https://github.com/) to work on your article through the review process.
+## What fits
 
-**Iterative** -- Post publication, make updates and improvements to keep your work accurate and informative.
+We publish work in **quantitative finance**, **mathematics**, and **engineering**.
 
-**Tooling** -- Tooling is sorted for you, write your article in markdown with the full power of open source tools like [Quarto](https://quarto.org/), [Hugo](https://gohugo.io/), [MathJax](https://www.mathjax.org/) and [Observable](https://observablehq.com/).
+We care most about writing that is:
 
-**Credit** -- You are acknowledged as the sole author(s) of your article. Neither Open Source Quant nor anyone working here will claim authorship on any material you produce.
+- clear
+- technically serious
+- useful to readers
+- lighter on jargon, heavier on understanding
 
-**Impact** -- Articles on Open Source Quant are read by more than 2 people.
+## What to submit
 
-## Scope
+We are usually looking for one of three things:
 
-We publish articles in the area of quantitative finance, mathematics, and engineering.
+- **Original research** — new ideas, methods, or results
+- **Explanations** — clear treatments of important concepts, papers, or techniques
+- **Reproductions** — careful attempts to replicate or verify existing results
 
-The key feature of one of our articles is great writing. We prefer less jargon and more understanding.
+## How to contribute
 
-## Article types
+1. **Check the fit.** Make sure your article belongs broadly in quantitative finance, mathematics, or engineering, and that the writing aims for clarity rather than unnecessary jargon.
+2. **Look at an example.** Review a published article such as ["Why Returns are not Gaussian"](https://github.com/robolyst/osquant/blob/main/content/papers/2023/why-returns-are-not-gaussian/index.md) to get a feel for structure, front matter, and tone.
+3. **Write your draft in Markdown.** Follow the structure and front matter used in published articles.
+4. **Open a pull request.** Submit your article to the [OSQuant repository](https://github.com/robolyst/osquant) when it is ready for review.
+5. **Work through feedback.** Editors will suggest changes to improve clarity, structure, and presentation before publication.
+6. **Publish.** Once the article is ready, it will be approved and merged.
 
-We pubish the following types of articles:
+## A few tips
 
-**Research** -- New research never published before.
-
-**Explainations** -- Articles explaining prior research and findings in a way that enhances a reader's understanding.
-
-**Reproductions** -- Articles reporting on reproducing results.
-
-## How to write an article
-
-Articles on Open Source Quant are written in Markdown and the review process happens on Github.
-
-1. Have a look at an example of an article [here](https://github.com/robolyst/osquant/tree/main/content/papers/why-returns-are-not-gaussian).
-1. Write your article in Markdown following the same format as the example.
-1. When you are ready for review, submit a pull request with your article to [osquant](https://github.com/robolyst/osquant).
-1. Editors will provide feedback to help your article meet our standards.
-1. An editor will approve and merge your pull request officially publishing your work.
+- Lead with the idea: tell the reader what problem you are solving and why it matters.
+- Prefer explanation over jargon.
+- Include maths, code, figures, or references where they genuinely help.
+- Keep the piece teachable: a strong article should reward careful reading.
 
 ## Thank you
 
-The community looks forward to reading your work!
+We look forward to reading your work.
