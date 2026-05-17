@@ -14,10 +14,12 @@
                             <a href="{{ .URL }}">{{ .Name }}</a>
                         </li>
                     {{ end }}
-                    {{ range .Site.Menus.footer_dev }}
-                        <li>
-                            <a href="{{ .URL }}">{{ .Name }}</a>
-                        </li>
+                     {{ if $show_author }}
+                        {{ range .Site.Menus.footer_dev }}
+                            <li>
+                                <a href="{{ .URL }}">{{ .Name }}</a>
+                            </li>
+                        {{ end }}
                     {{ end }}
                 </ul>
             </div>
