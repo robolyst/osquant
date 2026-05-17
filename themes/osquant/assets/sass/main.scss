@@ -723,6 +723,163 @@ Page (Single)
     }
 }
 
+.about-page-content {
+    padding-bottom: 5rem;
+}
+
+.about-section {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+    position: relative;
+}
+
+.about-section-header {
+    max-width: 42rem;
+    margin-bottom: 3rem;
+}
+
+.about-section-title {
+    font-size: 2.1rem;
+    line-height: 1.25;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.about-section-intro {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: $light-text-color;
+    margin: 0.75rem 0 0;
+}
+
+.about-overview-grid,
+.about-principles-grid,
+.about-action-grid {
+    display: grid;
+    gap: 1.75rem;
+}
+
+.about-overview-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.about-principles-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.about-action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.about-card,
+.about-action-card {
+    border: 1px solid $light-border-color;
+    border-radius: 14px;
+    padding: 1.55rem 1.6rem 1.65rem;
+    text-align: left;
+}
+
+.about-card h3,
+.about-action-card h3 {
+    font-size: 1.05rem;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+.about-card p,
+.about-action-card p {
+    margin: 0;
+    color: $light-text-color;
+    line-height: 1.7;
+    text-align: left;
+    text-wrap: pretty;
+}
+
+.about-principles-section {
+}
+
+.about-overview-grid .about-card,
+.about-principles-grid .about-card {
+    border: 0;
+    border-radius: 0;
+    border-top: 1px solid $light-border-color;
+    padding: 1.25rem 0 0;
+}
+
+.about-manifesto {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+    text-align: center;
+}
+
+.about-manifesto .container {
+    max-width: 54rem;
+    padding: 0 3vw;
+}
+
+.about-manifesto-text {
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    line-height: 1.2;
+    margin: 0.75rem 0 1rem;
+    font-weight: 700;
+}
+
+.about-manifesto-support {
+    margin: 0 auto;
+    max-width: 42rem;
+    color: $light-text-color;
+    line-height: 1.8;
+}
+
+.about-action-card {
+    display: block;
+    color: inherit;
+    background-color: white;
+    box-shadow: 0 18px 36px rgba(27, 39, 51, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.about-action-card span {
+    display: inline-block;
+    margin-top: 1.1rem;
+    font-family: $sans;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $blue;
+}
+
+.about-action-card:hover {
+    transform: translateY(-2px);
+    border-color: #cfd9ee;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: $tablet) {
+    .about-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about-principles-grid,
+    .about-action-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: $phone) {
+    .about-section {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    .about-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-section-title {
+        font-size: 1.7rem;
+    }
+}
+
 #page_content {
     line-height: 1.5em;
 }
