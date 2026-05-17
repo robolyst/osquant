@@ -18,7 +18,7 @@ principles:
   - title: Iterative
     description: Articles are living documents. As research moves and methods improve, the writing should too.
 manifesto: "Serious quantitative ideas should be open, readable, and useful."
-manifesto_support: "We care about depth, but we care just as much about clarity. The goal is not to simplify ideas beyond recognition—it is to explain them well enough that people can actually use them."
+manifesto_support: "We care about depth, but we care just as much about clarity. The goal is to explain ideas in a way that sparks understanding, confidence, and curiosity."
 cta_heading: Get involved
 cta_intro: "If something resonates—or something looks wrong—there are plenty of ways to contribute."
 cta_items:
