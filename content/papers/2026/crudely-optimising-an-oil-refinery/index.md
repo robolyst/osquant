@@ -91,8 +91,7 @@ Translating the linear model into AMPL is rather straightforward. The documentat
 
 The model is built around a single set, $T$, which represents a collection of **time points**. The number of these points is defined by the parameter $N$, which will be $18$, representing each month in our optimisation. In this example, each time point will be optimised for profit independently.
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 # The number of months within the optimisation
 param N integer > 0;
 
@@ -112,8 +111,7 @@ To simplify calculations, the crude oil is converted to a per-gallon basis, wher
 
 $$P_{t}^{C} = P_{t}^{C,B} \div 42$$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 param crude_price {T};        # Crude USD/bbl at time t
 param heating_oil_price {T};  # Heating oil USD/gal at time t
 param gasoline_price {T};     # Gasoline USD/gal at time t
@@ -142,8 +140,7 @@ The model's decision variables represent the quantities of crude oil to be proce
 - $O_{t}^{G}$: Gallons of gasoline production at time $t$.
 - $O_{t}^{R}$: Gallons of residual material at time $t$.
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 # Crude used at time t in gallons
 var crude_used_gal {t in T} >= 0;
 
@@ -165,8 +162,7 @@ The objective is to maximise the total profit, which is calculated as the total 
 
 $$\max \quad \text{profit} = \sum_{t \in T} \left( P_{t}^{H} O_{t}^{H} + P_{t}^{G} O_{t}^{G} - P_{t}^{C} I_{t} \right)$$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 maximize profit: sum{t in T} (
     -1 * crude_price_gal[t] * crude_used_gal[t]
     + heating_oil_price[t] * heating_oil_production[t]
@@ -186,8 +182,7 @@ The amount of crude oil processed at each time point cannot exceed the maximum m
 
 $$I_{t} \leq M^{G} \quad \forall t \in T$$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 subject to Maximum_Crude_Used {t in T}:
     crude_used_gal[t] <= maximum_crude_per_month_gal;
 ```
@@ -205,8 +200,7 @@ Here, we assume for a given amount of crude oil, 60% of it may be suitable for h
 - Heating Oil: $O_{t}^{H} \leq 0.6 \times I_{t} \quad \forall t \in T$
 - Gasoline: $O_{t}^{G} \leq 0.6 \times I_{t} \quad \forall t \in T$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 subject to Heating_Oil_Ratio {t in T}:
     heating_oil_production[t] <= 0.6 * crude_used_gal[t];
 
@@ -220,8 +214,7 @@ Assuming heating oil and gasoline have a portion of shared hydrocarbon chain len
 
 - Heating Oil and Gasoline: $O_{t}^{H} + O_{t}^{G} \leq 0.9 \times I_{t} \quad \forall t \in T$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 subject to Gasoline_Heating_Oil_Ratio {t in T}:
     (gasoline_production[t] + heating_oil_production[t]
         <= 0.9 * crude_used_gal[t]);
@@ -233,8 +226,7 @@ The total quantity of all refined products (heating oil, gasoline, and residual)
 
 $$O_{t}^{H} + O_{t}^{G} + O_{t}^{R} \leq I_{t} \quad \forall t \in T$$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 subject to Total_Production {t in T}:
     (heating_oil_production[t] + gasoline_production[t] + residual[t]
         <= crude_used_gal[t]);
@@ -246,8 +238,7 @@ Given we have previously defined 90% of our crude can produce a marketable produ
 
 $$ O_{t}^{R} \geq I_{t} - \left( O_{t}^{H} + O_{t}^{G} \right) \quad \forall t \in T$$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 subject to Residual_Definition {t in T}:
     (residual[t] >=
         crude_used_gal[t]
@@ -308,8 +299,7 @@ For a sanity check, we can confirm the volumes align (sum of outputs = input) an
 
 As mentioned previously, sometimes additives need to be incorporated into distillate outputs for stability, environmental, or efficiency reasons. To model the per-gallon costs of production for heating oil and gasoline, two parameters will be introduced, $C^{H}$ and $C^{G}$.
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 param heating_oil_production_cost >= 0;
 param gasoline_production_cost >= 0;
 ```
@@ -318,8 +308,7 @@ Incorporating this into a new objective function is simple.
 
 $$\max \quad \text{profit} = \sum_{t \in T} \left( \left( P_{t}^{H} - C^{H} \right) O_{t}^{H} + \left( P_{t}^{G} - C^{G} \right) O_{t}^{G} - P_{t}^{C} I_{t} \right)$$
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 maximize profit: sum{t in T} (
     -1 * crude_price_gal[t] * crude_used_gal[t]
     + ((heating_oil_price[t] - heating_oil_production_cost)
@@ -448,8 +437,7 @@ df.to_csv("commodity_futures_prices.csv")
 
 ## Full AMPL Definition
 
-<!-- TODO: Change this to `ampl` once the lexer is in Hugo (via Chroma) -->
-```cython
+```ampl
 # =================================== SETS ===================================
 
 # The number of months within the optimisation
