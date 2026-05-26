@@ -1,7 +1,7 @@
 FROM debian:forky-slim
 
 RUN apt update \
-    && apt install -y hugo=0.161.1-1 npm wget git zsh --no-install-recommends \
+    && apt install -y hugo=0.162.0-1 npm wget git zsh --no-install-recommends \
     && apt-get clean
 
 # Markdown linting.
