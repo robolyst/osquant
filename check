@@ -1,4 +1,0 @@
-#!/bin/bash
-
-markdownlint content/**/*.md
-markdownlint content/**/*.qmd
