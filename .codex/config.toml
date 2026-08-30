@@ -1,0 +1,5 @@
+model = "gpt-5.6-terra"
+
+# Enable --yolo by default
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
