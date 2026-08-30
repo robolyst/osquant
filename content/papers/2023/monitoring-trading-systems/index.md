@@ -7,7 +7,6 @@ Poorly monitoring your trading strategy means you are missing mistakes and leavi
 date: "2023-05-12"
 original_date: "2022-12-14"
 type: paper
-katex: false
 authors:
     - Adrian Letchford
 categories:

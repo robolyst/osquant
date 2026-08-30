@@ -1190,18 +1190,7 @@ Other
 }
 
 
-.katex { /* Inline math */
-    font-size: 1em;
-}
-
-.katex .tag .vlist-t2 {
-    /* Stop the equation numbers from poking
-    out the right, causing overflow and a
-    scroll bar to appear. */
-    margin-right: 0;
-}
-
-#page_content .katex-display, #page_content mjx-container[display="true"] { /* Block math */
+#page_content mjx-container[display="true"] { /* Block math */
     margin: 2rem 0;
     display: block;
     overflow-x: auto;
@@ -1219,10 +1208,6 @@ Other
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-
-#page_content .katex-display .katex { /* Block math */
-    font-size: 1.1em;
-}
 
 @media (max-width:450px) {
     #page_content table th {

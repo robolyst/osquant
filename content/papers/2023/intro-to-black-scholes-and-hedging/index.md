@@ -7,7 +7,6 @@ A break down of how the Black-Scholes option pricing model works, what implied v
 date: "2023-08-26"
 type: paper
 mathjax: true # Enable mathematics on the page
-# katex: true
 plotly: true  # Enable plotly on the page
 authors:
     - Adrian Letchford

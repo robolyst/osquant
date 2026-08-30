@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="https://use.typekit.net/tib0kdm.css">
    
     {{ if .Params.mathjax }}{{ partial "mathjax.html" . }}{{ end }}
-    {{ if .Params.katex }}{{ partial "katex.html" . }}{{ end }}
     {{ if .Params.plotly }}{{ partial "plotly.html" . }}{{ end }}
 
     {{ $options := dict "targetPath" "css/main.css" }}

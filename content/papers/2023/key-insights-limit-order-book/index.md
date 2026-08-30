@@ -7,7 +7,6 @@ summary: "
 date: "2023-10-01"
 type: paper
 mathjax: true # Enable mathematics on the page
-katex: false # Enable mathematics on the page
 plotly: false  # Enable plotly on the page
 authors:
     - Adrian Letchford
