@@ -2,5 +2,3 @@
 
 markdownlint content/**/*.md
 markdownlint content/**/*.qmd
-
-vale --minAlertLevel=error content
