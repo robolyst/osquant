@@ -4,7 +4,7 @@ summary: "
 Rather than recalculating a least--squares model on each new data point, you can simply update the fitted coefficients. This saves you computational time and allows you to place greater emphasis on recent data.
 "
 type: paper
-katex: true # Enable mathematics on the page
+mathjax: true # Enable mathematics on the page
 date: "2023-07-22"
 authors:
     - Adrian Letchford
@@ -42,9 +42,7 @@ $$
 
 The solution is:
 $$
-\begin{aligned}
 \boldsymbol{w}_{i-1} = (\boldsymbol{X}\_{i-1}^T \boldsymbol{X}\_{i-1})^{-1} \boldsymbol{X}\_{i-1} \boldsymbol{y}\_{i-1} \label{1}\tag{1}
-\end{aligned}
 $$
 
 This is used to make a prediction of \\( y_{i} \\):
@@ -54,7 +52,7 @@ $$
 
 # Recursive least-squares
 
-We can derive a recursive formula for \\( \boldsymbol{w}\_{i-1} \\) so that we do not have to recalculate Eq. \\( \ref{1} \\) at each time step.
+We can derive a recursive formula for \\( \boldsymbol{w}\_{i-1} \\) so that we do not have to recalculate Eq. \\(\eqref{1}\\) at each time step.
 
 Denote:
 $$

@@ -4,7 +4,7 @@ summary: "
 The square root of your portfolio's covariance matrix gives you a powerful way of understanding where your portfolio variance is coming from. Here I show how to calculate the square root and provide an interactive example to explore how it works.
 "
 type: paper
-katex: true # Enable mathematics on the page
+mathjax: true # Enable mathematics on the page
 date: "2023-07-27"
 authors:
     - Adrian Letchford

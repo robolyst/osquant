@@ -4,7 +4,7 @@ summary: "
 Bond returns are a function of yields. Calculating the expected value of this function is quite difficult. You can take a Taylor expansion to make calculating the mean and variance of returns much easier.
 "
 type: paper
-katex: true # Enable mathematics on the page
+mathjax: true # Enable mathematics on the page
 date: "2023-04-05"
 authors:
     - Adrian Letchford

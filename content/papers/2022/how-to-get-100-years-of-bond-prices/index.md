@@ -6,7 +6,7 @@ summary: "
 
 date: "2022-11-24"
 type: paper
-katex: true  # Enable mathematics on the page
+mathjax: true # Enable mathematics on the page
 authors:
     - Adrian Letchford
 categories:

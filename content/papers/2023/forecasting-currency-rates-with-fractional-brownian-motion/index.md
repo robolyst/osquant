@@ -2,7 +2,7 @@
 title: Forecasting currency rates with fractional brownian motion
 summary: ' Fractional Brownian motion is a stochastic process that can model mean reversion. Predicting future values turns out to be a simple linear model. This model has significant predictive power when applied to currencies. '
 type: paper
-katex: true
+mathjax: true
 date: '2023-08-09'
 authors:
   - Adrian Letchford

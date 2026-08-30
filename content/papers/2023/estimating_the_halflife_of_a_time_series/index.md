@@ -3,7 +3,7 @@ title: "Estimating the half-life of a time series"
 summary: "The half-life of a stationary series can be estimated with a linear regression. These notes show the derivation of the half-life from the regression coefficients."
 date: "2023-03-18"
 type: paper
-katex: true # Enable mathematics on the page
+mathjax: true # Enable mathematics on the page
 authors:
     - Adrian Letchford
 categories:

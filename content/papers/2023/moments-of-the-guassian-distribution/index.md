@@ -5,7 +5,7 @@ A reference page listing the moments of a Guassian distribution and shows how to
 "
 date: "2023-04-01"
 type: paper
-katex: true
+mathjax: true
 authors:
     - Adrian Letchford
 categories:
@@ -101,20 +101,22 @@ Two other co-moments that come up often are:
 $$
 \begin{aligned}
 E[X^2Y] &= E[(\mu_X + \hat{\sigma}_X \hat{X} + \sigma\_{XY} \hat{Z})^2(\mu_Y + \hat{\sigma}_Y \hat{Y} + \sigma\_{XY} \hat{Z})] \\\
-&= \mu_X^2\mu_Y  + 2 \mu_X\sigma\_{XY}^2 + \mu_Y\sigma^2\_X \label{2}\tag{2}
+&= \mu_X^2\mu_Y  + 2 \mu_X\sigma\_{XY}^2 + \mu_Y\sigma^2\_X
 \end{aligned}
+\label{2}\tag{2}
 $$
 
 $$
 \begin{aligned}
 E[X^2Y^2] &= E[(\mu_X + \hat{\sigma}\_X \hat{X} + \sigma\_{XY} \hat{Z})^2(\mu_Y + \hat{\sigma}\_Y \hat{Y} + \sigma_{XY} \hat{Z})^2] \\\
-&= \sigma^2_X\sigma^2_Y
-\+ \sigma^2_X \mu_{Y}^{2}
-\+ \sigma^2_Y \mu_{X}^{2}
-\+ 2 \sigma_{XY}^{4}
-\+ 4 \mu_{X} \mu_{Y} \sigma_{XY}^{2}
-\+ \mu_{X}^{2} \mu_{Y}^{2}  \label{3}\tag{3}
+&= \sigma^2_X\sigma^2_Y \\\
+&\quad + \sigma^2_X \mu_{Y}^{2} \\\
+&\quad + \sigma^2_Y \mu_{X}^{2} \\\
+&\quad + 2 \sigma_{XY}^{4} \\\
+&\quad + 4 \mu_{X} \mu_{Y} \sigma_{XY}^{2} \\\
+&\quad + \mu_{X}^{2} \mu_{Y}^{2}
 \end{aligned}
+\label{3}\tag{3}
 $$
 
 [^1]: [Raw Gaussian moments](https://math.stackexchange.com/a/4030443). Answer on Stack Exchange.

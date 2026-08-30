@@ -8,7 +8,7 @@ date: "2015-08-06"
 type: paper
 authors:
     - Adrian Letchford
-katex: true
+mathjax: true
 categories:
     - mathematics
 # This article was written before the site organised articles under YEAR/MONTH/slug

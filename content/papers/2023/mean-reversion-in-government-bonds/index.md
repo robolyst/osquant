@@ -4,7 +4,7 @@ summary: "
 Using the Ornstein–Uhlenbeck process, you can calculate the expected spread between bond yields of different maturities. These expected values can then be used to estimated the expected value of treasury ETF spreads.
 "
 type: paper
-katex: true # Enable mathematics on the page
+mathjax: true # Enable mathematics on the page
 date: "2023-04-08"
 authors:
     - Adrian Letchford
